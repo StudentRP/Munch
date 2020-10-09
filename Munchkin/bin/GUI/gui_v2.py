@@ -1,7 +1,14 @@
 """ GUI as class to be imported into the working script. Accommodated for scope issues with get()
 
+requiremets:
+    starting gui (welcome screen)
+    player number select
+    name and sex, sex maybe check box..
+    main game loop window
 
 """
+
+
 from tkinter import *
 
 
