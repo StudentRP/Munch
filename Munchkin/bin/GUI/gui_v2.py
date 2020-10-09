@@ -23,6 +23,6 @@ class StartScreen():
         Label(self.root, text=f"{self.enter.get()}").pack()
 
 
-r = StartScreen
+r = StartScreen # instance
 
-r()
+r() # calling the instance
