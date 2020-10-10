@@ -13,7 +13,7 @@ from tkinter import *
 
 
 
-class StartScreen:
+class MainScreen:
     """This will be the start screen, will need door pic."""
     def __init__(self):
         self.root = Tk()# main root window. Current thinking = need spawns of Toplevel for main game loop
@@ -23,19 +23,19 @@ class StartScreen:
         self.frame.pack()
         self.fl = Label(self.frame, text="hi class")
         self.fl.pack()
-        self.enter = Entry()
-        self.enter.pack()
+        self.ent = Entry()
+        self.ent.pack()
         self.but = Button(self.root, text="get text", command=self.getobj)
         self.but.pack()
         self.mainloop = mainloop()
 
-    def getobj(self):
-        Label(self.root, text=f"{self.enter.get()}").pack()
+    def get_obj(self):
+        Label(self.root, text=f"{self.ent.get()}").pack()
 
 
-# r = StartScreen() # instance
+# win = MainScreen() # instance
 
-# r() # calling the instance
+
 
 
 class NumOfPlayers:
@@ -51,5 +51,10 @@ class NumOfPlayers:
 
         self.mainloop = mainloop()
 
-n = NumOfPlayers()
+# n = NumOfPlayers()
+
+# class MainWinPlayerinfo:
+#     player_info =[(x, y)]
+#     for attrib, value in player_info:
+
 
