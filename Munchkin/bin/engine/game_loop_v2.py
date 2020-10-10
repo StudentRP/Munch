@@ -20,6 +20,7 @@ from Munchkin.bin.engine.game_logic import start_choice
 from Munchkin.bin.all_cards.table import Dealer
 from Munchkin.bin.engine import cut_scenes as cs
 from random import randint
+from Munchkin.bin.GUI.gui_v2 import TestWin
 from time import sleep
 
 
@@ -46,8 +47,10 @@ class NumberOfPlayers:
         while self.cycle <= 4: # test scenario, to be removed (replace with play for game exit)
             try:
                 "main game loop"
-                if instance == self.new_players[index] and instance.alive: #checks instance against index if player alive
+                if instance == self.new_players[index] and instance.alive: # checks instance against index
+                    # and if player alive (skips turn if not)
                     "Main pathway logic"
+                    player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)
                     print(f"{instance.name} Turn.")
                     # ..................... code calls for loop...............................
                     start_choice(instance, self.new_players) # triggers Kick Door and Inventory (1st step)
@@ -102,7 +105,7 @@ class NumberOfPlayers:
                 randomise = randint(0, len(self.new_players) - 1) # index correction
                 gofirst = self.new_players[randomise] # gets instance at position[random]
                 # print(self.new_players) # check to see if passing object and rand number
-                self.player_order(gofirst) #passes instance to player_order()
+                self.player_order(gofirst) #passes instance to player_order() function
         except ValueError:
             print("Out of cards!")
             self.select_players()

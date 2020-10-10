@@ -102,9 +102,13 @@ def start_choice(pobj, all_players):# takes player instance
         Player.inventory(pobj)
         start_choice(pobj)
 
+    elif choice1 == '0': ################
+        return pobj
+
+
     else:
         print("Command not recognised")
-        start_choice(pobj)
+        start_choice(pobj, all_players)
 
 
 
