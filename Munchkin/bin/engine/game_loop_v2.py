@@ -84,7 +84,8 @@ class NumberOfPlayers:
                 continue
 
     def select_players(self):
-        """Setup for instances, names/gender and first deal"""
+        """Setup for instances, names/gender and first deal. slices player instance list with new player list,
+         for each player set them up with cards, rand player to go first and sends to player_order function"""
         print(cs.start())
         try:
             maxplayers = int(input("Please select number of players 1 - 10.\n>>> ")) # throws error with str, need catch
@@ -92,14 +93,14 @@ class NumberOfPlayers:
                 print(cs.invalid())
                 self.select_players() # restarts loop
             elif maxplayers:
-                self.new_players = self.players_available[:maxplayers]
-                for player in self.new_players:
+                self.new_players = self.players_available[:maxplayers] # slices players_avail & adds to new_players
+                for player in self.new_players: #sets each instance up with sets of cards to start
                     player.char_setup() # sets up players before game
                     print("\nGetting cards from dealer\n")
-                    player.sack = Dealer.deal_cards(player, "start") # add stating cards to player sack
+                    player.sack = Dealer.deal_cards(player, "start") # adds starting cards to player sack
                 print("Dice rolled to see who goes first!\n")
                 randomise = randint(0, len(self.new_players) - 1) # index correction
-                gofirst = self.new_players[randomise] #gets instance at position[x]
+                gofirst = self.new_players[randomise] # gets instance at position[random]
                 # print(self.new_players) # check to see if passing object and rand number
                 self.player_order(gofirst) #passes instance to player_order()
         except ValueError:
