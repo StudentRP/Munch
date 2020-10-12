@@ -71,16 +71,6 @@ class PlayerInfo(Frame):
 
 # PlayerInfo().mainloop()
 
-
-
-
-class Builder(MainWind):
-    klasses = [PlayerInfo]
-    for klass in klasses:
-        pass
-
-
-
 #######################################################
 
 class MainScreen:
@@ -128,7 +118,12 @@ class NumOfPlayers:
 #     player_info =[(x, y)]
 #     for attrib, value in player_info:
 
-
+#########################################################################################################
+#########################################################################################################
+# Design tests
+#########################################################################################################
+#########################################################################################################
+"""Use within package and detailing specific data"""
 class TestWin:
     """Test complete. runs and changes info per cycle. window must be destroyed before script continues."""
     def __init__(self, person='JB', level=0): # P(n) from player class will be instances for this
@@ -151,3 +146,71 @@ class TestWin:
 
 
 # p = TestWin()
+
+"""gui structure """
+
+
+LARGE_FONT = ("Verdana", 12)
+
+
+class MainTest(Tk):
+
+    def __init__(self, *args, **kwargs):
+        Tk.__init__(self, *args, **kwargs)
+        container = Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+        self.frames = {}
+        frame = StartPage(container, self)
+        self.frames[StartPage] = frame
+        frame.grid(row=0, column=0, sticky="nsew")
+        self.show_frame(StartPage)
+
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+
+
+class StartPage(Frame):
+
+    def __init__(self, parent, controller,  name='Unknown', gender='Male', level=1, bonus=0, race=None, klass=None, lhand=None,
+                 rhand=None, big=None, hgear=None, armour=None, ftgear=None):
+        Frame.__init__(self, parent)
+
+        Label(self, text='Player Info', font=preset1, fg="blue").grid(column=0, row=0, columnspan=2)
+        Label(self, text="---------------------").grid(column=0, row=1, columnspan=2)
+        Label(self, text="Player").grid(column=0, row=2)
+        Label(self, text=f'{name}').grid(column=1, row=2)
+        Label(self, text="Gender").grid(column=0, row=3)
+        Label(self, text=f'{gender}').grid(column=1, row=3)
+        Label(self, text="Level").grid(column=0, row=4)
+        Label(self, text=f'{level}').grid(column=1, row=4)
+        Label(self, text="Bonus").grid(column=0, row=5)
+        Label(self, text=f'{bonus}').grid(column=1, row=5)
+        Label(self, text="Race").grid(column=0, row=6)
+        Label(self, text=f'{race}').grid(column=1, row=6)
+        Label(self, text="Class").grid(column=0, row=7)
+        Label(self, text=f'{klass}').grid(column=1, row=7)
+        Label(self, text="---------------------").grid(column=0, row=8, columnspan=2)
+
+        Label(self, text='Armour & Weapons', font=preset1, fg="blue").grid(column=0, row=9, columnspan=2)
+        Label(self, text="Left hand").grid(column=0, row=10)
+        Label(self, text=f'{lhand}').grid(column=1, row=10)
+        Label(self, text="Right hand").grid(column=0, row=11)
+        Label(self, text=f'{rhand}').grid(column=1, row=11)
+        Label(self, text="Big item").grid(column=0, row=12)
+        Label(self, text=f'{big}').grid(column=1, row=12)
+        Label(self, text="Head gear").grid(column=0, row=13)
+        Label(self, text=f'{hgear}').grid(column=1, row=13)
+        Label(self, text="Armour").grid(column=0, row=14)
+        Label(self, text=f'{armour}').grid(column=1, row=14)
+        Label(self, text="Feet").grid(column=0, row=15)
+        Label(self, text=f'{ftgear}').grid(column=1, row=15)
+        Label(self, text="---------------------").grid(column=0, row=16, columnspan=2)
+
+
+app = MainTest()
+app.mainloop()
+
+
