@@ -153,35 +153,37 @@ class TestWin:
 LARGE_FONT = ("Verdana", 12)
 
 
-class MainTest(Tk):
+# class MainTest(Tk):
+# 
+#     def __init__(self, *args, **kwargs):
+#         Tk.__init__(self, *args, **kwargs)
+#         self.title("Top TK window") # tk title
+#         self.geometry("600x600") # tk window size
+#         container1 = Frame(self) # frame space 1
+#         container1.pack(side=LEFT, fill=Y, expand=True)
+#         container2 = Frame(self) # frame space 2
+#         container2.pack(side=BOTTOM, fill=X, expand=True)
+#         container3 = Frame(self) # frame space 3
+#         container3.pack(side=RIGHT, fill=BOTH, expand=True)
+# 
+#         self.frames = {}
+# 
+#         frame = PlayerInfo(container1, self)
+#         self.frames[PlayerInfo] = frame
+#         frame.grid()
+#         self.show_frame(PlayerInfo)
+# 
+#     def show_frame(self, cont):
+#         frame = self.frames[cont]
+#         frame.tkraise()
 
-    def __init__(self, *args, **kwargs):
-        Tk.__init__(self, *args, **kwargs)
-        self.title("Top TK window") # tk title
-        self.geometry("600x600") # tk window size
-        container1 = Frame(self) # frame space 1
-        container1.pack(side=LEFT, fill=Y, expand=True)
-        container2 = Frame(self) # frame space 2
-        container2.pack(side=BOTTOM, fill=X, expand=True)
-        container3 = Frame(self) # frame space 3
-        container3.pack(side=RIGHT, fill=BOTH, expand=True)
-
-        self.frames = {}
-
-        frame = PlayerInfo(container1, self)
-        self.frames[PlayerInfo] = frame
-        frame.grid()
-        self.show_frame(PlayerInfo)
-
-    def show_frame(self, cont):
-        frame = self.frames[cont]
-        frame.tkraise()
 
 
 class PlayerInfo(Frame):
+    """Playerinfo frame to be placed in main window. """
 
-    def __init__(self, parent, controler, name='Unknown', gender='Male', level=1, bonus=0, race=None, klass=None, lhand=None,
-                 rhand=None, big=None, hgear=None, armour=None, ftgear=None):
+    def __init__(self, parent, name='Unknown', gender='Male', level=1, bonus=0, race=None, klass=None,
+                 lhand=None, rhand=None, big=None, hgear=None, armour=None, ftgear=None):
         Frame.__init__(self, parent)
 
         Label(self, text='Player Info', font=preset1, fg="blue").grid(column=0, row=0, columnspan=2)
@@ -215,11 +217,50 @@ class PlayerInfo(Frame):
         Label(self, text=f'{ftgear}').grid(column=1, row=15)
         Label(self, text="---------------------").grid(column=0, row=16, columnspan=2)
 
+class ThemedButton(Button):
+    """class that modifies the original button"""
+    def __init__(self, parent=None, **configs):
+        Button.__init__(self, parent, **configs)
+        self.pack()
+        self.config(bg='blue', font=preset1)
+
+class ControlPannel(Frame):
+    """Frame contaning all the buttons for player actions"""
+    def __init__(self, parent=None, *args, **kwargs):
+        Frame.__init__(self, parent, *args, **kwargs)
+        ThemedButton(self, text="one").pack() # inherits from created class that in turn inherits from button
+        Button(self, text="two").pack()# box standard button no frills
+
+        self.pack(side=BOTTOM, fill=X)
+
+class BattleGround(Frame):
+    def __init__(self, parent=None, *args, **kwargs):
+        Frame.__init__(self, parent, *args, **kwargs)
+        Label(self, text="Card viewer", bg="yellow").pack(side=RIGHT, fill=BOTH, expand=YES)
 
 
-app = MainTest()
 
-per = PlayerInfo(app)
+
+
+class Main(Tk):
+    """Main window that takes in frames and puts them into place"""
+    def __init__(self, *args, **kwargs):
+        Tk.__init__(self, *args, **kwargs)
+        self.title("Munch time")
+        self.geometry("600x600")
+        ControlPannel(self).pack(side=BOTTOM, fill=X)
+        PlayerInfo(self).pack(side=LEFT, fill=Y)
+        BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
+
+
+
+
+
+app = Main()
+
+
+# per = PlayerInfo(app)
+
 app.mainloop()
 
 """close but not winning!!!!"""

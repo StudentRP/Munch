@@ -50,7 +50,7 @@ class NumberOfPlayers:
                 if instance == self.new_players[index] and instance.alive: # checks instance against index
                     # and if player alive (skips turn if not)
                     "Main pathway logic"
-                    player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)
+                    player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)############
                     print(f"{instance.name} Turn.")
                     # ..................... code calls for loop...............................
                     start_choice(instance, self.new_players) # triggers Kick Door and Inventory (1st step)
