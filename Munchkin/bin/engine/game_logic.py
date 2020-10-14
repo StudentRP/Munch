@@ -108,7 +108,7 @@ def start_choice(pobj, all_players):# takes player instance
 
     else:
         print("Command not recognised")
-        start_choice(pobj, all_players)
+        start_choice(pobj, all_players)# hand back object
 
 
 

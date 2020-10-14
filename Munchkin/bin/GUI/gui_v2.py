@@ -189,7 +189,8 @@ class PlayerInfo(Frame):
         Label(self, text='Player Info', font=preset1, fg="blue").grid(column=0, row=0, columnspan=2)
         Label(self, text="---------------------").grid(column=0, row=1, columnspan=2)
         Label(self, text="Player").grid(column=0, row=2)
-        Label(self, text=f'{name}').grid(column=1, row=2)
+        self.name = Label(self, text=f'{name}')
+        self.name.grid(column=1, row=2)
         Label(self, text="Gender").grid(column=0, row=3)
         Label(self, text=f'{gender}').grid(column=1, row=3)
         Label(self, text="Level").grid(column=0, row=4)
@@ -216,6 +217,8 @@ class PlayerInfo(Frame):
         Label(self, text="Feet").grid(column=0, row=15)
         Label(self, text=f'{ftgear}').grid(column=1, row=15)
         Label(self, text="---------------------").grid(column=0, row=16, columnspan=2)
+        Main() # calls main TK to put frames in
+
 
 class ThemedButton(Button):
     """class that modifies the original button"""
@@ -224,8 +227,9 @@ class ThemedButton(Button):
         self.pack()
         self.config(bg='blue', font=preset1)
 
+
 class ControlPannel(Frame):
-    """Frame contaning all the buttons for player actions"""
+    """Frame containing all the buttons for player actions"""
     def __init__(self, parent=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         ThemedButton(self, text="one").pack() # inherits from created class that in turn inherits from button
@@ -233,12 +237,12 @@ class ControlPannel(Frame):
 
         self.pack(side=BOTTOM, fill=X)
 
+
 class BattleGround(Frame):
+    """card area on table and all cards in play"""
     def __init__(self, parent=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         Label(self, text="Card viewer", bg="yellow").pack(side=RIGHT, fill=BOTH, expand=YES)
-
-
 
 
 
@@ -251,16 +255,17 @@ class Main(Tk):
         ControlPannel(self).pack(side=BOTTOM, fill=X)
         PlayerInfo(self).pack(side=LEFT, fill=Y)
         BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
+        self.mainloop()
 
 
 
 
+# Main()
+# app = Main()
+#
+#
+# # per = PlayerInfo(app)
+#
+# app.mainloop()
 
-app = Main()
-
-
-# per = PlayerInfo(app)
-
-app.mainloop()
-
-"""close but not winning!!!!"""
+"""close but not winning!! Trouble addresing in script"""
