@@ -251,10 +251,10 @@ class Main(Tk):
         Tk.__init__(self, *args, **kwargs)
         self.title("Munch time")
         self.geometry("600x600")
-        ControlPannel(self).pack(side=BOTTOM, fill=X)
-        PlayerInfo(self).pack(side=LEFT, fill=Y)
-        BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
-        self.mainloop()
+        # ControlPannel(self).pack(side=BOTTOM, fill=X)
+        # PlayerInfo(self).pack(side=LEFT, fill=Y)
+        # BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
+
 
 
 
