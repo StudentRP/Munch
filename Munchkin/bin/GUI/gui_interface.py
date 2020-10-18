@@ -81,37 +81,44 @@ class Playerinfo(tk.Frame):
         self.show_bonus = tk.Label(text=f'{instance.bonus}', font=self.preset2)
         self.show_bonus.grid(row=4, column=1)
 
-        self.show_sack = tk.Button(text="Sack", command=lambda: self.my_sack(instance))
+        self.show_sack = tk.Button(text="Sack", command=lambda: self.my_sack(instance), fg='red')
         self.show_sack.grid(row=5, column=0)
 
-        self.show_weapons = tk.Button(text="Weapons", command=lambda: self.my_weapons(instance))
+        self.show_weapons = tk.Button(text="Weapons", command=lambda: self.my_weapons(instance), fg='red')
         self.show_weapons.grid(row=5, column=1)
 
     def my_sack(self, instance):
-        tl = tk.Toplevel()
-        tl.title('Sack Contents')
-        tl.geometry('200x400')
+        tl1 = tk.Toplevel() #new main window
+        tl1.title('Sack Contents')
+        tl1.geometry('300x400')
+        tl = tk.Frame(tl1) # frame within toplevel
+        tl.pack()
+
+
         tk.Label(tl, text='My Gold: ').grid(row=0, column=0)
         tk.Label(tl, text=f'{instance.wallet}').grid(row=0, column=1)
+
         print(instance.armor)
 
         for key, val in enumerate(instance.armor.items(), start=1):
             print(type(val))
-            if not val[1]:
+            if val[1] == False:
                 pass
             else:
                 tk.Label(tl, text=f'{val[0]}: ').grid(row=key, column=0)
                 tk.Label(tl, text=f'{val[1]}').grid(row=key, column=1)
 
     def my_weapons(self, instance):
-        tl = tk.Toplevel()
-        tl.title('Weapons')
-        tl.geometry('200x400')
+        tl2 = tk.Toplevel()
+        tl2.title('Weapons')
+        tl2.geometry('300x400')
+        tl = tk.Frame(tl2)
+        tl.pack()
         print(instance.weapons)
 
         for key, val in enumerate(instance.weapons.items(), start=1):
             print(type(val))
-            if not val[1]:
+            if val[1] == False:
                 pass
             else:
                 tk.Label(tl, text=f'{val[0]}: ').grid(row=key, column=0)
