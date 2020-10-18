@@ -88,7 +88,7 @@ class Playerinfo(tk.Frame):
         self.show_weapons.grid(row=5, column=1)
 
     def my_sack(self, instance):
-        tl1 = tk.Toplevel() #new main window
+        tl1 = tk.Toplevel() # new main window
         tl1.title('Sack Contents')
         tl1.geometry('300x400')
         tl = tk.Frame(tl1) # frame within toplevel
