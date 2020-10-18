@@ -10,8 +10,9 @@ import tkinter as tk
 
 
 class CustomLab(tk.Label):
-
+    """customises labels for frame titles"""
     preset1 = ('curlz MT', 15, 'bold')
+
     def __init__(self, *args, **kwargs):
         tk.Label.__init__(self, *args, **kwargs)
         self.config(font=self.preset1, fg='blue')
