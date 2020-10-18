@@ -124,8 +124,6 @@ class NumOfPlayers:
 #########################################################################################################
 #########################################################################################################
 """Use within package and detailing specific data"""
-
-
 class TestWin:
     """Test complete. runs and changes info per cycle. window must be destroyed before script continues."""
     def __init__(self, person='JB', level=0): # P(n) from player class will be instances for this
@@ -180,17 +178,19 @@ LARGE_FONT = ("Verdana", 12)
 #         frame.tkraise()
 
 
+
 class PlayerInfo(Frame):
     """Playerinfo frame to be placed in main window. """
 
     def __init__(self, parent, name='Unknown', gender='Male', level=1, bonus=0, race=None, klass=None,
                  lhand=None, rhand=None, big=None, hgear=None, armour=None, ftgear=None):
         Frame.__init__(self, parent)
-        label.grid(column=1, row=2)
+
         Label(self, text='Player Info', font=preset1, fg="blue").grid(column=0, row=0, columnspan=2)
         Label(self, text="---------------------").grid(column=0, row=1, columnspan=2)
         Label(self, text="Player").grid(column=0, row=2)
-        # Label(self, text=f'{name}').grid(column=1, row=2)
+        self.name = Label(self, text=f'{name}')
+        self.name.grid(column=1, row=2)
         Label(self, text="Gender").grid(column=0, row=3)
         Label(self, text=f'{gender}').grid(column=1, row=3)
         Label(self, text="Level").grid(column=0, row=4)
@@ -217,6 +217,7 @@ class PlayerInfo(Frame):
         Label(self, text="Feet").grid(column=0, row=15)
         Label(self, text=f'{ftgear}').grid(column=1, row=15)
         Label(self, text="---------------------").grid(column=0, row=16, columnspan=2)
+        Main() # calls main TK to put frames in
 
 
 class ThemedButton(Button):
@@ -251,20 +252,20 @@ class Main(Tk):
         Tk.__init__(self, *args, **kwargs)
         self.title("Munch time")
         self.geometry("600x600")
-        # ControlPannel(self).pack(side=BOTTOM, fill=X)
-        # PlayerInfo(self).pack(side=LEFT, fill=Y)
-        # BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
-
+        ControlPannel(self).pack(side=BOTTOM, fill=X)
+        PlayerInfo(self).pack(side=LEFT, fill=Y)
+        BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
+        self.mainloop()
 
 
 
 
 # Main()
-app = Main()
+# app = Main()
 #
 #
-
+# # per = PlayerInfo(app)
 #
-app.mainloop()
+# app.mainloop()
 
 """close but not winning!! Trouble addresing in script"""

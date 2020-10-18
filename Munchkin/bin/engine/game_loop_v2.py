@@ -20,7 +20,8 @@ from Munchkin.bin.engine.game_logic import start_choice
 from Munchkin.bin.all_cards.table import Dealer
 from Munchkin.bin.engine import cut_scenes as cs
 from random import randint
-from Munchkin.bin.GUI.gui_v2 import TestWin, PlayerInfo, Main
+# from Munchkin.bin.GUI.gui_v2 import TestWin, PlayerInfo, Main
+from Munchkin.bin.GUI.gui_interface import Root
 from time import sleep
 
 
@@ -47,14 +48,16 @@ class NumberOfPlayers:
         while self.cycle <= 4: # test scenario, to be removed (replace with play for game exit)
             try:
                 "main game loop"
-                if instance == self.new_players[index] and instance.alive: # checks instance against index
+                if instance == self.new_players[index] and instance.alive: # checks instance(x) against index in list
                     # and if player alive (skips turn if not)
                     "Main pathway logic"
 
                     ###GUI####
 
                     # player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)
-                    PlayerInfo(instance.name) # not work. passes single object to gui class (hard work find way to pass whole instance)
+                    app = Root(instance) # not work. passes single object to gui class (hard work find way to pass whole instance)
+                    app.mainloop()
+                    # moreover scrit will call at wrong place of gui not launching the main application
 
 
                     print(f"{instance.name} Turn.")
@@ -68,7 +71,7 @@ class NumberOfPlayers:
                     instance = self.new_players[index]  # changes player, if index error does not execute below
                     continue
                 elif instance != self.new_players[index]:
-                    "Logic to increment index in search for player"
+                    "Logic to increment index in search for player, can strip allot of this put on finish"
                     print(f"Seeking index for {instance.name, instance.ref}")
                     index += 1
                     continue

@@ -201,7 +201,7 @@ class Player(P_tools):
 
 
 
-p1 = Player(1)
+p1 = Player(1) #passes reference (ref)
 p2 = Player(2)
 p3 = Player(3)
 p4 = Player(4)
@@ -215,13 +215,12 @@ p10 = Player(10)
 
 
 
-
 if __name__ == '__main__':
     p1 = Player(1)
     print(p1)
     # p1.get_treasure() # duplicate val is print state from Handler class method (note is same: GOOD)
-    p1.char_setup() # calls player name/sex setup, to be called after player number select
-    p1.inventory() # shows inventory of new built char
+    # p1.char_setup() # calls player name/sex setup, to be called after player number select
+    # p1.inventory() # shows inventory of new built char
 
 
 

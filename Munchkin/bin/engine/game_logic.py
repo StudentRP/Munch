@@ -102,7 +102,7 @@ def start_choice(pobj, all_players):# takes player instance
         Player.inventory(pobj)
         start_choice(pobj)
 
-    elif choice1 == '0': ################
+    elif choice1 == '0': ################ for gui loop check
         return pobj, all_players #####NEED TO CHECK####
 
 
