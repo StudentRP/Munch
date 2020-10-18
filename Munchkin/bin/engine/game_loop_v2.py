@@ -54,7 +54,7 @@ class NumberOfPlayers:
                     ###GUI####
 
                     # player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)
-                    PlayerInfo(instance.name) #not work
+                    PlayerInfo(instance.name) # not work. passes single object to gui class (hard work find way to pass whole instance)
 
 
                     print(f"{instance.name} Turn.")
