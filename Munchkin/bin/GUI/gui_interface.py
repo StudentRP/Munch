@@ -10,29 +10,37 @@ import tkinter as tk
 from Munchkin.bin.players.playermodel import p1  # to show player instance in field
 from tkinter.ttk import *
 
+preset1 = ('curlz MT', 12, 'bold')
+preset2 = ('curlz MT', 12, 'bold italic')
 
 # customisation classes of buttons and Labels
 
 #############################################################
 # labels
 #############################################################
-class Title_lab(tk.Label):  # inherits from parent Label
+class BaseLabel(tk.Label):
+    def __init__(self, *args, **kwargs):
+        tk.Label.__init__(self, *args, **kwargs)
+        self.config(bg='yellow')
+
+
+class Title_lab(BaseLabel):  # inherits from parent Label
     """customises labels for frame titles"""
-    preset1 = ('curlz MT', 15, 'bold')
 
     def __init__(self, *args, **kwargs):
-        tk.Label.__init__(self, *args, **kwargs)  # passes all args and kwargs to parent to sort
-        self.config(font=self.preset1, fg='blue')
+        BaseLabel.__init__(self, *args, **kwargs)  # passes all args and kwargs to parent to sort
+        self.config(font=preset1, fg='blue')
 
 
-class LabStyle(tk.Label):  # inherits from parent Label
+class LabStyle(BaseLabel):  # inherits from parent Label
     """customises labels for column data names"""
-    preset2 = ('curlz MT', 12, 'bold')
-    preset3 = ('curlz MT', 12, 'bold italic')  ### for next class
 
     def __init__(self, *args, **kwargs):
-        tk.Label.__init__(self, *args, **kwargs)  # passes all args and kwargs to parent to sort
-        self.config(font=self.preset2, fg='grey')
+        BaseLabel.__init__(self, *args, **kwargs)  # passes all args and kwargs to parent to sort
+        self.config(font=preset2, fg='grey')
+
+
+
 
 
 ################################################################
@@ -43,7 +51,16 @@ class LabStyle(tk.Label):  # inherits from parent Label
 # first container object
 class StartScreen(tk.Frame):
     """player select dropdown"""
-    pass
+    def __init__(self, *args, **kwargs):  # takes instance arg to feed into gui frame
+        tk.Frame.__init__(self, *args, **kwargs)
+        first_win = tk.Frame()
+        first_win.pack(fill='both', expand='yes')
+        self. player = tk.IntVar
+        select = Menubutton(first_win, text='Number of players')
+        select.pack()
+
+
+
 
 
 class PlayerSetup(tk.Frame):
@@ -52,40 +69,40 @@ class PlayerSetup(tk.Frame):
 
 
 class Playerinfo(tk.Frame):
-    """fits in contaier1"""
-
-    preset1 = ('curlz MT', 12, 'bold')
-    preset2 = ('curlz MT', 12, 'bold italic')
+    """fits in container1"""
 
     def __init__(self, instance, *args, **kwargs):  # takes instance arg to feed into gui frame
         tk.Frame.__init__(self, *args, **kwargs)
-        self.main_title = Title_lab(text='Player info')  # tk.Label(text="Player info")
+        cont1 = tk.Frame()
+        self.main_title = Title_lab(cont1,  text='Player info')  # tk.Label(text="Player info")
         self.main_title.grid(row=0, column=0, columnspan=2)
+        cont1.pack(side='left') #dictates where ethe frame goes in main window
+        cont1.config(bg='yellow')
 
-        self.name = LabStyle(text="Name: ", font=self.preset1)
+        self.name = LabStyle(cont1, text="Name: ", font=preset1)
         self.name.grid(row=1, column=0)
-        self.show_name = tk.Label(text=f'{instance.name}', font=self.preset2)
+        self.show_name = tk.Label(cont1, text=f'{instance.name}', font=preset2)
         self.show_name.grid(row=1, column=1)
 
-        self.gender = LabStyle(text="Gender: ", font=self.preset1)
+        self.gender = LabStyle(cont1, text="Gender: ", font=preset1)
         self.gender.grid(row=2, column=0)
-        self.show_gender = tk.Label(text=f'{instance.sex}', font=self.preset2)
+        self.show_gender = tk.Label(cont1, text=f'{instance.sex}', font=preset2)
         self.show_gender.grid(row=2, column=1)
 
-        self.level = LabStyle(text="Level: ", font=self.preset1)
+        self.level = LabStyle(cont1, text="Level: ", font=preset1)
         self.level.grid(row=3, column=0)
-        self.show_level = tk.Label(text=f'{instance.level}', font=self.preset2)
+        self.show_level = tk.Label(cont1, text=f'{instance.level}', font=preset2)
         self.show_level.grid(row=3, column=1)
 
-        self.bonus = LabStyle(text="Bonus: ", font=self.preset1)
+        self.bonus = LabStyle(cont1, text="Bonus: ", font=preset1)
         self.bonus.grid(row=4, column=0)
-        self.show_bonus = tk.Label(text=f'{instance.bonus}', font=self.preset2)
+        self.show_bonus = tk.Label(cont1, text=f'{instance.bonus}', font=preset2)
         self.show_bonus.grid(row=4, column=1)
 
-        self.show_sack = tk.Button(text="Sack", command=lambda: self.my_sack(instance), fg='red')
+        self.show_sack = tk.Button(cont1, text="Sack", command=lambda: self.my_sack(instance), fg='red')
         self.show_sack.grid(row=5, column=0)
 
-        self.show_weapons = tk.Button(text="Weapons", command=lambda: self.my_weapons(instance), fg='red')
+        self.show_weapons = tk.Button(cont1, text="Weapons", command=lambda: self.my_weapons(instance), fg='red')
         self.show_weapons.grid(row=5, column=1)
 
     def my_sack(self, instance):
@@ -129,11 +146,11 @@ class Playerinfo(tk.Frame):
 # root setup
 
 class Root(tk.Tk):
-    """Customises the main tk window, takes in instance from """
+    """Customises the main tk window, takes in instance from game_loop"""
 
     def __init__(self, instance, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)  # passed to parent to handle
-        self.title("Munch time")  # overrides parent name space from default
+        self.title("Munchkin time")  # overrides parent name space from default
         self.geometry("600x600")  # overrides default geometry
         ### may have some form of bring to front object here for starting interfaces and method to switch between.
         """really important below. shows that i can pass info to other classes through this one"""
@@ -155,7 +172,6 @@ class Root(tk.Tk):
         """changes over container objects"""
 
 
-if __name__ == '__main__':
-    app = Root(p1)  # to show player instance in field
 
-    app.mainloop()
+app = StartScreen()
+app.mainloop()
