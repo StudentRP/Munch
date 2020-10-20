@@ -8,6 +8,7 @@ Goals:
 """
 import tkinter as tk
 from Munchkin.bin.players.playermodel import p1  # to show player instance in field
+from tkinter.ttk import *
 
 
 # customisation classes of buttons and Labels
