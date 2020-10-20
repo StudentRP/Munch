@@ -8,7 +8,7 @@ Goals:
 """
 import tkinter as tk
 from Munchkin.bin.players.playermodel import p1  # to show player instance in field
-from tkinter.ttk import *
+import tkinter.ttk as ttk
 
 preset1 = ('curlz MT', 12, 'bold')
 preset2 = ('curlz MT', 12, 'bold italic')
@@ -56,8 +56,11 @@ class StartScreen(tk.Frame):
         first_win = tk.Frame()
         first_win.pack(fill='both', expand='yes')
         self. player = tk.IntVar
-        select = Menubutton(first_win, text='Number of players')
+        select = tk.Menubutton(first_win, text='Number of players')
         select.pack()
+        combobox = ttk.Combobox(first_win, values=["Option 1", "Option 2", "Option 3"])
+        combobox.pack()
+
 
 
 
