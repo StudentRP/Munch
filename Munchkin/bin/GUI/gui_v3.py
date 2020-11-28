@@ -13,6 +13,47 @@ sub tasks:
 
 """
 
-import tkinter
+import tkinter as tk
+import tkinter.ttk as ttk
 
 
+
+
+
+class Main(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        self.geometry("200x200")
+        self.title("Munchkin Dungeon")
+
+        self.welcome = tk.Label(self, text="Welcome")
+        self.welcome.pack()
+
+        self.start = tk.Button(self, text="Start", command=self.launch)
+        self.start.pack()
+        self.num_of_players_IV = tk.IntVar()
+
+    def launch(self):
+        player_select = tk.Toplevel(self)
+        # player_select.attributes('-fullscreen', True) # makes full screen
+        player_select.geometry("600x600")
+        player_select.title("Player Select")
+
+        tk.Label(player_select, text="Please select number of players").pack()
+        l1 = ttk.Spinbox(player_select, from_=1, to=6, increment=1, textvariable=self.num_of_players_IV)
+        l1.focus()
+        l1.pack()
+
+        tk.Button(player_select, text="Continue", command=self.player_setup).pack()
+
+    def player_setup(self):
+
+        player_set = tk.Toplevel(self)
+        # player_set.attributes('-fullscreen', True) # makes full screen
+        player_set.geometry("600x600")
+        player_set.title("Player Select")
+
+
+if __name__ == '__main__':
+    app = Main()
+    app.mainloop()
