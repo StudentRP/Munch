@@ -1,0 +1,2 @@
+the fui has to link to the main game loop. this will be achieved by introducing the main loop into the main script.
+All compontent to the gui will be inherited from the gui filw.

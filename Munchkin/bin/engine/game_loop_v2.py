@@ -10,8 +10,7 @@ Considerations;
     correlation of player vs cards                              = = move to game logic
     player intervention mechanics                               = = move to game logic
     exports treasure/curse objects to player self               = = move to game logic
-
-
+    start GUI loop here and import from gui the inherited bits  = = to do
 """
 
 

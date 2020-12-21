@@ -7,6 +7,7 @@ Main tasks:
     create player name/sex entery toplevel
     create main toplevel window with 3 main frames(nav, player info, action window)
 
+
 sub tasks:
     save/load capability
 
@@ -34,24 +35,26 @@ class Main(tk.Tk):
         self.num_of_players_IV = tk.IntVar()
 
     def launch(self):
-        player_select = tk.Toplevel(self)
-        # player_select.attributes('-fullscreen', True) # makes full screen
-        player_select.geometry("600x600")
-        player_select.title("Player Select")
 
-        tk.Label(player_select, text="Please select number of players").pack()
-        l1 = ttk.Spinbox(player_select, from_=1, to=6, increment=1, textvariable=self.num_of_players_IV)
+        self.player_select = tk.Toplevel(self)
+        # player_select.attributes('-fullscreen', True) # makes full screen
+        self.player_select.geometry("600x600")
+        self.player_select.title("Player Select")
+
+        tk.Label(self.player_select, text="Please select number of players").pack()
+        l1 = ttk.Spinbox(self.player_select, from_=1, to=6, increment=1, textvariable=self.num_of_players_IV)
         l1.focus()
         l1.pack()
 
-        tk.Button(player_select, text="Continue", command=self.player_setup).pack()
+        tk.Button(self.player_select, text="Continue", command=self.player_setup).pack()
 
     def player_setup(self):
-
-        player_set = tk.Toplevel(self)
+        self.player_select.destroy() # destroys old toplevel window
+        self.player_set = tk.Toplevel(self)
+        self.player_set.focus_set() # focuses on window
         # player_set.attributes('-fullscreen', True) # makes full screen
-        player_set.geometry("600x600")
-        player_set.title("Player Select")
+        self.player_set.geometry("600x600")
+        self.player_set.title("Player Info")
 
 
 if __name__ == '__main__':
