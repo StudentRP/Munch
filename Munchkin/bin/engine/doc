@@ -1,0 +1,38 @@
+game logic:
+
+game_loop script
+    1. calls all player instances into scope as a list called player_available
+    2. the list is sliced to give the number of players in the game by the select_players method
+    3.
+
+
+    what need to happen when at start???
+
+        # game starts
+        welcome screen (root)
+        calls into action toplevel window
+        num of players selected > sets IntVar > slices player instance list > stores new list for game loop
+        Tlvl for player set up > in loop of list set all player names/gender in their instances
+        deal cards to all players
+        process to id starting player
+
+        ENTER MAIN GAMING LOOP
+        NumberOfPlayers().select_players() activates the class and  the method of that class first by building the objects
+        then my using the objects within the method.
+
+        Method select_players, does several things (should be broken up)
+        1. catches an error when out of cards with try block
+        2. takes a input and checks is it is grater than 1 and less than 10. if out prints message of faut and recalls
+            method
+        3. if within player range, self.new_players = self.players_available[:maxplayers] is a list slice drive by the
+            original input
+        4. loop is created for the new list setting up each player object 1 at a time with name gender and starting cards.
+            player.sack = Dealer.deal_cards(player, "start") passes the instance and string to the Dealer.
+            Dealer is in table module that acts as the physical table and and a physical dealer.
+
+
+string understanding:
+    variables are established in a main gui class
+    each variable is to be imported from the class
+    when each player is called the variable is reassigned
+

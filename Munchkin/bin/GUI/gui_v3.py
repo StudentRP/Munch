@@ -18,6 +18,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 
+# variables
+# NumOfPlayers = tk.IntVar()
 
 
 
@@ -32,7 +34,10 @@ class Main(tk.Tk):
 
         self.start = tk.Button(self, text="Start", command=self.launch)
         self.start.pack()
-        self.num_of_players_IV = tk.IntVar()
+
+        # game variables .to be called by export
+        self.NumOfPlayers = tk.IntVar()
+        self.player_name = tk.StringVar()
 
     def launch(self):
 
@@ -42,7 +47,7 @@ class Main(tk.Tk):
         self.player_select.title("Player Select")
 
         tk.Label(self.player_select, text="Please select number of players").pack()
-        l1 = ttk.Spinbox(self.player_select, from_=1, to=6, increment=1, textvariable=self.num_of_players_IV)
+        l1 = ttk.Spinbox(self.player_select, from_=1, to=6, increment=1, textvariable=self.NumOfPlayers)
         l1.focus()
         l1.pack()
 
@@ -55,7 +60,11 @@ class Main(tk.Tk):
         # player_set.attributes('-fullscreen', True) # makes full screen
         self.player_set.geometry("600x600")
         self.player_set.title("Player Info")
+        tk.Label(self.player_set, textvariable=self.NumOfPlayers).pack(side=tk.BOTTOM)
+        tk.Label(self.player_set, textvariable=self.player_name).pack(side=tk.BOTTOM)
+        print(self.NumOfPlayers)
 
+app = Main()
 
 if __name__ == '__main__':
     app = Main()

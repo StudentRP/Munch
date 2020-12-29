@@ -15,13 +15,14 @@ Considerations;
 
 
 from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10
-from Munchkin.bin.engine.game_logic import start_choice
+from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
 from Munchkin.bin.all_cards.table import Dealer
 from Munchkin.bin.engine import cut_scenes as cs
 from random import randint
 # from Munchkin.bin.GUI.gui_v2 import TestWin, PlayerInfo, Main
 from Munchkin.bin.GUI.gui_interface import Root
 from time import sleep
+from Munchkin.bin.GUI.gui_v3 import app as gui_main # app.mainloop() will trigger gui
 
 
 ##################################################################
@@ -42,26 +43,26 @@ class NumberOfPlayers:
     def player_order(self, instance):
         """Main game loop, triggers events and cycles players from a list"""
         index = 0
-        play = True # for ending game loop
+        play = True # for ending game thus loop
 
-        while self.cycle <= 4: # test scenario, to be removed (replace with play for game exit)
+        while self.cycle <= 4: #TODO test scenario 4 turn loops, to be edited (replace with play for game exit)
             try:
                 "main game loop"
-                if instance == self.new_players[index] and instance.alive: # checks instance(x) against index in list
+                if instance == self.new_players[index] and instance.alive: # checks instance(x) against returned index in list
                     # and if player alive (skips turn if not)
                     "Main pathway logic"
-
+                    # instance.name = gui_main.player_name
                     ###GUI####
 
                     # player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)
-                    app = Root(instance) # not work. passes single object to gui class (hard work find way to pass whole instance)
-                    app.mainloop()
-                    # moreover scrit will call at wrong place of gui not launching the main application
+                    # app = Root(instance) # not work. passes single object to gui class (hard work find way to pass whole instance)
+                    # app.mainloop()
+                    # moreover script will call at wrong place of gui not launching the main application
 
 
                     print(f"{instance.name} Turn.")
                     # ..................... code calls for loop...............................
-                    start_choice(instance, self.new_players) # triggers Kick Door and Inventory (1st step)
+                    game_logic_start_choice(instance, self.new_players) # triggers Kick Door and Inventory (1st step)
 
 
                     # .sack vol check/charity
@@ -102,7 +103,7 @@ class NumberOfPlayers:
             maxplayers = int(input("Please select number of players 1 - 10.\n>>> ")) # throws error with str, need catch
             if maxplayers < 1 or maxplayers > 10: #out of player limits
                 print(cs.invalid())
-                self.select_players() # restarts loop
+                self.select_players() # restarts method loop
             elif maxplayers:
                 self.new_players = self.players_available[:maxplayers] # slices players_avail & adds to new_players
                 for player in self.new_players: #sets each instance up with sets of cards to start
@@ -121,7 +122,8 @@ class NumberOfPlayers:
 
 if __name__ == "__main__":
 
-    NumberOfPlayers().select_players() # starts game
+    NumberOfPlayers().select_players() # starts game by activating NOP building the objects, and activating select_players
+    # running wach line.
 
 
 

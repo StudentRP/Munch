@@ -8,7 +8,7 @@ Considerations:
 
 
     """
-
+from Munchkin.bin.GUI.gui_v3 import app as gui_main
 
 class P_tools():
     """Tools associated to the player class"""
@@ -61,4 +61,5 @@ class P_tools():
         if x == "ninja": # ......................................................................... dev mode
             y = "The_Creator "
             return y
+
         return x.title()

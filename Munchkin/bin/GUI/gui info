@@ -1,2 +1,6 @@
-the fui has to link to the main game loop. this will be achieved by introducing the main loop into the main script.
-All compontent to the gui will be inherited from the gui filw.
+the gui has to link to the main game loop. this will be achieved by introducing the main loop into the main script.
+All compontent to the gui will be inherited from the gui file.
+
+StringVar ect will be created in the GUI class and the object imported to the the main game loop  class where the can
+link to a player instance. This wil most likley be in the form of function that takes the parameters of a player
+instance and String/IntVar instances. This function is to be run at the start of a player turn.
