@@ -31,7 +31,6 @@ p2 = Player('Holly')
 
 if __name__ == '__main__':
     g = Mains()
-    p1.switch() # sets it but does not return back to
-    # this function during gui loop
+
 
     g.mainloop()
