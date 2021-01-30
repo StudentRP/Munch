@@ -7,4 +7,4 @@ def start():
 
 
 def invalid():
-    return "\nInvalid option. Please try again\n"
+    return "\nInvalid option. Please select a number between 1 and 10.\n"

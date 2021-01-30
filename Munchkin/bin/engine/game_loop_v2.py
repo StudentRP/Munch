@@ -36,7 +36,7 @@ class NumberOfPlayers:
     """class to determine number of players and hand to player order"""
 
     def __init__(self):
-        self.players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
+        self.players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] # instances from Player class
         self.new_players = []
         self.cycle = 0
 
@@ -98,25 +98,25 @@ class NumberOfPlayers:
     def select_players(self):
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
-        print(cs.start())
+        print(cs.start()) #' cut scene start message
         try:
             maxplayers = int(input("Please select number of players 1 - 10.\n>>> ")) # throws error with str, need catch
-            if maxplayers < 1 or maxplayers > 10: #out of player limits
-                print(cs.invalid())
+            if maxplayers < 1 or maxplayers > 10: # input limit checker
+                print(cs.invalid()) # message defining error
                 self.select_players() # restarts method loop
             elif maxplayers:
-                self.new_players = self.players_available[:maxplayers] # slices players_avail & adds to new_players
-                for player in self.new_players: #sets each instance up with sets of cards to start
-                    player.char_setup() # sets up players before game
+                self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
+                for player in self.new_players: # sets each instance up with sets of cards to start
+                    player.char_setup() # calls meth from Player setting up char name/sex before game
                     print("\nGetting cards from dealer\n")
-                    player.sack = Dealer.deal_cards(player, "start") # adds starting cards to player sack
+                    player.sack = Dealer.deal_cards(player, "start") # adds starting cards to player sack in Player class
                 print("Dice rolled to see who goes first!\n")
                 randomise = randint(0, len(self.new_players) - 1) # index correction
                 gofirst = self.new_players[randomise] # gets instance at position[random]
                 # print(self.new_players) # check to see if passing object and rand number
                 self.player_order(gofirst) #passes instance to player_order() function
         except ValueError:
-            print("Out of cards!")
+            print("Out of cards!") # crude catch stemming from the ue of random card deals #TODO find better way
             self.select_players()
 
 

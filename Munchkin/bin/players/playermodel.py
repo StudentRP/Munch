@@ -97,8 +97,8 @@ class Player(P_tools):
 
     def char_setup(self):
         """sets up name and sex when called"""
-        na = P_tools.name()
-        self.name = na
+        na = P_tools.name() # method to set name
+        self.name = na  # makes change to player
         xy = P_tools.sex()
         self.sex = xy
         y = input(f"Your name is {self.name} and you are {self.sex.title()}. Is this correct?\n>>> ")

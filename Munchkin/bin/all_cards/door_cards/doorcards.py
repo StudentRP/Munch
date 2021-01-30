@@ -1,4 +1,7 @@
-""" This folder will lay out the monster and curse card only  """
+"""
+Contains all door cards.
+Will need a processing level
+"""
 
 
 # from random import randint
@@ -89,28 +92,14 @@ class Moncurse():
         {'id': 100, 'type': 'wandering monster', 'name': 'Wandering Monster', 'des': 'Adds monster to the fight',
          'choice': 'choose monster'},
 
-        #
     ]
+
     @classmethod
     def __repr__(cls):
-        return cls.door_cards[0]["name"]
+        return cls.door_cards[0]["name"] # list index, dict name
 
 
-#     def drawn(self):
-#         x = randint(1, 2) # mon or cur
-#         n = 1 # int(len(Moncurs.mon) - 1)
-#         y = randint(0, n)
-#         if x == 1:
-#             return Moncurs.mon[y]
-#
-#         else:
-#             return Moncurs.cur[y]
-#
-#
-#
-# m1 = Moncurs()
-#
-# if __name__ == "__main__":
-#     print(m1.drawn())
-#     import class_tree
-#     class_tree.instancetree(m1)
+m1 = Moncurse()
+
+if __name__ == "__main__":
+    print(m1)
