@@ -20,9 +20,9 @@ from Munchkin.bin.all_cards.table import Dealer
 from Munchkin.bin.engine import cut_scenes as cs
 from random import randint
 # from Munchkin.bin.GUI.gui_v2 import TestWin, PlayerInfo, Main
-from Munchkin.bin.GUI.gui_interface import Root
+# from Munchkin.bin.GUI.gui_interface import Root
 from time import sleep
-from Munchkin.bin.GUI.gui_v3 import app as gui_main # app.mainloop() will trigger gui
+# from Munchkin.bin.GUI.gui_v3 import app as gui_main # app.mainloop() will trigger gui
 
 
 ##################################################################
@@ -30,6 +30,10 @@ from Munchkin.bin.GUI.gui_v3 import app as gui_main # app.mainloop() will trigge
 ##################################################################
 
 """ V2.0  """
+##globals for gui
+
+gui_num_of_players = 1 # changed by the gui
+
 
 
 class NumberOfPlayers:
@@ -39,6 +43,7 @@ class NumberOfPlayers:
         self.players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] # instances from Player class
         self.new_players = []
         self.cycle = 0
+        self.setup = self.select_players()
 
     def player_order(self, instance):
         """Main game loop, triggers events and cycles players from a list"""
@@ -52,12 +57,6 @@ class NumberOfPlayers:
                     # and if player alive (skips turn if not)
                     "Main pathway logic"
                     # instance.name = gui_main.player_name
-                    ###GUI####
-
-                    # player = TestWin(instance.name, instance.level) ### GUI TEST (GOOD data moves to win!)
-                    # app = Root(instance) # not work. passes single object to gui class (hard work find way to pass whole instance)
-                    # app.mainloop()
-                    # moreover script will call at wrong place of gui not launching the main application
 
 
                     print(f"{instance.name} Turn.")
@@ -95,15 +94,18 @@ class NumberOfPlayers:
                 self.cycle += 1 # test scenario, to be removed
                 continue
 
-    def select_players(self):
+    def select_players(self): # gui must call this passing the player num as a param
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
-        print(cs.start()) #' cut scene start message
+        # print(cs.start()) #' cut scene start message
+        print(gui_num_of_players)
+        global NumberOfPlayers
         try:
-            maxplayers = int(input("Please select number of players 1 - 10.\n>>> ")) # throws error with str, need catch
+            maxplayers = int(gui_num_of_players) #int(input("Please select number of players 1 - 10.\n>>> ")) # throws error with str, need catch
             if maxplayers < 1 or maxplayers > 10: # input limit checker
                 print(cs.invalid()) # message defining error
                 self.select_players() # restarts method loop
+                print(f"number of players selected: {int(gui_num_of_players)}") ### GUI test for number acceptance##############################
             elif maxplayers:
                 self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
                 for player in self.new_players: # sets each instance up with sets of cards to start
@@ -118,6 +120,7 @@ class NumberOfPlayers:
         except ValueError:
             print("Out of cards!") # crude catch stemming from the ue of random card deals #TODO find better way
             self.select_players()
+
 
 
 if __name__ == "__main__":

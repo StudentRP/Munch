@@ -1,6 +1,29 @@
 the gui has to link to the main game loop. this will be achieved by introducing the main loop into the main script.
 All compontent to the gui will be inherited from the gui file.
 
+
+
 StringVar ect will be created in the GUI class and the object imported to the the main game loop  class where the can
 link to a player instance. This wil most likley be in the form of function that takes the parameters of a player
 instance and String/IntVar instances. This function is to be run at the start of a player turn.
+
+
+####################################
+
+gui must sit on top of methods calling them at a button press and pushing values from th gui to the functions where
+they are required.
+all actions in gui have to be done it the half dead state
+
+buttons can be styled from gui_modeling class
+methods from the engine class can be bound to buttons
+
+
+#########################################
+# methodology
+#########################################
+main gui window called
+window will have a button called start
+opening message dialog window/frame
+frame with player number select (drop down)
+
+

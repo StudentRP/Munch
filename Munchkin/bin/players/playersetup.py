@@ -8,7 +8,7 @@ Considerations:
 
 
     """
-from Munchkin.bin.GUI.gui_v3 import app as gui_main
+# from Munchkin.bin.GUI.gui_v3 import app as gui_main
 
 class P_tools():
     """Tools associated to the player class"""
@@ -20,7 +20,7 @@ class P_tools():
         # if card["lvl"]:
         #     print("can not equip monster")
 
-    def card_options(self, card): # receives card object #todo
+    def card_options(self, card): # receives card object #todo missing veiw for all cards in player sack
         """Options for cards: Equip, Use, Sell and Charity"""
         print(f"You have chosen: {card}")
         sack_menu = input("Sack options:\n1) Equip\n2) Use\n3) Sell\n4) Charity\n5) Back\n>>> ")

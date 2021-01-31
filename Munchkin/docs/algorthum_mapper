@@ -1,0 +1,149 @@
+Game logic algorithmic determination
+
+##################################################
+START
+##################################################
+start gui (links to methods below)
+Select number of players
+menu options:
+    ### game mode: win condition level, death is death
+    ### game options: number of cards, pack volume, lvl to win
+    ### start
+Name of each player and gender
+Deal cards, 4 of each (changable in possible options)
+Random player index
+
+END RESULT: new list of player instances each with names, genders and set of cards.
+            random player selected from list and push to game loop
+            ### menu added
+
+################################################
+GAME LOOP:
+################################################
+
+Check to see if player is alive (True), skip if False
+Player inventory actions, (gui selection process) = INVENTORY Method, Full access, (sell, equipment, use)
+Player initiates Door card to be drawn (on button press)
+
+Card is placed on table(visible) (outcomes A | B)
+condition check outcomes
+info on outcome
+
+ A: MONSTER: Menu Options (inspect, inventory, ask for help, fight, run, interfere)
+    INSPECT OPTION:
+        inspect all visible cards on table (players, monster)
+
+    INVENTORY OPTION:
+        player item select use item/s (implement effect) INVENTORY Method, Restricted access, NO equip!
+
+    HELP OPTION:
+        player ask others for aid, help(condition: gold/treasure)
+
+    INTERFERE option:
+        other player interference, selecting items to use for or against
+
+    FIGHT OPTION:
+        fight monster/s (first in list)
+
+        FIGHT OUTCOME:
+            Constant outcome:
+                any player specific objects used during fight removed from inventory (spent)
+                spent cards moved to Table burn_pile
+            Win specific:
+                any assisting players help condition met (if treasure distribute according to terms, gold transfer)
+                treasure distributed
+                level increase +1 per monster
+                END FIGHT
+
+            Death/BADSTUFF:
+                if Death:
+                    # check win condition death if True remove player from player list
+                    player alive flag set to false
+                    death method for player atrib stripping
+                    branch for dead players to be reset and cards re-delt
+                    END PLAYER TURN
+                If BADSTUFF:
+                    referer to Monster card as associated methods (require processor function)
+                    END FIGHT
+    RUN OPTION:
+       check run attempt condition true or false (cant run from same monmster unless item allows)
+       other player/s interference option
+       if run true remove card from table list (add to burn pile list)
+       run attempt from each monster on the table (alternate between run and fight)
+       if Fail set run condition to False (removes/greys_out run option button for current monster)
+       END FIGHT IF RUN SUCCESSFUL
+       RETURN TO FIGHT IF UNSUCCESSFUL
+
+ B:
+    NON FIGHTING CARD
+        condition to check type of card
+            if not curse card
+                move card player sack
+                look for trouble (draw card from hand)
+                GO TO FIGHT Method called
+            else: cursed:
+                apply status
+                draw a face down card
+
+
+END FIGHT / END TURN CLEAN UP
+    check player level if win END Game function
+    check player sack max
+    option to access pack Method equipping, selling, use
+    menu: (inspect table, end turn)
+    inspect table (all player visible cards)
+    end turn button
+
+#####################################################
+END TURN
+#####################################################
+ Next player
+ condition check alive
+    if True
+        reset condition
+        END TURN
+
+
+######################################################
+# classes and methods
+######################################################
+
+Player class:
+class for specific setup
+initialisation
+    player attributes
+        self.ref = ref # simple form to keep track of players
+        self.name = None # to be set when called
+        self.sex = None
+        self.level = 1 # win lvl 10, make changeable so edit score to win
+        self.bonus = 0
+        self.wallet = 0
+        self.race = {'r1': True, 'r2': False} # string eval to True so will show
+        self.klass = {'c1': True, 'c2': False}
+        self.weapons = {"L_hand": None, "R_hand": None, "big": None, "special_1": None, "special_2": False}
+        self.armor = {"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
+                      "special_1": None, "special_2": False, "special_3": False}
+        self.sack = [] # volume to be monitored
+        self.visible_cards = [] # cards visible on the table that have value
+        self.hireling = []
+        self.undefined = [] # unclassified objects for all the things i want but dont know it
+        self.alive = True
+        self.longevity = 1 # counts cycles alive, if 0 player misses go
+
+    char_setup
+        call meth to set up name (P_tools class)
+        call method to set up sex
+
+    inventory
+        method to set items to the player
+
+
+class P_tools
+    all player related methods unclutter player class
+
+
+gui#### should i have an intermediate gui script that holds all the variables?
+
+main_gui reports(sets vars) to gui_var script and engine get all variables from gui var script
+thus main_gui imports gui_var and engine imports gui_var. gui can then call the classes of engine without moving any variables
+or changing the self parameter
