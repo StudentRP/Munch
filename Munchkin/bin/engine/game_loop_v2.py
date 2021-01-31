@@ -97,9 +97,9 @@ class NumberOfPlayers:
     def select_players(self): # gui must call this passing the player num as a param
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
-        print(gui_num_of_players) # global var changes by GUI script
+        print(gui_num_of_players) # global var changes by GUI script # remove at end
         maxplayers = gui_num_of_players
-        print(f"number of players selected: {int(gui_num_of_players)}") ### GUI test for number acceptance#######
+        print(f"number of players selected: {int(gui_num_of_players)}") ## GUI test for number acceptance# remove at end
         self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
         print(self.new_players[0].ref) # remove at end
 

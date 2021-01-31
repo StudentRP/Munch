@@ -16,6 +16,7 @@ sub tasks:
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from PIL import Image, ImageTk
 import bin.engine.game_loop_v2 as engine
 import bin.engine.cut_scenes as cs
 
@@ -28,8 +29,17 @@ import bin.engine.cut_scenes as cs
 class Main(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.geometry("200x200")
+        self.geometry("300x200")
         self.title("Munchkin Dungeon")
+
+        ## for background image on main start win
+        # self.canvas = tk.Canvas(self, width=300, height=400)
+        # self.canvas.pack()
+        # self.img = ImageTk.PhotoImage(Image.open().resize((WIDTH, HEIGTH), Image.ANTIALIAS))
+        # self.canvas.background = self.img  # Keep a reference in case this code is put in a function.
+        # self.bg = self.canvas.create_image(0, 0, anchor=tk.NW, image=self.img)
+        # button_window = self.canvas.create_window(10, 10, anchor=tk.NW, window=self.start)
+        # label_window = self.canvas.create_window(10, 10, anchor=tk.NW, window=self.self.welcome)
 
         self.welcome = tk.Label(self, text=f"{cs.start()}")
         self.welcome.pack()
