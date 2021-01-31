@@ -97,15 +97,19 @@ class NumberOfPlayers:
     def select_players(self): # gui must call this passing the player num as a param
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
+        # print(cs.start()) #' cut scene start message
         print(gui_num_of_players) # global var changes by GUI script
+        #try:
         maxplayers = gui_num_of_players
+        # if maxplayers < 1 or maxplayers > 10: # input limit checker # not required for gui as spinbox limits this
+        #     print(cs.invalid()) # message defining error
+        #     self.select_players() # restarts method loop
         print(f"number of players selected: {int(gui_num_of_players)}") ### GUI test for number acceptance#######
         self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
-        print(self.new_players[0].ref) # remove at end
+        print(self.new_players[0].ref)
 
     def player_name_gender(self):
             ############ ok up to here with gui ##################
-        try:
             for player in self.new_players: # sets each instance up with sets of cards to start
                 player.char_setup() # calls meth from Player setting up char name/sex before game
                 print("\nGetting cards from dealer\n")

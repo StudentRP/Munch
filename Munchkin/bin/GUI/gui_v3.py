@@ -17,6 +17,7 @@ sub tasks:
 import tkinter as tk
 import tkinter.ttk as ttk
 import bin.engine.game_loop_v2 as engine
+import bin.engine.cut_scenes as cs
 
 
 # variables
@@ -30,7 +31,7 @@ class Main(tk.Tk):
         self.geometry("200x200")
         self.title("Munchkin Dungeon")
 
-        self.welcome = tk.Label(self, text="Welcome")
+        self.welcome = tk.Label(self, text=f"{cs.start()}")
         self.welcome.pack()
 
         self.start = tk.Button(self, text="Start", command=self.launch)
@@ -56,8 +57,9 @@ class Main(tk.Tk):
         self.player_select.title("Player Select")
 
         tk.Label(self.player_select, text="Please select number of players").pack()
-        l1 = ttk.Spinbox(self.player_select, from_=1, to=6, increment=1, textvariable=self.NumOfPlayers)
+        l1 = ttk.Spinbox(self.player_select, from_=1, to=10, increment=1, textvariable=self.NumOfPlayers)
         l1.focus()
+        l1.set(1)
         l1.pack()
         tk.Button(self.player_select, text='Confirm', command=self.setplayers).pack()  ##### move val
         tk.Button(self.player_select, text="Continue", command=self.player_setup).pack()
