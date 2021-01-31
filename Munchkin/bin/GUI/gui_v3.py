@@ -50,17 +50,16 @@ class Main(tk.Tk):
         # game variables .to be called by export
         self.NumOfPlayers = tk.IntVar()
         self.player_name = tk.StringVar()
+        self.player_gender = tk.StringVar()
 
 
     def setplayers(self):
         print(f'player: {self.NumOfPlayers.get()}')
-        y = self.NumOfPlayers.get()
         engine.gui_num_of_players = self.NumOfPlayers.get() # sets the num of players in engine script
         engine.NumberOfPlayers() # calls class in engine scrip setting up all class attribs  #####################
-        #need to start engine class without passing self to it!
+        self.player_setup()
 
     def launch(self):
-
         self.player_select = tk.Toplevel(self)
         # player_select.attributes('-fullscreen', True) # makes full screen
         self.player_select.geometry("600x600")
@@ -72,18 +71,33 @@ class Main(tk.Tk):
         l1.set(1)
         l1.pack()
         tk.Button(self.player_select, text='Confirm', command=self.setplayers).pack()  ##### move val
-        tk.Button(self.player_select, text="Continue", command=self.player_setup).pack()
+
 
     def player_setup(self):
+        advance = True
         self.player_select.destroy() # destroys old toplevel window
         self.player_set = tk.Toplevel(self)
+        # player_set.attributes('-fullscreen', True) # makes full screen
         self.player_set.focus_set() # focuses on window
         # player_set.attributes('-fullscreen', True) # makes full screen
         self.player_set.geometry("600x600")
         self.player_set.title("Player Info")
-        tk.Label(self.player_set, textvariable=self.NumOfPlayers).pack(side=tk.BOTTOM)
-        tk.Label(self.player_set, textvariable=self.player_name).pack(side=tk.BOTTOM)
-        print(self.NumOfPlayers)
+
+        def advancing():
+            print('binding info to player')
+
+
+        for player in range(self.NumOfPlayers.get()):
+            """need mechanism for waiting for individual person data. current not working"""
+            ttk.Label(self.player_set, text='What is your name?').pack()
+            ttk.Entry(self.player_set, textvariable=self.player_name).pack()
+            ttk.Label(self.player_set, text='What is your gender?').pack()
+            ttk.Combobox(self.player_set, textvariable=self.player_gender, values=["Male", "Female"]).pack()
+            tk.Button(self.player_set, text="Next", command=advancing).pack()
+            # need to pause before moving on
+            tk.Label(self.player_set, text="Press Return for next player").pack()
+            # transfer of the Vars is required to specific player
+        print(self.player_name.get(), self.player_gender.get())
 
 # app = Main() # having this will run the script twice. in any other script it will cause them to trigger when imported!!
 
