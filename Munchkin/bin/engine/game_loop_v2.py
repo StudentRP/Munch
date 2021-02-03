@@ -19,10 +19,12 @@ from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choi
 from Munchkin.bin.all_cards.table import Dealer
 from Munchkin.bin.engine import cut_scenes as cs
 from random import randint
+import bin.GUI.gui_variables as gameVar
+
 # from Munchkin.bin.GUI.gui_v2 import TestWin, PlayerInfo, Main
 # from Munchkin.bin.GUI.gui_interface import Root
 from time import sleep
-# from Munchkin.bin.GUI.gui_v3 import app as gui_main # app.mainloop() will trigger gui
+
 
 
 ##################################################################
@@ -97,11 +99,12 @@ class NumberOfPlayers:
     def select_players(self): # gui must call this passing the player num as a param
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
-        print(gui_num_of_players) # global var changes by GUI script # remove at end
+        print(f"this is the global use:{gui_num_of_players}.\nThis is the var from gui_variables"
+              f" :{gameVar.StartVariables.new_players}") # global var changes by GUI script # remove at end
         maxplayers = gui_num_of_players
-        print(f"number of players selected: {int(gui_num_of_players)}") ## GUI test for number acceptance# remove at end
+        print(f"number of players selected: {gui_num_of_players}") ## GUI test for number acceptance# remove at end
         self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
-        print(self.new_players[0].ref) # remove at end
+        print(f"player ref:{self.new_players[0].ref}") # remove at end
 
     def player_name_gender(self):
             ############ ok up to here with gui ##################

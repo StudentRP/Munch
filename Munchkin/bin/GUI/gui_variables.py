@@ -1,14 +1,15 @@
 """
 local area for all tkinter variables use in the game.
-This script is imported in gui_v3 and game-loop_v2 so variable may be passed around
+This script is updated by gui_v3 with game-loop_v2 requesting data for the logic.
 
 
 """
 
-from tkinter import *
+class StartVariables:
+
+    # Start game variables
+    new_players = 1
 
 
-class Starting:
-    root =Tk()
-    player_numbers = IntVar(root)
-    pass
+    #Player varaibles
+

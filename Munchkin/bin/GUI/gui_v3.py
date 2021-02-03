@@ -16,14 +16,11 @@ sub tasks:
 
 import tkinter as tk
 import tkinter.ttk as ttk
-from PIL import Image, ImageTk
 import bin.engine.game_loop_v2 as engine
 import bin.engine.cut_scenes as cs
-
-
-# variables
-# NumOfPlayers = tk.IntVar()
-
+import bin.GUI.gui_variables as gameVar
+from PIL import Image, ImageTk
+# import bin.players.playermodel as contestant
 
 
 class Main(tk.Tk):
@@ -31,6 +28,8 @@ class Main(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
         self.geometry("300x200")
         self.title("Munchkin Dungeon")
+        # self.iconbitmap('')
+
 
         ## for background image on main start win
         # self.canvas = tk.Canvas(self, width=300, height=400)
@@ -41,21 +40,19 @@ class Main(tk.Tk):
         # button_window = self.canvas.create_window(10, 10, anchor=tk.NW, window=self.start)
         # label_window = self.canvas.create_window(10, 10, anchor=tk.NW, window=self.self.welcome)
 
-        self.welcome = tk.Label(self, text=f"{cs.start()}")
-        self.welcome.pack()
+        self.welcome = tk.Label(self, text=f"{cs.start()}").pack()
 
-        self.start = tk.Button(self, text="Start", command=self.launch)
-        self.start.pack()
+        self.start = tk.Button(self, text="Start", command=self.launch).pack()
 
         # game variables .to be called by export
         self.NumOfPlayers = tk.IntVar()
         self.player_name = tk.StringVar()
         self.player_gender = tk.StringVar()
 
-
     def setplayers(self):
-        print(f'player: {self.NumOfPlayers.get()}')
+        print(f'player from setplayers: {self.NumOfPlayers.get()}')
         engine.gui_num_of_players = self.NumOfPlayers.get() # sets the num of players in engine script
+        gameVar.StartVariables.new_players = self.NumOfPlayers.get() # sets in gui_variables
         engine.NumberOfPlayers() # calls class in engine scrip setting up all class attribs  #####################
         self.player_setup()
 
@@ -87,16 +84,16 @@ class Main(tk.Tk):
             print('binding info to player')
 
 
-        for player in range(self.NumOfPlayers.get()):
-            """need mechanism for waiting for individual person data. current not working"""
-            ttk.Label(self.player_set, text='What is your name?').pack()
-            ttk.Entry(self.player_set, textvariable=self.player_name).pack()
-            ttk.Label(self.player_set, text='What is your gender?').pack()
-            ttk.Combobox(self.player_set, textvariable=self.player_gender, values=["Male", "Female"]).pack()
-            tk.Button(self.player_set, text="Next", command=advancing).pack()
-            # need to pause before moving on
-            tk.Label(self.player_set, text="Press Return for next player").pack()
-            # transfer of the Vars is required to specific player
+        # for player in range(self.NumOfPlayers.get()):
+        #     """need mechanism for waiting for individual person data. current not working"""
+        #     ttk.Label(self.player_set, text='What is your name?').pack()
+        #     ttk.Entry(self.player_set, textvariable=self.player_name).pack()
+        #     ttk.Label(self.player_set, text='What is your gender?').pack()
+        #     ttk.Combobox(self.player_set, textvariable=self.player_gender, values=["Male", "Female"]).pack()
+        #     tk.Button(self.player_set, text="Next", command=advancing).pack()
+        #     # need to pause before moving on
+        #     tk.Label(self.player_set, text="Press Return for next player").pack()
+        #     # transfer of the Vars is required to specific player
         print(self.player_name.get(), self.player_gender.get())
 
 # app = Main() # having this will run the script twice. in any other script it will cause them to trigger when imported!!
