@@ -32,9 +32,7 @@ from time import sleep
 ##################################################################
 
 """ V2.0  """
-##globals for gui
 
-gui_num_of_players = 1 # changed by the gui
 
 
 
@@ -99,12 +97,10 @@ class NumberOfPlayers:
     def select_players(self): # gui must call this passing the player num as a param
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
-        print(f"this is the global use:{gui_num_of_players}.\nThis is the var from gui_variables"
-              f" :{gameVar.StartVariables.new_players}") # global var changes by GUI script # remove at end
-        maxplayers = gui_num_of_players
-        print(f"number of players selected: {gui_num_of_players}") ## GUI test for number acceptance# remove at end
+        session_players = gameVar.StartVariables.new_players
+        maxplayers = session_players
+        print(f"number of session players selected is: {session_players}") ## GUI test for number acceptance# remove at end
         self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
-        # print(self.new_players)
 
     def player_name_gender(self):
             ############ ok up to here with gui ##################

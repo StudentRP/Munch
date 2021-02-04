@@ -15,7 +15,7 @@ class Main(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.geometry('600x600')
+        self.geometry('600x600') # adding +x+y to the end provide window location
         container = tk.Frame(self)
         container.pack(side=tk.TOP, fill='both', expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -34,10 +34,10 @@ class Main(tk.Tk):
         frame = self.frames[content]
         frame.tkraise()
 
-
 ##########################################################################
 # frames to build up interface
 ##########################################################################
+
 
 class StartPg(tk.Frame):
     """Starting page """
@@ -60,9 +60,18 @@ class PlayerSelect(tk.Frame):
         l1.focus()
         l1.set(1)
         l1.pack()
+        but1 = tk.Button(self, text="OK", command=self.setplayers)
+        but1.pack()
+        #but for window progression
         but2 = tk.Button(self, text='Confirm', command=lambda: controller.show_frame(MainLoop)) # change method but use
         # this setup for moving onto next frame
         but2.pack()
+
+    def setplayers(self):
+        print(f'player from setplayers: {self.NumOfPlayers.get()}')
+        gameVar.StartVariables.new_players = self.NumOfPlayers.get() # sets in gui_variables
+        engine.NumberOfPlayers() # calls class in engine script setting up all class attribs  #####################
+                
 
 
 class MainLoop(tk.Frame):
