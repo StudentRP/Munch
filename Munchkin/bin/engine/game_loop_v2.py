@@ -104,7 +104,7 @@ class NumberOfPlayers:
         maxplayers = gui_num_of_players
         print(f"number of players selected: {gui_num_of_players}") ## GUI test for number acceptance# remove at end
         self.new_players = self.players_available[:maxplayers] # slices players_avail list creating new list
-        print(f"player ref:{self.new_players[0].ref}") # remove at end
+        # print(self.new_players)
 
     def player_name_gender(self):
             ############ ok up to here with gui ##################
@@ -121,7 +121,6 @@ class NumberOfPlayers:
         except ValueError:
             print("Out of cards!") # crude catch stemming from the ue of random card deals #TODO find better way
             self.select_players()
-
 
 
 if __name__ == "__main__":

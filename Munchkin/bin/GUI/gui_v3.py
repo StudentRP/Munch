@@ -23,6 +23,7 @@ from PIL import Image, ImageTk
 # import bin.players.playermodel as contestant
 
 
+
 class Main(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -97,6 +98,8 @@ class Main(tk.Tk):
         print(self.player_name.get(), self.player_gender.get())
 
 # app = Main() # having this will run the script twice. in any other script it will cause them to trigger when imported!!
+
+
 
 if __name__ == '__main__':
     app = Main()
