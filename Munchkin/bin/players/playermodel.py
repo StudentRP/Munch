@@ -16,6 +16,9 @@ from Munchkin.bin.all_cards.table import Table # most likely not used here (pos 
 from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
 from Munchkin.bin.players.playersetup import P_tools
+import bin.GUI.gui_variables as gameVar
+
+
 
 
 """adding items to player"""
@@ -102,15 +105,16 @@ class Player(P_tools):
         self.name = na  # makes change to player
         xy = P_tools.sex()
         self.sex = xy
-        y = input(f"Your name is {self.name} and you are {self.sex.title()}. Is this correct?\n>>> ")
-        if y.lower() == "y" or y.lower() == "yes" or y == "":
-            pass
-        else:
-            Player.char_setup(self)
+        print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
+
         if self.name == "The_Creator": # ................................................................... dev mode
             self.sex = "bob"
             self.bonus = 200
             self.wallet = 20000
+            gameVar.StartVariables.player_gender = self.sex
+
+        print("finished player set up")
+        print(self.__repr__())
 
 
     def inventory(self): # GUI to take control

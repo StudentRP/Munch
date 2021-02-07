@@ -8,7 +8,9 @@ Considerations:
 
 
     """
-# from Munchkin.bin.GUI.gui_v3 import app as gui_main
+
+import bin.GUI.gui_variables as gameVar
+
 
 class P_tools():
     """Tools associated to the player class"""
@@ -44,22 +46,14 @@ class P_tools():
     @classmethod
     def sex(cls):
         """Sets gender"""
-        x = str(input("Please choose a sex: 1 = Male, 2 = Female.\n>>> "))
-        if x == '1' or "":
-            return str("male")
-        elif x == '2':
-            return str("female")
-        else:
-            print("\nInvalid command\n")
-            P_tools.sex()
+        x = gameVar.StartVariables.player_gender
+        return x
 
     @classmethod
     def name(cls):
         """Sets name"""
-        x = input("\nWhat is your name?\n>>>")
-        print(f"Thank you {x.title()}")
+        x = gameVar.StartVariables.player_name
         if x == "ninja": # ......................................................................... dev mode
-            y = "The_Creator "
+            y = "The_Creator"
             return y
-
-        return x.title()
+        return x

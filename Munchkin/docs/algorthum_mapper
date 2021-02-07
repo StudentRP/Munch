@@ -147,3 +147,53 @@ gui#### should i have an intermediate gui script that holds all the variables?
 main_gui reports(sets vars) to gui_var script and engine get all variables from gui var script
 thus main_gui imports gui_var and engine imports gui_var. gui can then call the classes of engine without moving any variables
 or changing the self parameter
+
+
+######################################################
+# GUI considerations
+######################################################
+
+Controller:
+    Controller serves up pages(frames) that are raised to the top.
+
+Pages:
+    start page-
+        welcomes with start button that progresses to options frame (if included)
+
+    options-
+        sets game options. button leads to player select
+
+    player select-
+        spin box with player select.
+        button leads to player details method
+
+        player details:
+            provides a  generic player name with a box to enter name and gender
+            button to confirm either moves to another player name/gender or starts game loop
+            Information required:
+                method to check num of players
+                link to game var to bind plays name/gender
+                call of method in engine to bind attribs to the correct player
+                possible yield loop that takes player instance
+                order:
+                    while new_players =>1
+                    box pops up.
+                    player inputs info
+                    button is pushed
+
+                        calls player method
+                        for each instance (in order) from Maxplayers
+                            fetches gui_variables and binds to player
+                            yields player
+
+                    calls next() method
+
+
+
+
+
+
+
+
+
+

@@ -255,17 +255,17 @@ class Main(Tk):
         ControlPannel(self).pack(side=BOTTOM, fill=X)
         PlayerInfo(self).pack(side=LEFT, fill=Y)
         BattleGround(self).pack(side=RIGHT, fill=BOTH, expand=YES)
-        self.mainloop()
+        # self.mainloop()
 
 
 
 
 # Main()
-# app = Main()
+app = Main()
 #
 #
 # # per = PlayerInfo(app)
 #
-# app.mainloop()
+app.mainloop()
 
 """close but not winning!! Trouble addresing in script"""
