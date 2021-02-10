@@ -91,13 +91,13 @@ class Player(P_tools):
 
     def __repr__(self):
         """developer aid"""
-        return f"\nPLAYER OBJECT:{self.ref}\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
+        return f"\nPLAYER REF:{self.ref}\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
                f"\nBonus:{self.bonus}\nWallet:{self.wallet}\n"
 
-    def __str__(self):
-        """developer aid"""
-        return f"\nPLAYER INFO:\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
-               f"\nBonus:{self.bonus}\nvisible_cards:{self.visible_cards}\n"
+    # def __str__(self):
+    #     """developer aid"""
+    #     return f"\nPLAYER INFO:\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
+    #            f"\nBonus:{self.bonus}\nvisible_cards:{self.visible_cards}\n"
 
     def char_setup(self):
         """sets up name and sex when called"""
@@ -105,7 +105,6 @@ class Player(P_tools):
         self.name = na  # makes change to player
         xy = P_tools.sex()
         self.sex = xy
-        print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
 
         if self.name == "The_Creator": # ................................................................... dev mode
             self.sex = "bob"
@@ -113,8 +112,9 @@ class Player(P_tools):
             self.wallet = 20000
             gameVar.StartVariables.player_gender = self.sex
 
-        print("finished player set up")
-        print(self.__repr__())
+        print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
+        print("moving back to game_loop")
+        # print(self.__repr__())
 
 
     def inventory(self): # GUI to take control

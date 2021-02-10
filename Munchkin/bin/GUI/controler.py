@@ -1,9 +1,11 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from bin.engine.game_loop_v2 import gamefile
+# import bin.engine.game_loop_v2 as engine
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 
+# number = 0
 
 ##########################################################################
 # Main controller
@@ -15,7 +17,7 @@ class Main(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.geometry('600x600') # adding +x+y to the end provide window location
+        self.geometry('400x400') # adding +x+y to the end provide window location
         self.title("Munchkin")
         container = tk.Frame(self)
         container.pack(side=tk.TOP, fill='both', expand=True)
@@ -53,11 +55,14 @@ class StartPg(tk.Frame):
 
 class PlayerSelect(tk.Frame):
     """player number select"""
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller): # controller always passed in from main
         tk.Frame.__init__(self, parent)
         self.NumOfPlayers = tk.IntVar()
         self.instname = tk.StringVar()
         self.instgender = tk.StringVar()
+        self.counter = tk.IntVar() #gameVar.StartVariables.player_counter
+        self.counter.set(1)
+        self.count = tk.IntVar() #gameVar.StartVariables.new_players
 
         label = tk.Label(self, text="Select number of players")
         label.pack(pady=10, padx=10)
@@ -75,57 +80,75 @@ class PlayerSelect(tk.Frame):
     def playersetter(self):
         """ isolates the StringVar from setplayers()"""
         gameVar.StartVariables.new_players = self.NumOfPlayers.get()
-        gamefile.select_players()
-        self.setplayers()
-
-    def setplayers(self,):
-        """form for player info, counter linked to gui_var """
-        count = gameVar.StartVariables.new_players # count down for if loop for players (to be reduced in engine)
-
-        if count >= 1:
-
-            playobj = tk.Toplevel()
-            playobj.geometry('350x150+500+300')
-            mainframe = tk.Frame(playobj)
-            mainframe.pack(side='top', fill='both', expand=True)
-            mainframe.focus_set() #foucus on this window objects
-            mainframe.grab_set() # modal form
-
-            arbitary = tk.Label(mainframe, text=f"Player {count}")
-            arbitary.config(font=('castellar', 15, 'bold'), fg='blue')
-            arbitary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
-
-            namelab = tk.Label(mainframe, text='Name: ')
-            namelab.grid(column=1, row=1, sticky='w')
-            nameent = tk.Entry(mainframe, textvariable=self.instname)
-            nameent.grid(column=2, row=1, sticky='w,e')
-            nameent.focus()
-
-            genderlab = tk.Label(mainframe, text='Gender: ')
-            genderlab.grid(column=1, row=2, sticky='w')
-            nameent = ttk.Combobox(mainframe, textvariable=self.instgender, values=["Male", "Female"])
-            nameent.grid(column=2, row=2, sticky='w')
-
-            but2 = tk.Button(mainframe, text='Confirm', command=self.test)
-            but2.config(bd=10, activebackground='green')
-            but2.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
-
-        else:
-            Main.controller.show_frame(MainLoop)
-
-    def test(self):
-        # bind entries, call player class method, clear entries and recall set players
-        gameVar.StartVariables.player_name = self.instname.get()
-        gameVar.StartVariables.player_gender = self.instgender.get()
-        gamefile.player_name_gender() # iteration required to
+        gamefile.select_players() # sets in motion player slice in game_loop
+        Playerinfo() #calls toplevel
+        # self.setplayers()
 
 
-        print(f"player name: {self.instname.get().title()}\nplayer gender: {gameVar.StartVariables.player_gender}")
-        print(f'player are set to: {self.NumOfPlayers.get()}')
+class Playerinfo(tk.Toplevel):
+    """must: update title label with player number, store variables from entries, call game_loop with index para,
+    increment index,  """
+    counter = 1
+    indexing = 0
 
-        # engine.NumberOfPlayers.player_name_gender()
-        # gameVar.StartVariables.new_players = self.NumOfPlayers.get() # sets in gui_variables
-        # engine.NumberOfPlayers() # moved to player setter method
+
+    def __init__(self):
+        tk.Toplevel.__init__(self)
+        self.instname = tk.StringVar()
+        self.instgender = tk.StringVar()
+
+        self.geometry('350x150+500+300')
+        self.mainframe = tk.Frame(self)
+        self.mainframe.pack(side='top', fill='both', expand=True)
+        self.mainframe.focus_set()  # foucus on this window objects
+        self.mainframe.grab_set()  # modal form
+
+        self.arbitary = tk.Label(self.mainframe, text=f"Player {Playerinfo.counter}")
+        self.arbitary.config(font=('castellar', 15, 'bold'), fg='blue')
+        self.arbitary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
+
+        self.namelab = tk.Label(self.mainframe, text='Name: ')
+        self.namelab.grid(column=1, row=1, sticky='w')
+        self.nameent = tk.Entry(self.mainframe, textvariable=self.instname)
+        self.nameent.grid(column=2, row=1, sticky='w,e')
+        self.nameent.focus()
+
+        self.genderlab = tk.Label(self.mainframe, text='Gender: ')
+        self.genderlab.grid(column=1, row=2, sticky='w')
+        self.nameent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
+        self.nameent.grid(column=2, row=2, sticky='w')
+
+        self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.test)
+        self.but2.config(bd=10, activebackground='green')
+        self.but2.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
+        self.bind('<Return>', self.test)  # creates event to be passed to test
+
+    def test(self, event=None):
+        number = gameVar.StartVariables.new_players
+        # number = x
+        print(number)
+
+        if number >= 1:
+            print('setting up player: ', number)
+            number -= 1 # decreases the num of new pLayer integer
+            Playerinfo.counter += 1 # increase player counter for arbitrary label in __init__
+            gameVar.StartVariables.player_name = self.instname.get() # changes name in gameVar script
+            gameVar.StartVariables.player_gender = self.instgender.get() # changes name in gameVar script
+            gamefile.player_name_gender(Playerinfo.indexing) # call game loop for name to instance # indexing works ~~~~OK~~~
+            Playerinfo.indexing = Playerinfo.indexing + 1
+            print("destroying toplevel")
+            Playerinfo.destroy(self) #destoys toplevel window
+            gameVar.StartVariables.new_players = number
+            # conditional needed to stop window building for non existant player
+            if number != 0:
+                Playerinfo() # recalls toplevel anew
+
+            else:
+                Playerinfo.destroy(self)
+                print("no players left")
+                for players in gameVar.StartVariables.active_players:
+                    print(players.name) # checks all players names for activity
+
 
 ####################################################################################################################
 class MainLoop(tk.Frame):
