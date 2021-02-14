@@ -1,9 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from bin.engine.game_loop_v2 import gamefile
-# import bin.engine.game_loop_v2 as engine
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
+from random import randint
 
 # number = 0
 
@@ -26,7 +26,7 @@ class Main(tk.Tk):
         self.frames = {}
         #### all player atribs to bind ####
         self.name = tk.StringVar()
-        self.gender = tk.StringVar
+        self.gender = tk.StringVar()
         self.level= tk.IntVar()
 
         "fills the dictionary"
@@ -41,10 +41,12 @@ class Main(tk.Tk):
         frame.tkraise()
 
     def update_frame(self):
+        """binds all the labels to the gamevar"""
         self.name.set(gameVar.PlayerAtribs.player_name)
+        self.gender.set(gameVar.PlayerAtribs.player_gender)
 
-    def other(self, updates):
-        app.update(updates)
+    # def other(self, updates):
+    #     app.update(updates)
 
 
 
@@ -87,6 +89,7 @@ class PlayerSelect(tk.Frame):
     def playersetter(self):
         """ isolates the StringVar from setplayers()"""
         gameVar.StartVariables.new_players = self.NumOfPlayers.get()
+        gameVar.StartVariables.player_rand = self.NumOfPlayers.get() #binds in 2nd location for later use in indexing
         gamefile.select_players() # sets in motion player slice in game_loop
         Playerinfo() #calls toplevel
         # self.setplayers()
@@ -131,7 +134,6 @@ class Playerinfo(tk.Toplevel):
 
     def test(self, event=None):
         number = gameVar.StartVariables.new_players # (int)
-
         if number >= 1:
             number -= 1 # decreases the num of new pLayer integer
             Playerinfo.counter += 1 # increase player counter for arbitrary label in __init__
@@ -150,11 +152,13 @@ class Playerinfo(tk.Toplevel):
                 print("No players left")
                 for players in gameVar.StartVariables.active_players: # loop to see all player names
                     print(players.name) # checks all players names for activity
-                # Main.update_frame(app, MainLoop)
-                app.update_frame()
+
+                # HERE!!! call some sort of random funct to deside which player goes first. and sets a gamevar.
+                gamefile.varseter(gameVar.StartVariables.player_rand)
+                print(f" INDEX NUM IS::: {gameVar.StartVariables.player_rand}")
+
+                app.update_frame() # updates all tk Vars in Main class.
                 print(app.name.get(), "call to main class")
-                ############ method to randomise and bind first player instance to the gamevars
-                # call some sort of random funct to deside which player goes first. and sets a gamevar.
                 app.show_frame(MainLoop) # calls next frame to raise by controller
 
 
@@ -164,23 +168,28 @@ class MainLoop(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        # self.randomiseperson = some function to call on initiation to select who goes first (want popup)
-        # self.setplayerinfo = method to set all info for the player
-        print(f"player index {}")
         self.plframe = tk.LabelFrame(self, text='Player Info')
-        self.plframe.config(bg='green')
+        self.plframe.config(bg='green'),
         self.plframe.pack(side='left', fill='both', expand=True)
 
         self.l1 = tk.Label(self.plframe, text="Name: ")
         self.l1.grid(row=0, column=1, sticky='nsew')
         self.l2 = tk.Label(self.plframe, textvariable=controller.name) ## works binding strait to stringvar in Main
         self.l2.grid(row=0, column=2, sticky='nsew')
+
+        self.l3 = tk.Label(self.plframe, text="Gender: ")
+        self.l3.grid(row=1, column=1, sticky='nsew')
+        self.l4 = tk.Label(self.plframe, textvariable=controller.gender)  ## works binding strait to stringvar in Main
+        self.l4.grid(row=1, column=2, sticky='nsew')
+
         self.b1 = tk.Button(self.plframe, text="next player", command=self.rebuild)
-        self.b1.grid(row=1, column=0, columnspan=2)
+        self.b1.grid(row=3, column=0, columnspan=2)
 
     def rebuild(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop"""
         # method to pass new instance index to gameloop.
+        gamefile.varseter(gameVar.StartVariables.player_rand)
+        app.update_frame()
 
 
 
@@ -188,4 +197,4 @@ app = Main()
 
 app.mainloop()
 
-# Main().mainloop()
+# Main().mainloop(),

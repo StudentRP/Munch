@@ -18,11 +18,9 @@ Considerations;
 # from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
 # from Munchkin.bin.all_cards.table import Dealer
 # from Munchkin.bin.engine import cut_scenes as cs
-# from random import randint
+from random import randint
 import bin.GUI.gui_variables as gameVar
 
-# from Munchkin.bin.GUI.gui_v2 import TestWin, PlayerInfo, Main
-# from Munchkin.bin.GUI.gui_interface import Root
 from time import sleep
 
 
@@ -41,6 +39,17 @@ class NumberOfPlayers:
 
     def __init__(self):
         self.cycle = 0
+
+    def varseter(self, index):
+        """method to generate randomplayer from the list and bind instance to all gui_var script"""
+        x = index -1
+        rand = randint(0, x)
+        print(f" ############### The random num is: {rand} ######################")
+        y = gameVar.StartVariables.active_players[rand]
+        print(f"player activated {y.name}")
+
+        gameVar.PlayerAtribs.player_name = y.name.title()
+        gameVar.PlayerAtribs.player_gender = y.sex.title()
 
 
     # def player_order(self, instance):

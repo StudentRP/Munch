@@ -18,7 +18,21 @@ class StartVariables:
 
 class PlayerAtribs:
 
+    player_ref = 0
     player_name = 'BOB' # current session player name
     player_gender = 'male'  # current session player gender
+    player_level = 1
+    player_bonus = 0
+    player_wallet = 0
+    player_race = {'r1': True, 'r2': False}
+    player_weapons = {"L_hand": None, "R_hand": None, "big": None, "special_1": None, "special_2": False}
+    player_armor = {"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
+                  "special_1": None, "special_2": False, "special_3": False}
+    player_sack = []
+    player_visible_cards = []
+    player_hireling = []
+    player_undefined = []
+    player_alive = True
+    player_longevity = 1
 
 
