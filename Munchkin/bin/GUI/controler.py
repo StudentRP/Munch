@@ -27,7 +27,7 @@ class Main(tk.Tk):
         #### all player atribs to bind ####
         self.name = tk.StringVar()
         self.gender = tk.StringVar()
-        self.level= tk.IntVar()
+        self.level = tk.IntVar()
 
         "fills the dictionary"
         for frm in StartPg, PlayerSelect, MainLoop:
@@ -70,26 +70,22 @@ class PlayerSelect(tk.Frame):
     """player number select"""
     def __init__(self, parent, controller): # controller always passed in from main
         tk.Frame.__init__(self, parent)
-        self.NumOfPlayers = tk.IntVar() # (int) of players in session
-        self.count = tk.IntVar() #gameVar.StartVariables.new_players
+        self.Num_of_players = tk.IntVar() # (int) of players in session
+        self.count = tk.IntVar() # gameVar.StartVariables.new_players
 
         label = tk.Label(self, text="Select number of players")
         label.pack(pady=10, padx=10)
-        l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.NumOfPlayers)
+        l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players)
         l1.focus()
         l1.set(1)
         l1.pack()
         but1 = tk.Button(self, text="Confirm", command=self.playersetter)
         but1.pack()
-        #but2 for window progression move to final player setup
-        # but2 = tk.Button(self, text='Confirm', command=lambda: controller.show_frame(MainLoop)) # change method but use
-        # this setup for moving onto next frame
-        # but2.pack()
 
     def playersetter(self):
         """ isolates the StringVar from setplayers()"""
-        gameVar.StartVariables.new_players = self.NumOfPlayers.get()
-        gameVar.StartVariables.player_rand = self.NumOfPlayers.get() #binds in 2nd location for later use in indexing
+        gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
+        gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
         gamefile.select_players() # sets in motion player slice in game_loop
         Playerinfo() #calls toplevel
         # self.setplayers()
@@ -99,7 +95,7 @@ class Playerinfo(tk.Toplevel):
     """must: update title label with player number, store variables from entries, call game_loop with index para,
     increment index,  """
     counter = 1 # player identity title number
-    indexing = 0 # index to pass to game loop for player list index
+    indexing = 0 # index to pass to game loop for player list index. Ensures player details are bound to the correct instance
 
     def __init__(self):
         tk.Toplevel.__init__(self)
@@ -133,7 +129,7 @@ class Playerinfo(tk.Toplevel):
         self.bind('<Return>', self.test)  # creates event to be passed to test
 
     def test(self, event=None):
-        number = gameVar.StartVariables.new_players # (int)
+        number = gameVar.StartVariables.new_players # (int) devrived for playersetter.
         if number >= 1:
             number -= 1 # decreases the num of new pLayer integer
             Playerinfo.counter += 1 # increase player counter for arbitrary label in __init__
@@ -154,8 +150,8 @@ class Playerinfo(tk.Toplevel):
                     print(players.name) # checks all players names for activity
 
                 # HERE!!! call some sort of random funct to deside which player goes first. and sets a gamevar.
-                gamefile.varseter(gameVar.StartVariables.player_rand)
-                print(f" INDEX NUM IS::: {gameVar.StartVariables.player_rand}")
+                playerinstance = gamefile.varseter(gameVar.StartVariables.player_rand)
+                print(f" player Level IS::: {playerinstance.level}")
 
                 app.update_frame() # updates all tk Vars in Main class.
                 print(app.name.get(), "call to main class")
@@ -188,8 +184,10 @@ class MainLoop(tk.Frame):
     def rebuild(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop"""
         # method to pass new instance index to gameloop.
-        gamefile.varseter(gameVar.StartVariables.player_rand)
-        app.update_frame()
+        playerinst = gamefile.varseter(gameVar.StartVariables.player_rand)
+        app.update_frame() # updates the tk.vars in Main under the instance controller.
+        gamefile.player_order(playerinst) # calls main game loop to loop over game cycle
+        print(f"in rebuld: {playerinst.bonus}") # this works, creator = 200
 
 
 
