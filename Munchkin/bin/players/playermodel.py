@@ -100,20 +100,21 @@ class Player(P_tools):
     #            f"\nBonus:{self.bonus}\nvisible_cards:{self.visible_cards}\n"
 
     def char_setup(self):
-        """sets up name and sex when called"""
+        # complete, prints to be removed
+        """sets up name and sex in gameVar and player instance when called"""
         na = P_tools.name() # method to set name
         self.name = na  # makes change to player
+        gameVar.PlayerAtribs.player_name = na.title() # changes gamevar to be titled so comes up in gui label
         xy = P_tools.sex()
         self.sex = xy
+        gameVar.PlayerAtribs.player_gender = xy.title()
 
         if self.name == "The_Creator": # ................................................................... dev mode
             self.sex = "bob"
             self.bonus = 200
             self.wallet = 20000
-            gameVar.StartVariables.player_gender = self.sex
-
+            gameVar.PlayerAtribs.player_gender = self.sex.title()
         print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
-        print("moving back to game_loop")
         # print(self.__repr__())
 
 

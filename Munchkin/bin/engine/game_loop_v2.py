@@ -92,8 +92,10 @@ class NumberOfPlayers:
     #             self.cycle += 1 # test scenario, to be removed
     #             continue
 
+    def initaliseplay(self):
+        """method to """
 
-    def select_players(self): # gui must call this passing the player num as a param
+    def select_players(self): # slices num of availabel players with gui entry
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
         session_players = gameVar.StartVariables.new_players
@@ -101,14 +103,9 @@ class NumberOfPlayers:
         print(f"number of players in session: {session_players}") ## GUI test for number acceptance# remove at end
         gameVar.StartVariables.active_players = gameVar.StartVariables.players_available[:maxplayers] # slices players_avail list creating new list
 
-    def player_name_gender(self, playerindex=0): #push in index for the number of players from caller
+    def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
         """call active player list, use index to ref each player instance, call """
-        print("in name gender method")
-        # print(gameVar.StartVariables.active_players)
-        print("the index is:", playerindex)
-        cout = 1
         player = gameVar.StartVariables.active_players[playerindex]
-        cout += 1
         player.char_setup()
         print(player)
 

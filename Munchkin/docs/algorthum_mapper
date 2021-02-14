@@ -142,7 +142,7 @@ class P_tools
     all player related methods unclutter player class
 
 
-gui#### should i have an intermediate gui script that holds all the variables?
+gui#### should i have an intermediate gui script that holds all the variables? WORKING PROGRESS
 
 main_gui reports(sets vars) to gui_var script and engine get all variables from gui var script
 thus main_gui imports gui_var and engine imports gui_var. gui can then call the classes of engine without moving any variables
@@ -154,7 +154,7 @@ or changing the self parameter
 ######################################################
 
 Controller:
-    Controller serves up pages(frames) that are raised to the top.
+    Controller serves up pages(frames) that are raised to the top. these are pre-build at the beginning and updated by tk.Vars
 
 Pages:
     start page-
@@ -187,6 +187,18 @@ Pages:
                             yields player
 
                     calls next() method
+
+
+for main play window the gui must have the gamevars ready linking to the instance in question. button will change the
+instance associated
+
+mainloop class to define a method to send index to game_loop class.
+
+game_Loop
+    game_loop will use index to determine the correct player in gameVar.active_players.
+    indexed player will bind self to gameVar.player_atribs.x
+    controller Main class binds self.x to StringVar()
+    .get() method fetches the variable in tk
 
 
 
