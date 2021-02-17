@@ -18,7 +18,7 @@ Considerations;
 # from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
 # from Munchkin.bin.all_cards.table import Dealer
 # from Munchkin.bin.engine import cut_scenes as cs
-from random import randint
+from random import randint, choice
 import bin.GUI.gui_variables as gameVar
 
 from time import sleep
@@ -40,81 +40,68 @@ class NumberOfPlayers:
     def __init__(self):
         self.cycle = 0
 
-    def varseter(self, index):
-        """method to generate randomplayer from the list and bind instance to all gui_var script"""
-        global first
-        if first: # too run on first call
-            rand = randint(0, index - 1)
-            print(f" ############### The random num is: {rand} ######################")
-            instance = gameVar.StartVariables.active_players[rand]
-            print(f"player activated {instance.name}")
-            first = False
-        else: # second call will need to provide an index
-            print("else branch")
-            instance = gameVar.StartVariables.active_players[index - 1]
+    def rand(self):
+        """called to pick a random player in the active player list"""
+        x = choice(gameVar.StartVariables.active_players)
+        gameVar.StartVariables.rand_player = x # send to game var for accessibility
+        gameVar.StartVariables.rand_index = gameVar.StartVariables.active_players.index(x)
+        # print(f"player: {x.name} index: {gameVar.StartVariables.rand_index}")
+        print(f"random player selected is {x.name}")
+        self.varbinding(x)
 
-        gameVar.PlayerAtribs.player_ref = instance.ref
-        gameVar.PlayerAtribs.player_name = instance.name.title()
-        gameVar.PlayerAtribs.player_gender = instance.sex.title()
-        gameVar.PlayerAtribs.player_level = instance.level
-        gameVar.PlayerAtribs.player_bonus = instance.bonus
 
-        return instance # returns instance to caller
+    def varbinding(self, playerinst):
+        """method to bind all atribs to gameVar, to be called with player instance"""
+        gameVar.PlayerAtribs.player_name = playerinst.name.title()
+        gameVar.PlayerAtribs.player_gender = playerinst.sex.title()
+        gameVar.PlayerAtribs.player_level = playerinst.level
+        gameVar.PlayerAtribs.player_bonus = playerinst.bonus
+        gameVar.PlayerAtribs.player_wallet = playerinst.wallet
 
 
 
     def player_order(self, instance):
         """Main game loop, triggers events and cycles players from a list"""
-        index = 0
         play = True # for ending game thus loop
 
-        while self.cycle <= 4: # play bool to be here
-            try:
-                "main game loop"
-                if instance == gameVar.StartVariables.active_players[index] and instance.alive: # checks instance(x) against returned index in list
-                    # and if player alive (skips turn if not)
-                    "Main pathway logic"
-                    # instance.name = gui_main.player_name
+        # while self.cycle <= 4: # play bool to be here
 
-
-                    print(f"{instance.name} Turn.")
-                    # ..................... code calls for loop...............................
-                    # game_logic_start_choice(instance, gameVar.StartVariables.active_players) # triggers Kick Door and Inventory (1st step)
-
-
-                    # .sack vol check/charity
-                    # ... end game loop
-                    index += 1 #increments index for next player
-                    instance = gameVar.StartVariables.active_players[index]  # changes player, if index error does not execute below
-
-                    continue
-                elif instance != gameVar.StartVariables.active_players[index]:
-                    "Logic to increment index in search for player, can strip allot of this put on finish"
-                    print(f"Seeking index for {instance.name, instance.ref}")
+        "main game loop"
+        for index in range(len(gameVar.StartVariables.active_players)):
+            print(index)
+            if gameVar.StartVariables.active_players.index(instance) == index and instance.alive: # gets instance index from list and compares to loop value
+                print(f"It's {instance.name} Turn.")
+                # self.varbinding(instance)
+                try:
                     index += 1
-                    continue
-                elif instance == gameVar.StartVariables.active_players[index] and not instance.alive:
-                    "Logic for player skip turn"
-                    print(f"You are dead {instance.name}, your items have been looted!")
-                    instance.alive = True
-                    index += 1
-                    instance = gameVar.StartVariables.active_players[index] # changes player
-                    continue
-                else:
-                    "Catch eventuality"
-                    print('ERROR: Something has gone seriously wrong!')
+                    gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]  # binds rand_player to next in order
+                    nextplayer = gameVar.StartVariables.rand_player
+                    print(f"next player to try is: {nextplayer.name}")
+                    self.varbinding(nextplayer)
                     break
-            except IndexError:
-                "Looping logic"
-                index = 0
-                instance = gameVar.StartVariables.active_players[index]  # changes player
-                print(f"Resetting index {index}, next player is: {instance.name}")
-                print("\n######################## Cycle number:", self.cycle, "########################")
-                self.cycle += 1 # test scenario, to be removed
+
+                except IndexError:
+                    index = 0
+                    gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
+                    nextplayer = gameVar.StartVariables.rand_player
+                    print(f"next player accepted is {nextplayer.name}")
+                    self.varbinding(nextplayer)
+                    break
+
+            elif gameVar.StartVariables.active_players.index(instance) == index and not instance.alive:
+                "Logic for player skip turn"
+                print(f"You are dead {instance.name}, your items have been looted!") # send as message
+                instance.alive = True
+                index += 1
+                gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
                 continue
 
-    def initaliseplay(self):
-        """method to """
+            else:
+                "Catch eventuality"
+                print('ERROR: Something has gone seriously wrong!')
+                break
+
+
 
     def select_players(self): # slices num of availabel players with gui entry
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
@@ -128,7 +115,7 @@ class NumberOfPlayers:
         """call active player list, use index to ref each player instance, call """
         player = gameVar.StartVariables.active_players[playerindex]
         player.char_setup()
-        print(player)
+        # print(player)
 
 
 

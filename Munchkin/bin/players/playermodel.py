@@ -73,7 +73,7 @@ class Player(P_tools):
     def __init__(self, ref):
         self.ref = ref # simple form to keep track of players
         self.name = None
-        self.sex = None
+        self.sex = None # require way to set as default
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
         self.wallet = 0

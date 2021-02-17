@@ -14,6 +14,9 @@ class StartVariables:
     players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
     active_players = None # (list) generated list slice for all session players
     player_rand = 1 # number for random player generator
+    rand_player = None # set to bind at game start a random player
+    rand_index = 0 # for the above player
+    message = None
 
 
 class PlayerAtribs:
