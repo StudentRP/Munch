@@ -54,7 +54,7 @@ class Main(tk.Tk):
         print(f'player from setplayers: {self.NumOfPlayers.get()}')
         engine.gui_num_of_players = self.NumOfPlayers.get() # sets the num of players in engine script
         gameVar.StartVariables.new_players = self.NumOfPlayers.get() # sets in gui_variables
-        engine.NumberOfPlayers() # calls class in engine scrip setting up all class attribs  #####################
+        engine.PlayerSetUp() # calls class in engine scrip setting up all class attribs  #####################
         self.player_setup()
 
     def launch(self):

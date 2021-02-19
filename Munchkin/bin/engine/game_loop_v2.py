@@ -34,7 +34,7 @@ first = True
 
 
 
-class NumberOfPlayers:
+class PlayerSetUp:
     """class to determine number of players and hand to player order"""
 
     def __init__(self):
@@ -49,7 +49,6 @@ class NumberOfPlayers:
         print(f"random player selected is {x.name}")
         self.varbinding(x)
 
-
     def varbinding(self, playerinst):
         """method to bind all atribs to gameVar, to be called with player instance"""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
@@ -58,50 +57,37 @@ class NumberOfPlayers:
         gameVar.PlayerAtribs.player_bonus = playerinst.bonus
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
 
+    def deal_cards(self):
+        pass
 
 
     def player_order(self, instance):
-        """Main game loop, triggers events and cycles players from a list"""
-        play = True # for ending game thus loop
-
-        # while self.cycle <= 4: # play bool to be here
-
-        "main game loop"
+        """Player cycle loop for ending turns and loading new player"""
         for index in range(len(gameVar.StartVariables.active_players)):
-            print(index)
             if gameVar.StartVariables.active_players.index(instance) == index and instance.alive: # gets instance index from list and compares to loop value
-                print(f"It's {instance.name} Turn.")
                 # self.varbinding(instance)
                 try:
                     index += 1
                     gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]  # binds rand_player to next in order
                     nextplayer = gameVar.StartVariables.rand_player
-                    print(f"next player to try is: {nextplayer.name}")
+                    print(f"binding next player from try {nextplayer.name}")
                     self.varbinding(nextplayer)
                     break
-
                 except IndexError:
                     index = 0
                     gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
                     nextplayer = gameVar.StartVariables.rand_player
-                    print(f"next player accepted is {nextplayer.name}")
+                    print(f"binding next player {nextplayer.name}")
                     self.varbinding(nextplayer)
                     break
 
             elif gameVar.StartVariables.active_players.index(instance) == index and not instance.alive:
                 "Logic for player skip turn"
-                print(f"You are dead {instance.name}, your items have been looted!") # send as message
+                print(f"You are dead {instance.name}, your body will be looted!") # send as message
                 instance.alive = True
                 index += 1
                 gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
                 continue
-
-            else:
-                "Catch eventuality"
-                print('ERROR: Something has gone seriously wrong!')
-                break
-
-
 
     def select_players(self): # slices num of availabel players with gui entry
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
@@ -118,25 +104,7 @@ class NumberOfPlayers:
         # print(player)
 
 
-
-
-
-        #
-        # try:
-        #     for player in gameVar.StartVariables.active_players: # sets each instance up with sets of cards to start
-        #         player.char_setup() # calls meth from Player setting up char name/sex before game
-        #         print("\nGetting cards from dealer\n")
-        #         player.sack = Dealer.deal_cards(player, "start") # adds starting cards to player sack in Player class
-        #     print("Dice rolled to see who goes first!\n")
-        #     randomise = randint(0, len(gameVar.StartVariables.active_players) - 1) # index correction
-        #     gofirst = gameVar.StartVariables.active_players[randomise] # gets instance at position[random]
-        #     # print(self.new_players) # check to see if passing object and rand number
-        #     self.player_order(gofirst) #passes instance to player_order() function
-        # except ValueError:
-        #     print("Out of cards!") # crude catch stemming from the ue of random card deals #TODO find better way
-        #     self.select_players()
-
-gamefile = NumberOfPlayers()
+gamefile = PlayerSetUp()
 
 if __name__ == "__main__":
 

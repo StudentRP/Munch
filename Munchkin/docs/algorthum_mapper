@@ -154,7 +154,10 @@ or changing the self parameter
 ######################################################
 
 Controller:
-    Controller serves up pages(frames) that are raised to the top. these are pre-build at the beginning and updated by tk.Vars
+    Controller serves up pages(frames) that are raised to the top.
+    These are pre-build at the beginning
+    An update method is required that binds all tk.Vars to gameVar scrip (updated from player model)
+
 
 Pages:
     start page-
@@ -172,7 +175,7 @@ Pages:
                 2) gameVar.StartVariables.player_rand that drives the index for the instances in the list during selection
 
 
-        playerinfo:
+        PlayerInfo:
             provides a  generic player name with a box to enter name and gender
             button to confirm either moves to another player name/gender or starts game loop
             Information required:
@@ -199,9 +202,23 @@ instance associated
 
 mainloop class to define a method to send index to game_loop class.
 
-game_Loop
-    before MainLoop is called all tkVar need to be set up. this is handled by the controller by the method update_frame.
-    at the end of Playerinfo class method test,
+game_Loop.py
+    Game_loop.py main directive is to either source logic from other classes, provide one shot logic demanded by the
+    GUI and primarily to update gui_variables.py  that can be accessed by controller.py
+
+        Main class: PlayerSetup:
+            rand method:
+                usees random choice function from the random module.
+                picks a random player instance from the generated active_players list
+                send result to verbinding method.
+
+            varbinding method:
+                accepts parameter of a player instance
+                uses instance to bind all player attributes to gameVar
+
+    before MainLoop is called all tkVar need to be set up. this is handled by the controller by
+    the method update_frame.
+    At the end of Playerinfo class method test,
     game_loop will use index to determine the correct player in gameVar.active_players.
     indexed player will bind self to gameVar.player_atribs.x
     controller.Main class binds self.x to StringVar()

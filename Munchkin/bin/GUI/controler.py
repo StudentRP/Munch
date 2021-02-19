@@ -30,9 +30,9 @@ class Main(tk.Tk):
         self.level = tk.IntVar()
         self.bonus = tk.IntVar()
         self.wallet = tk.IntVar()
+        # self.l_hand = tk.IntVar()
 
-
-        "fills the dictionary"
+        "fills the dictionary, snapshot built frames"
         for frm in StartPg, PlayerSelect, MainLoop:
             frame = frm(container, self) # passes container as the parent
             self.frames[frm] = frame
@@ -45,12 +45,13 @@ class Main(tk.Tk):
 
     def update_frame(self):
         """binds all the labels to the gamevar"""
-        self.geometry("800x800") # changes the geometry when called
+        self.geometry("600x600") # changes the geometry when called
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
         self.level.set(gameVar.PlayerAtribs.player_level)
         self.bonus.set(gameVar.PlayerAtribs.player_bonus)
         self.wallet.set(gameVar.PlayerAtribs.player_wallet)
+        # self.l_hand.set(gameVar.PlayerAtribs.player_weapons["L_hand"])
 
 
 ##########################################################################
@@ -89,11 +90,11 @@ class PlayerSelect(tk.Frame):
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
         gamefile.select_players() # sets in motion player slice in game_loop
-        Playerinfo() #calls toplevel
+        PlayerInfo() #calls toplevel
         # self.setplayers()
 
 
-class Playerinfo(tk.Toplevel):
+class PlayerInfo(tk.Toplevel):
     """must: update title label with player number, store variables from entries, call game_loop with index para,
     increment index,  """
     counter = 1 # player identity title number
@@ -110,7 +111,7 @@ class Playerinfo(tk.Toplevel):
         self.mainframe.focus_set()  # foucus on this window objects
         self.mainframe.grab_set()  # modal form
 
-        self.arbitary = tk.Label(self.mainframe, text=f"Player {Playerinfo.counter}") #title
+        self.arbitary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.counter}") #title
         self.arbitary.config(font=('castellar', 15, 'bold'), fg='blue')
         self.arbitary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
 
@@ -118,43 +119,43 @@ class Playerinfo(tk.Toplevel):
         self.namelab.grid(column=1, row=1, sticky='w')
         self.nameent = tk.Entry(self.mainframe, textvariable=self.instname)
         self.nameent.grid(column=2, row=1, sticky='w,e')
-        self.nameent.focus()
+        self.nameent.focus_set()
 
         self.genderlab = tk.Label(self.mainframe, text='Gender: ')
         self.genderlab.grid(column=1, row=2, sticky='w')
         self.nameent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
         self.nameent.grid(column=2, row=2, sticky='w')
 
-        self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.test)
+        self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.inital_set)
         self.but2.config(bd=10, activebackground='green')
         self.but2.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
-        self.bind('<Return>', self.test)  # creates event to be passed to test
+        self.bind('<Return>', self.inital_set)  # creates event to be passed to test
 
-    def test(self, event=None):
+    def inital_set(self, event=None):
         number = gameVar.StartVariables.new_players # (int) devrived for playersetter.
         if number >= 1:
             number -= 1 # decreases the num of new pLayer integer
-            Playerinfo.counter += 1 # increase player counter for arbitrary label in __init__
+            PlayerInfo.counter += 1 # increase player counter for arbitrary label in __init__
             gameVar.PlayerAtribs.player_name = self.instname.get() # changes name in gameVar script
             gameVar.PlayerAtribs.player_gender = self.instgender.get() # changes name in gameVar script
-            gamefile.player_name_gender(Playerinfo.indexing) # call game loop for name to instance # indexing works ~~~~OK~~~
-            Playerinfo.indexing = Playerinfo.indexing + 1
+            gamefile.player_name_gender(PlayerInfo.indexing) # call game loop for name to instance # indexing works ~~~~OK~~~
+            PlayerInfo.indexing = PlayerInfo.indexing + 1
             print("destroying toplevel")
-            Playerinfo.destroy(self) #destoys toplevel window
+            PlayerInfo.destroy(self) #destoys toplevel window
             gameVar.StartVariables.new_players = number
             # conditional needed to stop window building for non existant player
             if number != 0:
-                Playerinfo() # rebuilds toplevel anew
+                PlayerInfo() # rebuilds toplevel anew
             else:
-                Playerinfo.destroy(self)
+                PlayerInfo.destroy(self)
                 print("Players in game:") # TO BE REMOVED + LOOP BELOW
                 for players in gameVar.StartVariables.active_players: # loop to see all player names
                     print(players.name.title()) # checks all players names for activity
 
-
-                gamefile.rand() # gets a random player from the list and binds all atribs
-                app.update_frame() # updates all tk Vars in Main class.
+                gamefile.rand() # gets a random player from the active player list, auto calls varbinging.
+                app.update_frame() # updates all lable variables from gameVar
                 app.show_frame(MainLoop) # calls next frame to raise by controller
+                ########## deal cards to all players required
 
 
 ####################################################################################################################
@@ -164,15 +165,41 @@ class MainLoop(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        "frame for buttons"
+        "frame for buttons - may create some buttons to inherit style from "
         self.butframe = tk.LabelFrame(self, text='Buttons')
-        self.butframe.config(bg='lightblue'),
-        self.butframe.pack(side='bottom', fill='x', ipady=100)
+        self.butframe.config(bg='#C7D6D8'),
+        self.butframe.pack(side='bottom', fill='x', ipady=80)
 
         self.b1 = tk.Button(self.butframe, text="End Turn", command=self.rebuild)
-        self.b1.grid(row=0, column=0, columnspan=2)
+        self.b1.config(activebackground='#0ABF28', bg="#F60808", padx=20, pady=30)
+        self.b1.place(x=700, y=45)
 
-        "frane player atribs"
+        self.b2 = tk.Button(self.butframe, text="Kick Door", command=self.door)
+        self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5)
+        self.b2.place(x=350, y=45)
+
+        self.b3 = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
+        self.b3.place(x=250, y=10)
+        self.b4 = tk.Button(self.butframe, text="Armour", command=self.list_armour)
+        self.b4.place(x=225, y=45)
+        self.b5 = tk.Button(self.butframe, text="Consumables", command=self.consumables)
+        self.b5.place(x=250, y=80)
+
+        self.b6 = tk.Button(self.butframe, text="Sell", command=self.list_sell)
+        self.b6.config(padx=15)
+        self.b6.place(x=450, y=10)
+        self.b7= tk.Button(self.butframe, text="Sack", command=self.list_sack)
+        self.b7.config(padx=10)
+        self.b7.place(x=475, y=45)
+        self.b8 = tk.Button(self.butframe, text="Visible", command=self.list_visible)
+        self.b8.place(x=450, y=80)
+
+        self.b9 = tk.Button(self.butframe, text="Interfere", command=self.interfere)
+        self.b9.place(x=10, y=10)
+        self.b10 = tk.Button(self.butframe, text="Help", command=self.ask_for_help)
+        self.b10.place(x=10, y=10)
+
+        "frame player attribs"
         self.plframe = tk.LabelFrame(self, text='Player Info')
         self.plframe.config(pady=20)
         self.plframe.pack(side='left', fill="y", ipadx=50)
@@ -202,11 +229,18 @@ class MainLoop(tk.Frame):
         self.l5b = tk.Label(self.plframe, textvariable=controller.wallet)  ## works binding strait to stringvar in Main
         self.l5b.grid(row=4, column=2, sticky='nsew')
 
+        # self.l6 = tk.Label(self.plframe, text="Left hand")
+        # self.l6.grid(row=5, column=1, sticky='nsew')
+        # self.l6b = tk.Label(self.plframe, text=controller.l_hand)
+        # self.l6b.grid(row=5, column=2, sticky='nsew')
+
+
         "Game Window"
         self.tblframe = tk.LabelFrame(self, text='Table')
         self.tblframe.config(bg='lightgrey'),
         self.tblframe.pack(side="left", fill="both", expand=True)
 
+    "Handlers"
     def rebuild(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
@@ -214,6 +248,35 @@ class MainLoop(tk.Frame):
         gamefile.player_order(gameVar.StartVariables.rand_player) # sends random player to method for order creation
         app.update_frame() # updates the tk.vars in Main under the instance controller.
 
+    def door(self):
+        """game actions for door. cards drawn from door"""
+        print(f"{app.name.get()} has kicked open the door!")
+
+    def list_weapons(self):
+        print("This will be the weapons toplevel")
+        # gameVar.PlayerAtribs.player_weapons["L_hand"]="Big hammer"
+        # app.update_frame()
+
+    def list_armour(self):
+        print("This will be the armour toplevel")
+
+    def consumables(self):
+        print("This will be the toplevel for throwable and other once only objects")
+
+    def list_sell(self):
+        print("This will be the toplevel for sellable items with radio/tick boxes")
+
+    def interfere(self):
+        print("Toplevel window where another player can interfere with play")
+
+    def ask_for_help(self):
+        print("Toplevel window where another player can help... for a price..")
+
+    def list_sack(self):
+        print("This will be the sack toplevel")
+
+    def list_visible(self):
+        print("This will be the visible cards toplevel")
 
 
 app = Main()
