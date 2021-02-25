@@ -5,6 +5,9 @@ import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 
 
+
+gamefont=('castellar', 15, 'bold')
+
 # number = 0
 
 ##########################################################################
@@ -17,7 +20,7 @@ class Main(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.geometry('400x400') # adding +x+y to the end provide window location
+        self.geometry('300x200') # adding +x+y to the end provide window location
         self.title("Munchkin")
         container = tk.Frame(self)
         container.pack(side=tk.TOP, fill='both', expand=True)
@@ -45,7 +48,7 @@ class Main(tk.Tk):
 
     def update_frame(self):
         """binds all the labels to the gamevar"""
-        self.geometry("600x600") # changes the geometry when called
+        self.geometry("800x500") # changes the geometry when called
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
         self.level.set(gameVar.PlayerAtribs.player_level)
@@ -70,7 +73,7 @@ class StartPg(tk.Frame):
 
 
 class PlayerSelect(tk.Frame):
-    """player number select"""
+    """Selection on number of players """
     def __init__(self, parent, controller): # controller always passed in from main
         tk.Frame.__init__(self, parent)
         self.Num_of_players = tk.IntVar() # (int) of players in session
@@ -86,25 +89,26 @@ class PlayerSelect(tk.Frame):
         but1.pack()
 
     def playersetter(self):
-        """ isolates the StringVar from setplayers()"""
+        """Binds values from spinbox to gui_var for later use and calls next stage"""
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        gamefile.select_players() # sets in motion player slice in game_loop
-        PlayerInfo() #calls toplevel
+        gamefile.select_players() # sets in motion player slice in game_loop..
+        PlayerInfo() #calls toplevel for name and gender entry for each player
         # self.setplayers()
 
 
 class PlayerInfo(tk.Toplevel):
-    """must: update title label with player number, store variables from entries, call game_loop with index para,
-    increment index,  """
+    """Top level for players to enter names and gender. Must: update title label with player number, store variables
+    from entries, call game_loop with index para, increment index"""
     counter = 1 # player identity title number
     indexing = 0 # index to pass to game loop for player list index. Ensures player details are bound to the correct instance
 
     def __init__(self):
         tk.Toplevel.__init__(self)
+        """throw-away vars for names/gender """
         self.instname = tk.StringVar() # does not use Main self.name as no access as no controller passed on
         self.instgender = tk.StringVar()
-
+        """main toplevel setup"""
         self.geometry('350x150+500+300')
         self.mainframe = tk.Frame(self)
         self.mainframe.pack(side='top', fill='both', expand=True)
@@ -132,11 +136,12 @@ class PlayerInfo(tk.Toplevel):
         self.bind('<Return>', self.inital_set)  # creates event to be passed to test
 
     def inital_set(self, event=None):
-        number = gameVar.StartVariables.new_players # (int) devrived for playersetter.
+        """button handler"""
+        number = gameVar.StartVariables.new_players # (int) derived from gui_var .
         if number >= 1:
             number -= 1 # decreases the num of new pLayer integer
             PlayerInfo.counter += 1 # increase player counter for arbitrary label in __init__
-            gameVar.PlayerAtribs.player_name = self.instname.get() # changes name in gameVar script
+            gameVar.PlayerAtribs.player_name = self.instname.get() # changes name in gameVar script from the one entered
             gameVar.PlayerAtribs.player_gender = self.instgender.get() # changes name in gameVar script
             gamefile.player_name_gender(PlayerInfo.indexing) # call game loop for name to instance # indexing works ~~~~OK~~~
             PlayerInfo.indexing = PlayerInfo.indexing + 1
@@ -166,13 +171,13 @@ class MainLoop(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         "frame for buttons - may create some buttons to inherit style from "
-        self.butframe = tk.LabelFrame(self, text='Buttons')
+        self.butframe = tk.LabelFrame(self, text='Navigation')
         self.butframe.config(bg='#C7D6D8'),
         self.butframe.pack(side='bottom', fill='x', ipady=80)
 
         self.b1 = tk.Button(self.butframe, text="End Turn", command=self.rebuild)
-        self.b1.config(activebackground='#0ABF28', bg="#F60808", padx=20, pady=30)
-        self.b1.place(x=700, y=45)
+        self.b1.config(activebackground='#0ABF28', bg="#B40BEE", padx=15, pady=20)
+        self.b1.place(x=600, y=45)
 
         self.b2 = tk.Button(self.butframe, text="Kick Door", command=self.door)
         self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5)
@@ -273,7 +278,9 @@ class MainLoop(tk.Frame):
         print("Toplevel window where another player can help... for a price..")
 
     def list_sack(self):
-        print("This will be the sack toplevel")
+        print("Your sack contains:")
+        print(f"{gameVar.PlayerAtribs.player_sack}") #~~~~~~~~~~~~works, need sorting method
+
 
     def list_visible(self):
         print("This will be the visible cards toplevel")

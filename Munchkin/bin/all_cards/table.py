@@ -9,6 +9,7 @@ Burn pile, object o get cards
 
 from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 from Munchkin.bin.all_cards.door_cards.doorcards import Moncurse
+# import Munchkin.bin.GUI.gui_variables as gameVar# creates circle import
 from random import randint
 
 
@@ -21,7 +22,7 @@ class Dice:
 
 class Dealer:
 
-    def deal_cards(self, y=None): # y= set card type
+    def deal_cards(self, y=None, cardnum=4): # y= set card type
         """Selects card from pack either moncur or treasure and returns card object to caller"""
         x = randint(0, 10)
         dmax = len(Moncurse.door_cards) - 1     # total cards in Door pack
@@ -33,11 +34,12 @@ class Dealer:
             """called at start to deal specific number of cards to pass to player"""
             starter_set = []
             # print(f"monster cards:{len(Moncurse.door_cards)}\n")
-            deal = int(input("How many cards to deal?\n>>> ")) # link to option
-            for i in range(deal):
+            deal = cardnum # link to gameVar option
+            for i in range(deal): # may need +=1
                 dobj = Moncurse.door_cards.pop(-1) # may want more randomness than just number in first card
                 starter_set.append(dobj) # adds card to list
                 tobj = Treasure.treasure_cards.pop(-1)
+                starter_set.append(tobj)
             return starter_set # passes list obj to caller
 
         elif y == 11 or x <= 5: # y specific for deck

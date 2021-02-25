@@ -16,7 +16,7 @@ Considerations;
 
 # from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 # creates circular
 # from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
-# from Munchkin.bin.all_cards.table import Dealer
+from Munchkin.bin.all_cards.table import cards
 # from Munchkin.bin.engine import cut_scenes as cs
 from random import randint, choice
 import bin.GUI.gui_variables as gameVar
@@ -30,8 +30,6 @@ from time import sleep
 ##################################################################
 first = True
 """ V2.0  """
-
-
 
 
 class PlayerSetUp:
@@ -56,6 +54,7 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_level = playerinst.level
         gameVar.PlayerAtribs.player_bonus = playerinst.bonus
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
+        gameVar.PlayerAtribs.player_sack = playerinst.sack
 
     def deal_cards(self):
         pass
@@ -71,6 +70,8 @@ class PlayerSetUp:
                     gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]  # binds rand_player to next in order
                     nextplayer = gameVar.StartVariables.rand_player
                     print(f"binding next player from try {nextplayer.name}")
+                    instance.longevity += 1 #determins how long the player survived.
+                    print(f" you have suvives  {instance.longevity} turns!")
                     self.varbinding(nextplayer)
                     break
                 except IndexError:
@@ -92,10 +93,15 @@ class PlayerSetUp:
     def select_players(self): # slices num of availabel players with gui entry
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
-        session_players = gameVar.StartVariables.new_players
+        session_players = gameVar.StartVariables.new_players # get int representing num of players in current session
         maxplayers = session_players
-        print(f"number of players in session: {session_players}") ## GUI test for number acceptance# remove at end
-        gameVar.StartVariables.active_players = gameVar.StartVariables.players_available[:maxplayers] # slices players_avail list creating new list
+        print(f"number of players in session: {session_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
+        gameVar.StartVariables.active_players = gameVar.StartVariables.players_available[:maxplayers] # slice creaes new list of players in session binding to new variable gamevar
+        ## loop for binding cards to each player in loop ~~~~~works, need method for sorting cards as just dumpt in sack atm
+        for player in gameVar.StartVariables.active_players:
+            player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt)
+            # print(player)
+
 
     def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
         """call active player list, use index to ref each player instance, call """

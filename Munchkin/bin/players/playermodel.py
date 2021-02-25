@@ -82,22 +82,26 @@ class Player(P_tools):
         self.weapons = {"L_hand": None, "R_hand": None, "big": None, "special_1": None, "special_2": False}
         self.armor = {"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
                       "special_1": None, "special_2": False, "special_3": False}
-        self.sack = [] # 5 max
+        self.sack = [] # 5 max, pos editable later in an options
         self.visible_cards = [] # will need to sort, simple branch on the return objs
         self.hireling = []
         self.undefined = [] # unclassified objects for all the things i want but dont know it
         self.alive = True
-        self.longevity = 1 # counts cycles alive, if 0 player misses go
+        self.longevity = 0 # counts cycles alive, if 0 player misses go
 
     def __repr__(self):
         """developer aid"""
         return f"\nPLAYER REF:{self.ref}\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
-               f"\nBonus:{self.bonus}\nWallet:{self.wallet}\n"
+               f"\nBonus:{self.bonus}\nSack:{self.wallet}\n"
 
     # def __str__(self):
     #     """developer aid"""
     #     return f"\nPLAYER INFO:\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
     #            f"\nBonus:{self.bonus}\nvisible_cards:{self.visible_cards}\n"
+
+    # def __getattr__(self, index):
+    #     """for indexing weapons and armour"""
+    #     pass
 
     def char_setup(self):
         # complete, prints to be removed
