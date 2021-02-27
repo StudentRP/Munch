@@ -78,19 +78,20 @@ class Treasure(T_tools):
     
     """
     treasure_cards = [
-        #disposables only
-        {"id": 1, "name": "Electric Radioactive Acid Potion", "des": "Use during any combat. +5 to either side.",
+        # type disposable
+        {"type": "disposable", "id": 1, "name": "Electric Radioactive Acid Potion", "des": "Use during any combat. +5 to either side.",
          "bonus": 2, "sell": 200, 'restriction': ["once, any combat"]},
-        {"id": 3, "name": "Flaming Poison Potion", "des": "Use during combat", "bonus": 3, "sell": 100,
+        {"type": "disposable", "id": 3, "name": "Flaming Poison Potion", "des": "Use during combat", "bonus": 3, "sell": 100,
          "special": "fire", 'restriction': ["once"]},
-        {"id": 4, 'name': "Instant Wall", 'des': 'Automatic escape for 1 or 2 players', 'sell': 300,
+        {"type": "disposable", "id": 4, 'name': "Instant Wall", 'des': 'Automatic escape for 1 or 2 players', 'sell': 300,
          "special": "auto escape 2 players", 'restriction': ["once"]},
-        {"id": 5, "name": "Flask Of Glue", "des": "Use during combat, must re-roll escape even if auto last time",
+        {"type": "disposable", "id": 5, "name": "Flask Of Glue", "des": "Use during combat, must re-roll escape even if auto last time",
          "sell": 100, "special": "escape", 'restriction': ["once", "reroll escape"]},
 
-        #armor/head
+        #type armor/headm
         {"id": 6, "type": "necklace", "name": "The Occasionally Reliable Amulet",
          'des': 'If equipped, chance to deflect curse', 'sell': 600, 'special': "deflect"},
+
         {"id": 7, "type": "headgear", "name": "Tinfoil Hat",
          "des": "Immune to curses, curses by kicking down doors still effect", "bonus": 0, "sell": 800,
          "special": "cast immune"},
@@ -124,15 +125,14 @@ class Treasure(T_tools):
         {"id": 20, "type": "armor", "name": "Leather Armor", "des": "Its leather.", "bonus": 1, "sell": 200},
 
 
-
         #armor/boots
         {"id": 10, "type": "footgear", "name": "Boots Of Running Really Fast", "des": "run away + 2", "bonus": 0,
          "sell": 400, "special": "footgear"},
 
         #weapons
-        {"id": 11, "type": "1 hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
-         "sell": 800, "special": "1 hand"},
-        {"id": 11, "type": "1 hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
+        {"id": 11, "type": "1hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
+         "sell": 800, "special": "1hand"},
+        {"id": 11, "type": "1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
          "sell": 800,
          "special": "item enhancer", "restriction": "wizards only, with item"}
     ]

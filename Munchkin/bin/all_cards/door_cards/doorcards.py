@@ -63,6 +63,7 @@ class Moncurse():
          'choice': 'super choice'},
         {'id': 100, 'type': 'super munchkin', 'name': 'Super Munchkin', 'des': 'You may have two class cards',
          'choice': 'super choice'},
+
         {'id': 100, 'type': 'half bread', 'name': 'Half Bread', 'des': 'You may have two race cards',
          'choice': 'bread choice'},
         {'id': 100, 'type': 'half bread', 'name': 'Half Bread', 'des': 'You may have two race cards',
@@ -73,6 +74,7 @@ class Moncurse():
          'choice': 'bread choice'},
         {'id': 100, 'type': 'half bread', 'name': 'Half Bread', 'des': 'You may have two race cards',
          'choice': 'bread choice'},
+
         {'id': 100, 'type': 'wandering monster', 'name': 'Wandering Monster', 'des': 'Adds monster to the fight',
          'choice': 'choose monster'},
         {'id': 100, 'type': 'wandering monster', 'name': 'Wandering Monster', 'des': 'Adds monster to the fight',

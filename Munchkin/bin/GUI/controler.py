@@ -67,7 +67,7 @@ class Main(tk.Tk):
 ##########################################################################
 
 class StartPg(tk.Frame):
-    """Starting page """
+    """Starting page with options to enhance game play"""
     # window_color = "#160606" # Would like pic here of door
     # text_color ="#7A0600"
     # but_color = "#3EB0A1"
@@ -175,8 +175,7 @@ class PlayerSelect(tk.Frame):
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
         gamefile.select_players() # sets in motion player slice in game_loop..
-        PlayerInfo() #calls toplevel for name and gender entry for each player
-        # self.setplayers()
+        PlayerInfo() # calls toplevel for name and gender entry for each player
 
 
 class PlayerInfo(tk.Toplevel):
@@ -230,7 +229,7 @@ class PlayerInfo(tk.Toplevel):
             print("destroying toplevel")
             PlayerInfo.destroy(self) #destoys toplevel window
             gameVar.StartVariables.new_players = number
-            # conditional needed to stop window building for non existant player
+            # conditional needed to stop window building for non existent player
             if number != 0:
                 PlayerInfo() # rebuilds toplevel anew
             else:

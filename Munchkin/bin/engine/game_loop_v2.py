@@ -24,7 +24,6 @@ import bin.GUI.gui_variables as gameVar
 from time import sleep
 
 
-
 ##################################################################
 # main loop
 ##################################################################
@@ -69,7 +68,7 @@ class PlayerSetUp:
                     gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]  # binds rand_player to next in order
                     nextplayer = gameVar.StartVariables.rand_player
                     print(f"binding next player from try {nextplayer.name}")
-                    instance.longevity += 1 #determins how long the player survived.
+                    instance.longevity += 1 # determins how long the player survived.
                     print(f" you have suvives  {instance.longevity} turns!")
                     self.varbinding(nextplayer)
                     break
@@ -89,7 +88,7 @@ class PlayerSetUp:
                 gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
                 continue
 
-    def select_players(self): # slices num of availabel players with gui entry
+    def select_players(self): # slices num of available players with gui entry
         """Setup for instances, names/gender and first deal. slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
         session_players = gameVar.StartVariables.new_players # get int representing num of players in current session
@@ -100,7 +99,6 @@ class PlayerSetUp:
         for player in gameVar.StartVariables.active_players:
             player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt)
             # print(player)
-
 
     def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
         """call active player list, use index to ref each player instance, call """
