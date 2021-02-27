@@ -253,7 +253,7 @@ class MainLoop(tk.Frame):
 
         "frame for buttons - may create some buttons to inherit style from "
         self.butframe = tk.LabelFrame(self, text='Navigation')
-        self.butframe.config(bg='#C7D6D8'),
+        self.butframe.config(bg=but_color)
         self.butframe.pack(side='bottom', fill='x', ipady=80)
 
         self.b1 = tk.Button(self.butframe, text="End Turn", command=self.rebuild)
