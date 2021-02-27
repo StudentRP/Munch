@@ -59,7 +59,6 @@ class PlayerSetUp:
     def deal_cards(self):
         pass
 
-
     def player_order(self, instance):
         """Player cycle loop for ending turns and loading new player"""
         for index in range(len(gameVar.StartVariables.active_players)):

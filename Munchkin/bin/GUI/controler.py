@@ -3,10 +3,14 @@ import tkinter.ttk as ttk
 from bin.engine.game_loop_v2 import gamefile
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
+from tkinter import messagebox
 
 
 
-gamefont=('castellar', 15, 'bold')
+gamefont=('castellar', 12, 'bold')
+window_color = "#160606" # Would like pic here of door
+text_color ="#7A0600"
+but_color = "#3EB0A1"
 
 # number = 0
 
@@ -16,11 +20,11 @@ gamefont=('castellar', 15, 'bold')
 
 
 class Main(tk.Tk):
-    """main controller class that interchanges frames"""
+    """main controller class that interchanges frames, updates variables with the frames"""
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.geometry('300x200') # adding +x+y to the end provide window location
+        self.geometry('500x200') # adding +x+y to the end provide window location
         self.title("Munchkin")
         container = tk.Frame(self)
         container.pack(side=tk.TOP, fill='both', expand=True)
@@ -35,7 +39,7 @@ class Main(tk.Tk):
         self.wallet = tk.IntVar()
         # self.l_hand = tk.IntVar()
 
-        "fills the dictionary, snapshot built frames"
+        "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
             frame = frm(container, self) # passes container as the parent
             self.frames[frm] = frame
@@ -43,6 +47,7 @@ class Main(tk.Tk):
         self.show_frame(StartPg)
 
     def show_frame(self, content):
+        """brings the fame to the fore front"""
         frame = self.frames[content]
         frame.tkraise()
 
@@ -63,14 +68,25 @@ class Main(tk.Tk):
 
 class StartPg(tk.Frame):
     """Starting page """
+    # window_color = "#160606" # Would like pic here of door
+    # text_color ="#7A0600"
+    # but_color = "#3EB0A1"
+
     def __init__(self, parent, controller): # access to Main methods through the controller
         tk.Frame.__init__(self, parent)
+        self.config(bg=window_color)
+
         label = tk.Label(self, text=f"{cs.start()}") # massage
+        label.config(font=gamefont, bg=window_color, fg=text_color)
         label.pack(pady=10, padx=10)
-        but1 = ttk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect))
+
+        but1 = tk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect))
+        but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack()
         but1.focus_set()
-        but2 = ttk.Button(self, text="Options", command=self.options)
+
+        but2 = tk.Button(self, text="Options", command=self.options)
+        but2.config(bg=but_color, fg=text_color, padx=40, activebackground='yellow', relief="raised")
         but2.pack(side="bottom")
 
     def options(self):
@@ -82,32 +98,56 @@ class GameOptions(tk.Toplevel):
     """Toplevel window for setting in game options""" # WORKS need others added and style tidying
     def __init__(self):
         tk.Toplevel.__init__(self)
-        self.sack_size = tk.IntVar()
+        self.inital_deal = tk.IntVar()
         self.maxlvl = tk.IntVar()
-        self.geometry("200x300+400+50")
+        self.permadeath = tk.BooleanVar()
+        self.carry_weight = tk.IntVar()
+
+
+        self.geometry("275x275+400+50")
 
         lf = tk.LabelFrame(self, text="Game Options")
+        lf.config(font=gamefont)
         lf.pack(fill='both', expand=True)
 
-        l1 = tk.Label(lf, text="Set sack items")
+        l1 = tk.Label(lf, text="Number of starting cards")
         l1.grid(column=0, row=0)
-        e1 = tk.Entry(lf, textvariable=self.sack_size)
+        e1 = tk.Entry(lf, textvariable=self.inital_deal)
+        self.inital_deal.set(4)
+        e1.icursor(1) # sets index of cursor ready for change
+        e1.focus() # focuses on entry
         e1.grid(column=1, row=0)
 
-        l1 = tk.Label(lf, text="Set max level")
-        l1.grid(column=0, row=1)
-        e1 = tk.Entry(lf, textvariable=self.maxlvl)
-        e1.grid(column=1, row=1)
+        l2 = tk.Label(lf, text="Set max level")
+        l2.grid(column=0, row=1)
+        e2 = tk.Entry(lf, textvariable=self.maxlvl)
+        self.maxlvl.set(10)
+        e2.grid(column=1, row=1)
 
-        b1= tk.Button(lf, text="OK", command=self.setopts)
-        b1.grid(column=0, row=2, columnspan=2)
+        l2 = tk.Label(lf, text="Max sack capacity")
+        l2.grid(column=0, row=2)
+        e2 = tk.Entry(lf, textvariable=self.carry_weight)
+        self.carry_weight.set(10) # change when cards are categorised, should be 6
+        e2.grid(column=1, row=2)
+
+        l3 = tk.Label(lf,text="Perm-a-death")
+        l3.grid(column=0, row=3)
+        cbut = tk.Checkbutton(lf, variable=self.permadeath)
+        cbut.grid(column=1, row=3, sticky="w")
+
+        b1 = tk.Button(lf, text="OK", command=self.setopts)
+        b1.config(padx=20)
+        b1.grid(column=0, row=4, columnspan=2)
 
     def setopts(self):
         """binds sack size to gameVar changing the number of cards you can carry"""
-        gameVar.Options.cards_delt = int(self.sack_size.get())
-        gameVar.Options.win_lvl = int(self.maxlvl.get())
-
-        print(f"OPTIONS CHJANGED:\nSack size: {gameVar.Options.cards_delt}\nWin level:{gameVar.Options.win_lvl}")
+        gameVar.Options.cards_delt = self.inital_deal.get()
+        gameVar.Options.win_lvl = self.maxlvl.get()
+        gameVar.Options.perm_death = self.permadeath.get()
+        gameVar.Options.carry_weight = self.carry_weight.get()
+        message = f"Starting deal: {gameVar.Options.cards_delt}\nWin level:{gameVar.Options.win_lvl}\n" \
+                  f"Carry weight: {gameVar.Options.carry_weight}\nPerm_a_death: {gameVar.Options.perm_death}"
+        messagebox.showinfo("Settings Changed!", message)
         GameOptions.destroy(self)
 
 
@@ -117,15 +157,18 @@ class PlayerSelect(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.Num_of_players = tk.IntVar() # (int) of players in session
         self.count = tk.IntVar() # gameVar.StartVariables.new_players
+        self.config(bg=window_color)
 
         label = tk.Label(self, text="Select number of players")
+        label.config(font=gamefont, bg=window_color, fg=text_color)
         label.pack(pady=10, padx=10)
         l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players)
         l1.focus()
         l1.set(1)
         l1.pack()
         but1 = tk.Button(self, text="Confirm", command=self.playersetter)
-        but1.pack()
+        but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
+        but1.pack(side="bottom")
 
     def playersetter(self):
         """Binds values from spinbox to gui_var for later use and calls next stage"""
