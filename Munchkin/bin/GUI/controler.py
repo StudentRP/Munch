@@ -70,6 +70,45 @@ class StartPg(tk.Frame):
         but1 = ttk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect))
         but1.pack()
         but1.focus_set()
+        but2 = ttk.Button(self, text="Options", command=self.options)
+        but2.pack(side="bottom")
+
+    def options(self):
+        """top level options screen"""
+        GameOptions()
+
+
+class GameOptions(tk.Toplevel):
+    """Toplevel window for setting in game options""" # WORKS need others added and style tidying
+    def __init__(self):
+        tk.Toplevel.__init__(self)
+        self.sack_size = tk.IntVar()
+        self.maxlvl = tk.IntVar()
+        self.geometry("200x300+400+50")
+
+        lf = tk.LabelFrame(self, text="Game Options")
+        lf.pack(fill='both', expand=True)
+
+        l1 = tk.Label(lf, text="Set sack items")
+        l1.grid(column=0, row=0)
+        e1 = tk.Entry(lf, textvariable=self.sack_size)
+        e1.grid(column=1, row=0)
+
+        l1 = tk.Label(lf, text="Set max level")
+        l1.grid(column=0, row=1)
+        e1 = tk.Entry(lf, textvariable=self.maxlvl)
+        e1.grid(column=1, row=1)
+
+        b1= tk.Button(lf, text="OK", command=self.setopts)
+        b1.grid(column=0, row=2, columnspan=2)
+
+    def setopts(self):
+        """binds sack size to gameVar changing the number of cards you can carry"""
+        gameVar.Options.cards_delt = int(self.sack_size.get())
+        gameVar.Options.win_lvl = int(self.maxlvl.get())
+
+        print(f"OPTIONS CHJANGED:\nSack size: {gameVar.Options.cards_delt}\nWin level:{gameVar.Options.win_lvl}")
+        GameOptions.destroy(self)
 
 
 class PlayerSelect(tk.Frame):

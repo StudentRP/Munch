@@ -22,7 +22,7 @@ class Dice:
 
 class Dealer:
 
-    def deal_cards(self, y=None, cardnum=4): # y= set card type
+    def deal_cards(self, y=None, cardnum=4): # y= set card type, cardnum=number of cards to deal set by game  options
         """Selects card from pack either moncur or treasure and returns card object to caller"""
         x = randint(0, 10)
         dmax = len(Moncurse.door_cards) - 1     # total cards in Door pack
@@ -33,13 +33,12 @@ class Dealer:
         if y == "start":
             """called at start to deal specific number of cards to pass to player"""
             starter_set = []
-            # print(f"monster cards:{len(Moncurse.door_cards)}\n")
-            deal = cardnum # link to gameVar option
+            deal = cardnum # link to gameVar option for number of cards to deal at start
             for i in range(deal): # may need +=1
                 dobj = Moncurse.door_cards.pop(-1) # may want more randomness than just number in first card
-                starter_set.append(dobj) # adds card to list
-                tobj = Treasure.treasure_cards.pop(-1)
-                starter_set.append(tobj)
+                starter_set.append(dobj) # adds door card to list
+                tobj = Treasure.treasure_cards.pop(-1) # gets t card. better rand required
+                starter_set.append(tobj) # adds treasure card to list
             return starter_set # passes list obj to caller
 
         elif y == 11 or x <= 5: # y specific for deck
@@ -86,11 +85,20 @@ class Table(Treasure, Moncurse): # inherits from
         self.in_play = []
         self.dice_sop = Dice()
 
-    def add_to_burn(self):
-        pass
+    def add_to_burn(self, discard):
+        """adding to burn pile"""
+        self.burn_pile.append(discard)
 
+    def remove_from_burn(self, pull_request):
+        """digging through burn pile """
+        try:
+            return self.burn_pile[:-pull_request]
 
-cards = Table()
+        except IndexError:
+            x = len(self.burn_pile) -1
+            return self.burn_pile[:x]
+
+cards = Table() #main instance to use - gives access to all card classes and methods.
 dice = Table()
 
 if __name__ == "__main__":

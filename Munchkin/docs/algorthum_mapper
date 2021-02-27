@@ -6,8 +6,7 @@ START
 start gui (links to methods below)
 Select number of players
 menu options:
-    ### game mode: win condition level, death is death
-    ### game options: number of cards, pack volume, lvl to win
+    ### game options: number of cards in backpack, lvl to win, starting deal card number, permadeath.
     ### start
 Name of each player and gender
 Deal cards, 4 of each (changable in possible options)
@@ -216,10 +215,8 @@ game_Loop.py
                 accepts parameter of a player instance
                 uses instance to bind all player attributes to gameVar
 
-    before MainLoop is called all tkVar need to be set up. this is handled by the controller by
-    the method update_frame.
-    At the end of Playerinfo class method test,
-    game_loop will use index to determine the correct player in gameVar.active_players.
+    before MainLoop is called all tkVar need to be set up. this is handled by the controller by the method update_frame.
+    At the end of Playerinfo class method test, game_loop will use index to determine the correct player in gameVar.active_players.
     indexed player will bind self to gameVar.player_atribs.x
     controller.Main class binds self.x to StringVar()
     Main.update_frame method binds all player attributes to tk Variables and the gameVar script

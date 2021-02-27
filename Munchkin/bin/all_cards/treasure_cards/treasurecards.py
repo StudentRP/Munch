@@ -31,7 +31,7 @@ class T_tools:
         print("This item has been depleted")
 
     @classmethod
-    def special(cls):
+    def special(cls, word, dictkeyname):
         """kwrd search to determine nature of special:
         escape
         auto escape
@@ -41,6 +41,8 @@ class T_tools:
         over armour
         gnome only
         """
+        if word in dictkeyname:
+            pass
 
     # @classmethod
     # def escape(cls):
@@ -70,7 +72,11 @@ class Treasure(T_tools):
 
 
     """General order: id, type, name, description, bonus, sell, special/restriction/, Dict to loop
-    use only once, armour, weapons, """
+    use only once, armour, weapons, 
+    MAY NEED SOME FORM OF CATEGORY KEY FOR THE SORTER FUNCT REQUIRED WHEN DECIDING WHERE OR WHAT THE CARDS BELONG TOO.
+     
+    
+    """
     treasure_cards = [
         #disposables only
         {"id": 1, "name": "Electric Radioactive Acid Potion", "des": "Use during any combat. +5 to either side.",
