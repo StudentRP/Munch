@@ -22,7 +22,7 @@ class Dice:
 
 class Dealer:
 
-    def deal_cards(self, y=None, cardnum=4): # y= set card type, cardnum=number of cards to deal set by game  options
+    def deal_cards(self, option=None, cardnum=4): # y= set card type, cardnum=number of cards to deal set by game  options
         """Selects card from pack either moncur or treasure and returns card object to caller"""
         x = randint(0, 10)
         dmax = len(Moncurse.door_cards) - 1     # total cards in Door pack
@@ -30,25 +30,25 @@ class Dealer:
         tmax = len(Treasure.treasure_cards) - 1 # total cards in Treasure pack
         tpack = randint(0, tmax)                # random card from the Treasure pack
 
-        if y == "start":
+        if option == "start":
             """called at start to deal specific number of cards to pass to player"""
             starter_set = []
-            deal = cardnum # link to gameVar option for number of cards to deal at start
-            for i in range(deal): # may need +=1
+            # deal = cardnum # link to gameVar option for number of cards to deal at start
+            for i in range(cardnum): # may need +=1
                 dobj = Moncurse.door_cards.pop(-1) # may want more randomness than just number in first card
                 starter_set.append(dobj) # adds door card to list
                 tobj = Treasure.treasure_cards.pop(-1) # gets t card. better rand required
                 starter_set.append(tobj) # adds treasure card to list
             return starter_set # passes list obj to caller
 
-        elif y == 11 or x <= 5: # y specific for deck
+        elif option == 11 or x <= 5: # y specific for deck
             """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
             print('From Door pile\n')
             card = Moncurse.door_cards.pop(dpack)
             print(f"Your card is: {card['name']}\nCards left in deck: {dmax}")
             return card
 
-        elif y == 12 or x > 5:
+        elif option == 12 or x > 5:
             """Deal Treasure cards"""
             print('From Treasure pile\n')
             card = Treasure.treasure_cards.pop(tpack)

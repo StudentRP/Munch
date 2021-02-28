@@ -55,8 +55,17 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
         gameVar.PlayerAtribs.player_sack = playerinst.sack
 
-    def deal_cards(self):
-        pass
+    def deal_handler(self, option, instance=None):
+        """Calls table.py for dealing cards with parameters"""
+        if option == "start": # initial play or resurrection
+            for player in gameVar.StartVariables.active_players:
+                player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt) # calls table
+        elif option == "door": # Standard gameplay loop
+            print("your not at the start")
+        elif option == "treasure": # Deal treasure, requires number for amount to deal.
+            print("You have been dealt a treasure card")
+        else: # Require check to see how many in deck and in burn pile for prob solving
+            print("I guess the deck is empty....")
 
     def player_order(self, instance):
         """Player cycle loop for ending turns and loading new player"""
@@ -89,19 +98,16 @@ class PlayerSetUp:
                 continue
 
     def select_players(self): # slices num of available players with gui entry
-        """Setup for instances, names/gender and first deal. slices player instance list with new player list,
+        """Setup for instances, names/gender and calls first deal. Slices player instance list with new player list,
          for each player set them up with cards, rand player to go first and sends to player_order function"""
         session_players = gameVar.StartVariables.new_players # get int representing num of players in current session
         maxplayers = session_players
         print(f"number of players in session: {session_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
         gameVar.StartVariables.active_players = gameVar.StartVariables.players_available[:maxplayers] # slice creaes new list of players in session binding to new variable gamevar
-        ## loop for binding cards to each player in loop ~~~~~works, need method for sorting cards as just dumpt in sack atm
-        for player in gameVar.StartVariables.active_players:
-            player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt)
-            # print(player)
+        self.deal_handler("start") # Starts process of dealing cards to all players
 
     def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
-        """call active player list, use index to ref each player instance, call """
+        """Call active player list, use index to ref each player instance, call """
         player = gameVar.StartVariables.active_players[playerindex]
         player.char_setup()
         # print(player)
