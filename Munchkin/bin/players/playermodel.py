@@ -86,6 +86,7 @@ class Player(P_tools):
         self.visible_cards = [] # will need to sort, simple branch on the return objs
         self.hireling = []
         self.undefined = [] # unclassified objects for all the things i want but dont know it
+        self.unsorted = [] # list of all cards that are used to by sorting
         self.alive = True
         self.longevity = 0 # counts cycles alive, if 0 player misses go
 

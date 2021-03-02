@@ -20,6 +20,7 @@ from Munchkin.bin.all_cards.table import cards
 # from Munchkin.bin.engine import cut_scenes as cs
 from random import randint, choice
 import bin.GUI.gui_variables as gameVar
+from itertools import cycle
 
 from time import sleep
 
@@ -39,27 +40,27 @@ class PlayerSetUp:
 
     def rand(self):
         """called to pick a random player in the active player list"""
-        x = choice(gameVar.StartVariables.active_players)
-        gameVar.StartVariables.rand_player = x # send to game var for accessibility
-        gameVar.StartVariables.rand_index = gameVar.StartVariables.active_players.index(x)
-        # print(f"player: {x.name} index: {gameVar.StartVariables.rand_index}")
-        print(f"random player selected is {x.name}")
-        self.varbinding(x)
+        player = choice(gameVar.StartVariables.session_players)
+        gameVar.StartVariables.active_player = player # send to game var for accessibility
+        print(f"random player selected is {player.name.title()}")
+        self.varbinding(player) # set all gameVar to this player
 
     def varbinding(self, playerinst):
-        """method to bind all atribs to gameVar, to be called with player instance"""
+        """Method to bind all player atribs to gameVar, to be called with player instance when ever communication is required to gui"""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
         gameVar.PlayerAtribs.player_gender = playerinst.sex.title()
         gameVar.PlayerAtribs.player_level = playerinst.level
         gameVar.PlayerAtribs.player_bonus = playerinst.bonus
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
         gameVar.PlayerAtribs.player_sack = playerinst.sack
+        gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
 
     def deal_handler(self, option, instance=None):
-        """Calls table.py for dealing cards with parameters"""
+        """ Provides cards to players dependent on option parameter."""
         if option == "start": # initial play or resurrection
-            for player in gameVar.StartVariables.active_players:
-                player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt) # calls table
+            for player in gameVar.StartVariables.session_players:
+                #!!!!!!!!!!! player.unsorted neads sorting and assigning to other buttons like armor weapons ect.
+                player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
             print("your not at the start")
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
@@ -67,50 +68,43 @@ class PlayerSetUp:
         else: # Require check to see how many in deck and in burn pile for prob solving
             print("I guess the deck is empty....")
 
-    def player_order(self, instance):
-        """Player cycle loop for ending turns and loading new player"""
-        for index in range(len(gameVar.StartVariables.active_players)):
-            if gameVar.StartVariables.active_players.index(instance) == index and instance.alive: # gets instance index from list and compares to loop value
-                # self.varbinding(instance)
-                try:
-                    index += 1
-                    gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]  # binds rand_player to next in order
-                    nextplayer = gameVar.StartVariables.rand_player
-                    print(f"binding next player from try {nextplayer.name}")
-                    instance.longevity += 1 # determins how long the player survived.
-                    print(f" you have suvives  {instance.longevity} turns!")
-                    self.varbinding(nextplayer)
-                    break
-                except IndexError:
-                    index = 0
-                    gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
-                    nextplayer = gameVar.StartVariables.rand_player
-                    print(f"binding next player {nextplayer.name}")
-                    self.varbinding(nextplayer)
-                    break
-
-            elif gameVar.StartVariables.active_players.index(instance) == index and not instance.alive:
-                "Logic for player skip turn"
-                print(f"You are dead {instance.name}, your body will be looted!") # send as message
-                instance.alive = True
-                index += 1
-                gameVar.StartVariables.rand_player = gameVar.StartVariables.active_players[index]
+    def player_order(self, current_player): # called with gameVar rand_index
+        """Note initial player is set at this point+bound.
+        Player cycle loop for calling next player and call binding on new player"""
+        play = True # win condition
+        player_gen = cycle(gameVar.StartVariables.session_players) # generator function that cycles a list indefinitely
+        y = next(player_gen) # yields players from the list, at start this would be first item = p1.
+        while play:
+            if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
+                print(f"Current player {current_player.name} turn ended")
+                gameVar.StartVariables.active_player = next(player_gen) # binds next player to rand_player, (changes x)
+                self.varbinding(gameVar.StartVariables.active_player) #  binds new player
+                print(f"{gameVar.StartVariables.active_player.name} has been binded")
+                break
+            elif current_player == y and not current_player.alive:
+                print("print player is dead") #move in to conditional for permadeath
+                current_player.alive = True # resets player status ##########need peradeath bit here
+                gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
+            else:
+                print("y did not match. Searching for player in list")
+                y = next(player_gen) # changes y to find commonality to x
+
 
     def select_players(self): # slices num of available players with gui entry
-        """Setup for instances, names/gender and calls first deal. Slices player instance list with new player list,
-         for each player set them up with cards, rand player to go first and sends to player_order function"""
-        session_players = gameVar.StartVariables.new_players # get int representing num of players in current session
-        maxplayers = session_players
-        print(f"number of players in session: {session_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
-        gameVar.StartVariables.active_players = gameVar.StartVariables.players_available[:maxplayers] # slice creaes new list of players in session binding to new variable gamevar
-        self.deal_handler("start") # Starts process of dealing cards to all players
+        """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
+         deal_handler is called to provide starting number of cards for each player"""
+        num_of_players = gameVar.StartVariables.new_players # get int representing num of players in current session (from spinbox)
+        print(f"number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
+        gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
+        # session binding to new variable gamevar
+        self.deal_handler("start") # Starts process of dealing cards to all players. results in putting in player.unsorted. Does not bind to gameVar
 
     def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
         """Call active player list, use index to ref each player instance, call """
-        player = gameVar.StartVariables.active_players[playerindex]
-        player.char_setup()
-        # print(player)
+        player = gameVar.StartVariables.session_players[playerindex]
+        player.char_setup() # calls playermodel.py method.
+        # print(player) # __repr__ method
 
 
 gamefile = PlayerSetUp()

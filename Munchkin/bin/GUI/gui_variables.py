@@ -12,10 +12,9 @@ class StartVariables:
     # Start game variables
     new_players = 1 # (int) number associated to total players in current game
     players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
-    active_players = None # (list) generated list slice for all session players
+    session_players = None # (list) generated list slice from game_loop with all player instances in active session
     player_rand = 1 # number for random player generator
-    rand_player = None # set to bind at game start a random player
-    rand_index = 0 # for the above player
+    active_player = None # selected random player from active players. becomes next player
     message = None
 
 
@@ -28,7 +27,7 @@ class Options:
 
 
 class PlayerAtribs:
-
+    """Must mirror whats in game_loop.PlayerSetUp.verbinding and call to bind here!"""
     player_ref = 0
     player_name = 'BOB' # current session player name
     player_gender = 'male'  # current session player gender
@@ -43,6 +42,7 @@ class PlayerAtribs:
     player_visible_cards = []
     player_hireling = []
     player_undefined = []
+    player_unsorted = []
     player_alive = True
     player_longevity = 1
 

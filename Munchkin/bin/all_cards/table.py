@@ -14,7 +14,7 @@ from random import randint
 
 
 class Dice:
-
+    """simulates a dice roll"""
     def roll(self):
         roll = int(randint(1, 6))
         return roll
@@ -22,41 +22,43 @@ class Dice:
 
 class Dealer:
 
-    def deal_cards(self, option=None, cardnum=4): # y= set card type, cardnum=number of cards to deal set by game  options
-        """Selects card from pack either moncur or treasure and returns card object to caller"""
-        x = randint(0, 10)
-        dmax = len(Moncurse.door_cards) - 1     # total cards in Door pack
-        dpack = randint(0, dmax)                # random card index from the Door pack
-        tmax = len(Treasure.treasure_cards) - 1 # total cards in Treasure pack
-        tpack = randint(0, tmax)                # random card from the Treasure pack
+    def deal_cards(self, option=None, cardnum=4): # option = set card type, cardnum=number of cards to deal set by game  options
+        """Method for dealing cards to players at start or during play. params: option selects the type/situation of
+        dealing specific cards cardnum specific to the start/resurrect determines the amount of cards to of each type
+        to deal players"""
+
+        x = randint(0, 10) # random card type generator
 
         if option == "start":
             """called at start to deal specific number of cards to pass to player"""
             starter_set = []
-            # deal = cardnum # link to gameVar option for number of cards to deal at start
-            for i in range(cardnum): # may need +=1
-                dobj = Moncurse.door_cards.pop(-1) # may want more randomness than just number in first card
-                starter_set.append(dobj) # adds door card to list
-                tobj = Treasure.treasure_cards.pop(-1) # gets t card. better rand required
-                starter_set.append(tobj) # adds treasure card to list
-            return starter_set # passes list obj to caller
+            for i in range(cardnum): # takes attrib of number of loops for card dealing (set by gameVar.Options)
+                # dpack = randint(0, len(Moncurse.door_cards)) - 1
+                # tpack = randint(0, len(Treasure.treasure_cards)) - 1
 
-        elif option == 11 or x <= 5: # y specific for deck
+                dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
+                starter_set.append(dobj) # adds door card to list
+                tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets t card. better rand required
+                starter_set.append(tobj) # adds treasure card to list
+                # print(f" num of cards in pack:{len(Moncurse.door_cards)}, rand gen tres:{tpack} door:{dpack}") # should go down
+            return starter_set # returns starter_set list to caller (player.unsorted)
+
+        elif option == "door" or x < 5:
             """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
             print('From Door pile\n')
-            card = Moncurse.door_cards.pop(dpack)
-            print(f"Your card is: {card['name']}\nCards left in deck: {dmax}")
+            card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
+            print(f"Your card is: {card['name']}\nCards left in deck: {len(Moncurse.door_cards) - 1}")
             return card
 
-        elif option == 12 or x > 5:
+        elif option == "treasure" or x >= 5:
             """Deal Treasure cards"""
             print('From Treasure pile\n')
-            card = Treasure.treasure_cards.pop(tpack)
+            card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
             # print(f"Card number: {pick},\nCard: {card}")
             return card
 
         else:
-            pass
+            print("card error")
 
 
     """remove duplication with branch above and default arg"""
@@ -98,7 +100,7 @@ class Table(Treasure, Moncurse): # inherits from
             x = len(self.burn_pile) -1
             return self.burn_pile[:x]
 
-cards = Table() #main instance to use - gives access to all card classes and methods.
+cards = Table() # main instance to use - gives access to all card classes and methods.
 dice = Table()
 
 if __name__ == "__main__":

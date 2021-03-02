@@ -95,7 +95,7 @@ class StartPg(tk.Frame):
 
 
 class GameOptions(tk.Toplevel):
-    """Toplevel window for setting in game options""" # WORKS need others added and style tidying
+    """Toplevel window for setting in game options at start""" # WORKS need others added and style tidying
     def __init__(self):
         tk.Toplevel.__init__(self)
         self.inital_deal = tk.IntVar()
@@ -181,8 +181,8 @@ class PlayerSelect(tk.Frame):
 class PlayerInfo(tk.Toplevel):
     """Top level for players to enter names and gender. Must: update title label with player number, store variables
     from entries, call game_loop with index para, increment index"""
-    counter = 1 # player identity title number
-    indexing = 0 # index to pass to game loop for player list index. Ensures player details are bound to the correct instance
+    counter = 1 # player identity title number for arbitrary label
+    indexing = 0 # index to access correct player instance in list. Ensures player details are bound to the correct instance
 
     def __init__(self):
         tk.Toplevel.__init__(self)
@@ -217,28 +217,31 @@ class PlayerInfo(tk.Toplevel):
         self.bind('<Return>', self.inital_set)  # creates event to be passed to test
 
     def inital_set(self, event=None):
-        """button handler"""
+        """button handler, binds name/gender to gameVar, increments arbitrary label and index for ensuring correct player instance,
+         """
         number = gameVar.StartVariables.new_players # (int) derived from gui_var .
         if number >= 1:
             number -= 1 # decreases the num of new pLayer integer
             PlayerInfo.counter += 1 # increase player counter for arbitrary label in __init__
-            gameVar.PlayerAtribs.player_name = self.instname.get() # changes name in gameVar script from the one entered
-            gameVar.PlayerAtribs.player_gender = self.instgender.get() # changes name in gameVar script
-            gamefile.player_name_gender(PlayerInfo.indexing) # call game loop for name to instance # indexing works ~~~~OK~~~
-            PlayerInfo.indexing = PlayerInfo.indexing + 1
-            print("destroying toplevel")
+            gameVar.PlayerAtribs.player_name = self.instname.get() # entered name binds to gameVar
+            gameVar.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
+            gamefile.player_name_gender(PlayerInfo.indexing) # call game_loop with index for player instance
+            PlayerInfo.indexing = PlayerInfo.indexing + 1 # increases player index ensuring correct player attribute assignment
+            print("Destroying toplevel")
             PlayerInfo.destroy(self) #destoys toplevel window
-            gameVar.StartVariables.new_players = number
-            # conditional needed to stop window building for non existent player
-            if number != 0:
-                PlayerInfo() # rebuilds toplevel anew
+            gameVar.StartVariables.new_players = number # reduces number in gameVar for next  player in loop
+
+            if number != 0: # loop for next player
+                PlayerInfo() # rebuilds toplevel anew for next player
             else:
                 PlayerInfo.destroy(self)
-                print("Players in game:") # TO BE REMOVED + LOOP BELOW
-                for players in gameVar.StartVariables.active_players: # loop to see all player names
+                #~~~~~~~~ TO BE REMOVED + LOOP BELOW
+                print("Players in game:")
+                for players in gameVar.StartVariables.session_players: # loop to see all player names
                     print(players.name.title()) # checks all players names for activity
+                #~~~~~~~~~~~~~~~
 
-                gamefile.rand() # gets a random player from the active player list, auto calls varbinging.
+                gamefile.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
                 app.update_frame() # updates all lable variables from gameVar
                 app.show_frame(MainLoop) # calls next frame to raise by controller
                 ########## deal cards to all players required
@@ -256,7 +259,7 @@ class MainLoop(tk.Frame):
         self.butframe.config(bg=but_color)
         self.butframe.pack(side='bottom', fill='x', ipady=80)
 
-        self.b1 = tk.Button(self.butframe, text="End Turn", command=self.rebuild)
+        self.b1 = tk.Button(self.butframe, text="End Turn", command=self.end_turn)
         self.b1.config(activebackground='#0ABF28', bg="#B40BEE", padx=15, pady=20)
         self.b1.place(x=600, y=45)
 
@@ -274,7 +277,7 @@ class MainLoop(tk.Frame):
         self.b6 = tk.Button(self.butframe, text="Sell", command=self.list_sell)
         self.b6.config(padx=15)
         self.b6.place(x=450, y=10)
-        self.b7= tk.Button(self.butframe, text="Sack", command=self.list_sack)
+        self.b7 = tk.Button(self.butframe, text="Sack", command=self.list_sack) ###########
         self.b7.config(padx=10)
         self.b7.place(x=475, y=45)
         self.b8 = tk.Button(self.butframe, text="Visible", command=self.list_visible)
@@ -327,11 +330,11 @@ class MainLoop(tk.Frame):
         self.tblframe.pack(side="left", fill="both", expand=True)
 
     "Handlers"
-    def rebuild(self):
+    def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # gamefile.rand() # change for pick up order methods
-        gamefile.player_order(gameVar.StartVariables.rand_player) # sends random player to method for order creation
+        gamefile.player_order(gameVar.StartVariables.active_player) # sends random player to method for order creation
         app.update_frame() # updates the tk.vars in Main under the instance controller.
 
     def door(self):
@@ -360,7 +363,7 @@ class MainLoop(tk.Frame):
 
     def list_sack(self):
         print("Your sack contains:")
-        print(f"{gameVar.PlayerAtribs.player_sack}") #~~~~~~~~~~~~works, need sorting method
+        print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
 
 
     def list_visible(self):
