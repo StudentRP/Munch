@@ -277,7 +277,7 @@ class MainLoop(tk.Frame):
         self.b6 = tk.Button(self.butframe, text="Sell", command=self.list_sell)
         self.b6.config(padx=15)
         self.b6.place(x=450, y=10)
-        self.b7 = tk.Button(self.butframe, text="Sack", command=self.list_sack) ###########
+        self.b7 = tk.Button(self.butframe, text="Sack", command=self.list_sack) ########### used as dummy atm
         self.b7.config(padx=10)
         self.b7.place(x=475, y=45)
         self.b8 = tk.Button(self.butframe, text="Visible", command=self.list_visible)
@@ -333,8 +333,7 @@ class MainLoop(tk.Frame):
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
-        # gamefile.rand() # change for pick up order methods
-        gamefile.player_order(gameVar.StartVariables.active_player) # sends random player to method for order creation
+        gamefile.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
         app.update_frame() # updates the tk.vars in Main under the instance controller.
 
     def door(self):
@@ -342,18 +341,29 @@ class MainLoop(tk.Frame):
         print(f"{app.name.get()} has kicked open the door!")
 
     def list_weapons(self):
+        """method calling toplevel that details all weapons currently owned with options to add/remove, sell and charity"""
         print("This will be the weapons toplevel")
-        # gameVar.PlayerAtribs.player_weapons["L_hand"]="Big hammer"
-        # app.update_frame()
+        player = gameVar.StartVariables.active_player
+        player.inventory("type", "weapon")
+        print(gameVar.StartVariables.selected_items)
+        OwnedItems()
 
     def list_armour(self):
         print("This will be the armour toplevel")
+        player = gameVar.StartVariables.active_player
+        player.inventory("type", "armor")
+        print(gameVar.StartVariables.selected_items)
+        OwnedItems()
 
     def consumables(self):
         print("This will be the toplevel for throwable and other once only objects")
 
     def list_sell(self):
         print("This will be the toplevel for sellable items with radio/tick boxes")
+        player = gameVar.StartVariables.active_player
+        player.item_by_key("sell")
+        print(gameVar.StartVariables.selected_items)
+        OwnedItems()
 
     def interfere(self):
         print("Toplevel window where another player can interfere with play")
@@ -364,11 +374,40 @@ class MainLoop(tk.Frame):
     def list_sack(self):
         print("Your sack contains:")
         print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
-
+        gameVar.StartVariables.selected_items = gameVar.PlayerAtribs.player_unsorted
+        OwnedItems()
 
     def list_visible(self):
         print("This will be the visible cards toplevel")
 
+
+class OwnedItems(tk.Toplevel):
+
+    def __init__(self, key= None):
+        tk.Toplevel.__init__(self)
+        self.key = key
+
+        if not gameVar.StartVariables.selected_items:
+            f = tk.Frame(self)
+            tk.Label(f, text="No cards to shop").grid(row=0, column=0)
+
+        else:
+            f = tk.Frame(self)
+            f.pack(side="top", expand=True)
+            tk.Label(f, text="Name").grid(row=0, column=0, sticky="nw")
+            tk.Label(f, text="Des").grid(row=0, column=1, sticky="nw")
+            tk.Label(f, text="Sell").grid(row=0, column=2, sticky="nw")
+            tk.Label(f, text="Equip").grid(row=0, column=3, sticky="nw")
+
+            for lab in gameVar.StartVariables.selected_items:
+                f1 = tk.Frame(self)
+                f1.pack(side="top", expand=True)
+                l1 = tk.Label(f1, text=lab['name'])
+                l1.grid(row=0, column=0, sticky="nw")
+                l2 = tk.Label(f1, text=lab['type'])
+                l2.grid(row=0, column=1, sticky="nw")
+                tk.Checkbutton(f1, text=" ").grid(row=0, column=2, sticky="nw")
+                tk.Radiobutton(f1, text=" ").grid(row=0, column=3, sticky="nw")
 
 app = Main()
 

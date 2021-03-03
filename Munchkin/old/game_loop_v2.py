@@ -119,9 +119,9 @@ class NumberOfPlayers:
             gofirst = self.new_players[randomise] # gets instance at position[random]
             # print(self.new_players) # check to see if passing object and rand number
             self.player_order(gofirst) #passes instance to player_order() function
-        except ValueError:
-            print("Out of cards!") # crude catch stemming from the ue of random card deals #TODO find better way
-            self.select_players()
+        # except ValueError:
+        #     print("Out of cards!") # crude catch stemming from the ue of random card deals #TODO find better way
+        #     self.select_players()
 
 
 

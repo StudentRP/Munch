@@ -11,10 +11,11 @@ class StartVariables:
 
     # Start game variables
     new_players = 1 # (int) number associated to total players in current game
-    players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10]
+    player_rand = 1  # number for random player generator for PlayerSelect.playersetter
+    players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] #all available players !to be sliced!
     session_players = None # (list) generated list slice from game_loop with all player instances in active session
-    player_rand = 1 # number for random player generator
     active_player = None # selected random player from active players. becomes next player
+    selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
     message = None
 
 

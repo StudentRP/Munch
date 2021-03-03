@@ -82,12 +82,12 @@ class PlayerSetUp:
                 print(f"{gameVar.StartVariables.active_player.name} has been binded")
                 break
             elif current_player == y and not current_player.alive:
-                print("print player is dead") #move in to conditional for permadeath
+                print(f"print player {current_player} is dead") #move in to conditional for permadeath
                 current_player.alive = True # resets player status ##########need peradeath bit here
                 gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
             else:
-                print("y did not match. Searching for player in list")
+                print(f"{y.name} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
 
 

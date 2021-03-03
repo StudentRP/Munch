@@ -122,59 +122,65 @@ class Player(P_tools):
         print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
         # print(self.__repr__())
 
-
-    def inventory(self): # GUI to take control
-        """Presents options for player inventory and equipped items."""
-        x = str(input("\nView player:\n1: Details\n2: Weapons & armour\n3: Sack\nQ: exit\n>>>  "))
-        """About self"""
-        if x == "1":
-            print(f"Name:{self.name}\nSex:{self.sex.title()}\nLevel:{self.level}\nBonus:{self.bonus}"
-                  f"\nWallet:{self.wallet}")
-            for key1, value1 in self.race.items():
-                if value1: # will show other val when string (Good)
-                    print('Race:', value1)
-                else:
-                    continue
-            for key2, value2 in self.klass.items():
-                if value2:
-                    print('Class:', value2)
-                else:
-                    continue
-            Player.inventory(self)
-
-            """equipped armor and weapons"""
-        elif x == "2":
-            for key3, value3 in self.weapons.items():
-                print(key3.title(), ':', value3) # to equip items call method
-            for key4, value4 in self.armor.items():
-                print(key4.title(), ':', value4)
-            Player.inventory(self) # ################ another method to change inventory/sell items
-
-            "Player sack"
-        elif x == "3":
-            # method for removal, sell, equip, gift
-            print("You are carrying:")
-            for val, contents in enumerate(self.sack, start=1):
-                print(f"{val}: {contents['name']}, "
-                      f"Level:{contents.get('lvl')}, Bonus:{contents.get('bonus')}") # print card objects in sack
-            pick = input("Choose card\n>>>")
-            if pick:
-                print(f"picked {self.sack[int(pick) - 1]['name']}")
-                card = self.sack[int(pick) - 1]
-                n = P_tools.card_options(self, card)
-            if n == "back":
-                Player.inventory(self)
+    def inventory(self, key, cardtype): # called from GUI on button press
+        """creates a list of dict of cards from player unsorted cards of a particular type."""
+        gameVar.StartVariables.selected_items = [obj for obj in self.unsorted if obj[key] == cardtype]
 
 
+    def item_by_key(self, key):
+        gameVar.StartVariables.selected_items = [obj for obj in self.unsorted if obj.get(key)]
 
-            Player.inventory(self) #up menu
-            "Dev mode"
-        elif x == "007": # ................................................................................. dev mode
-            cheat = int(input("Select bonus level"))
-            self.bonus = cheat
-            Player.inventory(self)
-        else:
-            return f"leaving {self.name}'s player info"
+        # x = str(input("\nView player:\n1: Details\n2: Weapons & armour\n3: Sack\nQ: exit\n>>>  "))
+        # """About self"""
+        # if x == "1":
+        #     print(f"Name:{self.name}\nSex:{self.sex.title()}\nLevel:{self.level}\nBonus:{self.bonus}"
+        #           f"\nWallet:{self.wallet}")
+        #     for key1, value1 in self.race.items():
+        #         if value1: # will show other val when string (Good)
+        #             print('Race:', value1)
+        #         else:
+        #             continue
+        #     for key2, value2 in self.klass.items():
+        #         if value2:
+        #             print('Class:', value2)
+        #         else:
+        #             continue
+        #     Player.inventory(self)
+        #
+        #     """equipped armor and weapons"""
+        # elif x == "2":
+        #     for key3, value3 in self.weapons.items():
+        #         print(key3.title(), ':', value3) # to equip items call method
+        #     for key4, value4 in self.armor.items():
+        #
+        #         print(key4.title(), ':', value4)
+        #     Player.inventory(self) # ################ another method to change inventory/sell items
+        #
+        #     "Player sack"
+        # elif x == "3":
+        #     # method for removal, sell, equip, gift
+        #     print("You are carrying:")
+        #     for val, contents in enumerate(self.sack, start=1):
+        #         print(f"{val}: {contents['name']}, "
+        #               f"Level:{contents.get('lvl')}, Bonus:{contents.get('bonus')}") # print card objects in sack
+        #     pick = input("Choose card\n>>>")
+        #     if pick:
+        #         print(f"picked {self.sack[int(pick) - 1]['name']}")
+        #         card = self.sack[int(pick) - 1]
+        #         n = P_tools.card_options(self, card)
+        #     if n == "back":
+        #         Player.inventory(self)
+        #
+        #
+        #
+        #     Player.inventory(self) #up menu
+        #     "Dev mode"
+        # elif x == "007": # ................................................................................. dev mode
+        #     cheat = int(input("Select bonus level"))
+        #     self.bonus = cheat
+        #     Player.inventory(self)
+        # else:
+        #     return f"leaving {self.name}'s player info"
 
     # def card_handler(self, obj):
     #     """handles cards handled from the engine class"""

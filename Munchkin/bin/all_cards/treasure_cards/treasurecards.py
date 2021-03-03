@@ -130,11 +130,11 @@ class Treasure(T_tools):
          "sell": 400, "special": "footgear"},
 
         #weapons
-        {"id": 11, "type": "1hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
-         "sell": 800, "special": "1hand"},
-        {"id": 11, "type": "1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
+        {"id": 11, "type": "weapon", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
+         "sell": 800, "restriction": "1hand"},
+        {"id": 11, "type": "weapon", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
          "sell": 800,
-         "special": "item enhancer", "restriction": "wizards only, with item"}
+         "special": "item enhancer", "restriction": "1hand, wizards only, with item"}
     ]
     
     @classmethod
