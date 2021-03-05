@@ -17,6 +17,7 @@ from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
 from Munchkin.bin.players.playersetup import P_tools
 import bin.GUI.gui_variables as gameVar
+from bin.all_cards.table import cards
 
 
 
@@ -126,9 +127,46 @@ class Player(P_tools):
         """creates a list of dict of cards from player unsorted cards of a particular type."""
         gameVar.StartVariables.selected_items = [obj for obj in self.unsorted if obj[key] == cardtype]
 
-
     def item_by_key(self, key):
+        """passes list of specific set of items to gameVar with the use of a key from the dict"""
         gameVar.StartVariables.selected_items = [obj for obj in self.unsorted if obj.get(key)]
+
+    def sell_item(self): # called by player.sell_item so self bound to player
+        """Call from zipper to sell items, remove cards, reset gameVars and call to add to burn pile"""
+        for card in gameVar.StartVariables.selected_items: # loops over specific card items
+            for tup in gameVar.GameObjects.zipped_tup: # loops over tuple pairs
+                if tup[0] == card["id"] and tup[1]:  # compares card ids and if 1 or 0 from checkbutton
+                    self.wallet += card["sell"] #adds worth of card to player
+                    print(f"removing unsorted {card['name']}")
+                    x = self.unsorted.pop(self.unsorted.index(card)) # removes card from player unsorted deck
+                    cards.add_to_burn(x)# adds card to burn pile on table
+                    print("burn pile le", len(cards.burn_pile))
+                    print(self.name)
+                    print(gameVar.StartVariables.active_player.name)
+                    print(len(gameVar.StartVariables.selected_items))
+                    print(len(gameVar.StartVariables.selected_items))
+                    # is 1 behind as not refreshed
+                    # so far toplevel is being destroyed but not refreshing
+                    # need to check action of priming sel but canceling out
+                else:
+                    continue
+        # print(gameVar.GameObjects.zipped_tup)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         # x = str(input("\nView player:\n1: Details\n2: Weapons & armour\n3: Sack\nQ: exit\n>>>  "))
         # """About self"""

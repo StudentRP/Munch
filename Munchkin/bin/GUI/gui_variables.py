@@ -18,6 +18,13 @@ class StartVariables:
     selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
     message = None
 
+class GameObjects:
+    check_but_ids = [] # to be filled with checkbut id's
+    check_but_boo = [] # populated with bools of card ids & check but return value
+    check_but_cards = [] # populated with card id's
+    zipped_tup = []
+
+
 
 class Options:
     """variables associated to start options that may be manipulated changing win parameters ect"""

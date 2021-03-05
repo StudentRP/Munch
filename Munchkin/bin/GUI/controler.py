@@ -346,24 +346,34 @@ class MainLoop(tk.Frame):
         player = gameVar.StartVariables.active_player
         player.inventory("type", "weapon")
         print(gameVar.StartVariables.selected_items)
-        OwnedItems()
+        OwnedItems("Weapons owned")
 
     def list_armour(self):
         print("This will be the armour toplevel")
         player = gameVar.StartVariables.active_player
-        player.inventory("type", "armor")
+        player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
         print(gameVar.StartVariables.selected_items)
-        OwnedItems()
+        OwnedItems("Armour Owned")
 
     def consumables(self):
         print("This will be the toplevel for throwable and other once only objects")
+        player = gameVar.StartVariables.active_player
+        player.inventory("type", "disposable")
+        OwnedItems("One shot items")
 
     def list_sell(self):
-        print("This will be the toplevel for sellable items with radio/tick boxes")
-        player = gameVar.StartVariables.active_player
-        player.item_by_key("sell")
-        print(gameVar.StartVariables.selected_items)
-        OwnedItems()
+        """builds toplevel with sellable items"""
+        print("Sell selected")
+        gameVar.StartVariables.selected_items.clear() # clears the list for new entry
+        gameVar.GameObjects.zipped_tup.clear() # clears tup list
+        gameVar.GameObjects.check_but_ids.clear() # clears card ids
+        gameVar.GameObjects.check_but_boo.clear() ############ put into method
+        gameVar.GameObjects.check_but_cards.clear() # clears crd list
+
+        player = gameVar.StartVariables.active_player # gets current player
+        player.item_by_key("sell") # load all sellable cards into gamevar.selected_items  with use of dict key param
+        # print(gameVar.StartVariables.selected_items) # call method that in gameile that creates zip
+        OwnedItems("Sellable Items") # calls toplevel with window title
 
     def interfere(self):
         print("Toplevel window where another player can interfere with play")
@@ -372,25 +382,27 @@ class MainLoop(tk.Frame):
         print("Toplevel window where another player can help... for a price..")
 
     def list_sack(self):
+        "shows all items in sack"
         print("Your sack contains:")
         print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
         gameVar.StartVariables.selected_items = gameVar.PlayerAtribs.player_unsorted
-        OwnedItems()
+        OwnedItems("All items")
 
     def list_visible(self):
         print("This will be the visible cards toplevel")
 
 
 class OwnedItems(tk.Toplevel):
-
-    def __init__(self, key= None):
+    """takes player card list and converts to label for specific button actions"""
+    def __init__(self, wind_title="template"):
         tk.Toplevel.__init__(self)
-        self.key = key
+        self.wind_title = wind_title
+        self.title(self.wind_title)
+        self.geometry("300x250+200+200")
 
         if not gameVar.StartVariables.selected_items:
-            f = tk.Frame(self)
-            tk.Label(f, text="No cards to shop").grid(row=0, column=0)
-
+            fm = tk.Frame(self)
+            tk.Label(fm, text="No cards to shop").pack()
         else:
             f = tk.Frame(self)
             f.pack(side="top", expand=True)
@@ -399,15 +411,31 @@ class OwnedItems(tk.Toplevel):
             tk.Label(f, text="Sell").grid(row=0, column=2, sticky="nw")
             tk.Label(f, text="Equip").grid(row=0, column=3, sticky="nw")
 
-            for lab in gameVar.StartVariables.selected_items:
+            for card in gameVar.StartVariables.selected_items:
+                status = tk.IntVar() # for keeping track of check buttons
                 f1 = tk.Frame(self)
                 f1.pack(side="top", expand=True)
-                l1 = tk.Label(f1, text=lab['name'])
+                l1 = tk.Label(f1, text=card['name'])
                 l1.grid(row=0, column=0, sticky="nw")
-                l2 = tk.Label(f1, text=lab['type'])
+                l2 = tk.Label(f1, text=card['type'])
                 l2.grid(row=0, column=1, sticky="nw")
-                tk.Checkbutton(f1, text=" ").grid(row=0, column=2, sticky="nw")
-                tk.Radiobutton(f1, text=" ").grid(row=0, column=3, sticky="nw")
+                tk.Checkbutton(f1, text=" ", variable=status).grid(row=0, column=2, sticky="nw")
+                # tk.Radiobutton(f1, text=" ").grid(row=0, column=3, sticky="nw")
+                gameVar.GameObjects.check_but_ids.append(status) #maybe good place to add card id here????????????
+                gameVar.GameObjects.check_but_cards.append(card["id"]) # sends card ids int to list
+        tk.Button(self, text="Sell", command=lambda:self.sell(wind_title)).pack(side="left")
+        # tk.Button(self, text="Equip", command=self.x).pack(side="left")
+
+    def sell(self, wind_title):
+        """triggers sell event when pushed"""
+        gamefile.zipper() # calls meth to make tuple from card ids and checkbutton converted bools
+
+        app.update_frame()
+        # player = gameVar.StartVariables.active_player
+        # # player.item_by_key("sell") #reloads gameVar.StartVariables.selected_items# done from earlier button press
+        OwnedItems.destroy(self)
+
+
 
 app = Main()
 

@@ -45,7 +45,7 @@ class PlayerSetUp:
         print(f"random player selected is {player.name.title()}")
         self.varbinding(player) # set all gameVar to this player
 
-    def varbinding(self, playerinst):
+    def varbinding(self, playerinst=gameVar.StartVariables.active_player):
         """Method to bind all player atribs to gameVar, to be called with player instance when ever communication is required to gui"""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
         gameVar.PlayerAtribs.player_gender = playerinst.sex.title()
@@ -105,6 +105,19 @@ class PlayerSetUp:
         player = gameVar.StartVariables.session_players[playerindex]
         player.char_setup() # calls playermodel.py method.
         # print(player) # __repr__ method
+
+    def zipper(self):
+        "zips checkbox bools to card ids"
+        gameVar.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
+        for create_boo in gameVar.GameObjects.check_but_ids:
+            gameVar.GameObjects.check_but_boo.append(create_boo.get()) # creates a list of 1s & 0s from check buttons status
+            x, y = gameVar.GameObjects.check_but_cards, gameVar.GameObjects.check_but_boo
+            gameVar.GameObjects.zipped_tup = list(zip(x, y))
+
+        player = gameVar.StartVariables.active_player  # things start to get bit funny here on 2nd person go
+        print("moving to player script", gameVar.GameObjects.zipped_tup)
+        player.sell_item() # calls player method to sell card
+        self.varbinding(player) # reloads player atribs
 
 
 gamefile = PlayerSetUp()
