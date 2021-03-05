@@ -13,6 +13,7 @@ caller = "hat" #to be called as a param in the method (specific to caller!)
 x = [obj for obj in l if obj['type'] == caller]
 
 print(x)
+print(l[0]["type"])
 
 result = [] #dont forget to clear after use
 boo = []
@@ -73,4 +74,4 @@ tk.Button(f, text="sell", command=grab).grid(row=1, column=0, columnspan=3)
 
 
 
-app.mainloop()
+# app.mainloop()

@@ -1,4 +1,4 @@
-from Munchkin.bin.engine.game_loop_v2 import PlayerSetUp
+from Munchkin.bin.engine.game_loop_v3 import PlayerSetUp
 
 if __name__ == "__main__":
 

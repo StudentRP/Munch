@@ -15,15 +15,17 @@ class StartVariables:
     players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] #all available players !to be sliced!
     session_players = None # (list) generated list slice from game_loop with all player instances in active session
     active_player = None # selected random player from active players. becomes next player
-    selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
+    # selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
     message = None
 
-class GameObjects:
-    check_but_ids = [] # to be filled with checkbut id's
-    check_but_boo = [] # populated with bools of card ids & check but return value
-    check_but_cards = [] # populated with card id's
-    zipped_tup = []
 
+class GameObjects:
+    all_cards = [] # simple list of all cards
+    selected_items = []  # list of playing cards ready to be looped over. ie all weapons from player items
+    check_but_intvar_gen = [] # populated with objects of checkbutton
+    check_but_boo = [] # populated with checkbutton return values from intVar() objects
+    check_but_card_ids = [] # populated with card id's
+    zipped_tup = [] # populated with bools of card ids & fetched checkbutton from (check_but_card_ids, check_but_boo)
 
 
 class Options:

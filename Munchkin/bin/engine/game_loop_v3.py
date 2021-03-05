@@ -55,7 +55,7 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
 
-    def deal_handler(self, option, instance=None):
+    def deal_handler(self, option, instance=None):######### METHOD NOT UPDATED AND USED!!!!!!!!!!!!!!!! yet
         """ Provides cards to players dependent on option parameter."""
         if option == "start": # initial play or resurrection
             for player in gameVar.StartVariables.session_players:
@@ -90,7 +90,6 @@ class PlayerSetUp:
                 print(f"{y.name} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
 
-
     def select_players(self): # slices num of available players with gui entry
         """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
          deal_handler is called to provide starting number of cards for each player"""
@@ -107,17 +106,22 @@ class PlayerSetUp:
         # print(player) # __repr__ method
 
     def zipper(self):
-        "zips checkbox bools to card ids"
+        "zips card id's to checkbox bools. Used for all card sorting regardless of type"
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
-        for create_boo in gameVar.GameObjects.check_but_ids:
+        for create_boo in gameVar.GameObjects.check_but_intvar_gen:
             gameVar.GameObjects.check_but_boo.append(create_boo.get()) # creates a list of 1s & 0s from check buttons status
-            x, y = gameVar.GameObjects.check_but_cards, gameVar.GameObjects.check_but_boo
+            x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
             gameVar.GameObjects.zipped_tup = list(zip(x, y))
+        # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows list clearing
+        self.varbinding(gameVar.StartVariables.active_player) # reloads player atribs
 
-        player = gameVar.StartVariables.active_player  # things start to get bit funny here on 2nd person go
-        print("moving to player script", gameVar.GameObjects.zipped_tup)
-        player.sell_item() # calls player method to sell card
-        self.varbinding(player) # reloads player atribs
+    def scrub_lists(self):
+        """Clears all appended list that are not capable of clearing."""
+        gameVar.GameObjects.selected_items.clear()  # clears the card objects list
+        gameVar.GameObjects.zipped_tup.clear()  # clears tup list
+        gameVar.GameObjects.check_but_intvar_gen.clear()  # clears list of intVar objects from check buttons
+        gameVar.GameObjects.check_but_boo.clear()  # clears boolean list
+        gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
 
 
 gamefile = PlayerSetUp()

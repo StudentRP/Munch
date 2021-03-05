@@ -16,7 +16,7 @@ sub tasks:
 
 import tkinter as tk
 import tkinter.ttk as ttk
-import bin.engine.game_loop_v2 as engine
+import bin.engine.game_loop_v3 as engine
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from PIL import Image, ImageTk
