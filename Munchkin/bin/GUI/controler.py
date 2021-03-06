@@ -140,8 +140,8 @@ class GameOptions(tk.Toplevel):
         b1.grid(column=0, row=4, columnspan=2)
 
     def setopts(self):
-        """binds sack size to gameVar changing the number of cards you can carry"""
-        gameVar.Options.cards_delt = self.inital_deal.get()
+        """sets in game options. Binds sack size to gameVar changing the number of cards you can carry"""
+        gameVar.Options.cards_delt = self.inital_deal.get() #
         gameVar.Options.win_lvl = self.maxlvl.get()
         gameVar.Options.perm_death = self.permadeath.get()
         gameVar.Options.carry_weight = self.carry_weight.get()
@@ -152,7 +152,7 @@ class GameOptions(tk.Toplevel):
 
 
 class PlayerSelect(tk.Frame):
-    """Selection on number of players """
+    """Selection on number of players and meth to deal initial cards"""
     def __init__(self, parent, controller): # controller always passed in from main
         tk.Frame.__init__(self, parent)
         self.Num_of_players = tk.IntVar() # (int) of players in session
@@ -171,10 +171,11 @@ class PlayerSelect(tk.Frame):
         but1.pack(side="bottom")
 
     def playersetter(self):
-        """Binds values from spinbox to gui_var for later use and calls next stage"""
+        """Binds values from spinbox to gui_var for later use and calls next stage. calls player slice and meth to set
+        initial player cards"""
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        gamefile.select_players() # sets in motion player slice in game_loop..
+        gamefile.select_players() # sets in motion player slice in game_loop.. and calls meth to deal firs set of cards
         PlayerInfo() # calls toplevel for name and gender entry for each player
 
 
@@ -424,9 +425,18 @@ class OwnedItems(tk.Toplevel):
     def sell(self):
         """triggers sell event when pushed"""
         gamefile.zipper() # calls meth to make tuple from card ids and checkbutton converted bools
-        gameVar.StartVariables.active_player.sell_item() # calls method for sell in player
+        gameVar.StartVariables.active_player.sell_item() # calls method for sell in player# location for kw if decided
         app.update_frame() # updates main player info frame
         OwnedItems.destroy(self) # destroys toplevel window
+        print("resetting lists")
+        """Checker to see if list are scrubbed"""
+        gamefile.scrub_lists()
+        print(gameVar.GameObjects.selected_items,
+              gameVar.GameObjects.zipped_tup,
+              gameVar.GameObjects.check_but_intvar_gen,
+              gameVar.GameObjects.check_but_boo,
+              gameVar.GameObjects.check_but_card_ids,# ensures all are reset
+              len(gameVar.StartVariables.active_player.unsorted)) #ensures player list reduced on sale and not erased
 
     def equip_item(self):
         gamefile.zipper()

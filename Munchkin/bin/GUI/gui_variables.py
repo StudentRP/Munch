@@ -21,8 +21,8 @@ class StartVariables:
 
 class GameObjects:
     all_cards = [] # simple list of all cards
-    selected_items = []  # list of playing cards ready to be looped over. ie all weapons from player items
-    check_but_intvar_gen = [] # populated with objects of checkbutton
+    selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
+    check_but_intvar_gen = [] # populated with callable objects from checkbutton
     check_but_boo = [] # populated with checkbutton return values from intVar() objects
     check_but_card_ids = [] # populated with card id's
     zipped_tup = [] # populated with bools of card ids & fetched checkbutton from (check_but_card_ids, check_but_boo)

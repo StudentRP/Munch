@@ -133,6 +133,7 @@ class Player(P_tools):
         for card in gameVar.GameObjects.selected_items: # loops over specific card items
             for tup in gameVar.GameObjects.zipped_tup: # loops over tuple pairs
                 if tup[0] == card["id"] and tup[1]:  # compares card ids and if 1 or 0 from checkbutton
+                    """possible opportunity for splitting this up if use keyword param through for branching selector"""#################################/
                     self.wallet += card["sell"] #adds worth of card to player
                     print(f"Removing unsorted {card['name']}")
                     x = self.unsorted.pop(self.unsorted.index(card)) # removes card from player unsorted deck

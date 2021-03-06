@@ -29,7 +29,7 @@ from time import sleep
 # main loop
 ##################################################################
 first = True
-""" V2.0  """
+""" V3.0  """
 
 
 class PlayerSetUp:
@@ -39,14 +39,16 @@ class PlayerSetUp:
         self.cycle = 0
 
     def rand(self):
-        """called to pick a random player in the active player list"""
+        """Game start, picks a random player in the session_players list. Setts player as active_player and calls meth
+        to load player atribs gor gui"""
         player = choice(gameVar.StartVariables.session_players)
         gameVar.StartVariables.active_player = player # send to game var for accessibility
-        print(f"random player selected is {player.name.title()}")
+        print(f"The dice has been rolled. Random player selected is {player.name.title()}")
         self.varbinding(player) # set all gameVar to this player
 
     def varbinding(self, playerinst=gameVar.StartVariables.active_player):
-        """Method to bind all player atribs to gameVar, to be called with player instance when ever communication is required to gui"""
+        """Method to bind all player atribs to gameVar, to be called with player instance when ever
+        communication is required to gui"""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
         gameVar.PlayerAtribs.player_gender = playerinst.sex.title()
         gameVar.PlayerAtribs.player_level = playerinst.level
@@ -55,11 +57,10 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
 
-    def deal_handler(self, option, instance=None):######### METHOD NOT UPDATED AND USED!!!!!!!!!!!!!!!! yet
+    def deal_handler(self, option, instance=None):
         """ Provides cards to players dependent on option parameter."""
-        if option == "start": # initial play or resurrection
+        if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
             for player in gameVar.StartVariables.session_players:
-                #!!!!!!!!!!! player.unsorted neads sorting and assigning to other buttons like armor weapons ect.
                 player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
             print("your not at the start")
