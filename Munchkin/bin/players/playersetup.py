@@ -47,13 +47,13 @@ class P_tools():
     def sex(cls):
         """Sets gender"""
         x = gameVar.PlayerAtribs.player_gender
-        return x.title()
+        return x
 
     @classmethod
     def name(cls):
         """Sets name"""
         x = gameVar.PlayerAtribs.player_name
-        if x == "ninja": # ......................................................................... dev mode
+        if x == "PoWeR": # ......................................................................... dev mode
             y = "The_Creator"
             return y
         return x

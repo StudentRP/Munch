@@ -160,16 +160,17 @@ Controller:
 
 Pages:
     start page-
-        welcomes with start button that progresses to options frame (if included)
+        welcomes with start button that progresses to options toplevel
 
     options-
-        sets game options. button leads to player select
+        sets game options in gui_variables.py.Options.  These will be game flags for certain activities
+        modal infobox detailing changes on conformation button press
 
     player select-
         spin box with player select. textvariable = num_of_players
         button leads to player details playersetter method
         playersetter-
-            num_of_players =StringVar() binds to 2 variables in gameVar -
+            num_of_players = IntVar() binds to 2 variables in gameVar -
                 1) gameVar.StartVariables.new_players that manipulates label in Toplevel
                 2) gameVar.StartVariables.player_rand that drives the index for the instances in the list during selection
 
@@ -215,6 +216,7 @@ game_Loop.py
                 accepts parameter of a player instance
                 uses instance to bind all player attributes to gameVar
 
+
     before MainLoop is called all tkVar need to be set up. this is handled by the controller by the method update_frame.
     At the end of Playerinfo class method test, game_loop will use index to determine the correct player in gameVar.active_players.
     indexed player will bind self to gameVar.player_atribs.x
@@ -224,6 +226,278 @@ game_Loop.py
 
 
 
+#######################################################################
+# Game start and options methods
+#######################################################################
+deatails method for start page and game options
+
+controller.StartPg, class
+    Presents two options start or options
+    - start button will call controller.show_frame(PlayerSelect) so that number of players can be selected from the spinbox
+    - options button will call toplevel GameOptions class
+
+start button
+    controller.show_frame(PlayerSelect)
+        See player rotation method detailed in independent section bellow
+
+GameOptions, toplevel
+    presents options that change gameVar.Options that act as flags for specific in game methods
+    Defaults are set in gameVar. Options for are:
+        gameVar.Options.cards_delt = self.inital_deal.get()     # number of each type of card to deal on start
+        gameVar.Options.win_lvl = self.maxlvl.get()             # level needed to win game
+        gameVar.Options.perm_death = self.permadeath.get()      # game death permanency
+        gameVar.Options.carry_weight = self.carry_weight.get()  # number of cards that can be placed in sack
+    'Ok' button calls method setopts(self)
+
+    setopts(self), method
+        Fetches all tk variables and binds to all gameVar variables.
+        creates a message variable with all f-string of all new values
+        messagebox.showinfo(title,contents) is called
+        messagebox.showinfo("Settings Changed!", message) is called highlighting the changes
+
+    GameOptions.destroy(self), tk.method
+        toplevel with options is destroyed after acknowledging messagebox
+
+controller.StartPg
+player can now either re-enter options of press start
+
+#######################################################################
+# Name/gender, random player to start and deal starting set of cards
+#######################################################################
+Details method for setting name/gender, random player to start and deal initial cards
+
+PlayerSelect(), class
+    creates spinbox with textvariable=self.Num_of_players bound to tk.IntVar()
+    and Confirm Button that calls self.playersetter method
+
+    playersetter, method
+        gameVar.StartVariables.new_players = self.Num_of_players.get()
+            pulls the number of selected players from the spinbox and binds to gameVar new_players
+            This is the number of players wanted in the current game.
+
+        gameVar.StartVariables.player_rand = self.Num_of_players.get()
+            Binds player_rand to Num_of_players also.
+
+        engine.select_players(), method
+            method is used to slice total available players with the number of players wanted then call deal_handler() to
+            provide cards to all players in session.
+
+            num_of_players = gameVar.StartVariables.new_players
+            actual players named session_players which is then stored in gameVar.
+                This is used to slice available_players list into a list of
+                gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players]
+
+            deal_handler("start"), method
+            Flexible method created to deal cards either at start, after death or specific cards (door/treasure).
+            player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt)
+                Used to issue cards to all players. "start" parameter is used to define the the type of deal wanted.
+                This then loops over the players in session_players calling cards.card_sop.deal_cards() table.py
+
+                cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt)
+                    Calls Table class and the card method card_sop for the Dealer class (a table has-a Dealer) with the
+                    method deal_cards. The arguments "start" and ameVar.Options.cards_dealt specify the mode of deal
+                    through the branch and the number of each card to deal laid out by the game options respectively.
+                    Card selection fo each type is randomised through the use of Random module.
+                    Cards are stored in the variable starter_set and returned to caller and bound to player.unsorted.
+                    This is a list of cards that associates to the individual player
+
+        PlayerInfo(), toplevel
+            Complex script to create a arbitrary name tag with incrementation number, set the name and gender of
+            the player, generate a random player to start and structure a game loop that loops over session_players.
+
+                class had 2 class variables:
+                    counter = 1  #  player identity title number for arbitrary label
+                    indexing = 0 # index to access correct player instance in session_players list and ensures
+                    details are bound to the correct player instance.
+                    note a 3rd is used but located in gameVar (new_players) set by the playersetter method above.
+
+                Players enter their details and press "confirm" button that triggers initial_set (return button does
+                same thing).
+
+                    number = gameVar.StartVariables.new_players
+
+                initial_set, method
+                    Branch is created for checking the number of players in gameVar.StartVariables.new_players assigned
+                    to the variable name = number. Each time this method is called it reduces number by 1 ensuring that
+                    the final entry is the last to redraw the toplevel window. (number -= 1)
+
+                    PlayerInfo.counter += 1 is used to increase the number for the arbitrary player label
+
+                    gameVar.PlayerAtribs.player_name = self.instname.get()
+                    gameVar.PlayerAtribs.player_gender = self.instgender.get()
+                    Both bind the player attribs provided to the player name in gameVar
+                    engine.player_name_gender(PlayerInfo.indexing) is then called
+
+                    engine.player_name_gender(PlayerInfo.indexing), engine class method
+                        player = gameVar.StartVariables.session_players[playerindex]
+                            class indexing variable is used to pass to player_name_gender method to access the correct
+                            player in session_players.
+                            player is now a specific player instance
+
+                        player.char_setup() method is called to set and bind attrribs to players
+
+                        player.char_setup(), method
+                            calls P_tools.name() and xy = P_tools.name()
+                            return value of each is set as a player attribute
+                            if the return val is == to the dev mode other attribs will be attributed to the player
+
+                            P_tools.name()
+                                x = gameVar.PlayerAtribs.player_name
+                                returns name stored in gameVar with title method
+                                or dev mode name if criteria met
+
+                            P_tools.name()
+                            x = gameVar.PlayerAtribs.player_gender
+                            return x.title()
+
+                    PlayerInfo.indexing = PlayerInfo.indexing + 1 is increased for the next player when passed back into
+                    engine.player_name_gender(self, playerindex)    NOTE: index == playerindex as it becomes method argument
+                    PlayerInfo.destroy(self) is called to destroy the toplevel window
+                    gameVar.StartVariables.new_players = number changes the number new_players in gameVar to the new
+                    decreased number.
+
+                        Inner loop triggered if number not equal to 0 triggering toplevel to rebuild with the new
+                        arbitrary counter label increasing.
+
+                        When the condition runs that the number is == 0, the integer in new_players list has reached
+                        zero. This will destroy the toplevel PlayerInfo permanently and trigger the next sequence of
+                        events.
+
+                        engine.rand(), method
+                            method for selecting a player from the session_players to go first with the use of the
+                            random module - player = choice(gameVar.StartVariables.session_players).
+                            This method then calls varbinding(player), a method specifically for binding the player
+                            attributes to gameVar.
+                            Importantly gameVar active_player is named: gameVar.StartVariables.active_player = player
+                            used later in turn based assignment
+
+                            varbinding(player) method
+                                Binds all player attributes to gameVar.PlayerAtribs. Note this method can take in any
+                                player instance and bind to gameVar.PlayerAtribs.
+
+                        app.update_frame(), method
+                            part of controller.py class Main method that acts as the controller. Sets all tk.Vars with
+                            gameVar.PlayerAtribs. Act like a refresh for new bindings from varbinding that impacts upon
+                            MainLoop frame that calls controller.atrib. method also changes size of the Main window
+                            ready for gameplay.
+
+                        app.show_frame(MainLoop), method
+                            Raises MainLoop to the forefront
+
+#######################################################################
+# player rotation method, (initial start and game progression)
+#######################################################################
+Setting player rotation method and binding attributes. In previous section varbinding(player) and update_frame()
+set the player info to the random selected player. This is detailed in the player info to the left on the screen and
+goes first in the game. End turn button should trigger events that lead to the next player and the update of the
+player info window.
+
+    end_turn, button method
+    On button press player turn ends and another begins.
+        engine.player_order(gameVar.StartVariables.active_player) active_player bound in rand method above becomes
+        current_player. while play is true (to be set as conditional for gameVar.Options.win_lvl) creates loop for
+        players in game. With the use of itertools cycle is used to iterate over the session_players
+        player_gen = cycle(gameVar.StartVariables.session_players). next is called to yield next player and loop back
+        to the beginning of the list.
+
+        within the while loop there is a branch. current_player is compared to next(player_gen) that is called y.
+        If the conditional in not met  current_player == y next is called again until current_player is found == y.
+        When this happens there are 2 outcomes either the player is alive or the player is dead.
+
+        In the event of alive gameVar.active_player is updated to next(player_gen) thus next in line to play. varbinding
+        is called with the new player argument gameVar.active_player. The loop is then broken preventing endless recursion.
+
+        Death and its conditionals will be addressed later.
+
+        app.update_frame(), method
+        method again updates the player info to the left of the screen
+
+
+#######################################################################
+# sell method
+#######################################################################
+
+Sell method uses code re-usability to the max with shortened functions that allow various usage buy numerous callers.
+The end goal is to remove items from the player adding them to the burn pile and gaining profit from the sale.
+
+    Mainloop the sell (sell_list) button-
+        From controller.Mainloop the sell button calls sell_list.
+        sell_list first calls scrub_lists. this important as all linked lists ar appended and not built anew.
+        calls player from active_player in gameVar
+
+        Player has method called item_by_key. this takes 1 argument 'sell' defined as key on other end
+        (but could be anything specific from a game card)
+        item_by_key(self, key) generates a list from all cards in player.unsorted (a list of cards delt to the player during
+        controller.PlayerSelect.playersetter during player slice) that are specific in the fact they have in card dictionary
+        a key called 'sell'. Under list comprehension this generates a list of only sellable objects in the player deck.
+        this list is binded to gameVar.GameObjects.selected items.
+
+        Returning to controller, OwnedItems(window_title) Toplevel is now called with the arg "Sellable Items".
+        OwnedItems loops over objects in selected_items creating a list format each with a name,type,value and a checkbox.
+        ** consider adding info buttion that either raise the pic of the card or text description.
+        gameVar.GameObjects.check_but_intvar_gen.append(status) is also build per item and bound to checkbutton changing
+        independently with activity activity.
+        The id each card is appended to a new list in gameVar.GameObjects.check_but_card_ids.
+        This order is the same order as Checkbutton object in the other list.
+        The button is use to call sell method
+
+    sell button -
+    engine.zipper()
+        Calls engine.zipper method (generic method for zipping 2 list together into a tuple)
+        gameVar.GameObjects.zipped_tup.clear() is calle to ensure list is clear.
+        First step required is the conversion of the Checkbutton objects to the boolean value (0 or 1) from
+        gameVar.GameObjects.check_but_intvar_gen.
+        This creates new list of booleans called gameVar.GameObjects.check_but_boo consisting of the bool values.
+        [x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
+        gameVar.GameObjects.zipped_tup = list(zip(x, y))] function is to zip card independent ids to their bool.
+        This creates tuple pairs of (id,0/1) for each card in gameVar.GameObjects.selected items.
+        engine.card_matcher(action) is then called from controller.
+
+    engine.card_matcher(action) CREATED FOR FLEXIBILITY OF INPUTS AND FORWARD PASS
+        creates loop for each card in gameVar.GameObjects.selected_items that iterates over cards then
+        creates an inner loop or tup in gameVar.GameObjects.zipped_tup for each card, NOTE:tup contains (card id, 0or1).
+        Conditional if tup[0] == card["id"] and tup[1] filters the cards by matching ids (tup[0]) and only if the
+        tup[1] value is == 1 (True).
+        After qualification a branch is created calling the correct method associated to action parameter, in this case "sell"
+        the qualifying card is passed to sell_item(self, card).
+
+        sell_item(self, card)
+            player wallet is substituted with the card value and the card is popped form the
+            player unsorted list and cards.add_to_burn(x) is called.
+
+            cards.(self, discard) method -
+            x = self.unsorted.pop(self.unsorted.index(card)) # pops card from player unsorted deck
+            cards.add_to_burn(x) # popped item is used as arg
+                simple method that adds cards to the burn pile that have been remove from the game. note simple arg of the card
+                to be removed
+
+    OwnedItems.destroy(self)
+        destroys toplevel with sellable items listed
+
+    engine.scrub_lists()
+        Critical for appended lists.
+        calls scrub_list from engine resetting all appendable lists: selected_items, check_but_intvar_gen, check_but_boo,
+        check_but_card_ids and zipped_tup. This reset allows new creation when recalled or new player.
+
+    rebinding variables
+    engine.varbinding(gameVar.StartVariables.active_player)
+    app.update_frame()
+        updates the player info screen detailing changes to player wallet
+
+##########################################################################
+# Equipping method
+##########################################################################
+
+
+
+
+
+
+
+    Having selected some items, the sel button calls
+
+
+    having ticked the appropriate
 
 card types:
 

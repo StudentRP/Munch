@@ -107,10 +107,8 @@ class Player(P_tools):
         """sets up name and sex in gameVar and player instance when called"""
         na = P_tools.name() # method to set name
         self.name = na  # makes change to player
-        gameVar.PlayerAtribs.player_name = na.title() # changes gamevar to be titled so comes up in gui label
         xy = P_tools.sex()
         self.sex = xy
-        gameVar.PlayerAtribs.player_gender = xy.title()
 
         if self.name == "The_Creator": # ................................................................... dev mode
             self.sex = "bob"
@@ -121,30 +119,22 @@ class Player(P_tools):
         # print(self.__repr__())
 
     def inventory(self, key, cardtype): # called from GUI on button press
-        """creates a list of dict of cards from player unsorted cards of a particular type."""
+        """creates a list of dict of cards from player unsorted cards of a particular type (ie armour == headgear)."""
         gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj[key] == cardtype]
 
     def item_by_key(self, key):
         """passes list of specific set of items to gameVar with the use of a key from the dict"""
         gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj.get(key)]
 
-    def sell_item(self): # called by player.sell_item so self bound to player
+    def sell_item(self, card): # called by player.sell_item so self bound to player
         """Call from zipper to sell items, remove cards, reset gameVars and call to add to burn pile"""
-        for card in gameVar.GameObjects.selected_items: # loops over specific card items
-            for tup in gameVar.GameObjects.zipped_tup: # loops over tuple pairs
-                if tup[0] == card["id"] and tup[1]:  # compares card ids and if 1 or 0 from checkbutton
-                    """possible opportunity for splitting this up if use keyword param through for branching selector"""#################################/
-                    self.wallet += card["sell"] #adds worth of card to player
-                    print(f"Removing unsorted {card['name']}")
-                    x = self.unsorted.pop(self.unsorted.index(card)) # removes card from player unsorted deck
-                    cards.add_to_burn(x)# adds card to burn pile on table
-
-                else:
-                    continue
-
+        self.wallet += card["sell"] #adds worth of card to player
+        print(f"Removing unsorted {card['name']}")
+        x = self.unsorted.pop(self.unsorted.index(card)) # removes card from player unsorted deck
+        cards.add_to_burn(x)# adds card to burn pile on table
         print("burn pile  ", len(cards.burn_pile))
         print("tup list: ", gameVar.GameObjects.zipped_tup)
-        # print(gameVar.GameObjects.zipped_tup)
+
 
 
         # x = str(input("\nView player:\n1: Details\n2: Weapons & armour\n3: Sack\nQ: exit\n>>>  "))

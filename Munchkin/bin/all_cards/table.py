@@ -33,9 +33,6 @@ class Dealer:
             """called at start to deal specific number of cards to pass to player"""
             starter_set = []
             for i in range(cardnum): # takes attrib of number of loops for card dealing (set by gameVar.Options)
-                # dpack = randint(0, len(Moncurse.door_cards)) - 1
-                # tpack = randint(0, len(Treasure.treasure_cards)) - 1
-
                 dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
                 starter_set.append(dobj) # adds door card to list
                 tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets t card. better rand required

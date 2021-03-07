@@ -61,7 +61,7 @@ class PlayerSetUp:
         """ Provides cards to players dependent on option parameter."""
         if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
             for player in gameVar.StartVariables.session_players:
-                player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_delt) # links to table.py, called from PlayerSetUp.select_players
+                player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
             print("your not at the start")
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
@@ -72,7 +72,7 @@ class PlayerSetUp:
     def player_order(self, current_player): # called with gameVar rand_index
         """Note initial player is set at this point+bound.
         Player cycle loop for calling next player and call binding on new player"""
-        play = True # win condition
+        play = True # win condition need method that will check all players
         player_gen = cycle(gameVar.StartVariables.session_players) # generator function that cycles a list indefinitely
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
         while play:
@@ -82,7 +82,7 @@ class PlayerSetUp:
                 self.varbinding(gameVar.StartVariables.active_player) #  binds new player
                 print(f"{gameVar.StartVariables.active_player.name} has been binded")
                 break
-            elif current_player == y and not current_player.alive:
+            elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
                 print(f"print player {current_player} is dead") #move in to conditional for permadeath
                 current_player.alive = True # resets player status ##########need peradeath bit here
                 gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
@@ -107,30 +107,42 @@ class PlayerSetUp:
         # print(player) # __repr__ method
 
     def zipper(self):
-        "zips card id's to checkbox bools. Used for all card sorting regardless of type"
+        """zips card id's to checkbox bools. Used for all card sorting regardless of type"""
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
         for create_boo in gameVar.GameObjects.check_but_intvar_gen:
             gameVar.GameObjects.check_but_boo.append(create_boo.get()) # creates a list of 1s & 0s from check buttons status
             x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
             gameVar.GameObjects.zipped_tup = list(zip(x, y))
         # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows list clearing
-        self.varbinding(gameVar.StartVariables.active_player) # reloads player atribs
+        # self.varbinding(gameVar.StartVariables.active_player) # reloads player atribs ***************
+
+    def card_matcher(self, action):
+        for card in gameVar.GameObjects.selected_items: # loops over specific card items
+            for tup in gameVar.GameObjects.zipped_tup: # loops over tuple pairs
+                if tup[0] == card["id"] and tup[1]:
+                    #action to take
+                    if action == "sell":
+                        gameVar.StartVariables.active_player.sell_item(card)
+                    elif action == "equip":
+                        pass
+
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""
         gameVar.GameObjects.selected_items.clear()  # clears the card objects list
-        gameVar.GameObjects.zipped_tup.clear()  # clears tup list
         gameVar.GameObjects.check_but_intvar_gen.clear()  # clears list of intVar objects from check buttons
         gameVar.GameObjects.check_but_boo.clear()  # clears boolean list
         gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
+        gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
 
-gamefile = PlayerSetUp()
+
+engine = PlayerSetUp()
 
 if __name__ == "__main__":
 
     # NumberOfPlayers().select_players() # starts game by activating NOP building the objects, and activating select_players
     # running wach line.
-    gamefile.player_name_gender()
+    engine.player_name_gender()
 
 

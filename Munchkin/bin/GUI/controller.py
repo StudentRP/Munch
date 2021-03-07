@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from bin.engine.game_loop_v3 import gamefile
+from bin.engine.game_loop_v3 import engine
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
@@ -85,13 +85,9 @@ class StartPg(tk.Frame):
         but1.pack()
         but1.focus_set()
 
-        but2 = tk.Button(self, text="Options", command=self.options)
+        but2 = tk.Button(self, text="Options", command=GameOptions)
         but2.config(bg=but_color, fg=text_color, padx=40, activebackground='yellow', relief="raised")
         but2.pack(side="bottom")
-
-    def options(self):
-        """top level options screen"""
-        GameOptions()
 
 
 class GameOptions(tk.Toplevel):
@@ -141,11 +137,11 @@ class GameOptions(tk.Toplevel):
 
     def setopts(self):
         """sets in game options. Binds sack size to gameVar changing the number of cards you can carry"""
-        gameVar.Options.cards_delt = self.inital_deal.get() #
+        gameVar.Options.cards_dealt = self.inital_deal.get()
         gameVar.Options.win_lvl = self.maxlvl.get()
         gameVar.Options.perm_death = self.permadeath.get()
         gameVar.Options.carry_weight = self.carry_weight.get()
-        message = f"Starting deal: {gameVar.Options.cards_delt}\nWin level:{gameVar.Options.win_lvl}\n" \
+        message = f"Starting deal: {gameVar.Options.cards_dealt}\nWin level:{gameVar.Options.win_lvl}\n" \
                   f"Carry weight: {gameVar.Options.carry_weight}\nPerm_a_death: {gameVar.Options.perm_death}"
         messagebox.showinfo("Settings Changed!", message)
         GameOptions.destroy(self)
@@ -175,7 +171,7 @@ class PlayerSelect(tk.Frame):
         initial player cards"""
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        gamefile.select_players() # sets in motion player slice in game_loop.. and calls meth to deal firs set of cards
+        engine.select_players() # sets in motion player slice in game_loop.. and calls meth to deal firs set of cards
         PlayerInfo() # calls toplevel for name and gender entry for each player
 
 
@@ -212,12 +208,12 @@ class PlayerInfo(tk.Toplevel):
         self.nameent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
         self.nameent.grid(column=2, row=2, sticky='w')
 
-        self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.inital_set)
+        self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.initial_set)
         self.but2.config(bd=10, activebackground='green')
         self.but2.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
-        self.bind('<Return>', self.inital_set)  # creates event to be passed to test
+        self.bind('<Return>', self.initial_set)  # creates event to be passed to test
 
-    def inital_set(self, event=None):
+    def initial_set(self, event=None):
         """button handler, binds name/gender to gameVar, increments arbitrary label and index for ensuring correct player instance,
          """
         number = gameVar.StartVariables.new_players # (int) derived from gui_var .
@@ -226,7 +222,7 @@ class PlayerInfo(tk.Toplevel):
             PlayerInfo.counter += 1 # increase player counter for arbitrary label in __init__
             gameVar.PlayerAtribs.player_name = self.instname.get() # entered name binds to gameVar
             gameVar.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
-            gamefile.player_name_gender(PlayerInfo.indexing) # call game_loop with index for player instance
+            engine.player_name_gender(PlayerInfo.indexing) # call game_loop with index for player instance
             PlayerInfo.indexing = PlayerInfo.indexing + 1 # increases player index ensuring correct player attribute assignment
             print("Destroying toplevel")
             PlayerInfo.destroy(self) #destoys toplevel window
@@ -242,7 +238,7 @@ class PlayerInfo(tk.Toplevel):
                     print(players.name.title()) # checks all players names for activity
                 #~~~~~~~~~~~~~~~
 
-                gamefile.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
+                engine.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
                 app.update_frame() # updates all lable variables from gameVar
                 app.show_frame(MainLoop) # calls next frame to raise by controller
                 ########## deal cards to all players required
@@ -334,7 +330,7 @@ class MainLoop(tk.Frame):
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
-        gamefile.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
+        engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
         app.update_frame() # updates the tk.vars in Main under the instance controller.
 
     def door(self):
@@ -365,7 +361,7 @@ class MainLoop(tk.Frame):
     def list_sell(self):
         """builds toplevel with sellable items"""
         print("Sell selected")
-        gamefile.scrub_lists() # resets all lists for next action
+        engine.scrub_lists() # resets all lists for next action
         player = gameVar.StartVariables.active_player # gets current player
         player.item_by_key("sell") # load all sellable cards into gamevar.selected_items  with use of dict key param
         # print(gameVar.StartVariables.selected_items) # call method that in gameile that creates zip
@@ -378,8 +374,8 @@ class MainLoop(tk.Frame):
         print("Toplevel window where another player can help... for a price..")
 
     def list_sack(self):
-        "shows all items in sack"
-        # gamefile.scrub_lists() #
+        """shows all items in sack"""
+        # new toplevel without checkboxes
         print("Your sack contains:")
         print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
         gameVar.GameObjects.all_cards = gameVar.PlayerAtribs.player_unsorted # wont work with gui.. yet
@@ -404,19 +400,22 @@ class OwnedItems(tk.Toplevel):
             f = tk.Frame(self)
             f.pack(side="top", expand=True)
             tk.Label(f, text="Name").grid(row=0, column=0, sticky="nw")
-            tk.Label(f, text="Des").grid(row=0, column=1, sticky="nw")
-            tk.Label(f, text="Sell").grid(row=0, column=2, sticky="nw")
-            tk.Label(f, text="Equip").grid(row=0, column=3, sticky="nw")
+            tk.Label(f, text="Type").grid(row=0, column=1, sticky="nw")
+            tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw")
+            tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw")
 
             for card in gameVar.GameObjects.selected_items:
                 status = tk.IntVar() # for keeping track of check buttons
                 f1 = tk.Frame(self)
                 f1.pack(side="top", expand=True)
+
                 l1 = tk.Label(f1, text=card['name'])
                 l1.grid(row=0, column=0, sticky="nw")
                 l2 = tk.Label(f1, text=card['type'])
                 l2.grid(row=0, column=1, sticky="nw")
-                tk.Checkbutton(f1, text=" ", variable=status).grid(row=0, column=2, sticky="nw")
+                l3 = tk.Label(f1, text=card['sell'])
+                l3.grid(row=0, column=2, sticky="nw")
+                tk.Checkbutton(f1, text=" ", variable=status).grid(row=0, column=3, sticky="nw")
                 gameVar.GameObjects.check_but_intvar_gen.append(status) #maybe good place to add card id here????????????
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
         tk.Button(self, text="Sell", command=self.sell).pack(side="left")
@@ -424,22 +423,23 @@ class OwnedItems(tk.Toplevel):
 
     def sell(self):
         """triggers sell event when pushed"""
-        gamefile.zipper() # calls meth to make tuple from card ids and checkbutton converted bools
-        gameVar.StartVariables.active_player.sell_item() # calls method for sell in player# location for kw if decided
-        app.update_frame() # updates main player info frame
+        engine.zipper() # calls meth to make tuple from card ids and checkbutton converted bools
+        engine.card_matcher("sell")# new meth
         OwnedItems.destroy(self) # destroys toplevel window
         print("resetting lists")
         """Checker to see if list are scrubbed"""
-        gamefile.scrub_lists()
+        engine.scrub_lists()
         print(gameVar.GameObjects.selected_items,
               gameVar.GameObjects.zipped_tup,
               gameVar.GameObjects.check_but_intvar_gen,
               gameVar.GameObjects.check_but_boo,
               gameVar.GameObjects.check_but_card_ids,# ensures all are reset
               len(gameVar.StartVariables.active_player.unsorted)) #ensures player list reduced on sale and not erased
+        engine.varbinding(gameVar.StartVariables.active_player) # explicitly ensures all vars ar correct
+        app.update_frame() # updates player info
 
     def equip_item(self):
-        gamefile.zipper()
+        engine.zipper()
         ### meth link to be fitted
         app.update_frame()
         OwnedItems.destroy(self)
