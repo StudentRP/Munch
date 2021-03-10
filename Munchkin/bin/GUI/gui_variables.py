@@ -20,7 +20,7 @@ class StartVariables:
 
 
 class GameObjects:
-    all_cards = [] # simple list of all cards
+    all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
     check_but_intvar_gen = [] # populated with callable objects from checkbutton
     check_but_boo = [] # populated with checkbutton return values from intVar() objects

@@ -403,22 +403,21 @@ class OwnedItems(tk.Toplevel):
             tk.Label(f, text="Type").grid(row=0, column=1, sticky="nw")
             tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw")
             tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw")
-
+            set_row = 1
             for card in gameVar.GameObjects.selected_items:
                 status = tk.IntVar() # for keeping track of check buttons
-                f1 = tk.Frame(self)
-                f1.pack(side="top", expand=True)
-
-                l1 = tk.Label(f1, text=card['name'])
-                l1.grid(row=0, column=0, sticky="nw")
-                l2 = tk.Label(f1, text=card['type'])
-                l2.grid(row=0, column=1, sticky="nw")
-                l3 = tk.Label(f1, text=card['sell'])
-                l3.grid(row=0, column=2, sticky="nw")
-                tk.Checkbutton(f1, text=" ", variable=status).grid(row=0, column=3, sticky="nw")
+                l1 = tk.Label(f, text=card['name'])
+                l1.grid(row=set_row, column=0, sticky="nw")
+                l2 = tk.Label(f, text=card['type'])
+                l2.grid(row=set_row, column=1, sticky="nw")
+                l3 = tk.Label(f, text=card['sell'])
+                l3.grid(row=set_row, column=2, sticky="nw")
+                tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
                 gameVar.GameObjects.check_but_intvar_gen.append(status) #maybe good place to add card id here????????????
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
+                set_row += 1
         tk.Button(self, text="Sell", command=self.sell).pack(side="left")
+        tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         # tk.Button(self, text="Equip", command=self.x).pack(side="left")
 
     def sell(self):
@@ -438,9 +437,11 @@ class OwnedItems(tk.Toplevel):
         engine.varbinding(gameVar.StartVariables.active_player) # explicitly ensures all vars ar correct
         app.update_frame() # updates player info
 
-    def equip_item(self):
+    def equip(self):
         engine.zipper()
         ### meth link to be fitted
+
+        engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
         OwnedItems.destroy(self)
         pass

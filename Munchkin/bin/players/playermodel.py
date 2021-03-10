@@ -91,6 +91,7 @@ class Player(P_tools):
         self.unsorted = [] # list of all cards that are used to by sorting
         self.alive = True
         self.longevity = 0 # counts cycles alive, if 0 player misses go
+        self.cheat = 0 # set to false
 
     def __repr__(self):
         """developer aid"""

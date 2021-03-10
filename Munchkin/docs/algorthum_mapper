@@ -422,10 +422,10 @@ The end goal is to remove items from the player adding them to the burn pile and
 
     Mainloop the sell (sell_list) button-
         From controller.Mainloop the sell button calls sell_list.
-        sell_list first calls scrub_lists. this important as all linked lists ar appended and not built anew.
+        sell_list first calls scrub_lists. This important as all linked lists ar appended and not built anew.
         calls player from active_player in gameVar
 
-        Player has method called item_by_key. this takes 1 argument 'sell' defined as key on other end
+        Player has method called item_by_key. This takes 1 argument 'sell' defined as key on other end
         (but could be anything specific from a game card)
         item_by_key(self, key) generates a list from all cards in player.unsorted (a list of cards delt to the player during
         controller.PlayerSelect.playersetter during player slice) that are specific in the fact they have in card dictionary
@@ -436,15 +436,15 @@ The end goal is to remove items from the player adding them to the burn pile and
         OwnedItems loops over objects in selected_items creating a list format each with a name,type,value and a checkbox.
         ** consider adding info buttion that either raise the pic of the card or text description.
         gameVar.GameObjects.check_but_intvar_gen.append(status) is also build per item and bound to checkbutton changing
-        independently with activity activity.
-        The id each card is appended to a new list in gameVar.GameObjects.check_but_card_ids.
+        independently with checkbutton activity.
+        The id of each card is appended to a new list in gameVar.GameObjects.check_but_card_ids.
         This order is the same order as Checkbutton object in the other list.
         The button is use to call sell method
 
     sell button -
     engine.zipper()
         Calls engine.zipper method (generic method for zipping 2 list together into a tuple)
-        gameVar.GameObjects.zipped_tup.clear() is calle to ensure list is clear.
+        gameVar.GameObjects.zipped_tup.clear() is called to ensure list is clear.
         First step required is the conversion of the Checkbutton objects to the boolean value (0 or 1) from
         gameVar.GameObjects.check_but_intvar_gen.
         This creates new list of booleans called gameVar.GameObjects.check_but_boo consisting of the bool values.
@@ -487,11 +487,26 @@ The end goal is to remove items from the player adding them to the burn pile and
 ##########################################################################
 # Equipping method
 ##########################################################################
+PREBUILD CONSIDERATIONS PLAN
+consider changing card to fit ie equip:True then loop over for equipped items. good to detrmine bonuses, use re for
+status effects/qualifiers. name of equipped item for player info = verbinding can call meth that returns it or none
+
+need to set up vars in Main
+access to them
+separate player list for equipped/curse/status effects
+method to select equipable items and populate selected_items
+way to screen items dependent on player ie for dewarfs only ect
+
+stepes needed:::
+way to screen cards race/gender... same for cursing??
+
+way to add to player or check if place is occupied already and remove player and add to sack
 
 
 
-
-
+#######################################################################
+# view all items
+#######################################################################
 
 
     Having selected some items, the sel button calls
