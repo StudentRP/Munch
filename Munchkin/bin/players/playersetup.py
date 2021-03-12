@@ -53,7 +53,7 @@ class P_tools():
     def name(cls):
         """Sets name"""
         x = gameVar.PlayerAtribs.player_name
-        if x == "PoWeR": # ......................................................................... dev mode
+        if x == "rory": # ......................................................................... dev mode
             y = "The_Creator"
             return y
         return x

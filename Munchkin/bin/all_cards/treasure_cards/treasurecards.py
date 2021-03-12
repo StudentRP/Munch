@@ -80,61 +80,60 @@ class Treasure(T_tools):
     treasure_cards = [
         # type disposable
         {"type": "disposable", "id": 1, "name": "Electric Radioactive Acid Potion", "des": "Use during any combat. +5 to either side.",
-         "bonus": 2, "sell": 200, 'restriction': ["once, any combat"]},
+         "bonus": 2, "sell": 200, 'restriction': "once, any combat"},
         {"type": "disposable", "id": 3, "name": "Flaming Poison Potion", "des": "Use during combat", "bonus": 3, "sell": 100,
-         "special": "fire", 'restriction': ["once"]},
+         "special": "fire", 'restriction': "once"},
         {"type": "disposable", "id": 4, 'name': "Instant Wall", 'des': 'Automatic escape for 1 or 2 players', 'sell': 300,
-         "special": "auto escape 2 players", 'restriction': ["once"]},
+         "special": "auto escape 2 players", 'restriction': "once"},
         {"type": "disposable", "id": 5, "name": "Flask Of Glue", "des": "Use during combat, must re-roll escape even if auto last time",
-         "sell": 100, "special": "escape", 'restriction': ["once", "reroll escape"]},
+         "sell": 100, "special": "escape", 'restriction': "once, reroll escape"},
 
-        #type armor/headm
-        {"id": 6, "type": "necklace", "name": "The Occasionally Reliable Amulet",
-         'des': 'If equipped, chance to deflect curse', 'sell': 600, 'special': "deflect"},
+        #type armor/head
+        {"id": 6, "type": "armor", "sub_type": "necklace", "name": "The Occasionally Reliable Amulet",
+         'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect"},
 
-        {"id": 7, "type": "headgear", "name": "Tinfoil Hat",
-         "des": "Immune to curses, curses by kicking down doors still effect", "bonus": 0, "sell": 800,
+        {"id": 7, "type": "armor", "sub_type": "headgear", "name": "Tinfoil Hat",
+         "des": "Immune to curses when  curses by kicking down doors still effect", "bonus": 0, "sell": 800,
          "special": "cast immune"},
-        {"id": 8, "type": "headgear", "name": "Pointy Hat Of Power", "des": "Usable by wizards only",
-         "bonus": 3, "sell": 400, "restriction": ["wizards only"]},
-        {"id": 9, "type": "headgear", "name": "Helm Of Peripheral Vision",
+        {"id": 8, "type": "armor", "sub_type": "headgear", "name": "Pointy Hat Of Power", "des": "Usable by wizards only",
+         "bonus": 3, "sell": 400, "klass_restriction": "wizard"},
+        {"id": 9, "type": "armor", "sub_type": "headgear", "name": "Helm Of Peripheral Vision",
          "des": "can not be back stabbed or stolen from by thief", "bonus": 2, "sell": 600, "special": "headgear",
-         "restriction": ["no backstab", "no steal"]},
-        {"id": 10, "type": "headgear", "name": "Badass Bandana",
-         "des": "Usable by humans only", "bonus": 3, "sell": 400, "restriction": ["humans only"]},
+         "restriction": "no backstab, no steal"},
+        {"id": 10, "type": "armor", "sub_type": "headgear", "name": "Badass Bandana",
+         "des": "Usable by humans only", "bonus": 3, "sell": 400, "race_restriction": "human"},
 
         # armor/armor (complete set)
         {"id": 11, "type": "armor", "name": "Short Wide Armour", "des": "usable by dwarf only", "bonus": 3,
-         "sell": 400, "restriction": ["dwarfs only"]},
+         "sell": 400, "race_restriction": "dwarfs"},
         {"id": 12, "type": "armor", "name": "Raincoat",
          "des": "Others can not use potions to interfere with your combat unless joins fight.", "sell": 100,
-         "special": "over armor", "restrictions": ["loose with armour"]},
+         "special": "over armor", "restrictions": "loose with armour"},
         {"id": 13, "type": "armor", "name": "Slimy Armour", "des": "Found in a stagnant pool of water.",
          "bonus": 1, "sell": 200},
         {"id": 14, "type": "armor", "name": "Mithril Armor", "des": "Oooo Shiny!", "bonus": 3,
-         "sell": 600, "restriction": ["big"]},
+         "sell": 600, "sub_type": "big"},
         {"id": 15, "type": "armor", "name": "Budget Armour", "des": "Get what you pay for..", "bonus": 1,
          "sell": 100},
         {"id": 16, "type": "armor", "name": "Flaming Armour", "des": " Its Really Hot!", "bonus": 2, "sell": 400},
-        {"id": 17, "type": "armor", "name": "Spudded Leather Armor", "des": "When best no available",
+        {"id": 17, "type": "armor", "name": "Studded Leather Armor", "des": "When best not available",
          "bonus": 2, "sell": 400},
         {"id": 18, "type": "armor", "name": "Gnomex Suit", "des": "Usable by Gnome only", "bonus": 4, "sell": 600,
-         "special": "over armor", "restrictions": ["loose with armour", "gnome only"]},
+         "special": "over armor", "restrictions": "loose with armour", "race_restriction": "gnome"},
         {"id": 19, "type": "armor", "name": "Chainmail Bikini", "des": "Strangely not just for women",
          "bonus": 3, "sell": 600},
         {"id": 20, "type": "armor", "name": "Leather Armor", "des": "Its leather.", "bonus": 1, "sell": 200},
 
 
         #armor/boots
-        {"id": 21, "type": "footgear", "name": "Boots Of Running Really Fast", "des": "run away + 2", "bonus": 0,
-         "sell": 400, "special": "footgear"},
+        {"id": 21, "type": "armor", "sub_type": "footgear", "name": "Boots Of Running Really Fast", "des": "run away + 2", "bonus": 0,
+         "sell": 400},
 
         #weapons
-        {"id": 22, "type": "weapon", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
-         "sell": 800, "restriction": "1hand"},
-        {"id": 23, "type": "weapon", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
-         "sell": 800,
-         "special": "item enhancer", "restriction": "1hand, wizards only, with item"}
+        {"id": 22, "type": "weapon", "subtype":"1hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
+         "sell": 800, "klass_restriction": "wizard"},
+        {"id": 23, "type": "weapon", "subtype":"1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
+         "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"}
     ]
     
     @classmethod

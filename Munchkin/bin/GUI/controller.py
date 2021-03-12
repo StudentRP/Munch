@@ -340,20 +340,23 @@ class MainLoop(tk.Frame):
     def list_weapons(self):
         """method calling toplevel that details all weapons currently owned with options to add/remove, sell and charity"""
         print("This will be the weapons toplevel")
+        engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "weapon")
-        print(gameVar.GameObjects.selected_items)
+        # print(gameVar.GameObjects.selected_items)  list all items
         OwnedItems("Weapons owned")
 
     def list_armour(self):
         print("This will be the armour toplevel")
+        engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
-        print(gameVar.GameObjects.selected_items)
+        # print(gameVar.GameObjects.selected_items) # lists all items
         OwnedItems("Armour Owned")
 
     def consumables(self):
         print("This will be the toplevel for throwable and other once only objects")
+        engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "disposable")
         OwnedItems("One shot items")
@@ -427,7 +430,7 @@ class OwnedItems(tk.Toplevel):
         OwnedItems.destroy(self) # destroys toplevel window
         print("resetting lists")
         """Checker to see if list are scrubbed"""
-        engine.scrub_lists()
+        engine.scrub_lists() # note lists are scrubbed when but pushed on main screen
         print(gameVar.GameObjects.selected_items,
               gameVar.GameObjects.zipped_tup,
               gameVar.GameObjects.check_but_intvar_gen,
@@ -440,10 +443,12 @@ class OwnedItems(tk.Toplevel):
     def equip(self):
         engine.zipper()
         ### meth link to be fitted
+        engine.card_matcher("equip") #### working progress
 
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
         OwnedItems.destroy(self)
+        engine.scrub_lists()
         pass
 
 app = Main()

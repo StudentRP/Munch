@@ -117,15 +117,71 @@ class PlayerSetUp:
         # self.varbinding(gameVar.StartVariables.active_player) # reloads player atribs ***************
 
     def card_matcher(self, action):
+        """compares tuple to selected_items and only passes on cards that returns true to being ticked"""
         for card in gameVar.GameObjects.selected_items: # loops over specific card items
             for tup in gameVar.GameObjects.zipped_tup: # loops over tuple pairs
                 if tup[0] == card["id"] and tup[1]:
-                    #action to take
                     if action == "sell":
                         gameVar.StartVariables.active_player.sell_item(card)
                     elif action == "equip":
-                        pass
+                        self.qualifier_race(card)
 
+    def qualifier_race(self, card):
+        """checks race compatibility of the cards against the player for equipping """
+        player = gameVar.StartVariables.active_player
+        if card.get("race_restriction"): # if present in dict do this
+            if card.get("race_restriction") == player.race or card.get("race_restriction") == player.race2:
+                print("get(race) main path")
+                self.qualifyer_klass(card)
+            elif player.race2 == "race_compliant": # cheat
+                print("race cheat path")
+                self.qualifyer_klass(card)
+            else:
+                print("you cant equip this card, race restriction")
+        else: # no restriction in card
+            print("no race required path")
+            self.qualifyer_klass(card)
+
+    def qualifyer_klass(self, card):
+        """checks race compatibility of the cards against the player for equipping """
+        player = gameVar.StartVariables.active_player
+        if card.get("klass_restriction"):  # if present in dict do this
+            if card.get("klass_restriction") == player.klass or card.get("klass_restriction") == player.klass2:
+                print("get(klass) main path")
+                self.qualifyer_gender(card)
+            elif player.klass2 == "klass_compliant": # cheat
+                print("klass cheat path")
+                self.qualifyer_gender(card)
+            else: # if card has no condition
+                print("you cant equip this card class restriction")
+        else:  # no restriction in card
+            print("no klass required path")
+            self.qualifyer_gender(card)
+
+    def qualifyer_gender(self, card):
+        """checks race compatibility of the cards against the player for equipping """
+        player = gameVar.StartVariables.active_player
+        if card.get("sex_restriction"):  # if present in dict do this.
+            if card.get("sex_restriction") == player.sex: #for combining have this as dict(key, value) ("sr":p.sex)
+                print("get(gender) main path")
+                player.add_remove(card)
+            elif player.sex == "bob":  # cheat# for combining all 3 use player.name == "The_Creator"
+                print("sex cheat path")
+                player.add_remove(card)
+            else:  # if card has no condition
+                print("you cant equip this card gender restriction")
+        else:  # no restriction in card
+            print("no gender required path")
+            player.add_remove(card)
+
+
+
+    def add_remove(self):
+        """adding/removing cards from the player"""
+        races = ["elf", "ork", "human", "dwarf"]
+        klasses = ["wizard", "bard", "warrior", "spy"]
+        location = ["headgear", "necklace", "ring", "armour", "knees", "footgear", "L_hand", "R_hand", "big"]
+        pass
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""

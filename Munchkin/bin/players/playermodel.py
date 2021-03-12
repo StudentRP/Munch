@@ -77,13 +77,16 @@ class Player(P_tools):
         self.sex = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
+        self.other_bonuses = [] # sholder drag ect
         self.wallet = 0
         self.race = "human" # string eval to True so will show
-        self.race2 = False
-        self.klass = {'c1': True, 'c2': False}
-        self.weapons = [{"L_hand": None, "R_hand": None, "big": None, "special_1": None, "special_2": False}]
-        self.armor = [{"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
-                      "special_1": None, "special_2": False, "special_3": False}] # fill with card ids
+        self.race2 = ""
+        self.klass = ""
+        self.klass2 = ""
+        self.weapons = {"L_hand": None, "R_hand": None, "big": None}
+        self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
+        self.armor = {"headgear": None, "armor": None, "knees": False, "footgear": None,
+                      "necklace": None, "ring": False, "ring2": False} # fill with card ids
         self.sack = [] # 5 max, pos editable later in an options
         self.visible_cards = [] # will need to sort, simple branch on the return objs
         self.hireling = []
@@ -92,6 +95,7 @@ class Player(P_tools):
         self.alive = True
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
+        self.cheat_card = 0 # card the player is cheating with
 
     def __repr__(self):
         """developer aid"""
@@ -115,12 +119,14 @@ class Player(P_tools):
             self.sex = "bob"
             self.bonus = 200
             self.wallet = 20000
+            self.race2 = "race_compliant"
+            self.klass2 = "klass_compliant"
             gameVar.PlayerAtribs.player_gender = self.sex.title()
         print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
         # print(self.__repr__())
 
     def inventory(self, key, cardtype): # called from GUI on button press
-        """creates a list of dict of cards from player unsorted cards of a particular type (ie armour == headgear)."""
+        """creates a list of dict of cards from player unsorted cards of a particular type (ie type == armour)."""
         gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj[key] == cardtype]
 
     def item_by_key(self, key):
@@ -135,6 +141,9 @@ class Player(P_tools):
         cards.add_to_burn(x)# adds card to burn pile on table
         print("burn pile  ", len(cards.burn_pile))
         print("tup list: ", gameVar.GameObjects.zipped_tup)
+
+    def add_remove(self, card):
+        print("in player add/remove")
 
 
 

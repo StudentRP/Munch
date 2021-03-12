@@ -27,7 +27,22 @@ cards = [ {"id": 22, "type": "weapon", "name": "Staff Of Napalm", "qualification
          "sell": 400} ]
 
 card1 = {"id": 22, "type": "weapon", "name": "Staff Of Napalm", "qualification": "wizard only female only", "bonus": 5,
-         "sell": 800, "restriction": "1hand"}
+         "sell": 800, "restriction": "wizard"}
+
+p1.armor["footgear"] = card1
+
+# print(isinstance(p1.armor["footgear"], dict)) # check it had a dict attached
+# print(p1.armor["footgear"]["name"]) # access to the contents
+# for key, val in p1.armor.items():
+#     # print(isinstance(val, dict))
+#     if isinstance(val, dict):
+#         print(val.get("qualification"))
+
+
+if card1.get("restrction", True): # returns true if not there
+    print("accessed")
+
+
 
 print('*' * 10)
 """method for qualification"""
@@ -62,7 +77,7 @@ def card_action(card):
 
     # if card.get["qualification", ]
     # pass
-card_action(card1)
+# card_action(card1)
 
 def equip():
     """simulates matcher"""
