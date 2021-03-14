@@ -75,7 +75,7 @@ class Treasure(T_tools):
     use only once, armour, weapons, 
     MAY NEED SOME FORM OF CATEGORY KEY FOR THE SORTER FUNCT REQUIRED WHEN DECIDING WHERE OR WHAT THE CARDS BELONG TOO.
      
-    
+    ALL items require bonus status
     """
     treasure_cards = [
         # type disposable
@@ -84,13 +84,13 @@ class Treasure(T_tools):
         {"type": "disposable", "id": 3, "name": "Flaming Poison Potion", "des": "Use during combat", "bonus": 3, "sell": 100,
          "special": "fire", 'restriction': "once"},
         {"type": "disposable", "id": 4, 'name': "Instant Wall", 'des': 'Automatic escape for 1 or 2 players', 'sell': 300,
-         "special": "auto escape 2 players", 'restriction': "once"},
+         "special": "auto escape 2 players", 'restriction': "once", "bonus": 0},
         {"type": "disposable", "id": 5, "name": "Flask Of Glue", "des": "Use during combat, must re-roll escape even if auto last time",
-         "sell": 100, "special": "escape", 'restriction': "once, reroll escape"},
+         "sell": 100, "special": "escape", 'restriction': "once, reroll escape", "bonus": 0},
 
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
         {"id": 6, "type": "armor", "sub_type": "necklace", "name": "The Occasionally Reliable Amulet",
-         'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect"},
+         'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect", "bonus": 0},
 
         {"id": 7, "type": "armor", "sub_type": "headgear", "name": "Tinfoil Hat",
          "des": "Immune to curses when  curses by kicking down doors still effect", "bonus": 0, "sell": 800,
@@ -108,7 +108,7 @@ class Treasure(T_tools):
          "sell": 400, "race_restriction": "dwarfs"},
         {"id": 12, "type": "armor", "sub_type": "armor", "name": "Raincoat",
          "des": "Others can not use potions to interfere with your combat unless joins fight.", "sell": 100,
-         "special": "over armor", "restrictions": "loose with armour"},
+         "special": "over armor", "restrictions": "loose with armour", "bonus": 0},
         {"id": 13, "type": "armor", "sub_type": "armor", "name": "Slimy Armour", "des": "Found in a stagnant pool of water.",
          "bonus": 1, "sell": 200},
         {"id": 14, "type": "armor", "sub_type": "armor", "name": "Mithril Armor", "des": "Oooo Shiny!", "bonus": 3,
@@ -126,7 +126,7 @@ class Treasure(T_tools):
 
 
         #armor/boots
-        {"id": 21, "type": "armor", "sub_type": "footgear", "name": "Boots Of Running Really Fast", "des": "run away + 2", "bonus": 0,
+        {"id": 21, "type": "armor", "sub_type": "footgear", "name": "Boots Of Running Really Fast", "des": "run_away + 2", "bonus": 0,
          "sell": 400},
 
         #weapons: id, type, sub_type, name, des, bonus, klass_restriction, hold_weight, sell, asso_meth

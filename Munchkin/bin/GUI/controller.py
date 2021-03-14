@@ -5,19 +5,15 @@ import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
 
-
-
 gamefont=('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
 text_color ="#7A0600"
 but_color = "#3EB0A1"
 
-# number = 0
 
 ##########################################################################
 # Main controller
 ##########################################################################
-
 
 class Main(tk.Tk):
     """main controller class that interchanges frames, updates variables with the frames"""
@@ -443,7 +439,7 @@ class OwnedItems(tk.Toplevel):
     def equip(self):
         engine.zipper()
         ### meth link to be fitted
-        engine.card_matcher("equip") #### working progress
+        engine.card_matcher("equip")
 
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
