@@ -73,7 +73,7 @@ class Player(P_tools):
 
     def __init__(self, ref):
         self.ref = ref # simple form to keep track of players
-        self.name = None
+        self.name = ""
         self.sex = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
@@ -83,10 +83,10 @@ class Player(P_tools):
         self.race2 = ""
         self.klass = ""
         self.klass2 = ""
-        self.weapons = {"L_hand": None, "R_hand": None, "big": None}
+        self.weapons = {"L_hand": "", "R_hand": "", "big": ""}
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
-        self.armor = {"headgear": None, "armor": None, "knees": False, "footgear": None,
-                      "necklace": None, "ring": False, "ring2": False} # fill with card ids
+        self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
+                      "necklace": "", "ring": "", "ring2": ""} # fill with card ids
         self.sack = [] # 5 max, pos editable later in an options
         self.visible_cards = [] # will need to sort, simple branch on the return objs
         self.hireling = []
@@ -142,7 +142,15 @@ class Player(P_tools):
         print("burn pile  ", len(cards.burn_pile))
         print("tup list: ", gameVar.GameObjects.zipped_tup)
 
-    def add_remove(self, card):
+    def add_remove(self, card, action):
+        location = ["headgear", "necklace", "ring", "armour", "knees", "footgear", "armor", "ring", "ring2" ]
+        x = card.get("type")
+        if action == "add":
+            if x == "armour" or x == "weapon":
+                sub_type = card.get("sub_type")
+
+
+
         print("in player add/remove")
 
 

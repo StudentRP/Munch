@@ -164,15 +164,15 @@ class PlayerSetUp:
         if card.get("sex_restriction"):  # if present in dict do this.
             if card.get("sex_restriction") == player.sex: #for combining have this as dict(key, value) ("sr":p.sex)
                 print("get(gender) main path")
-                player.add_remove(card)
+                player.add_remove(card, "add")
             elif player.sex == "bob":  # cheat# for combining all 3 use player.name == "The_Creator"
                 print("sex cheat path")
-                player.add_remove(card)
+                player.add_remove(card, "add")
             else:  # if card has no condition
                 print("you cant equip this card gender restriction")
         else:  # no restriction in card
             print("no gender required path")
-            player.add_remove(card)
+            player.add_remove(card, "add")
 
 
 
