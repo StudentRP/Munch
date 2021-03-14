@@ -29,9 +29,16 @@ cards = [ {"id": 22, "type": "weapon", "name": "Staff Of Napalm", "qualification
 
 card1 = {"id": 22, "type": "weapon", "name": "Staff Of Napalm", "qualification": "wizard only female only", "bonus": 5,
          "sell": 800, "restriction": "wizard"}
+card2 = {"id": 21, "type": "footgear", "name": "Boots Of Running Really Fast", "des": "run away + 2", "bonus": 0,
+         "sell": 400}
 
-p1.armor["footgear"] = card1
-p1.weapon[]
+p1.armor["footgear"] = card2
+p1.weapons["L_hand"] = card1
+
+
+
+
+
 
 # print(isinstance(p1.armor["footgear"], dict)) # check it had a dict attached
 # print(p1.armor["footgear"]["name"]) # access to the contents

@@ -18,6 +18,7 @@ from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 from Munchkin.bin.players.playersetup import P_tools
 import bin.GUI.gui_variables as gameVar
 from bin.all_cards.table import cards
+from  itertools import cycle
 
 
 
@@ -77,13 +78,15 @@ class Player(P_tools):
         self.sex = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
-        self.other_bonuses = [] # sholder drag ect
+        self.other_bonuses = [] # shoulder drag ect
+        self. enhancers = ""
         self.wallet = 0
         self.race = "human" # string eval to True so will show
         self.race2 = ""
         self.klass = ""
         self.klass2 = ""
-        self.weapons = {"L_hand": "", "R_hand": "", "big": ""}
+        self.big = "" # can carry only 1 big item
+        self.weapons = {"L_hand": "", "R_hand": ""}
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
         self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
                       "necklace": "", "ring": "", "ring2": ""} # fill with card ids
@@ -152,48 +155,56 @@ class Player(P_tools):
     #         else:
     #             continue
 
-
     def add_remove(self, card, action):
         location = ["headgear", "necklace", "ring", "armor", "knees", "footgear", "armor", "ring", "ring2"]
-        wep_hand = []
-        x = card.get("type")
+        wep_hand = ["L_hand", "R_hand"]
+        print(f"starting sack size: {len(self.unsorted)}")
+        x = card.get("type") # returns armour or weapon
         if action == "add":
-            print("passed add")
             if x == "armor":
-                print("passed armor")
                 for sub_type in location:
-                    print(card["name"])
-                    print(sub_type)
-                    if sub_type == card["sub_type"]:
-                        vacancy = isinstance(self.armor[sub_type], dict)
-                        if not vacancy:
-                            print("vacant if block")
-                            print(len(self.unsorted))
+                    if card["sub_type"] == sub_type: # matches card["sub_type] to list
+                        occupied = isinstance(self.armor[sub_type], dict)
+                        if not occupied:
                             x = self.unsorted.pop(self.unsorted.index(card)) # removes cards from unsorted list
-                            self.armor[sub_type] = x # binds now card to player attribute
-                            print(f"{card['name']} has been added to: {self.name}'s, {sub_type}")
-                            print(len(self.unsorted))
+                            self.armor[sub_type] = x # try block
                             break
-                        elif vacancy:
-                            print("add elif block")
-                            print(len(self.unsorted))
+                        elif occupied:
                             card_removed = self.armor.pop(sub_type) # removing card from player armour attrib
                             self.unsorted.append(card_removed)
                             x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
                             self.armor[sub_type] = x  # binds now card to player attribute
-                            print(f"{card['name']} has been added to: {self.name}'s, {sub_type}")
-                            print(len(self.unsorted))
                             break
                         else:
                             continue
 
             elif x == "weapon":
                 print("in weapon")
-                pass
+                sub = cycle(wep_hand) # ["L_hand", "R_hand"]
+                sub_type = next(sub)
 
+                if isinstance(self.weapons[sub_type], dict): # if fist is true
+                    x = next(sub_type) # change to next on list
+                    print(f"what is x {x}")
+                    if isinstance(self.weapons[x], dict):# if that full
+                        x = next(sub_type) # back to first
+                        y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                        self.weapons[x] = y  # takes first list objet and adds card to it.
+                        print(f" weapons equipped {self.weapons}")
+                    else: # adds card if not true
+                        y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                        self.weapons[x] = y
+                else: # if empty
+                    y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                    self.weapons[sub_type] = y
 
+        elif action == "remove": # button to be added in gui top level
+            pass
 
         print("ended player add/remove")
+        # print(self.armor[card["sub_type"]]["name"])
+        print(self.weapons)
+        print(f"finishing sack size: {len(self.unsorted)}")
 
 
 

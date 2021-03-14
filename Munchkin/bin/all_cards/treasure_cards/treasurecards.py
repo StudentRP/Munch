@@ -88,7 +88,7 @@ class Treasure(T_tools):
         {"type": "disposable", "id": 5, "name": "Flask Of Glue", "des": "Use during combat, must re-roll escape even if auto last time",
          "sell": 100, "special": "escape", 'restriction': "once, reroll escape"},
 
-        #type armor/head
+        #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
         {"id": 6, "type": "armor", "sub_type": "necklace", "name": "The Occasionally Reliable Amulet",
          'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect"},
 
@@ -100,7 +100,7 @@ class Treasure(T_tools):
         {"id": 9, "type": "armor", "sub_type": "headgear", "name": "Helm Of Peripheral Vision",
          "des": "can not be back stabbed or stolen from by thief", "bonus": 2, "sell": 600, "special": "headgear",
          "restriction": "no backstab, no steal"},
-        {"id": 10, "type": "armor", "sub_type": "headgear", "name": "Badass Bandana",
+        {"id": 10, "type": "armor", "sub_type": "headgear", "name": "Badass Bandanna",
          "des": "Usable by humans only", "bonus": 3, "sell": 400, "race_restriction": "human"},
 
         # armor/armor (complete set)
@@ -129,8 +129,8 @@ class Treasure(T_tools):
         {"id": 21, "type": "armor", "sub_type": "footgear", "name": "Boots Of Running Really Fast", "des": "run away + 2", "bonus": 0,
          "sell": 400},
 
-        #weapons
-        {"id": 22, "type": "weapon", "subtype": "1hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
+        #weapons: id, type, sub_type, name, des, bonus, klass_restriction, hold_weight, sell, asso_meth
+        {"id": 22, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
          "sell": 800, "klass_restriction": "wizard"},
         {"id": 23, "type": "weapon", "subtype": "1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
          "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"}
