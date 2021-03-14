@@ -126,6 +126,27 @@ class PlayerSetUp:
                     elif action == "equip":
                         self.qualifier_race(card)
 
+    # def tri_qualifier(self, card):
+    #     """attempt to combine the 3 qualifiers"""
+    #     player = gameVar.StartVariables.active_player
+    #     checks = {player.race: "race_restriction", player.race2: "race_restriction", player.klass: "klass_restriction",
+    #               player.klass2: "klass_restriction", player.sex:"sex_restriction"}
+    #     for key, val in checks:
+    #         if card.get(val):  # if present in dict do this
+    #             if card.get(val) == key:
+    #                 print(f"main path {key}")
+    #                 continue
+    #             elif player.name == "The_Creator":  # dev mode
+    #                 print(f"{key} dev path")
+    #                 continue
+    #             else:
+    #                 print("you cant equip this card, race restriction")
+    #                 break
+    #         else:  # no restriction in card
+    #             print("no race required path")
+    #             continue
+
+
     def qualifier_race(self, card):
         """checks race compatibility of the cards against the player for equipping """
         player = gameVar.StartVariables.active_player
@@ -133,7 +154,7 @@ class PlayerSetUp:
             if card.get("race_restriction") == player.race or card.get("race_restriction") == player.race2:
                 print("get(race) main path")
                 self.qualifyer_klass(card)
-            elif player.race2 == "race_compliant": # cheat
+            elif player.name == "The_Creator": # dev mode
                 print("race cheat path")
                 self.qualifyer_klass(card)
             else:
@@ -149,7 +170,7 @@ class PlayerSetUp:
             if card.get("klass_restriction") == player.klass or card.get("klass_restriction") == player.klass2:
                 print("get(klass) main path")
                 self.qualifyer_gender(card)
-            elif player.klass2 == "klass_compliant": # cheat
+            elif player.name == "The_Creator": # dev mode
                 print("klass cheat path")
                 self.qualifyer_gender(card)
             else: # if card has no condition
@@ -165,7 +186,7 @@ class PlayerSetUp:
             if card.get("sex_restriction") == player.sex: #for combining have this as dict(key, value) ("sr":p.sex)
                 print("get(gender) main path")
                 player.add_remove(card, "add")
-            elif player.sex == "bob":  # cheat# for combining all 3 use player.name == "The_Creator"
+            elif player.name == "The_Creator": # dev mode
                 print("sex cheat path")
                 player.add_remove(card, "add")
             else:  # if card has no condition
@@ -174,14 +195,6 @@ class PlayerSetUp:
             print("no gender required path")
             player.add_remove(card, "add")
 
-
-
-    def add_remove(self):
-        """adding/removing cards from the player"""
-        races = ["elf", "ork", "human", "dwarf"]
-        klasses = ["wizard", "bard", "warrior", "spy"]
-        location = ["headgear", "necklace", "ring", "armour", "knees", "footgear", "L_hand", "R_hand", "big"]
-        pass
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""

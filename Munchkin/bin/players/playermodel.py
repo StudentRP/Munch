@@ -119,9 +119,7 @@ class Player(P_tools):
             self.sex = "bob"
             self.bonus = 200
             self.wallet = 20000
-            self.race2 = "race_compliant"
-            self.klass2 = "klass_compliant"
-            gameVar.PlayerAtribs.player_gender = self.sex.title()
+            gameVar.PlayerAtribs.player_gender = self.sex
         print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
         # print(self.__repr__())
 
@@ -142,16 +140,60 @@ class Player(P_tools):
         print("burn pile  ", len(cards.burn_pile))
         print("tup list: ", gameVar.GameObjects.zipped_tup)
 
+    # def sum_of_bonuses(self):
+    #     tot_bonus = 0
+    #     locations = [self.weapons, self.armor]
+    #     for obj in locations:
+    #         if isinstance(obj, dict):
+    #             for key, val in obj:
+    #                 number = val.get("bonus")
+    #                 tot_bonus += number
+    #                 continue
+    #         else:
+    #             continue
+
+
     def add_remove(self, card, action):
-        location = ["headgear", "necklace", "ring", "armour", "knees", "footgear", "armor", "ring", "ring2" ]
+        location = ["headgear", "necklace", "ring", "armor", "knees", "footgear", "armor", "ring", "ring2"]
+        wep_hand = []
         x = card.get("type")
         if action == "add":
-            if x == "armour" or x == "weapon":
-                sub_type = card.get("sub_type")
+            print("passed add")
+            if x == "armor":
+                print("passed armor")
+                for sub_type in location:
+                    print(card["name"])
+                    print(sub_type)
+                    if sub_type == card["sub_type"]:
+                        vacancy = isinstance(self.armor[sub_type], dict)
+                        if not vacancy:
+                            print("vacant if block")
+                            print(len(self.unsorted))
+                            x = self.unsorted.pop(self.unsorted.index(card)) # removes cards from unsorted list
+                            self.armor[sub_type] = x # binds now card to player attribute
+                            print(f"{card['name']} has been added to: {self.name}'s, {sub_type}")
+                            print(len(self.unsorted))
+                            break
+                        elif vacancy:
+                            print("add elif block")
+                            print(len(self.unsorted))
+                            card_removed = self.armor.pop(sub_type) # removing card from player armour attrib
+                            self.unsorted.append(card_removed)
+                            x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                            self.armor[sub_type] = x  # binds now card to player attribute
+                            print(f"{card['name']} has been added to: {self.name}'s, {sub_type}")
+                            print(len(self.unsorted))
+                            break
+                        else:
+                            continue
+
+            elif x == "weapon":
+                print("in weapon")
+                pass
 
 
 
-        print("in player add/remove")
+        print("ended player add/remove")
 
 
 

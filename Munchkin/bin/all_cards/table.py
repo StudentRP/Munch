@@ -36,7 +36,7 @@ class Dealer:
                 dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
                 starter_set.append(dobj) # adds door card to list
                 tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets t card. better rand required
-                starter_set.append(tobj) # adds treasure card to list
+                starter_set.append(tobj) # adds treasure card to list,
                 # print(f" num of cards in pack:{len(Moncurse.door_cards)}, rand gen tres:{tpack} door:{dpack}") # should go down
             return starter_set # returns starter_set list to caller (player.unsorted)
 

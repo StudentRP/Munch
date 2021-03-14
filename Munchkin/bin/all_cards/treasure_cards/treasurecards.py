@@ -104,25 +104,25 @@ class Treasure(T_tools):
          "des": "Usable by humans only", "bonus": 3, "sell": 400, "race_restriction": "human"},
 
         # armor/armor (complete set)
-        {"id": 11, "type": "armor", "name": "Short Wide Armour", "des": "usable by dwarf only", "bonus": 3,
+        {"id": 11, "type": "armor", "sub_type": "armor", "name": "Short Wide Armour", "des": "usable by dwarf only", "bonus": 3,
          "sell": 400, "race_restriction": "dwarfs"},
-        {"id": 12, "type": "armor", "name": "Raincoat",
+        {"id": 12, "type": "armor", "sub_type": "armor", "name": "Raincoat",
          "des": "Others can not use potions to interfere with your combat unless joins fight.", "sell": 100,
          "special": "over armor", "restrictions": "loose with armour"},
-        {"id": 13, "type": "armor", "name": "Slimy Armour", "des": "Found in a stagnant pool of water.",
+        {"id": 13, "type": "armor", "sub_type": "armor", "name": "Slimy Armour", "des": "Found in a stagnant pool of water.",
          "bonus": 1, "sell": 200},
-        {"id": 14, "type": "armor", "name": "Mithril Armor", "des": "Oooo Shiny!", "bonus": 3,
-         "sell": 600, "sub_type": "big"},
-        {"id": 15, "type": "armor", "name": "Budget Armour", "des": "Get what you pay for..", "bonus": 1,
+        {"id": 14, "type": "armor", "sub_type": "armor", "name": "Mithril Armor", "des": "Oooo Shiny!", "bonus": 3,
+         "sell": 600, "restriction": "big"},
+        {"id": 15, "type": "armor", "sub_type": "armor", "name": "Budget Armour", "des": "Get what you pay for..", "bonus": 1,
          "sell": 100},
-        {"id": 16, "type": "armor", "name": "Flaming Armour", "des": " Its Really Hot!", "bonus": 2, "sell": 400},
-        {"id": 17, "type": "armor", "name": "Studded Leather Armor", "des": "When best not available",
+        {"id": 16, "type": "armor", "sub_type": "armor", "name": "Flaming Armour", "des": " Its Really Hot!", "bonus": 2, "sell": 400},
+        {"id": 17, "type": "armor", "sub_type": "armor", "name": "Studded Leather Armor", "des": "When best not available",
          "bonus": 2, "sell": 400},
-        {"id": 18, "type": "armor", "name": "Gnomex Suit", "des": "Usable by Gnome only", "bonus": 4, "sell": 600,
+        {"id": 18, "type": "armor", "sub_type": "armor", "name": "Gnomex Suit", "des": "Usable by Gnome only", "bonus": 4, "sell": 600,
          "special": "over armor", "restrictions": "loose with armour", "race_restriction": "gnome"},
-        {"id": 19, "type": "armor", "name": "Chainmail Bikini", "des": "Strangely not just for women",
+        {"id": 19, "type": "armor", "sub_type": "armor", "name": "Chainmail Bikini", "des": "Strangely not just for women",
          "bonus": 3, "sell": 600},
-        {"id": 20, "type": "armor", "name": "Leather Armor", "des": "Its leather.", "bonus": 1, "sell": 200},
+        {"id": 20, "type": "armor", "sub_type": "armor", "name": "Leather Armor", "des": "Its leather.", "bonus": 1, "sell": 200},
 
 
         #armor/boots
@@ -130,9 +130,9 @@ class Treasure(T_tools):
          "sell": 400},
 
         #weapons
-        {"id": 22, "type": "weapon", "subtype":"1hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
+        {"id": 22, "type": "weapon", "subtype": "1hand", "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
          "sell": 800, "klass_restriction": "wizard"},
-        {"id": 23, "type": "weapon", "subtype":"1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
+        {"id": 23, "type": "weapon", "subtype": "1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
          "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"}
     ]
     

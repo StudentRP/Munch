@@ -9,7 +9,8 @@ class Player():
         self.race = "human" # string eval to True so will show
         self.race2 = "fwizard"
         self.klass = {'c1': True, 'c2': False}
-        self.hands = []
+        self.big = []
+        self.weapons = {"L_hand": "", "R_hand": ""}
         self.armor = {"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
                        "special_1": None, "special_2": False, "special_3": False}  # open this out!
         self.sack = [] # 5 max, pos editable later in an options
@@ -30,6 +31,7 @@ card1 = {"id": 22, "type": "weapon", "name": "Staff Of Napalm", "qualification":
          "sell": 800, "restriction": "wizard"}
 
 p1.armor["footgear"] = card1
+p1.weapon[]
 
 # print(isinstance(p1.armor["footgear"], dict)) # check it had a dict attached
 # print(p1.armor["footgear"]["name"]) # access to the contents
@@ -79,10 +81,6 @@ def card_action(card):
     # pass
 # card_action(card1)
 
-def equip():
-    """simulates matcher"""
-    for card in cards: # for each card in the list of cards
-        card_action(card)
 
 
 
