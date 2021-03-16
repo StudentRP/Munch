@@ -33,7 +33,8 @@ class Main(tk.Tk):
         self.level = tk.IntVar()
         self.bonus = tk.IntVar()
         self.wallet = tk.IntVar()
-        # self.l_hand = tk.IntVar()
+        self.r_hand = tk.StringVar()
+        self.l_hand = tk.StringVar()
 
         "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
@@ -55,6 +56,8 @@ class Main(tk.Tk):
         self.level.set(gameVar.PlayerAtribs.player_level)
         self.bonus.set(gameVar.PlayerAtribs.player_bonus)
         self.wallet.set(gameVar.PlayerAtribs.player_wallet)
+        self.l_hand.set(gameVar.PlayerAtribs.player_l_hand)
+        self.r_hand.set(gameVar.PlayerAtribs.player_r_hand)
         # self.l_hand.set(gameVar.PlayerAtribs.player_weapons["L_hand"])
 
 
@@ -311,6 +314,16 @@ class MainLoop(tk.Frame):
         self.l5b = tk.Label(self.plframe, textvariable=controller.wallet)  ## works binding strait to stringvar in Main
         self.l5b.grid(row=4, column=2, sticky='nsew')
 
+        self.l6 = tk.Label(self.plframe, text="L_hand: ")
+        self.l6.grid(row=5, column=1, sticky='nsew')
+        self.l6b = tk.Label(self.plframe, textvariable=controller.l_hand)  ## works binding strait to stringvar in Main
+        self.l6b.grid(row=5, column=2, sticky='nsew')
+
+        self.l7 = tk.Label(self.plframe, text="R_hand: ")
+        self.l7.grid(row=6, column=1, sticky='nsew')
+        self.l7b = tk.Label(self.plframe, textvariable=controller.r_hand)  ## works binding strait to stringvar in Main
+        self.l7b.grid(row=6, column=2, sticky='nsew')
+
         # self.l6 = tk.Label(self.plframe, text="Left hand")
         # self.l6.grid(row=5, column=1, sticky='nsew')
         # self.l6b = tk.Label(self.plframe, text=controller.l_hand)
@@ -335,7 +348,6 @@ class MainLoop(tk.Frame):
 
     def list_weapons(self):
         """method calling toplevel that details all weapons currently owned with options to add/remove, sell and charity"""
-        print("This will be the weapons toplevel")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "weapon")
@@ -343,11 +355,9 @@ class MainLoop(tk.Frame):
         OwnedItems("Weapons owned")
 
     def list_armour(self):
-        print("This will be the armour toplevel")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
-        # print(gameVar.GameObjects.selected_items) # lists all items
         OwnedItems("Armour Owned")
 
     def consumables(self):
@@ -417,35 +427,32 @@ class OwnedItems(tk.Toplevel):
                 set_row += 1
         tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         tk.Button(self, text="Equip", command=self.equip).pack(side="left")
-        # tk.Button(self, text="Equip", command=self.x).pack(side="left")
+        tk.Button(self, text="remove", command=self.remove).pack(side="left")
 
     def sell(self):
         """triggers sell event when pushed"""
-        engine.zipper() # calls meth to make tuple from card ids and checkbutton converted bools
-        engine.card_matcher("sell")# new meth
+        engine.zipper("sell") # calls meth to make tuple from card ids and checkbutton converted bools
         OwnedItems.destroy(self) # destroys toplevel window
-        print("resetting lists")
-        """Checker to see if list are scrubbed"""
         engine.scrub_lists() # note lists are scrubbed when but pushed on main screen
-        print(gameVar.GameObjects.selected_items,
-              gameVar.GameObjects.zipped_tup,
-              gameVar.GameObjects.check_but_intvar_gen,
-              gameVar.GameObjects.check_but_boo,
-              gameVar.GameObjects.check_but_card_ids,# ensures all are reset
-              len(gameVar.StartVariables.active_player.unsorted)) #ensures player list reduced on sale and not erased
         engine.varbinding(gameVar.StartVariables.active_player) # explicitly ensures all vars ar correct
         app.update_frame() # updates player info
 
     def equip(self):
-        engine.zipper()
-        ### meth link to be fitted
-        engine.card_matcher("equip")
-
+        engine.zipper("equip") # calls card_matcher() passing the parameter to it.
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
         OwnedItems.destroy(self)
         engine.scrub_lists()
-        pass
+
+    def remove(self):
+        """wont work as cards not in this any more"""
+        engine.zipper("remove")
+        engine.varbinding(gameVar.StartVariables.active_player)
+        app.update_frame()
+        OwnedItems.destroy(self)
+        engine.scrub_lists()
+
+
 
 app = Main()
 

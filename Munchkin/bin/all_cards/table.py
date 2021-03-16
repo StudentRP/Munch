@@ -15,8 +15,8 @@ from random import randint
 
 class Dice:
     """simulates a dice roll"""
-    def roll(self):
-        roll = int(randint(1, 6))
+    def roll(self, max=6): # max added for methods that change the likelihood of running from a fight
+        roll = int(randint(1, max))
         return roll
 
 

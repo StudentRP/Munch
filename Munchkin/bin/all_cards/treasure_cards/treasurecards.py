@@ -130,10 +130,16 @@ class Treasure(T_tools):
          "sell": 400},
 
         #weapons: id, type, sub_type, name, des, bonus, klass_restriction, hold_weight, sell, asso_meth
-        {"id": 22, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Staff Of Napalm", "des": "Usable by wizards only", "bonus": 5,
-         "sell": 800, "klass_restriction": "wizard"},
+        {"id": 22, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Staff Of Napalm", "des": "Usable by wizards only",
+         "bonus": 5, "sell": 800, "klass_restriction": "wizard"},
         {"id": 23, "type": "weapon", "subtype": "1hand", "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
-         "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"}
+         "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"},
+        {"id": 24, "type": "weapon", "subtype": "1hand", "name": "Broad Sword", "des": "Not for females", "bonus": 3,
+         "sell": 400, "special": "", "klass_restriction": "male"},
+        {"id": 25, "type": "weapon", "subtype": "1hand", "name": "Sword Of Slaying Everything\nExcept squid..", "des": "long", "bonus": 4,
+         "sell": 800},
+        {"id": 26, "type": "weapon", "subtype": "1hand", "name": "Vorpal Blade", "des": "+10 with anything beginning with j", "bonus": 3,
+         "sell": 400, "special": "item enhancer"}
     ]
     
     @classmethod

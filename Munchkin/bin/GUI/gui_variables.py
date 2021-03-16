@@ -45,6 +45,8 @@ class PlayerAtribs:
     player_bonus = 0
     player_wallet = 0
     player_race = {'r1': True, 'r2': False}
+    player_l_hand = ""
+    player_r_hand = ""
     player_weapons = {"L_hand": None, "R_hand": None, "big": None, "special_1": None, "special_2": False}
     player_armor = {"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
                   "special_1": None, "special_2": False, "special_3": False}
