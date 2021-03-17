@@ -131,6 +131,7 @@ class PlayerSetUp:
                         # self.qualifier_race(card)
                         self.tri_qualifier(card) # test
                     elif action == "use":
+                        # gameVar.StartVariables.active_player.
                         pass
 
     def tri_qualifier(self, card):

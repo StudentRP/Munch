@@ -346,8 +346,11 @@ class MainLoop(tk.Frame):
         """game actions for door. cards drawn from door"""
         print(f"{app.name.get()} has kicked open the door!")
 
+    """ Method for building lists and calling a toplevel to show them. toplevel has own meth on actions to 
+    do with the items """
+
     def list_weapons(self):
-        """method calling toplevel that details all weapons currently owned with options to add/remove, sell and charity"""
+        """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "weapon")
@@ -391,13 +394,11 @@ class MainLoop(tk.Frame):
         # OwnedItems("All items") #setup dif toplevel without check buttons more informal list
 
     def list_equipped(self):
-        print("This will be the visible cards toplevel")
+        """list showing all items that are equipped"""
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.equipped_items()
         OwnedItems("Equipped Items", "equip")
-
-
 
 
 class OwnedItems(tk.Toplevel):
@@ -417,7 +418,10 @@ class OwnedItems(tk.Toplevel):
             f.pack(side="top", expand=True)
             tk.Label(f, text="Name").grid(row=0, column=0, sticky="nw")
             tk.Label(f, text="Type").grid(row=0, column=1, sticky="nw")
-            tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw")
+            if self.set_but == "sell":
+                tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw")
+            else:
+                tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
             tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw")
             set_row = 1
             for card in gameVar.GameObjects.selected_items:
@@ -426,8 +430,13 @@ class OwnedItems(tk.Toplevel):
                 l1.grid(row=set_row, column=0, sticky="nw")
                 l2 = tk.Label(f, text=card['type'])
                 l2.grid(row=set_row, column=1, sticky="nw")
-                l3 = tk.Label(f, text=card['sell'])
-                l3.grid(row=set_row, column=2, sticky="nw")
+                if self.set_but == "sell":
+                    l3 = tk.Label(f, text=card['sell'])
+                    l3.grid(row=set_row, column=2, sticky="nw")
+                # elif self.set_but == "weap" or self.set_but == "armor" or self.set_but == "consume" or self.set_but == "equip": ### too long!!!
+                elif self.set_but in " weap, armor, consume equip":
+                    l3 = tk.Label(f, text=card['bonus'])
+                    l3.grid(row=set_row, column=2, sticky="nw")
                 tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
@@ -440,7 +449,6 @@ class OwnedItems(tk.Toplevel):
             tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.equip).pack(side="left")
-
 
     def sell(self):
         """triggers sell event when pushed"""
@@ -459,7 +467,8 @@ class OwnedItems(tk.Toplevel):
 
     def use_item(self):
         """wont work as cards not in this any more"""
-        engine.zipper("use")
+        engine.zipper("use") #builds cards associated to consumable items
+        # meth that changes things in respects to the one shot items
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
         OwnedItems.destroy(self)

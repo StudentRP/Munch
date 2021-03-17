@@ -137,6 +137,7 @@ class Player(P_tools):
         """Returns list of cards form player unsorted list that contain the key x. (ie "sell") """
         gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj.get(key)]
 
+
     def sell_item(self, card): # called by player.sell_item so self bound to player
         """Call from zipper to sell items, remove cards, reset gameVars and call to add to burn pile"""
         self.wallet += card["sell"] #adds worth of card to player
