@@ -442,16 +442,16 @@ The end goal is to remove items from the player adding them to the burn pile and
         The button is use to call sell method
 
     sell button -
-    engine.zipper()
+    engine.zipper() # passes string arg for card_matcher (method acts as conduit)
         Calls engine.zipper method (generic method for zipping 2 list together into a tuple)
         gameVar.GameObjects.zipped_tup.clear() is called to ensure list is clear.
         First step required is the conversion of the Checkbutton objects to the boolean value (0 or 1) from
-        gameVar.GameObjects.check_but_intvar_gen.
-        This creates new list of booleans called gameVar.GameObjects.check_but_boo consisting of the bool values.
-        [x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
-        gameVar.GameObjects.zipped_tup = list(zip(x, y))] function is to zip card independent ids to their bool.
+        gameVar.GameObjects.check_but_intvar_gen, a list of all tk Vars, associated to the check button, requiring .get method.
+        This creates new list of booleans called gameVar.GameObjects.check_but_boo consisting of the boolean values.
+        x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
+        gameVar.GameObjects.zipped_tup = list(zip(x, y)) function is to zip cards independent ids to their bool.
         This creates tuple pairs of (id,0/1) for each card in gameVar.GameObjects.selected items.
-        engine.card_matcher(action) is then called from controller.
+        engine.card_matcher(action) is then called.
 
     engine.card_matcher(action) CREATED FOR FLEXIBILITY OF INPUTS AND FORWARD PASS
         creates loop for each card in gameVar.GameObjects.selected_items that iterates over cards then
@@ -505,21 +505,21 @@ way to add to player or check if place is occupied already and remove player and
 
 
 #######################################################################
-# view all items
+# remove items
 #######################################################################
-
-
-    Having selected some items, the sel button calls
-
-
-    having ticked the appropriate
-
-card types:
-
-monster, curse, disposable, necklace, headgear, armour, footgear, 1hand, 2hand
+requires a search if player assets as no items will show in top level as they have been removed.
 
 
 
+#######################################################################
+# enhancers
+#######################################################################
+most likely card associated methods that are called at start of play to enrich/encumber player
+
+
+#######################################################################
+# fight
+#######################################################################
 
 
 

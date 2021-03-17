@@ -120,17 +120,18 @@ class PlayerSetUp:
         self.card_matcher(action)
 
     def card_matcher(self, action):
-        """compares tuple to selected_items and only passes on cards that returns true to being ticked"""
+        """compares tuple to selected_items searching for matching card ids and only passes on cards that contain
+        a tuple with the boolean true. Action determines the whats happening to the cards next. """
         for card in gameVar.GameObjects.selected_items: # loops over specific card items
-            for tup in gameVar.GameObjects.zipped_tup: # loops over tuple pairs
+            for tup in gameVar.GameObjects.zipped_tup: # loops over coupled card_id, bool tuples.
                 if tup[0] == card["id"] and tup[1]:
                     if action == "sell":
                         gameVar.StartVariables.active_player.sell_item(card)
                     elif action == "equip":
                         # self.qualifier_race(card)
                         self.tri_qualifier(card) # test
-                    elif action == "remove":
-                        gameVar.StartVariables.active_player.add_remove(card, action)
+                    elif action == "use":
+                        pass
 
     def tri_qualifier(self, card):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
@@ -140,7 +141,7 @@ class PlayerSetUp:
                   player.klass2: "klass_restriction", player.sex:"sex_restriction"}
         flag = 1 # True
         for key, val in checks.items():
-            if card.get(val, "Not in card"):  # if present in dict do this
+            if card.get(val):  # if present in dict do this. Dont put string. Must return none!!!
                 if card.get(val) == key:
                     print(f"Main path for: {val}")
                     continue

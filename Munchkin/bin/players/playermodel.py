@@ -129,11 +129,12 @@ class Player(P_tools):
         # print(self.__repr__())
 
     def inventory(self, key, cardtype): # called from GUI on button press
-        """creates a list of dict of cards from player unsorted cards of a particular type (ie type == armour)."""
+        """Returns list of dict from player unsorted cards that have the key and match the key to a specific value.
+        (ie sub_type == armour)."""
         gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj[key] == cardtype]
 
     def item_by_key(self, key):
-        """passes list of specific set of items to gameVar with the use of a key from the dict"""
+        """Returns list of cards form player unsorted list that contain the key x. (ie "sell") """
         gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj.get(key)]
 
     def sell_item(self, card): # called by player.sell_item so self bound to player
@@ -145,22 +146,32 @@ class Player(P_tools):
         print("burn pile  ", len(cards.burn_pile))
         print("tup list: ", gameVar.GameObjects.zipped_tup)
 
-    def sum_of_bonuses(self):
-        """ Adds up all bonuses and bind to player"""
+    def sum_of_bonuses(self): # pos multi usage and use as player item searcher.
+        """ Adds up all bonuses and bind to player in weapons and armour"""
         tot_bonus = 0
-        locations = [self.weapons, self.armor]
-        for obj in locations: # returns dict of each
-            for ditionary in obj: #
+        locations = [self.weapons, self.armor] #locations to search
+        for obj in locations: # looks at each object in list
+            for sub_menu in obj: #
                 # print(ditionary) #string names of dict
-                if isinstance(obj[ditionary], dict):
-                    print(obj[ditionary]["bonus"])
-                    tot_bonus += obj[ditionary]["bonus"]
+                if isinstance(obj[sub_menu], dict): #checks submenu for card attachment in the form of a dict
+                    print(obj.get(sub_menu, "No sub menu").get("bonus", "No bonus found"))
+                    tot_bonus += obj.get(sub_menu, "").get("bonus", "Problem getting bonus")
                     continue
         if self.name == "The_Creator":
             print("in the creator")
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
         print(f" hand count:{self.weapon_count}")
+
+    def equipped_items(self):
+        locations = [self.weapons, self.armor]  # locations to search
+        for obj in locations:  # looks at each object in list
+            for sub_menu in obj:  #
+                # print(ditionary) #string names of dict
+                if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
+                    card_name = obj.get(sub_menu, "No sub menu")
+                    gameVar.GameObjects.selected_items.append(card_name)
+                    continue
 
 
     def add_remove(self, card, action):

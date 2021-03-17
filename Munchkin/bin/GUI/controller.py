@@ -276,7 +276,7 @@ class MainLoop(tk.Frame):
         self.b7 = tk.Button(self.butframe, text="Sack", command=self.list_sack) ########### used as dummy atm
         self.b7.config(padx=10)
         self.b7.place(x=475, y=45)
-        self.b8 = tk.Button(self.butframe, text="Visible", command=self.list_visible)
+        self.b8 = tk.Button(self.butframe, text="Equipped items", command=self.list_equipped)
         self.b8.place(x=450, y=80)
 
         self.b9 = tk.Button(self.butframe, text="Interfere", command=self.interfere)
@@ -352,29 +352,29 @@ class MainLoop(tk.Frame):
         player = gameVar.StartVariables.active_player
         player.inventory("type", "weapon")
         # print(gameVar.GameObjects.selected_items)  list all items
-        OwnedItems("Weapons owned")
+        OwnedItems("Weapons owned", "weap")
 
     def list_armour(self):
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
-        OwnedItems("Armour Owned")
+        OwnedItems("Armour Owned", "armor")
 
     def consumables(self):
         print("This will be the toplevel for throwable and other once only objects")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "disposable")
-        OwnedItems("One shot items")
+        OwnedItems("One shot items", "consume")
 
     def list_sell(self):
         """builds toplevel with sellable items"""
         print("Sell selected")
         engine.scrub_lists() # resets all lists for next action
         player = gameVar.StartVariables.active_player # gets current player
-        player.item_by_key("sell") # load all sellable cards into gamevar.selected_items  with use of dict key param
+        player.item_by_key("sell") # generates list of sellable cards passed on to gameVar.selected_items
         # print(gameVar.StartVariables.selected_items) # call method that in gameile that creates zip
-        OwnedItems("Sellable Items") # calls toplevel with window title
+        OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
     def interfere(self):
         print("Toplevel window where another player can interfere with play")
@@ -390,17 +390,24 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.all_cards = gameVar.PlayerAtribs.player_unsorted # wont work with gui.. yet
         # OwnedItems("All items") #setup dif toplevel without check buttons more informal list
 
-    def list_visible(self):
+    def list_equipped(self):
         print("This will be the visible cards toplevel")
+        engine.scrub_lists()
+        player = gameVar.StartVariables.active_player
+        player.equipped_items()
+        OwnedItems("Equipped Items", "equip")
+
+
 
 
 class OwnedItems(tk.Toplevel):
-    """takes player card list and converts to label for specific button actions"""
-    def __init__(self, wind_title="template"):
+    """generates toplevel from cards place in gameVar.GameObjects.selected_items."""
+    def __init__(self, wind_title="template", set_but=None):
         tk.Toplevel.__init__(self)
         self.wind_title = wind_title
         self.title(self.wind_title)
         self.geometry("300x250+200+200")
+        self.set_but = set_but
 
         if not gameVar.GameObjects.selected_items:
             fm = tk.Frame(self)
@@ -422,12 +429,18 @@ class OwnedItems(tk.Toplevel):
                 l3 = tk.Label(f, text=card['sell'])
                 l3.grid(row=set_row, column=2, sticky="nw")
                 tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
-                gameVar.GameObjects.check_but_intvar_gen.append(status) #maybe good place to add card id here????????????
+                gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
-        tk.Button(self, text="Sell", command=self.sell).pack(side="left")
-        tk.Button(self, text="Equip", command=self.equip).pack(side="left")
-        tk.Button(self, text="remove", command=self.remove).pack(side="left")
+        if self.set_but == "weap" or self.set_but == "armor"or self.set_but == "sell":
+            tk.Button(self, text="Sell", command=self.sell).pack(side="left")
+        if self.set_but == "consume":
+            tk.Button(self, text="Use item", command=self.use_item).pack(side="left")
+        if self.set_but == "weap" or self.set_but == "armor":
+            tk.Button(self, text="Equip", command=self.equip).pack(side="left")
+        if self.set_but == "remove":
+            tk.Button(self, text="Remove", command=self.equip).pack(side="left")
+
 
     def sell(self):
         """triggers sell event when pushed"""
@@ -444,9 +457,9 @@ class OwnedItems(tk.Toplevel):
         OwnedItems.destroy(self)
         engine.scrub_lists()
 
-    def remove(self):
+    def use_item(self):
         """wont work as cards not in this any more"""
-        engine.zipper("remove")
+        engine.zipper("use")
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
         OwnedItems.destroy(self)
