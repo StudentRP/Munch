@@ -398,12 +398,12 @@ class MainLoop(tk.Frame):
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.equipped_items()
-        OwnedItems("Equipped Items", "equip")
+        OwnedItems("Equipped Items", "remove")
 
 
 class OwnedItems(tk.Toplevel):
     """generates toplevel from cards place in gameVar.GameObjects.selected_items."""
-    def __init__(self, wind_title="template", set_but=None):
+    def __init__(self, wind_title="Template", set_but=None):
         tk.Toplevel.__init__(self)
         self.wind_title = wind_title
         self.title(self.wind_title)
@@ -434,21 +434,21 @@ class OwnedItems(tk.Toplevel):
                     l3 = tk.Label(f, text=card['sell'])
                     l3.grid(row=set_row, column=2, sticky="nw")
                 # elif self.set_but == "weap" or self.set_but == "armor" or self.set_but == "consume" or self.set_but == "equip": ### too long!!!
-                elif self.set_but in " weap, armor, consume equip":
+                elif self.set_but in " weap, armor, consume, equip, remove":
                     l3 = tk.Label(f, text=card['bonus'])
                     l3.grid(row=set_row, column=2, sticky="nw")
                 tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
-        if self.set_but == "weap" or self.set_but == "armor"or self.set_but == "sell":
+        if self.set_but in "weap, armor, sell":
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         if self.set_but == "consume":
             tk.Button(self, text="Use item", command=self.use_item).pack(side="left")
         if self.set_but == "weap" or self.set_but == "armor":
             tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         if self.set_but == "remove":
-            tk.Button(self, text="Remove", command=self.equip).pack(side="left")
+            tk.Button(self, text="Remove", command=self.remove).pack(side="left")
 
     def sell(self):
         """triggers sell event when pushed"""
@@ -474,6 +474,12 @@ class OwnedItems(tk.Toplevel):
         OwnedItems.destroy(self)
         engine.scrub_lists()
 
+    def remove(self):
+        engine.zipper("remove")
+        engine.varbinding(gameVar.StartVariables.active_player)
+        app.update_frame()
+        OwnedItems.destroy(self)
+        engine.scrub_lists()
 
 
 app = Main()

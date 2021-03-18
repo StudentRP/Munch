@@ -73,7 +73,7 @@ class Player(P_tools):
     """Main player class"""
 
     def __init__(self, ref):
-        self.m= ref # simple form to keep track of players
+        self.ref = ref # simple form to keep track of players
         self.name = ""
         self.sex = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
@@ -152,28 +152,25 @@ class Player(P_tools):
         tot_bonus = 0
         locations = [self.weapons, self.armor] #locations to search
         for obj in locations: # looks at each object in list
-            for sub_menu in obj: #
-                # print(ditionary) #string names of dict
+            for sub_menu in obj:
                 if isinstance(obj[sub_menu], dict): #checks submenu for card attachment in the form of a dict
-                    print(obj.get(sub_menu, "No sub menu").get("bonus", "No bonus found"))
+                    # print(obj.get(sub_menu, "No sub menu").get("bonus", "No bonus found"))
                     tot_bonus += obj.get(sub_menu, "").get("bonus", "Problem getting bonus")
                     continue
         if self.name == "The_Creator":
-            print("in the creator")
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
         print(f" hand count:{self.weapon_count}")
 
     def equipped_items(self):
+        """scans player weaps/armor for cards """
         locations = [self.weapons, self.armor]  # locations to search
         for obj in locations:  # looks at each object in list
             for sub_menu in obj:  #
-                # print(ditionary) #string names of dict
                 if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
-                    card_name = obj.get(sub_menu, "No sub menu")
-                    gameVar.GameObjects.selected_items.append(card_name)
+                    card = obj.get(sub_menu)
+                    gameVar.GameObjects.selected_items.append(card) #adds cards to selected_items list in gameVar
                     continue
-
 
     def add_remove(self, card, action):
         location = ["headgear", "necklace", "ring", "armor", "knees", "footgear", "armor", "ring", "ring2"]

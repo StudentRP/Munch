@@ -133,6 +133,9 @@ class PlayerSetUp:
                     elif action == "use":
                         # gameVar.StartVariables.active_player.
                         pass
+                    elif action == "remove":
+                        print("in remove object") #outputs cards that have been ticked only.
+
 
     def tri_qualifier(self, card):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
