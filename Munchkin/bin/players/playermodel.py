@@ -172,67 +172,86 @@ class Player(P_tools):
                     gameVar.GameObjects.selected_items.append(card) #adds cards to selected_items list in gameVar
                     continue
 
-    def add_remove(self, card, action):
+    def refined_adder(self, card):
+        """Carried card over from tri_qualifier. """
+        locations = [self.weapons, self.armor]  # locations to search
+        for obj in locations:  # looks at each object in list
+            for sub_type in obj:
+                if sub_type == card.get("sub_type"): # if card and sub_type match
+                    occupied = isinstance(sub_type, dict)
+                    if not occupied:
+                        x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                        obj[sub_type] = x  # adds to player's attribs
+                        break
+                    elif occupied:
+                        card_removed = obj.pop(sub_type)  # removing card from player's attrib
+                        self.unsorted.append(card_removed)
+                        x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                        obj[sub_type] = x  # binds now card to player attribute
+                        break
+                    else:
+                        continue
+
+
+    def add_player_item(self, card):
+        """Carried card over from tri_qualifier. """
         location = ["headgear", "necklace", "ring", "armor", "knees", "footgear", "armor", "ring", "ring2"]
         wep_hand = ["L_hand", "R_hand"]
         print(f"starting sack size: {len(self.unsorted)}")
         x = card.get("type") # returns armour or weapon
-        if action == "add":
-            if x == "armor":
-                print("in armor")
-                for sub_type in location:
-                    if card["sub_type"] == sub_type: # matches card["sub_type] to list
-                        occupied = isinstance(self.armor[sub_type], dict)
-                        if not occupied:
-                            x = self.unsorted.pop(self.unsorted.index(card)) # removes cards from unsorted list
-                            self.armor[sub_type] = x # try block
-                            break
-                        elif occupied:
-                            card_removed = self.armor.pop(sub_type) # removing card from player armour attrib
-                            self.unsorted.append(card_removed)
-                            x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
-                            self.armor[sub_type] = x  # binds now card to player attribute
-                            break
-                        else:
-                            continue
-            elif x == "weapon":
 
-                print("in weapon")
-                sub = cycle(wep_hand) # ["L_hand", "R_hand"]
-                sub_type = next(sub) # 1st hand
-                if self.weapon_count <= 2 and self.weapon_count >= 0:
-                    if isinstance(self.weapons[sub_type], dict): # check to see if 1st hand occupied
-                        sub_type = next(sub) # change to next hand (2nd)
-                        if isinstance(self.weapons[sub_type], dict):# checks 2nd hand is occupied
-                            print("right hand occupied placing on left hand")
-                            sub_type = next(sub) # back to 1st hand
-                            x = self.weapons.pop(sub_type) # removes from weaps
-                            self.unsorted.append(x) #adds back to player pack
-                            y = self.unsorted.pop(self.unsorted.index(card)) # removes selected card from unsorted list
-                            self.weapons[sub_type] = y  # takes first list objet and adds card to it.
-                            self.l_hand = self.weapons["L_hand"]["name"]
-                            self.weapon_count -= 1 # reduces the num of usable hands
-                        else: # no card on R_hand
-                            print("in empty right hand")
-                            y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
-                            self.weapons[sub_type] = y
-                            self.r_hand = self.weapons["R_hand"]["name"]
-                            self.weapon_count -= 1  # reduces the num of usable hands
-                    else: # if not using any weapons
-                        print("in else LEFT hand")
+        if x == "armor":
+            print("in armor")
+            for sub_type in location:
+                if card["sub_type"] == sub_type: # matches card["sub_type] to list
+                    occupied = isinstance(self.armor[sub_type], dict)
+                    if not occupied:
+                        x = self.unsorted.pop(self.unsorted.index(card)) # removes cards from unsorted list
+                        self.armor[sub_type] = x # adds to player's attribs
+                        break
+                    elif occupied:
+                        card_removed = self.armor.pop(sub_type) # removing card from player's attrib
+                        self.unsorted.append(card_removed)
+                        x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                        self.armor[sub_type] = x  # binds now card to player attribute
+                        break
+                    else:
+                        continue
+        elif x == "weapon":
+
+            print("in weapon")
+            sub = cycle(wep_hand) # ["L_hand", "R_hand"]
+            sub_type = next(sub) # 1st hand
+            if self.weapon_count <= 2 and self.weapon_count >= 0:
+                if isinstance(self.weapons[sub_type], dict): # runs only if 1st hand is full
+                    sub_type = next(sub) # change to next hand (2nd)
+                    if isinstance(self.weapons[sub_type], dict):# checks 2nd hand is occupied
+                        print("right hand occupied placing on left hand")
+                        sub_type = next(sub) # back to 1st hand
+                        x = self.weapons.pop(sub_type) # removes from weaps
+                        self.unsorted.append(x) #adds back to player pack
+                        y = self.unsorted.pop(self.unsorted.index(card)) # removes selected card from unsorted list
+                        self.weapons[sub_type] = y  # takes first list objet and adds card to it.
+                        self.l_hand = self.weapons.get("L_hand", "").get("name")
+                        self.weapon_count -= 1 # reduces the num of usable hands
+                    else: # no card on R_hand
+                        print("in empty right hand")
                         y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
                         self.weapons[sub_type] = y
-                        self.l_hand = self.weapons["L_hand"]["name"]
+                        self.r_hand = self.weapons.get("R_hand", "").get("name")
                         self.weapon_count -= 1  # reduces the num of usable hands
-                else:
-                    """large item that is two hands"""
-                    pass
-            else: #options other than weap/armor
-                print("You can not add this item to you player")
+                else: # if not using any weapons
+                    print("in else LEFT hand")
+                    y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                    self.weapons[sub_type] = y
+                    self.l_hand = self.weapons.get("L_hand", "").get("name")
+                    self.weapon_count -= 1  # reduces the num of usable hands
+            else:
+                """large item that is two hands"""
+                pass
+        else: #options other than weap/armor
+            print("You can not add this item to you player")
 
-
-        elif action == "remove": # button to be added in gui top level
-            pass
 
 
         print(self.weapons)
