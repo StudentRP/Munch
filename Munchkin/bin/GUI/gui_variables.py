@@ -32,7 +32,7 @@ class Options:
     """variables associated to start options that may be manipulated changing win parameters ect"""
     win_lvl = 10 # sets the leve that triggers win
     carry_weight = 8 # number of cards allowed in sack
-    cards_dealt = 4 # number of each card type delt at start or on resurrection #4 std
+    cards_dealt = 10 # number of each card type delt at start or on resurrection #4 std
     perm_death = False # dead players do not come back
 
 
@@ -44,12 +44,20 @@ class PlayerAtribs:
     player_level = 1
     player_bonus = 0
     player_wallet = 0
-    player_race = {'r1': True, 'r2': False}
+
+    player_race = ""
+    player_race2 = ""
+    player_klass = ""
+    player_klass2 = ""
+
     player_l_hand = ""
     player_r_hand = ""
-    player_weapons = {"L_hand": None, "R_hand": None, "big": None, "special_1": None, "special_2": False}
-    player_armor = {"headgear": None, "armor": None, "armor1": False, "armor2": False, "footgear": None,
-                  "special_1": None, "special_2": False, "special_3": False}
+    player_headgear = ""
+
+    player_armor = ""
+    player_knees = ""
+    player_footgear = ""
+
     player_sack = []
     player_visible_cards = []
     player_hireling = []

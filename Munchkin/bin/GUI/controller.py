@@ -35,6 +35,10 @@ class Main(tk.Tk):
         self.wallet = tk.IntVar()
         self.r_hand = tk.StringVar()
         self.l_hand = tk.StringVar()
+        self.headgear = tk.StringVar()
+        self.armor = tk.StringVar()
+        self.knees = tk.StringVar()
+        self.footgear = tk.StringVar()
 
         "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
@@ -56,9 +60,14 @@ class Main(tk.Tk):
         self.level.set(gameVar.PlayerAtribs.player_level)
         self.bonus.set(gameVar.PlayerAtribs.player_bonus)
         self.wallet.set(gameVar.PlayerAtribs.player_wallet)
+
         self.l_hand.set(gameVar.PlayerAtribs.player_l_hand)
         self.r_hand.set(gameVar.PlayerAtribs.player_r_hand)
-        # self.l_hand.set(gameVar.PlayerAtribs.player_weapons["L_hand"])
+
+        self.headgear.set(gameVar.PlayerAtribs.player_headgear)
+        self.armor.set(gameVar.PlayerAtribs.player_armor)
+        self.knees.set(gameVar.PlayerAtribs.player_knees)
+        self.footgear.set(gameVar.PlayerAtribs.player_footgear)
 
 
 ##########################################################################
@@ -289,45 +298,68 @@ class MainLoop(tk.Frame):
         self.plframe.config(pady=20)
         self.plframe.pack(side='left', fill="y", ipadx=50)
 
-        self.l1 = tk.Label(self.plframe, text="Name: ")
-        self.l1.grid(row=0, column=1, sticky='nsew')
-        self.l1b = tk.Label(self.plframe, textvariable=controller.name)  ## works binding strait to stringvar in Main
-        self.l1b.grid(row=0, column=2, sticky='nsew')
+        player_info = {"Name: ": controller.name,  "Gender: ": controller.gender, "Level: ": controller.level, "Bonus: ": controller.bonus,
+                        "Wallet: ": controller.wallet,"L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "Head Gear: ": controller.headgear,
+                        "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear}
+        row = 0
+        for key, val in player_info.items():
 
-        self.l2 = tk.Label(self.plframe, text="Gender: ")
-        self.l2.grid(row=1, column=1, sticky='nsew')
-        self.l2b = tk.Label(self.plframe, textvariable=controller.gender)  ## works binding strait to stringvar in Main
-        self.l2b.grid(row=1, column=2, sticky='nsew')
+            self.l1 = tk.Label(self.plframe, text=key)
+            self.l1.grid(row=row, column=1, sticky='nsew')
+            self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
+            self.l1b.grid(row=row, column=2, sticky='nsew')
+            row += 1
+            # continue
 
-        self.l3 = tk.Label(self.plframe, text="Level: ")
-        self.l3.grid(row=2, column=1, sticky='nsew')
-        self.l3b = tk.Label(self.plframe, textvariable=controller.level)  ## works binding strait to stringvar in Main
-        self.l3b.grid(row=2, column=2, sticky='nsew')
-
-        self.l4 = tk.Label(self.plframe, text="Bonus: ")
-        self.l4.grid(row=3, column=1, sticky='nsew')
-        self.l4b = tk.Label(self.plframe, textvariable=controller.bonus)  ## works binding strait to stringvar in Main
-        self.l4b.grid(row=3, column=2, sticky='nsew')
-
-        self.l5 = tk.Label(self.plframe, text="Wallet: ")
-        self.l5.grid(row=4, column=1, sticky='nsew')
-        self.l5b = tk.Label(self.plframe, textvariable=controller.wallet)  ## works binding strait to stringvar in Main
-        self.l5b.grid(row=4, column=2, sticky='nsew')
-
-        self.l6 = tk.Label(self.plframe, text="L_hand: ")
-        self.l6.grid(row=5, column=1, sticky='nsew')
-        self.l6b = tk.Label(self.plframe, textvariable=controller.l_hand)  ## works binding strait to stringvar in Main
-        self.l6b.grid(row=5, column=2, sticky='nsew')
-
-        self.l7 = tk.Label(self.plframe, text="R_hand: ")
-        self.l7.grid(row=6, column=1, sticky='nsew')
-        self.l7b = tk.Label(self.plframe, textvariable=controller.r_hand)  ## works binding strait to stringvar in Main
-        self.l7b.grid(row=6, column=2, sticky='nsew')
-
-        # self.l6 = tk.Label(self.plframe, text="Left hand")
+        # self.l2 = tk.Label(self.plframe, text="Gender: ")
+        # self.l2.grid(row=1, column=1, sticky='nsew')
+        # self.l2b = tk.Label(self.plframe, textvariable=controller.gender)  ## works binding strait to stringvar in Main
+        # self.l2b.grid(row=1, column=2, sticky='nsew')
+        #
+        # self.l3 = tk.Label(self.plframe, text="Level: ")
+        # self.l3.grid(row=2, column=1, sticky='nsew')
+        # self.l3b = tk.Label(self.plframe, textvariable=controller.level)  ## works binding strait to stringvar in Main
+        # self.l3b.grid(row=2, column=2, sticky='nsew')
+        #
+        # self.l4 = tk.Label(self.plframe, text="Bonus: ")
+        # self.l4.grid(row=3, column=1, sticky='nsew')
+        # self.l4b = tk.Label(self.plframe, textvariable=controller.bonus)  ## works binding strait to stringvar in Main
+        # self.l4b.grid(row=3, column=2, sticky='nsew')
+        #
+        # self.l5 = tk.Label(self.plframe, text="Wallet: ")
+        # self.l5.grid(row=4, column=1, sticky='nsew')
+        # self.l5b = tk.Label(self.plframe, textvariable=controller.wallet)  ## works binding strait to stringvar in Main
+        # self.l5b.grid(row=4, column=2, sticky='nsew')
+        #
+        # self.l6 = tk.Label(self.plframe, text="L_hand: ")
         # self.l6.grid(row=5, column=1, sticky='nsew')
-        # self.l6b = tk.Label(self.plframe, text=controller.l_hand)
+        # self.l6b = tk.Label(self.plframe, textvariable=controller.l_hand)  ## works binding strait to stringvar in Main
         # self.l6b.grid(row=5, column=2, sticky='nsew')
+        #
+        # self.l7 = tk.Label(self.plframe, text="R_hand: ")
+        # self.l7.grid(row=6, column=1, sticky='nsew')
+        # self.l7b = tk.Label(self.plframe, textvariable=controller.r_hand)  ## works binding strait to stringvar in Main
+        # self.l7b.grid(row=6, column=2, sticky='nsew')
+        #
+        # self.l7 = tk.Label(self.plframe, text="Head Gear: ")
+        # self.l7.grid(row=7, column=1, sticky='nsew')
+        # self.l7b = tk.Label(self.plframe, textvariable=controller.headgear)  ## works binding strait to stringvar in Main
+        # self.l7b.grid(row=7, column=2, sticky='nsew')
+        #
+        # self.l7 = tk.Label(self.plframe, text="Armor: ")
+        # self.l7.grid(row=8, column=1, sticky='nsew')
+        # self.l7b = tk.Label(self.plframe, textvariable=controller.armor)  ## works binding strait to stringvar in Main
+        # self.l7b.grid(row=8, column=2, sticky='nsew')
+        #
+        # self.l7 = tk.Label(self.plframe, text="Knees: ")
+        # self.l7.grid(row=9, column=1, sticky='nsew')
+        # self.l7b = tk.Label(self.plframe, textvariable=controller.knees)  ## works binding strait to stringvar in Main
+        # self.l7b.grid(row=9, column=2, sticky='nsew')
+        #
+        # self.l7 = tk.Label(self.plframe, text="Foot gear: ")
+        # self.l7.grid(row=10, column=1, sticky='nsew')
+        # self.l7b = tk.Label(self.plframe, textvariable=controller.footgear)  ## works binding strait to stringvar in Main
+        # self.l7b.grid(row=10, column=2, sticky='nsew')
 
 
         "Game Window"
@@ -397,7 +429,7 @@ class MainLoop(tk.Frame):
         """list showing all items that are equipped"""
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
-        player.equipped_items()
+        player.equipped_items("list_equipped")
         OwnedItems("Equipped Items", "remove")
 
 

@@ -507,6 +507,7 @@ way to add to player or check if place is occupied already and remove player and
 #######################################################################
 # remove items
 #######################################################################
+action =  engine,zipper("remove")>
 requires a search if player assets as no items will show in top level as they have been removed.
 
 

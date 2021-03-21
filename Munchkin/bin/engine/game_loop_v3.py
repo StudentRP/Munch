@@ -56,8 +56,12 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
         gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
-        gameVar.PlayerAtribs.player_l_hand = playerinst.l_hand
-        gameVar.PlayerAtribs.player_r_hand = playerinst.r_hand
+        gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
+        gameVar.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
+        gameVar.PlayerAtribs.player_headgear = playerinst.update_bindings("headgear")
+        gameVar.PlayerAtribs.player_armor = playerinst.update_bindings("armor")
+        gameVar.PlayerAtribs.player_knees = playerinst.update_bindings("knees")
+        gameVar.PlayerAtribs.player_footgear = playerinst.update_bindings("footgear")
 
     def deal_handler(self, option, instance=None): # instance for future use in case of player specific demand.
         """ Calls meth to deal cards for players dependent on option parameter."""
@@ -116,7 +120,7 @@ class PlayerSetUp:
             gameVar.GameObjects.check_but_boo.append(create_boo.get()) # creates a list of 1s & 0s from check buttons status
             x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
             gameVar.GameObjects.zipped_tup = list(zip(x, y))
-        # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
+        print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
         self.card_matcher(action)
 
     def card_matcher(self, action):
@@ -128,13 +132,14 @@ class PlayerSetUp:
                     if action == "sell":
                         gameVar.StartVariables.active_player.sell_item(card)
                     elif action == "equip":
-                        # self.qualifier_race(card)
-                        self.tri_qualifier(card) # test
+                        # self.qualifier_race(card) # old redundant meth
+                        self.tri_qualifier(card) # test ~~ok~~
                     elif action == "use":
                         # gameVar.StartVariables.active_player.
                         pass
                     elif action == "remove":
-                        print("in remove object") #outputs cards that have been ticked only.
+                        player = gameVar.StartVariables.active_player
+                        player.equipped_items("removal", card)
 
 
     def tri_qualifier(self, card):
@@ -155,6 +160,7 @@ class PlayerSetUp:
                 else:
                     print(f"You cant equip this card, {val}")
                     flag = 0
+                    # gameVar.StartVariables.message(f"Card can not be quipped: {val}.")
                     break
             else:  # no restriction in card
                 print(f"No {val} required path")
