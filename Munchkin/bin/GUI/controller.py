@@ -27,6 +27,8 @@ class Main(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         self.frames = {}
+        #### all Game notifications ####
+        self.message = tk.StringVar()
         #### all player atribs to bind ####
         self.name = tk.StringVar()
         self.gender = tk.StringVar()
@@ -39,6 +41,7 @@ class Main(tk.Tk):
         self.armor = tk.StringVar()
         self.knees = tk.StringVar()
         self.footgear = tk.StringVar()
+
 
         "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
@@ -69,6 +72,11 @@ class Main(tk.Tk):
         self.knees.set(gameVar.PlayerAtribs.player_knees)
         self.footgear.set(gameVar.PlayerAtribs.player_footgear)
 
+    def update_message(self, action=None):
+        if action == "show":
+            self.message.set(gameVar.GameObjects.message)
+        else:
+            self.message.set("")
 
 ##########################################################################
 # frames to build up interface
@@ -248,6 +256,7 @@ class PlayerInfo(tk.Toplevel):
 
                 engine.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
                 app.update_frame() # updates all lable variables from gameVar
+                app.update_message("show") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
                 ########## deal cards to all players required
 
@@ -255,7 +264,6 @@ class PlayerInfo(tk.Toplevel):
 ####################################################################################################################
 class MainLoop(tk.Frame):
     """3 frames with game loop, function required to set index at random place """
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
@@ -367,6 +375,11 @@ class MainLoop(tk.Frame):
         self.tblframe.config(bg='lightgrey'),
         self.tblframe.pack(side="left", fill="both", expand=True)
 
+        self.message = tk.Label(self.tblframe, textvariable=controller.message)
+        self.message.pack(side="top", fill="x", expand=True)
+
+
+
     "Handlers"
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
@@ -383,6 +396,8 @@ class MainLoop(tk.Frame):
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
+        gameVar.GameObjects.message = "Weapons list"
+        app.update_message("show")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "weapon")
@@ -390,13 +405,16 @@ class MainLoop(tk.Frame):
         OwnedItems("Weapons owned", "weap")
 
     def list_armour(self):
+        gameVar.GameObjects.message = "Armour list"
+        app.update_message("show")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
         OwnedItems("Armour Owned", "armor")
 
     def consumables(self):
-        print("This will be the toplevel for throwable and other once only objects")
+        gameVar.GameObjects.message = "Consumable items"
+        app.update_message("show")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "disposable")
@@ -404,23 +422,26 @@ class MainLoop(tk.Frame):
 
     def list_sell(self):
         """builds toplevel with sellable items"""
-        print("Sell selected")
+        gameVar.GameObjects.message = "Sell selected"
+        app.update_message("show")
         engine.scrub_lists() # resets all lists for next action
         player = gameVar.StartVariables.active_player # gets current player
         player.item_by_key("sell") # generates list of sellable cards passed on to gameVar.selected_items
-        # print(gameVar.StartVariables.selected_items) # call method that in gameile that creates zip
+        # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
     def interfere(self):
-        print("Toplevel window where another player can interfere with play")
+        gameVar.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
+        app.update_message("show")
 
     def ask_for_help(self):
-        print("Toplevel window where another player can help... for a price..")
+        gameVar.GameObjects.message = "Toplevel window where another player can help... for a price.."
+        app.update_message("show")
 
     def list_sack(self):
         """shows all items in sack"""
-        # new toplevel without checkboxes
-        print("Your sack contains:")
+        gameVar.GameObjects.message = "The contents of your:"
+        app.update_message("show")
         print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
         gameVar.GameObjects.all_cards = gameVar.PlayerAtribs.player_unsorted # wont work with gui.. yet
         # OwnedItems("All items") #setup dif toplevel without check buttons more informal list
@@ -489,13 +510,16 @@ class OwnedItems(tk.Toplevel):
         engine.scrub_lists() # note lists are scrubbed when but pushed on main screen
         engine.varbinding(gameVar.StartVariables.active_player) # explicitly ensures all vars ar correct
         app.update_frame() # updates player info
+        app.update_message("show")
 
     def equip(self):
         engine.zipper("equip") # calls card_matcher() passing the parameter to it.
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
+        app.update_message("show")
         OwnedItems.destroy(self)
         engine.scrub_lists()
+        # app.update_message("show")
 
     def use_item(self):
         """wont work as cards not in this any more"""
@@ -505,6 +529,7 @@ class OwnedItems(tk.Toplevel):
         app.update_frame()
         OwnedItems.destroy(self)
         engine.scrub_lists()
+        app.update_message("show")
 
     def remove(self):
         engine.zipper("remove")
@@ -512,6 +537,7 @@ class OwnedItems(tk.Toplevel):
         app.update_frame()
         OwnedItems.destroy(self)
         engine.scrub_lists()
+        app.update_message("show")
 
 
 app = Main()

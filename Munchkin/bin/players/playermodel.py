@@ -117,10 +117,8 @@ class Player(P_tools):
         for sub_cat in category:  # is the dict as a whole
             for key in sub_cat:
                 if isinstance(sub_cat[key], dict) and key == carried:
-                    print(f"player has: {key} binded")
-                    print(sub_cat.get(key).get("name"))
+                    gameVar.GameObjects.message = f'{sub_cat.get(key).get("name")} has been bound to {key}'
                     return sub_cat.get(key).get("name")
-            # continue
 
 
     def char_setup(self):
@@ -136,8 +134,9 @@ class Player(P_tools):
             self.bonus = 200
             self.wallet = 20000
             gameVar.PlayerAtribs.player_gender = self.sex
+            gameVar.GameObjects.message = f"{self.name} is in play, a god among mer mortals!"
+
         print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
-        # print(self.__repr__())
 
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player unsorted cards that have the key and match the key to a specific value.
@@ -151,11 +150,12 @@ class Player(P_tools):
     def sell_item(self, card): # called by player.sell_item so self bound to player
         """Call from zipper to sell items, remove cards, reset gameVars and call to add to burn pile"""
         self.wallet += card["sell"] #adds worth of card to player
-        print(f"Removing unsorted {card['name']}")
+        gameVar.GameObjects.message = f"Selling unsorted {card['name']}, Card added to burn pile. Depth: {len(cards.burn_pile)}"
         x = self.unsorted.pop(self.unsorted.index(card)) # removes card from player unsorted deck
         cards.add_to_burn(x)# adds card to burn pile on table
-        print("burn pile  ", len(cards.burn_pile))
-        print("tup list: ", gameVar.GameObjects.zipped_tup)
+        gameVar.GameObjects.message = f"Selling unsorted {card['name']}, " \
+                                      f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
+        # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
     def sum_of_bonuses(self): # pos multi usage and use as player item searcher.
         """ Adds up all bonuses and bind to player in weapons and armour"""
@@ -175,7 +175,7 @@ class Player(P_tools):
     def equipped_items(self, action, cards=None): # in use by gui list_equipped meth
         """sorts through equipped items, removing items that have been selected"""
         locations = [self.weapons, self.armor]  # locations to search
-        for obj in locations:  # looks at each object in list. obj is the top level dict of all the poss locations as seen in player attrbs
+        for obj in locations:  # looks at each object in list. obj is the dict of all the poss locations as seen in player attrbs
             for sub_menu in obj:  # sub_menu is the area the card is placed in: armor = {}
                 if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
                     card = obj.get(sub_menu) # x is the card object
@@ -194,10 +194,10 @@ class Player(P_tools):
     def refined_adder(self, card): # not in action yet by tri_qualifyer
         """Carried card over from tri_qualifier. """
         locations = [self.weapons, self.armor]  # locations to search
-        for obj in locations:  # looks at each object in list
-            for sub_type in obj:
-                if sub_type == card.get("sub_type"): # if card and sub_type match ie armour, weap ect
-                    occupied = isinstance(sub_type, dict)
+        for obj in locations:  # looks at each object in list (dict obj)
+            for sub_type in obj: # (elements of the dict)
+                if sub_type == card.get("sub_type"): # loops till it finds player location that matched card sub_type (1hand, footgear ect)
+                    occupied = isinstance(sub_type, dict) # checkes to see if player space is occupied
                     if not occupied:
                         x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
                         obj[sub_type] = x  # adds to player's attribs

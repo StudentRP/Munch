@@ -16,10 +16,11 @@ class StartVariables:
     session_players = None # (list) generated list slice from game_loop with all player instances in active session
     active_player = None # selected random player from active players. becomes next player
     # selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
-    message = None
+
 
 
 class GameObjects:
+    message = ""
     all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
     check_but_intvar_gen = [] # populated with callable objects from checkbutton

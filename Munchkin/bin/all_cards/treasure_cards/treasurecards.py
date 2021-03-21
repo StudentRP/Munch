@@ -7,52 +7,10 @@ from random import randint
 
 
 class T_tools:
-    """ methods for special card objects """
+    """ Specific methods for Treasure card"""
+    pass
 
-    # @classmethod
-    # def immune(cls):
-    #     """immune to curses"""
-    #     print("I love my Tinfoil Hat")
 
-    @classmethod
-    def restriction(cls): #maybe name restriction
-        """kwrd search to determine restriction
-        to add:
-        once
-        specific users
-        with item
-        any combat
-        reroll escape
-        no backstab
-        no steal
-        loose with armour
-        big
-        """
-        print("This item has been depleted")
-
-    @classmethod
-    def special(cls, word, dictkeyname):
-        """kwrd search to determine nature of special:
-        escape
-        auto escape
-        fire
-        cast immune
-        deflect
-        over armour
-        gnome only
-        """
-        if word in dictkeyname:
-            pass
-
-    # @classmethod
-    # def escape(cls):
-    #     """roll to escape combat, may need: return once()"""
-    #     print("You make a dash for it! This item has now been depleted")
-
-    # @classmethod
-    # def deflect(cls):
-    #     """1-3 deflect curse, 4-6 run, 6 go up level"""
-    #     print("The curse rebounds")
 
 #####################################################################
 # MAIN TREASURE CLASS

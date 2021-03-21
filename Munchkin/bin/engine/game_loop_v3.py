@@ -28,7 +28,7 @@ from time import sleep
 ##################################################################
 # main loop
 ##################################################################
-first = True
+# first = True
 """ V3.0  """
 
 
@@ -141,7 +141,6 @@ class PlayerSetUp:
                         player = gameVar.StartVariables.active_player
                         player.equipped_items("removal", card)
 
-
     def tri_qualifier(self, card):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
         race, class, gender """
@@ -160,12 +159,14 @@ class PlayerSetUp:
                 else:
                     print(f"You cant equip this card, {val}")
                     flag = 0
-                    # gameVar.StartVariables.message(f"Card can not be quipped: {val}.")
+                    # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
-            else:  # no restriction in card
-                print(f"No {val} required path")
-                continue
+            # else:  # no restriction in card
+            #     # print(f"No {val} required path")
+            #     # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
+            #     continue
         if flag: # only if flag remains True
+            # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
             player.add_player_item(card)
             # player.refined_adder(card)
 
