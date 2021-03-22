@@ -171,11 +171,6 @@ class PlayerSetUp:
             player.add_player_item(card)
             # player.refined_adder(card)
 
-    def id_matcher(self, id):
-        """Matches the ID to the card in selected_items and returns an image address"""
-        for card in gameVar.GameObjects.selected_items:
-            if card["id"] == id:
-                print(card["name"])
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""

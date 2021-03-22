@@ -235,7 +235,7 @@ class Player(P_tools):
             print("In weapon")
             sub = cycle(wep_hand) # ["L_hand", "R_hand"]
             sub_type = next(sub) # 1st hand
-            if self.weapon_count <= 2 and self.weapon_count >= 0:
+            if self.weapon_count <= 2 and self.weapon_count >= 0 and card["subtype"] == "1hand":
                 if isinstance(self.weapons[sub_type], dict): # runs only if 1st hand is full
                     sub_type = next(sub) # change to next hand (2nd)
                     if isinstance(self.weapons[sub_type], dict):# checks 2nd hand is occupied
@@ -259,8 +259,19 @@ class Player(P_tools):
                     self.weapons[sub_type] = y
                     # self.l_hand = self.weapons.get("L_hand", "").get("name")
                     self.weapon_count -= card.get("hold_weight")  # reduces the num of usable hands
-            else:
+            elif card["subtype"] == "2hand": ## not working as of yet####################################################
                 """large item that is two hands"""
+                for category in self.weapons:
+                    if isinstance(category, dict):
+                        removed_card = self.weapons.pop(category)
+                        self.unsorted.append(removed_card)
+                        print(f"category removed {category} and added to sack")
+                        self.weapon_count += removed_card["hold_weight"]
+                        print(f"carry capacity: {self.weapon_count}")
+                        continue
+
+            else:
+                "Cheat cards pos"
                 pass
         else: #options other than weap/armor
             print("You can not add this item to you player")

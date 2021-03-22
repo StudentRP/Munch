@@ -36,51 +36,43 @@ class Treasure(T_tools):
     ALL items require bonus status
     """
     treasure_cards = [
-        # type disposable
-        {"type": "disposable", "id": 1, "name": "Electric Radioactive Acid Potion", "des": "Use during any combat. +5 to either side.",
+        # type disposable #no 2 add!!
+        {"id": 1, "name": "Electric Radioactive Acid Potion", "type": "disposable", "des": "Use during any combat. +5 to either side.",
          "bonus": 2, "sell": 200, 'restriction': "once, any combat"},
-        {"type": "disposable", "id": 3, "name": "Flaming Poison Potion", "des": "Use during combat", "bonus": 3, "sell": 100,
+        {"id": 3, "name": "Flaming Poison Potion", "type": "disposable", "des": "Use during combat", "bonus": 3, "sell": 100,
          "special": "fire", 'restriction': "once"},
-        {"type": "disposable", "id": 4, 'name': "Instant Wall", 'des': 'Automatic escape for 1 or 2 players', 'sell': 300,
+        {"id": 4, 'name': "Instant Wall", "type": "disposable", 'des': 'Automatic escape for 1 or 2 players', 'sell': 300,
          "special": "auto escape 2 players", 'restriction': "once", "bonus": 0},
-        {"type": "disposable", "id": 5, "name": "Flask Of Glue", "des": "Use during combat, must re-roll escape even if auto last time",
-         "sell": 100, "special": "escape", 'restriction': "once, reroll escape", "bonus": 0},
+        {"id": 5, "name": "Flask Of Glue", "type": "disposable", "des": "Use during combat, must re-roll escape even if auto last time",
+         "sell": 100, "special": "escape", 'restriction': "once, re-roll escape", "bonus": 0},
 
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
-        {"id": 6, "type": "armor", "sub_type": "necklace", "name": "The Occasionally Reliable Amulet",
+        {"id": 6, "name": "The Occasionally Reliable Amulet", "type": "armor", "sub_type": "necklace",
          'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect", "bonus": 0},
-
-        {"id": 7, "type": "armor", "sub_type": "headgear", "name": "Tinfoil Hat",
+        {"id": 7, "name": "Tinfoil Hat", "type": "armor", "sub_type": "headgear",
          "des": "Immune to curses when  curses by kicking down doors still effect", "bonus": 0, "sell": 800,
          "special": "cast immune"},
-        {"id": 8, "type": "armor", "sub_type": "headgear", "name": "Pointy Hat Of Power", "des": "Usable by wizards only",
+        {"id": 8, "name": "Pointy Hat Of Power", "type": "armor", "sub_type": "headgear", "des": "Usable by wizards only",
          "bonus": 3, "sell": 400, "klass_restriction": "wizard"},
-        {"id": 9, "type": "armor", "sub_type": "headgear", "name": "Helm Of Peripheral Vision",
+        {"id": 9, "name": "Helm Of Peripheral Vision", "type": "armor", "sub_type": "headgear",
          "des": "can not be back stabbed or stolen from by thief", "bonus": 2, "sell": 600, "special": "headgear",
          "restriction": "no backstab, no steal"},
-        {"id": 10, "type": "armor", "sub_type": "headgear", "name": "Badass Bandanna",
+        {"id": 10, "name": "Badass Bandanna", "type": "armor", "sub_type": "headgear",
          "des": "Usable by humans only", "bonus": 3, "sell": 400, "race_restriction": "human"},
 
         # armor/armor (complete set)
-        {"id": 11, "type": "armor", "sub_type": "armor", "name": "Short Wide Armour", "des": "usable by dwarf only", "bonus": 3,
-         "sell": 400, "race_restriction": "dwarfs"},
-        {"id": 12, "type": "armor", "sub_type": "armor", "name": "Raincoat",
-         "des": "Others can not use potions to interfere with your combat unless joins fight.", "sell": 100,
-         "special": "over armor", "restrictions": "loose with armour", "bonus": 0},
-        {"id": 13, "type": "armor", "sub_type": "armor", "name": "Slimy Armour", "des": "Found in a stagnant pool of water.",
-         "bonus": 1, "sell": 200},
-        {"id": 14, "type": "armor", "sub_type": "armor", "name": "Mithril Armor", "des": "Oooo Shiny!", "bonus": 3,
-         "sell": 600, "restriction": "big"},
-        {"id": 15, "type": "armor", "sub_type": "armor", "name": "Budget Armour", "des": "Get what you pay for..", "bonus": 1,
-         "sell": 100},
-        {"id": 16, "type": "armor", "sub_type": "armor", "name": "Flaming Armour", "des": " Its Really Hot!", "bonus": 2, "sell": 400},
-        {"id": 17, "type": "armor", "sub_type": "armor", "name": "Studded Leather Armor", "des": "When best not available",
-         "bonus": 2, "sell": 400},
-        {"id": 18, "type": "armor", "sub_type": "armor", "name": "Gnomex Suit", "des": "Usable by Gnome only", "bonus": 4, "sell": 600,
-         "special": "over armor", "restrictions": "loose with armour", "race_restriction": "gnome"},
-        {"id": 19, "type": "armor", "sub_type": "armor", "name": "Chainmail Bikini", "des": "Strangely not just for women",
-         "bonus": 3, "sell": 600},
-        {"id": 20, "type": "armor", "sub_type": "armor", "name": "Leather Armor", "des": "Its leather.", "bonus": 1, "sell": 200},
+        {"id": 11, "name": "Short Wide Armour", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 400, "race_restriction": "dwarfs"},
+        {"id": 12, "name": "Raincoat", "type": "armor", "sub_type": "armor", "sell": 100, "special": "over armor",
+         "restrictions": "loose with armour", "bonus": 0},
+        {"id": 13, "name": "Slimy Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 200},
+        {"id": 14, "name": "Mithril Armor", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 600, "restriction": "big"},
+        {"id": 15, "name": "Budget Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 100},
+        {"id": 16, "name": "Flaming Armour", "type": "armor", "sub_type": "armor", "bonus": 2, "sell": 400},
+        {"id": 17, "name": "Spudded Leather Armor", "type": "armor", "sub_type": "armor", "bonus": 2, "sell": 400},
+        # {"id": 18, "name": "Gnomex Suit", "type": "armor", "sub_type": "armor", "bonus": 4, "sell": 600,
+        #  "special": "over armor", "restrictions": "loose with armour", "race_restriction": "gnome"},
+        {"id": 19, "name": "Chainmail Bikini", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 600},
+        {"id": 20, "name": "Leather Armor", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 200},
 
 
         #armor/boots
@@ -88,16 +80,18 @@ class Treasure(T_tools):
          "sell": 400},
 
         #weapons: id, type, sub_type, name, des, bonus, klass_restriction, hold_weight, sell, asso_meth
-        {"id": 22, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Staff Of Napalm", "des": "Usable by wizards only",
+        {"id": 22, "name": "Staff Of Napalm", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Usable by wizards only",
          "bonus": 5, "sell": 800, "klass_restriction": "wizard"},
-        {"id": 23, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Blessed", "des": "Usable by wizards only", "bonus": 2,
-         "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"},
-        {"id": 24, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Broad Sword", "des": "Not for females", "bonus": 3,
+        # {"id": 23, "name": "Blessed", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Usable by wizards only", "bonus": 2,
+        #  "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"},
+        {"id": 24, "name": "Broad Sword", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Not for females", "bonus": 3,
          "sell": 400, "special": "", "klass_restriction": "male"},
-        {"id": 25, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Sword Of Slaying Everything\nExcept squid..", "des": "long", "bonus": 4,
+        {"id": 25, "name": "Sword Of Slaying Everything\nExcept squid..","type": "weapon", "subtype": "1hand", "hold_weight": 1,  "des": "long", "bonus": 4,
          "sell": 800},
-        {"id": 26, "type": "weapon", "subtype": "1hand", "hold_weight": 1, "name": "Vorpal Blade", "des": "+10 with anything beginning with j", "bonus": 3,
-         "sell": 400, "special": "item enhancer"}
+        {"id": 26, "name": "Vorpal Blade", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "+10 with anything beginning with j", "bonus": 3,
+         "sell": 400, "special": "item enhancer"},
+        {"id": 27, "name": "Huge Rock", "type": "weapon", "subtype": "2hand", "hold_weight": 2, "bonus": 3, "sell": 0},
+        {"id": 28, "name": "Board of Education", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "bonus": 2, "sell": 500}
     ]
     
     @classmethod

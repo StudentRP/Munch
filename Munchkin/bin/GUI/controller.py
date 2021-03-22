@@ -508,10 +508,12 @@ class OwnedItems(tk.Toplevel):
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
 
-    def showcard(self, id):
+    def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
-        print(id)
-        engine.id_matcher(id)
+        print(card_id)
+        # card_img = engine.id_matcher(id)
+        # CardVeiw(card_img)
+        CardVeiw(card_id)
 
     def sell(self):
         """triggers sell event when pushed"""
@@ -548,6 +550,19 @@ class OwnedItems(tk.Toplevel):
         OwnedItems.destroy(self)
         engine.scrub_lists()
         app.update_message("show")
+
+class CardVeiw(): # not currently working
+    def __init__(self, card_id=None):
+        path = "..\\imgs\\cards\\"
+
+        win = tk.Toplevel()
+        win.title("Card Info")
+        img = tk.PhotoImage(file=f"{path}{str(card_id)}.png")
+        can = tk.Canvas(win)
+        can.pack(fill=tk.BOTH)
+        can.config(width=img.width(), height=img.height())
+        can.create_image(2, 2, image=img, anchor=tk.NW)  # x, y coordinates
+        win.mainloop()
 
 
 app = Main()
