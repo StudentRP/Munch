@@ -53,8 +53,9 @@ class PlayerAtribs:
 
     player_l_hand = ""
     player_r_hand = ""
-    player_headgear = ""
 
+    player_headgear = ""
+    player_necklace = ""
     player_armor = ""
     player_knees = ""
     player_footgear = ""

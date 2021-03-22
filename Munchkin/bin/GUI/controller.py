@@ -41,6 +41,7 @@ class Main(tk.Tk):
         self.armor = tk.StringVar()
         self.knees = tk.StringVar()
         self.footgear = tk.StringVar()
+        self.necklace = tk.StringVar()
 
 
         "fills the dictionary, snapshot built instance frames"
@@ -71,6 +72,7 @@ class Main(tk.Tk):
         self.armor.set(gameVar.PlayerAtribs.player_armor)
         self.knees.set(gameVar.PlayerAtribs.player_knees)
         self.footgear.set(gameVar.PlayerAtribs.player_footgear)
+        self.necklace.set(gameVar.PlayerAtribs.player_necklace)
 
     def update_message(self, action=None):
         if action == "show":
@@ -308,7 +310,7 @@ class MainLoop(tk.Frame):
 
         player_info = {"Name: ": controller.name,  "Gender: ": controller.gender, "Level: ": controller.level, "Bonus: ": controller.bonus,
                         "Wallet: ": controller.wallet,"L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "Head Gear: ": controller.headgear,
-                        "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear}
+                        "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear, "Necklace": controller.necklace}
         row = 0
         for key, val in player_info.items():
 
@@ -376,7 +378,7 @@ class MainLoop(tk.Frame):
         self.tblframe.pack(side="left", fill="both", expand=True)
 
         self.message = tk.Label(self.tblframe, textvariable=controller.message)
-        self.message.pack(side="top", fill="x", expand=True)
+        self.message.pack(anchor="n", fill="x", expand=True)
 
 
 
@@ -460,7 +462,7 @@ class OwnedItems(tk.Toplevel):
         tk.Toplevel.__init__(self)
         self.wind_title = wind_title
         self.title(self.wind_title)
-        self.geometry("300x250+200+200")
+        # self.geometry("350x250+200+200")
         self.set_but = set_but
 
         if not gameVar.GameObjects.selected_items:
@@ -490,7 +492,10 @@ class OwnedItems(tk.Toplevel):
                 elif self.set_but in " weap, armor, consume, equip, remove":
                     l3 = tk.Label(f, text=card['bonus'])
                     l3.grid(row=set_row, column=2, sticky="nw")
+                    b1 = tk.Button(f, text="info", command=lambda c=card["id"]: self.showcard(c))
+                    b1.grid(row=set_row, column=4)
                 tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
+
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
@@ -502,6 +507,11 @@ class OwnedItems(tk.Toplevel):
             tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
+
+    def showcard(self, id):
+        """ Method for showing the card in a toplevel window"""
+        print(id)
+        engine.id_matcher(id)
 
     def sell(self):
         """triggers sell event when pushed"""

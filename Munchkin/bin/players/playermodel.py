@@ -79,7 +79,7 @@ class Player(P_tools):
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
         self.other_bonuses = [] # shoulder drag ect
-        self. enhancers = ""
+        self. enhancers = "" # most likely be equipped card search and for meths on card
         self.wallet = 0
         self.race = "human" # string eval to True so will show
         self.race2 = ""
@@ -157,7 +157,7 @@ class Player(P_tools):
                                       f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
         # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
-    def sum_of_bonuses(self): # pos multi usage and use as player item searcher.
+    def sum_of_bonuses(self): # pos multi usage and use as player item searcher. limited by equipped_items as caller
         """ Adds up all bonuses and bind to player in weapons and armour"""
         tot_bonus = 0
         locations = [self.weapons, self.armor] #locations to search
@@ -176,7 +176,7 @@ class Player(P_tools):
         """sorts through equipped items, removing items that have been selected"""
         locations = [self.weapons, self.armor]  # locations to search
         for obj in locations:  # looks at each object in list. obj is the dict of all the poss locations as seen in player attrbs
-            for sub_menu in obj:  # sub_menu is the area the card is placed in: armor = {}
+            for sub_menu in obj:  # sub_menu is the keys which link to the card is placed in: armor = {}
                 if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
                     card = obj.get(sub_menu) # x is the card object
                     if action == "list_equipped":
@@ -190,7 +190,6 @@ class Player(P_tools):
                             self.weapon_count += card.get("hold_weight", 0)
                             continue
 
-
     def refined_adder(self, card): # not in action yet by tri_qualifyer
         """Carried card over from tri_qualifier. """
         locations = [self.weapons, self.armor]  # locations to search
@@ -203,14 +202,10 @@ class Player(P_tools):
                         obj[sub_type] = x  # adds to player's attribs
                         break
                     elif occupied:
-                        card_removed = obj.pop(sub_type)  # removing card from player's attrib
-                        self.unsorted.append(card_removed)
-                        x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
-                        obj[sub_type] = x  # binds now card to player attribute
+                        print("You can not equip this item. Please remove old first.")
                         break
                     else:
                         continue
-
 
     def add_player_item(self, card):
         """Carried card over from tri_qualifier. """
@@ -234,10 +229,9 @@ class Player(P_tools):
                         x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
                         self.armor[sub_type] = x  # binds now card to player attribute
                         break
-                    else:
-                        continue
+                    # else:
+                    #     continue
         elif x == "weapon":
-
             print("In weapon")
             sub = cycle(wep_hand) # ["L_hand", "R_hand"]
             sub_type = next(sub) # 1st hand
