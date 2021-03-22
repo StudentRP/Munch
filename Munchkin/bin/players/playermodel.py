@@ -261,7 +261,9 @@ class Player(P_tools):
                     self.weapon_count -= card.get("hold_weight")  # reduces the num of usable hands
             elif card["subtype"] == "2hand": ## not working as of yet####################################################
                 """large item that is two hands"""
+                print("in 2hands")
                 for category in self.weapons:
+                    print(category)
                     if isinstance(category, dict):
                         removed_card = self.weapons.pop(category)
                         self.unsorted.append(removed_card)
@@ -269,6 +271,9 @@ class Player(P_tools):
                         self.weapon_count += removed_card["hold_weight"]
                         print(f"carry capacity: {self.weapon_count}")
                         continue
+                    y = self.unsorted.pop(self.unsorted.index(card))
+                    category["L_hand"] = y
+                    self.weapon_count += card["hold_weight"]
 
             else:
                 "Cheat cards pos"
