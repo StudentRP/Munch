@@ -488,44 +488,45 @@ The end goal is to remove items from the player adding them to the burn pile and
 # Equipping method
 ##########################################################################
 Accessed by either weapons or armour buttons.
+MainLoop, class
+    Armor, Main screen button - calls list_armor method
 
-    list_armour method:
+    list_armor, method:
         gameVar.GameObjects.message & app.update_message("show") - Call simple message to the main window
+
         engine.scrub_lists() - clears all lists ready for new item stack
 
         player.inventory("type", "armor") - builds a list of all weapons from the unsorted list to contain only armor
             This list is bound to gameVar.selected_items. Note that this meth take two params as it is looking for a
-            specific key val pair.
+            specific key val pair. Note cards have "type":"armor" arrangement in the card dict.
 
-        OwnedItems("Armour Owned", "armor") - TopLevel call with params for title other for button layout specific to armor.
+        OwnedItems("Armor Owned", "armor") - TopLevel call with params for title other for button layout specific to armor.
 
-    OwnedItems("Armour Owned", "armor") - Toplevel, Window is build with title and specific set of buttons for armor.
+    OwnedItems(title, set_but) - Toplevel, Window is build with title and specific set of buttons for armor cards.
         Buttons include: sell (method as above), Equip (This focus).
 
         equip - button method
                 engine.zipper("equip"), method -  See sell meth for action (brief - takes selected_items list and bools
                 from checkbox to make. Calls card_matcher)
 
-                card_matcher(action), method - See sell , (brief - matches cards from unsorted with tuples that return
+                card_matcher(action), method - See sell , (brief - id matches cards with the unsorted. The tuples return
                     True to yield cards that can be used). The action parameter defines what happens to the card next).
 
-                tri_qualifier(card), method - For any card to be equipped it must be checked to ensure that it is suited
-                    to the player in respects of race, class and gender. This is required as some cards have restrictions
-                    who can use them. (This is an updated meth that does away with the a fractured 3 method approach).
-                    Uses dict of key vals to loop over player and card. First card is checked for any restrictions,
-                    if none exist the loop is exited resulting in the card being passed to the next method.
-                    If the card contains a restriction it is compared to the player. In the event the player does not
-                    qualify, the cards remains in the unsorted list unequipped. A flag is used to control passage.
-                    ############## small bug name can be r and still qualify if no gender set #######################
-                    If qualified, player.add_player_item(card) is called passing the card along.
+                    tri_qualifier(card), method - For any card to be equipped it must be checked to ensure that it is suited
+                        to the player in respects of race, class and gender. This is required as some cards have restrictions
+                        who can use them. (This is an updated meth that does away with the a fractured 3 method approach).
+                        Uses dict of key vals to loop over player and card. First card is checked for any restrictions,
+                        if none exist the loop is exited resulting in the card being passed to the next method.
+                        If the card contains a restriction it is compared to the player. In the event the player does not
+                        qualify, the cards remains in the unsorted list unequipped. A flag is used to control passage.
+                        ############## small bug name can be r and still qualify if no gender set #######################
+                        If qualified, card_designator(player, card) is called passing the card and player along.
 
-                player.add_player_item(card), method  # not fan off too verbose. Making smaller...
-                    basic operation is to define the type of card by sub_group sa weap and armour require dif actions.
-                    remove converlution arround weapon and make generic like armour. removal can then be the switch
-                    rather than juggling full with empty and clearing one to load another. actionof this method is to
-                    bind a card to a location, remove from unsorted and call a meth that adds up the bonuses.
+                        card_designator(self, player, card), method
+                            small method for distinguishing between weap and armor cards that then call the appropriate method
+                            based on card type. in the case of armor: equip_armor is called from the player class
 
-
+                            equip_armor(self, card)
 
 
 

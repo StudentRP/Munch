@@ -121,7 +121,7 @@ class PlayerSetUp:
             gameVar.GameObjects.check_but_boo.append(create_boo.get()) # creates a list of 1s & 0s from check buttons status
             x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
             gameVar.GameObjects.zipped_tup = list(zip(x, y))
-        print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
+        # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
         self.card_matcher(action)
 
     def card_matcher(self, action):
@@ -133,7 +133,6 @@ class PlayerSetUp:
                     if action == "sell":
                         gameVar.StartVariables.active_player.sell_item(card)
                     elif action == "equip":
-                        # self.qualifier_race(card) # old redundant meth
                         self.tri_qualifier(card) # test ~~ok~~
                     elif action == "use":
                         # gameVar.StartVariables.active_player.
@@ -162,14 +161,16 @@ class PlayerSetUp:
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
-            # else:  # no restriction in card
-            #     # print(f"No {val} required path")
-            #     # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
-            #     continue
+
         if flag: # only if flag remains True
             # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
-            player.add_player_item(card)
-            # player.refined_adder(card)
+            self.card_designator(player, card) # new separator meth
+
+    def card_designator(self, player, card):
+        if card.get("type") == "armor":
+            player.equip_armor(card)
+        elif card.get("type") == "weapon":
+            player.equip_weapon(card)
 
 
     def scrub_lists(self):

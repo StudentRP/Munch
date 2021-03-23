@@ -4,6 +4,7 @@ from bin.engine.game_loop_v3 import engine
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
+from PIL import ImageTk
 
 gamefont=('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
@@ -108,6 +109,7 @@ class StartPg(tk.Frame):
         but2.pack(side="bottom")
 
 
+
 class GameOptions(tk.Toplevel):
     """Toplevel window for setting in game options at start""" # WORKS need others added and style tidying
     def __init__(self):
@@ -184,6 +186,9 @@ class PlayerSelect(tk.Frame):
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack(side="bottom")
 
+
+
+
     def playersetter(self):
         """Binds values from spinbox to gui_var for later use and calls next stage. calls player slice and meth to set
         initial player cards"""
@@ -223,6 +228,7 @@ class PlayerInfo(tk.Toplevel):
 
         self.genderlab = tk.Label(self.mainframe, text='Gender: ')
         self.genderlab.grid(column=1, row=2, sticky='w')
+        self.instgender.set("male") # creates default
         self.nameent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
         self.nameent.grid(column=2, row=2, sticky='w')
 
@@ -284,7 +290,7 @@ class MainLoop(tk.Frame):
 
         self.b3 = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
         self.b3.place(x=250, y=10)
-        self.b4 = tk.Button(self.butframe, text="Armour", command=self.list_armour)
+        self.b4 = tk.Button(self.butframe, text="Armour", command=self.list_armor)
         self.b4.place(x=225, y=45)
         self.b5 = tk.Button(self.butframe, text="Consumables", command=self.consumables)
         self.b5.place(x=250, y=80)
@@ -321,55 +327,6 @@ class MainLoop(tk.Frame):
             row += 1
             # continue
 
-        # self.l2 = tk.Label(self.plframe, text="Gender: ")
-        # self.l2.grid(row=1, column=1, sticky='nsew')
-        # self.l2b = tk.Label(self.plframe, textvariable=controller.gender)  ## works binding strait to stringvar in Main
-        # self.l2b.grid(row=1, column=2, sticky='nsew')
-        #
-        # self.l3 = tk.Label(self.plframe, text="Level: ")
-        # self.l3.grid(row=2, column=1, sticky='nsew')
-        # self.l3b = tk.Label(self.plframe, textvariable=controller.level)  ## works binding strait to stringvar in Main
-        # self.l3b.grid(row=2, column=2, sticky='nsew')
-        #
-        # self.l4 = tk.Label(self.plframe, text="Bonus: ")
-        # self.l4.grid(row=3, column=1, sticky='nsew')
-        # self.l4b = tk.Label(self.plframe, textvariable=controller.bonus)  ## works binding strait to stringvar in Main
-        # self.l4b.grid(row=3, column=2, sticky='nsew')
-        #
-        # self.l5 = tk.Label(self.plframe, text="Wallet: ")
-        # self.l5.grid(row=4, column=1, sticky='nsew')
-        # self.l5b = tk.Label(self.plframe, textvariable=controller.wallet)  ## works binding strait to stringvar in Main
-        # self.l5b.grid(row=4, column=2, sticky='nsew')
-        #
-        # self.l6 = tk.Label(self.plframe, text="L_hand: ")
-        # self.l6.grid(row=5, column=1, sticky='nsew')
-        # self.l6b = tk.Label(self.plframe, textvariable=controller.l_hand)  ## works binding strait to stringvar in Main
-        # self.l6b.grid(row=5, column=2, sticky='nsew')
-        #
-        # self.l7 = tk.Label(self.plframe, text="R_hand: ")
-        # self.l7.grid(row=6, column=1, sticky='nsew')
-        # self.l7b = tk.Label(self.plframe, textvariable=controller.r_hand)  ## works binding strait to stringvar in Main
-        # self.l7b.grid(row=6, column=2, sticky='nsew')
-        #
-        # self.l7 = tk.Label(self.plframe, text="Head Gear: ")
-        # self.l7.grid(row=7, column=1, sticky='nsew')
-        # self.l7b = tk.Label(self.plframe, textvariable=controller.headgear)  ## works binding strait to stringvar in Main
-        # self.l7b.grid(row=7, column=2, sticky='nsew')
-        #
-        # self.l7 = tk.Label(self.plframe, text="Armor: ")
-        # self.l7.grid(row=8, column=1, sticky='nsew')
-        # self.l7b = tk.Label(self.plframe, textvariable=controller.armor)  ## works binding strait to stringvar in Main
-        # self.l7b.grid(row=8, column=2, sticky='nsew')
-        #
-        # self.l7 = tk.Label(self.plframe, text="Knees: ")
-        # self.l7.grid(row=9, column=1, sticky='nsew')
-        # self.l7b = tk.Label(self.plframe, textvariable=controller.knees)  ## works binding strait to stringvar in Main
-        # self.l7b.grid(row=9, column=2, sticky='nsew')
-        #
-        # self.l7 = tk.Label(self.plframe, text="Foot gear: ")
-        # self.l7.grid(row=10, column=1, sticky='nsew')
-        # self.l7b = tk.Label(self.plframe, textvariable=controller.footgear)  ## works binding strait to stringvar in Main
-        # self.l7b.grid(row=10, column=2, sticky='nsew')
 
 
         "Game Window"
@@ -406,13 +363,13 @@ class MainLoop(tk.Frame):
         # print(gameVar.GameObjects.selected_items)  list all items
         OwnedItems("Weapons owned", "weap")
 
-    def list_armour(self):
+    def list_armor(self):
         gameVar.GameObjects.message = "Armour list"
         app.update_message("show")
         engine.scrub_lists()
         player = gameVar.StartVariables.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
-        OwnedItems("Armour Owned", "armor")
+        OwnedItems("Armor Owned", "armor")
 
     def consumables(self):
         gameVar.GameObjects.message = "Consumable items"
@@ -557,7 +514,7 @@ class CardVeiw(): # not currently working
 
         win = tk.Toplevel()
         win.title("Card Info")
-        img = tk.PhotoImage(file=f"{path}{str(card_id)}.png")
+        img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") # does not require pil but in case change format
         can = tk.Canvas(win)
         can.pack(fill=tk.BOTH)
         can.config(width=img.width(), height=img.height())
@@ -565,8 +522,10 @@ class CardVeiw(): # not currently working
         win.mainloop()
 
 
-app = Main()
 
-app.mainloop()
+if __name__ == "__main__":
+    app = Main()
+
+    app.mainloop()
 
 # Main().mainloop(),

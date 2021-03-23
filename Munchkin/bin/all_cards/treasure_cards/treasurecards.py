@@ -80,18 +80,18 @@ class Treasure(T_tools):
          "sell": 400},
 
         #weapons: id, type, sub_type, name, des, bonus, klass_restriction, hold_weight, sell, asso_meth
-        {"id": 22, "name": "Staff Of Napalm", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Usable by wizards only",
+        {"id": 22, "name": "Staff Of Napalm", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "des": "Usable by wizards only",
          "bonus": 5, "sell": 800, "klass_restriction": "wizard"},
         # {"id": 23, "name": "Blessed", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Usable by wizards only", "bonus": 2,
         #  "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"},
-        {"id": 24, "name": "Broad Sword", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Not for females", "bonus": 3,
+        {"id": 24, "name": "Broad Sword", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "des": "Not for females", "bonus": 3,
          "sell": 400, "special": "", "klass_restriction": "male"},
-        {"id": 25, "name": "Sword Of Slaying Everything\nExcept squid..","type": "weapon", "subtype": "1hand", "hold_weight": 1,  "des": "long", "bonus": 4,
+        {"id": 25, "name": "Sword Of Slaying Everything\nExcept squid..", "type": "weapon", "sub_type": "1hand", "hold_weight": 1,  "des": "long", "bonus": 4,
          "sell": 800},
-        {"id": 26, "name": "Vorpal Blade", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "+10 with anything beginning with j", "bonus": 3,
+        {"id": 26, "name": "Vorpal Blade", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "des": "+10 with anything beginning with j", "bonus": 3,
          "sell": 400, "special": "item enhancer"},
-        {"id": 27, "name": "Huge Rock", "type": "weapon", "subtype": "2hand", "hold_weight": 2, "bonus": 3, "sell": 0},
-        {"id": 28, "name": "Board of Education", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "bonus": 2, "sell": 500}
+        {"id": 27, "name": "Huge Rock", "type": "weapon", "sub_type": "2hand", "hold_weight": 2, "bonus": 3, "sell": 0},
+        {"id": 28, "name": "Board of Education", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "bonus": 2, "sell": 500}
     ]
     
     @classmethod

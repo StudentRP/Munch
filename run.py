@@ -1,8 +1,7 @@
 """ calling this will trigger the game to start"""
 
 
-from Munchkin.bin.engine.game_loop_v3 import PlayerSetUp
+from Munchkin.bin.GUI.controller import Main
 
-if __name__ == "__main__":
-    """function call to start game """
-    PlayerSetUp().select_players() # starts game
+app = Main()
+app.mainloop()
