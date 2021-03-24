@@ -86,7 +86,7 @@ class Player(P_tools):
         self.klass = ""
         self.klass2 = ""
         self.big = "" # can carry only 1 big item
-        self.weapons = {"L_hand": "", "R_hand": ""}
+        self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""}
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
         self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
                       "necklace": "", "ring": "", "ring2": ""} # fill with card ids
@@ -172,6 +172,7 @@ class Player(P_tools):
         self.bonus = tot_bonus
         print(f" hand count:{self.weapon_count}")
 
+
     def equipped_items(self, action, cards=None): # in use by gui list_equipped meth
         """sorts through equipped items, removing items that have been selected"""
         locations = [self.weapons, self.armor]  # locations to search
@@ -190,9 +191,14 @@ class Player(P_tools):
                             self.weapon_count += card.get("hold_weight", 0)
                             continue
 
+    def multi_equipper(self, card): # not used
+        locations = [self.weapons, self.armor]
+        for category in locations:
+            for dict_cat in category.keys():
+                pass
+
     def equip_armor(self, card):
         location = self.armor
-
         print("in armor")
         for sub_type in location.keys():
             if card["sub_type"] == sub_type:  # matches card["sub_type] to list
@@ -210,9 +216,38 @@ class Player(P_tools):
         print("running sum_of_bonuses")
         self.sum_of_bonuses()
 
+    def mod_weap(self, card):
+        weap_hand = self.weapons
+        for dict_cat in weap_hand.keys():
+            if "1" in card["sub_type"]:
+                print(card['name'])
+                if isinstance(self.weapons[dict_cat], dict): # hand occupied
+                    print(f"{dict_cat}  occupied")
+                    continue # takes to 2nd hand
+                elif self.weapons[dict_cat] == "": # not isinstance(self.weapons[dict_cat], dict): #hand not occupied
+                    print(f"{dict_cat} now occupied")
+                    move_card = self.unsorted.pop(self.unsorted.index(card))# cards are in list so index is used to pull out!
+                    self.weapons[dict_cat] = move_card
+                    self.weapon_count -= card["hold_weight"]
+                    print(self.weapon_count)
+                    break
+
+            elif "two" in card["sub_type"]:
+                if isinstance(self.weapons[dict_cat], dict):
+                    print(f"{dict_cat} has dict")
+                    # gameVar.GameObjects.message = "object already equipped"
+
+                else:
+                    print("not counting self as dict")
+                    self.weapons[dict_cat] = card
+                    break
+
+            else:
+                print("Hands are full. Remove a weapon if you wish to use another!")
+
     def equip_weapon(self, card):
         """requires loop to check hands for weaps and equip where required"""
-        wep_hand = ["L_hand", "R_hand"]
+        wep_hand = ["L_hand", "R_hand", "2hand"]
         print("In weapon")
         sub = cycle(wep_hand)  # ["L_hand", "R_hand"]
         sub_type = next(sub)  # gets firs object = 1st hand
@@ -226,12 +261,12 @@ class Player(P_tools):
                     self.unsorted.append(x)  # adds back to player pack
                     y = self.unsorted.pop(self.unsorted.index(card))  # removes selected card from unsorted list
                     self.weapons[sub_type] = y  # takes first list objet and adds card to it.
-                    self.weapon_count -= 1  # reduces the num of usable hands
+                    self.weapon_count -= card["hold_weight"]  # reduces the num of usable hands
                 else:  # no card on R_hand
                     print("In empty right hand")
                     y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
                     self.weapons[sub_type] = y
-                    self.weapon_count -= 1  # reduces the num of usable hands
+                    self.weapon_count -= card["hold_weight"]  # reduces the num of usable hands
             else:  # if not using any weapons
                 print("In else LEFT hand")
                 y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
@@ -239,26 +274,28 @@ class Player(P_tools):
                 self.weapon_count -= card.get("hold_weight")  # reduces the num of usable hands
         elif card["sub_type"] == "2hand":  ## not working as of yet####################################################
             """large item that is two hands"""
-            print("in 2hands")
-            # for category in self.weapons:
-            #     print(category)
-            #     if isinstance(category, dict):
-            #         removed_card = self.weapons.pop(category)
-            #         self.unsorted.append(removed_card)
-            #         print(f"category removed {category} and added to sack")
-            #         self.weapon_count += removed_card["hold_weight"]
-            #         print(f"carry capacity: {self.weapon_count}")
-            #         continue
-            #     y = self.unsorted.pop(self.unsorted.index(card))
-            #     category["L_hand"] = y
-            #     self.weapon_count += card["hold_weight"]
+            if isinstance(self.weapons["L_hand"], dict):
+
+                print("in 2hands")
+                # for category in self.weapons:
+                #     print(category)
+                #     if isinstance(category, dict):
+                #         removed_card = self.weapons.pop(category)
+                #         self.unsorted.append(removed_card)
+                #         print(f"category removed {category} and added to sack")
+                #         self.weapon_count += removed_card["hold_weight"]
+                #         print(f"carry capacity: {self.weapon_count}")
+                #         continue
+                #     y = self.unsorted.pop(self.unsorted.index(card))
+                #     category["L_hand"] = y
+                #     self.weapon_count += card["hold_weight"]
 
         else:
             "Cheat cards pos"
             pass
 
         print(self.weapons)
-        print("ended player add/remove")
+        print("Encumbered: ", self.weapon_count)
         print(f"finishing sack size: {len(self.unsorted)}")
         print("running sum_of_bonuses")
         self.sum_of_bonuses()

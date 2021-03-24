@@ -90,7 +90,7 @@ class Treasure(T_tools):
          "sell": 800},
         {"id": 26, "name": "Vorpal Blade", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "des": "+10 with anything beginning with j", "bonus": 3,
          "sell": 400, "special": "item enhancer"},
-        {"id": 27, "name": "Huge Rock", "type": "weapon", "sub_type": "2hand", "hold_weight": 2, "bonus": 3, "sell": 0},
+        {"id": 27, "name": "Huge Rock", "type": "weapon", "sub_type": "twohand", "hold_weight": 2, "bonus": 3, "sell": 0},
         {"id": 28, "name": "Board of Education", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "bonus": 2, "sell": 500}
     ]
     

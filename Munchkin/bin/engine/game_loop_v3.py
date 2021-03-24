@@ -170,7 +170,8 @@ class PlayerSetUp:
         if card.get("type") == "armor":
             player.equip_armor(card)
         elif card.get("type") == "weapon":
-            player.equip_weapon(card)
+            player.mod_weap(card)
+            # player.equip_weapon(card)
 
 
     def scrub_lists(self):

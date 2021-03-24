@@ -337,8 +337,6 @@ class MainLoop(tk.Frame):
         self.message = tk.Label(self.tblframe, textvariable=controller.message)
         self.message.pack(anchor="n", fill="x", expand=True)
 
-
-
     "Handlers"
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
@@ -467,9 +465,6 @@ class OwnedItems(tk.Toplevel):
 
     def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
-        print(card_id)
-        # card_img = engine.id_matcher(id)
-        # CardVeiw(card_img)
         CardVeiw(card_id)
 
     def sell(self):
