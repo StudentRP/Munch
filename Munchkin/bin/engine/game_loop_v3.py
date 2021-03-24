@@ -58,6 +58,7 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
         gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
         gameVar.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
+        gameVar.PlayerAtribs.player_two_hand = playerinst.update_bindings("two_hand")
         gameVar.PlayerAtribs.player_headgear = playerinst.update_bindings("headgear")
         gameVar.PlayerAtribs.player_armor = playerinst.update_bindings("armor")
         gameVar.PlayerAtribs.player_knees = playerinst.update_bindings("knees")
@@ -170,8 +171,7 @@ class PlayerSetUp:
         if card.get("type") == "armor":
             player.equip_armor(card)
         elif card.get("type") == "weapon":
-            player.mod_weap(card)
-            # player.equip_weapon(card)
+            player.equip_weapon(card)
 
 
     def scrub_lists(self):

@@ -38,6 +38,7 @@ class Main(tk.Tk):
         self.wallet = tk.IntVar()
         self.r_hand = tk.StringVar()
         self.l_hand = tk.StringVar()
+        self.two_hand = tk.StringVar()
         self.headgear = tk.StringVar()
         self.armor = tk.StringVar()
         self.knees = tk.StringVar()
@@ -68,6 +69,8 @@ class Main(tk.Tk):
 
         self.l_hand.set(gameVar.PlayerAtribs.player_l_hand)
         self.r_hand.set(gameVar.PlayerAtribs.player_r_hand)
+        self.two_hand.set(gameVar.PlayerAtribs.player_two_hand)
+
 
         self.headgear.set(gameVar.PlayerAtribs.player_headgear)
         self.armor.set(gameVar.PlayerAtribs.player_armor)
@@ -314,9 +317,11 @@ class MainLoop(tk.Frame):
         self.plframe.config(pady=20)
         self.plframe.pack(side='left', fill="y", ipadx=50)
 
-        player_info = {"Name: ": controller.name,  "Gender: ": controller.gender, "Level: ": controller.level, "Bonus: ": controller.bonus,
-                        "Wallet: ": controller.wallet,"L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "Head Gear: ": controller.headgear,
-                        "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear, "Necklace": controller.necklace}
+        player_info = {"Name: ": controller.name, "Gender: ": controller.gender, "Level: ": controller.level,
+                       "Bonus: ": controller.bonus, "Wallet: ": controller.wallet, "L_hand: ": controller.l_hand,
+                       "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand, "Head Gear: ": controller.headgear,
+                       "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear,
+                       "Necklace": controller.necklace}
         row = 0
         for key, val in player_info.items():
 

@@ -117,7 +117,7 @@ class Player(P_tools):
         for sub_cat in category:  # is the dict as a whole
             for key in sub_cat:
                 if isinstance(sub_cat[key], dict) and key == carried:
-                    gameVar.GameObjects.message = f'{sub_cat.get(key).get("name")} has been bound to {key}'
+                    # gameVar.GameObjects.message = f'{sub_cat.get(key).get("name")} has been bound to {key}'
                     return sub_cat.get(key).get("name")
 
 
@@ -170,7 +170,6 @@ class Player(P_tools):
         if self.name == "The_Creator":
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
-        print(f" hand count:{self.weapon_count}")
 
 
     def equipped_items(self, action, cards=None): # in use by gui list_equipped meth
@@ -192,6 +191,7 @@ class Player(P_tools):
                             continue
 
     def multi_equipper(self, card): # not used
+        """Possible meth for smooth equip of armour/weapons"""
         locations = [self.weapons, self.armor]
         for category in locations:
             for dict_cat in category.keys():
@@ -216,177 +216,33 @@ class Player(P_tools):
         print("running sum_of_bonuses")
         self.sum_of_bonuses()
 
-    def mod_weap(self, card):
-        weap_hand = self.weapons
-        for dict_cat in weap_hand.keys():
-            if "1" in card["sub_type"]:
-                print(card['name'])
-                if isinstance(self.weapons[dict_cat], dict): # hand occupied
-                    print(f"{dict_cat}  occupied")
-                    continue # takes to 2nd hand
-                elif self.weapons[dict_cat] == "": # not isinstance(self.weapons[dict_cat], dict): #hand not occupied
-                    print(f"{dict_cat} now occupied")
-                    move_card = self.unsorted.pop(self.unsorted.index(card))# cards are in list so index is used to pull out!
-                    self.weapons[dict_cat] = move_card
-                    self.weapon_count -= card["hold_weight"]
-                    print(self.weapon_count)
-                    break
-
-            elif "two" in card["sub_type"]:
-                if isinstance(self.weapons[dict_cat], dict):
-                    print(f"{dict_cat} has dict")
-                    # gameVar.GameObjects.message = "object already equipped"
-
-                else:
-                    print("not counting self as dict")
-                    self.weapons[dict_cat] = card
-                    break
-
-            else:
-                print("Hands are full. Remove a weapon if you wish to use another!")
-
     def equip_weapon(self, card):
-        """requires loop to check hands for weaps and equip where required"""
-        wep_hand = ["L_hand", "R_hand", "2hand"]
-        print("In weapon")
-        sub = cycle(wep_hand)  # ["L_hand", "R_hand"]
-        sub_type = next(sub)  # gets firs object = 1st hand
-        if self.weapon_count <= 2 and self.weapon_count >= 0 and card["sub_type"] == "1hand":
-            if isinstance(self.weapons[sub_type], dict):  # runs only if 1st hand is full
-                sub_type = next(sub)  # change to next hand (2nd)
-                if isinstance(self.weapons[sub_type], dict):  # checks 2nd hand is occupied
-                    print("right hand occupied placing on left hand")
-                    sub_type = next(sub)  # back to 1st hand
-                    x = self.weapons.pop(sub_type)  # removes from weaps
-                    self.unsorted.append(x)  # adds back to player pack
-                    y = self.unsorted.pop(self.unsorted.index(card))  # removes selected card from unsorted list
-                    self.weapons[sub_type] = y  # takes first list objet and adds card to it.
-                    self.weapon_count -= card["hold_weight"]  # reduces the num of usable hands
-                else:  # no card on R_hand
-                    print("In empty right hand")
-                    y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
-                    self.weapons[sub_type] = y
-                    self.weapon_count -= card["hold_weight"]  # reduces the num of usable hands
-            else:  # if not using any weapons
-                print("In else LEFT hand")
-                y = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
-                self.weapons[sub_type] = y
-                self.weapon_count -= card.get("hold_weight")  # reduces the num of usable hands
-        elif card["sub_type"] == "2hand":  ## not working as of yet####################################################
-            """large item that is two hands"""
-            if isinstance(self.weapons["L_hand"], dict):
-
-                print("in 2hands")
-                # for category in self.weapons:
-                #     print(category)
-                #     if isinstance(category, dict):
-                #         removed_card = self.weapons.pop(category)
-                #         self.unsorted.append(removed_card)
-                #         print(f"category removed {category} and added to sack")
-                #         self.weapon_count += removed_card["hold_weight"]
-                #         print(f"carry capacity: {self.weapon_count}")
-                #         continue
-                #     y = self.unsorted.pop(self.unsorted.index(card))
-                #     category["L_hand"] = y
-                #     self.weapon_count += card["hold_weight"]
-
+        """New simplified model. Checks L/R hands to see if full, equipping if not. Two hand items will not work when other hands full """
+        if self.weapon_count > 0:
+            if card["sub_type"] == "1hand" and not isinstance(self.weapons["L_hand"], dict): # not equipped
+                added_card = self.unsorted.pop(self.unsorted.index(card))
+                self.weapons["L_hand"] = added_card
+                self.weapon_count -= card.get("hold_weight")
+                gameVar.GameObjects.message = f"Equipping {card['name']} to left hand"
+            elif card["sub_type"] == "1hand" and not isinstance(self.weapons["R_hand"], dict): # not equipped
+                gameVar.GameObjects.message = f"Equipping {card['name']} to right hand"
+                added_card = self.unsorted.pop(self.unsorted.index(card))
+                self.weapons["R_hand"] = added_card
+                self.weapon_count -= card.get("hold_weight")
+            elif card["sub_type"] == "2hand" and not isinstance(self.weapons["two_hand"], dict):
+                if isinstance(self.weapons["L_hand"], dict) or isinstance(self.weapons["R_hand"], dict):
+                    gameVar.GameObjects.message = "You can not equip this item while you have items in your other hands"
+                elif not isinstance(self.weapons["L_hand"], dict) and not isinstance(self.weapons["R_hand"], dict):
+                    gameVar.GameObjects.message = f"Equipping {card['name']} to both hands"
+                    added_card = self.unsorted.pop(self.unsorted.index(card))
+                    self.weapons["two_hand"] = added_card
+                    self.weapon_count -= card.get("hold_weight")
+            else: # cheat card section
+                pass
         else:
-            "Cheat cards pos"
-            pass
-
-        print(self.weapons)
-        print("Encumbered: ", self.weapon_count)
-        print(f"finishing sack size: {len(self.unsorted)}")
-        print("running sum_of_bonuses")
+            gameVar.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"
+        print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
-
-
-
-
-        # x = str(input("\nView player:\n1: Details\n2: Weapons & armour\n3: Sack\nQ: exit\n>>>  "))
-        # """About self"""
-        # if x == "1":
-        #     print(f"Name:{self.name}\nSex:{self.sex.title()}\nLevel:{self.level}\nBonus:{self.bonus}"
-        #           f"\nWallet:{self.wallet}")
-        #     for key1, value1 in self.race.items():
-        #         if value1: # will show other val when string (Good)
-        #             print('Race:', value1)
-        #         else:
-        #             continue
-        #     for key2, value2 in self.klass.items():
-        #         if value2:
-        #             print('Class:', value2)
-        #         else:
-        #             continue
-        #     Player.inventory(self)
-        #
-        #     """equipped armor and weapons"""
-        # elif x == "2":
-        #     for key3, value3 in self.weapons.items():
-        #         print(key3.title(), ':', value3) # to equip items call method
-        #     for key4, value4 in self.armor.items():
-        #
-        #         print(key4.title(), ':', value4)
-        #     Player.inventory(self) # ################ another method to change inventory/sell items
-        #
-        #     "Player sack"
-        # elif x == "3":
-        #     # method for removal, sell, equip, gift
-        #     print("You are carrying:")
-        #     for val, contents in enumerate(self.sack, start=1):
-        #         print(f"{val}: {contents['name']}, "
-        #               f"Level:{contents.get('lvl')}, Bonus:{contents.get('bonus')}") # print card objects in sack
-        #     pick = input("Choose card\n>>>")
-        #     if pick:
-        #         print(f"picked {self.sack[int(pick) - 1]['name']}")
-        #         card = self.sack[int(pick) - 1]
-        #         n = P_tools.card_options(self, card)
-        #     if n == "back":
-        #         Player.inventory(self)
-        #
-        #
-        #
-        #     Player.inventory(self) #up menu
-        #     "Dev mode"
-        # elif x == "007": # ................................................................................. dev mode
-        #     cheat = int(input("Select bonus level"))
-        #     self.bonus = cheat
-        #     Player.inventory(self)
-        # else:
-        #     return f"leaving {self.name}'s player info"
-
-    # def card_handler(self, obj):
-    #     """handles cards handled from the engine class"""
-    #     pass
-
-    # def get_treasure(self):
-    #     """calls Treasure card dict template for wins"""
-    #     cards = Handler() # create instance for handler
-    #     x = cards.card.get_treasure() # instance calls card return method assigning obj to x
-    #     print(f"Here is your card: {x}")
-    #     y = Player_atribs.card_choice(x)
-    #     if y == "store":
-    #         if len(self.sack) <= 5:
-    #             self.sack.append(x) # adds to players inventory
-    #         else:
-    #             Player_atribs.card_choice(x)
-    #     elif y == "equip":
-    #         print("equip it to be configured")
-    #     elif y == "use":
-    #         try:
-    #             n = int(x['bonus']) + self.bonus
-    #             self.bonus = int(n)
-    #         except IndexError:
-    #             print("could not add to bonus")
-
-        # for key, value in x.items():
-        #     if key == "des":
-        #         v = value.split(" ")
-        #         if 'wizards' in v and "only" in v:  # searches for wizards only item
-        #             print("usable by wizards only dude!!")
-                # print(v)
-
-            # print(key.title(), ":", value)
 
 
 
