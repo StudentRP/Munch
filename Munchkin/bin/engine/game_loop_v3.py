@@ -43,7 +43,7 @@ class PlayerSetUp:
         to load player atribs gor gui"""
         player = choice(gameVar.StartVariables.session_players)
         gameVar.StartVariables.active_player = player # send to game var for accessibility
-        print(f"The dice has been rolled. Random player selected is {player.name.title()}")
+        gameVar.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
         self.varbinding(player) # set all gameVar to this player
 
     def varbinding(self, playerinst=gameVar.StartVariables.active_player):
@@ -98,6 +98,8 @@ class PlayerSetUp:
             else:
                 print(f"{y.name} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
+
+        gameVar.GameObjects.message = f"{gameVar.StartVariables.active_player.name.title()}'s turn..."
 
     def select_players(self): # slices num of available players with gui entry
         """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
@@ -158,7 +160,7 @@ class PlayerSetUp:
                     print(f"{key} - Dev path")
                     continue
                 else:
-                    print(f"You cant equip this card, {val}")
+                    gameVar.GameObjects.message = f"You cant equip this card, {val}"
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break

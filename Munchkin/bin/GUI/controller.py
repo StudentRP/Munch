@@ -30,6 +30,7 @@ class Main(tk.Tk):
         self.frames = {}
         #### all Game notifications ####
         self.message = tk.StringVar()
+        self.message2 = tk.StringVar()
         #### all player atribs to bind ####
         self.name = tk.StringVar()
         self.gender = tk.StringVar()
@@ -81,8 +82,11 @@ class Main(tk.Tk):
     def update_message(self, action=None):
         if action == "show":
             self.message.set(gameVar.GameObjects.message)
+        elif action == "dev":
+            self.message2.set(gameVar.GameObjects.message2)
         else:
             self.message.set("")
+            self.message2.set("")
 
 ##########################################################################
 # frames to build up interface
@@ -267,7 +271,8 @@ class PlayerInfo(tk.Toplevel):
 
                 engine.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
                 app.update_frame() # updates all lable variables from gameVar
-                app.update_message("show") # dev addition message from the creator
+                app.update_message("show")
+                app.update_message("dev") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
                 ########## deal cards to all players required
 
@@ -280,7 +285,7 @@ class MainLoop(tk.Frame):
 
         "frame for buttons - may create some buttons to inherit style from "
         self.butframe = tk.LabelFrame(self, text='Navigation')
-        self.butframe.config(bg=but_color)
+        self.butframe.config(bg=but_color, fg="blue")
         self.butframe.pack(side='bottom', fill='x', ipady=80)
 
         self.b1 = tk.Button(self.butframe, text="End Turn", command=self.end_turn)
@@ -288,7 +293,7 @@ class MainLoop(tk.Frame):
         self.b1.place(x=600, y=45)
 
         self.b2 = tk.Button(self.butframe, text="Kick Door", command=self.door)
-        self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5)
+        self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5, pady=10)
         self.b2.place(x=350, y=45)
 
         self.b3 = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
@@ -325,7 +330,7 @@ class MainLoop(tk.Frame):
         row = 0
         for key, val in player_info.items():
 
-            self.l1 = tk.Label(self.plframe, text=key)
+            self.l1 = tk.Label(self.plframe, text=key.title())
             self.l1.grid(row=row, column=1, sticky='nsew')
             self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
             self.l1b.grid(row=row, column=2, sticky='nsew')
@@ -333,20 +338,27 @@ class MainLoop(tk.Frame):
             # continue
 
 
-
         "Game Window"
         self.tblframe = tk.LabelFrame(self, text='Table')
         self.tblframe.config(bg='lightgrey'),
-        self.tblframe.pack(side="left", fill="both", expand=True)
+        self.tblframe.pack( fill="both", expand=True)
 
         self.message = tk.Label(self.tblframe, textvariable=controller.message)
         self.message.pack(anchor="n", fill="x", expand=True)
+        self.message = tk.Label(self.tblframe, textvariable=controller.message2)
+        self.message.pack(anchor="n", fill="x", expand=True)
+
+        self.canvas = tk.Canvas(self.tblframe, bg='black')
+        self.canvas.pack(anchor="n", expand="yes", fill=tk.BOTH)
 
     "Handlers"
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
+        app.update_message() #clears all messages
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
+        app.update_message()  # clears all messages
+        app.update_message("show")
         app.update_frame() # updates the tk.vars in Main under the instance controller.
 
     def door(self):

@@ -134,7 +134,7 @@ class Player(P_tools):
             self.bonus = 200
             self.wallet = 20000
             gameVar.PlayerAtribs.player_gender = self.sex
-            gameVar.GameObjects.message = f"{self.name} is in play, a god among mer mortals!"
+            gameVar.GameObjects.message2 = f"{self.name} is in play, a god among mer mortals!"
 
         print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
 
@@ -213,7 +213,7 @@ class Player(P_tools):
                     x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
                     self.armor[sub_type] = x  # binds now card to player attribute
                     break
-        print("running sum_of_bonuses")
+        gameVar.GameObjects.message = f"Equipping {card['name']}"
         self.sum_of_bonuses()
 
     def equip_weapon(self, card):
