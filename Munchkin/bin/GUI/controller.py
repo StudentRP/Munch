@@ -11,7 +11,6 @@ window_color = "#160606" # Would like pic here of door
 text_color ="#7A0600"
 but_color = "#3EB0A1"
 
-
 ##########################################################################
 # Main controller
 ##########################################################################
@@ -28,12 +27,14 @@ class Main(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         self.frames = {}
+
         #### all Game notifications ####
         self.message = tk.StringVar()
         self.message2 = tk.StringVar()
         #### all player atribs to bind ####
         self.name = tk.StringVar()
         self.gender = tk.StringVar()
+        self.race = tk.StringVar()
         self.level = tk.IntVar()
         self.bonus = tk.IntVar()
         self.wallet = tk.IntVar()
@@ -45,7 +46,6 @@ class Main(tk.Tk):
         self.knees = tk.StringVar()
         self.footgear = tk.StringVar()
         self.necklace = tk.StringVar()
-
 
         "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
@@ -64,6 +64,7 @@ class Main(tk.Tk):
         self.geometry("800x500+720+50") # changes the geometry when called
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
+        self.race.set(gameVar.PlayerAtribs.player_race)
         self.level.set(gameVar.PlayerAtribs.player_level)
         self.bonus.set(gameVar.PlayerAtribs.player_bonus)
         self.wallet.set(gameVar.PlayerAtribs.player_wallet)
@@ -71,7 +72,6 @@ class Main(tk.Tk):
         self.l_hand.set(gameVar.PlayerAtribs.player_l_hand)
         self.r_hand.set(gameVar.PlayerAtribs.player_r_hand)
         self.two_hand.set(gameVar.PlayerAtribs.player_two_hand)
-
 
         self.headgear.set(gameVar.PlayerAtribs.player_headgear)
         self.armor.set(gameVar.PlayerAtribs.player_armor)
@@ -116,7 +116,6 @@ class StartPg(tk.Frame):
         but2.pack(side="bottom")
 
 
-
 class GameOptions(tk.Toplevel):
     """Toplevel window for setting in game options at start""" # WORKS need others added and style tidying
     def __init__(self):
@@ -147,7 +146,7 @@ class GameOptions(tk.Toplevel):
         self.maxlvl.set(10)
         e2.grid(column=1, row=1)
 
-        l2 = tk.Label(lf, text="Max sack capacity")
+        l2 = tk.Label(lf, text="Max Hand capacity") # cards not visible to all players.
         l2.grid(column=0, row=2)
         e2 = tk.Entry(lf, textvariable=self.carry_weight)
         self.carry_weight.set(10) # change when cards are categorised, should be 6
@@ -322,7 +321,8 @@ class MainLoop(tk.Frame):
         self.plframe.config(pady=20)
         self.plframe.pack(side='left', fill="y", ipadx=50)
 
-        player_info = {"Name: ": controller.name, "Gender: ": controller.gender, "Level: ": controller.level,
+        player_info = {"Name: ": controller.name, "Gender: ": controller.gender, "Race: ": controller.race,
+                       "Level: ": controller.level,
                        "Bonus: ": controller.bonus, "Wallet: ": controller.wallet, "L_hand: ": controller.l_hand,
                        "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand, "Head Gear: ": controller.headgear,
                        "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear,
@@ -364,6 +364,8 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door"""
         print(f"{app.name.get()} has kicked open the door!")
+
+
 
     """ Method for building lists and calling a toplevel to show them. toplevel has own meth on actions to 
     do with the items """
@@ -471,6 +473,7 @@ class OwnedItems(tk.Toplevel):
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
+
         if self.set_but in "weap, armor, sell":
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         if self.set_but == "consume":
@@ -519,6 +522,7 @@ class OwnedItems(tk.Toplevel):
         OwnedItems.destroy(self)
         engine.scrub_lists()
         app.update_message("show")
+
 
 class CardVeiw(): # not currently working
     def __init__(self, card_id=None):
