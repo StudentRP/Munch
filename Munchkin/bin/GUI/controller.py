@@ -35,6 +35,9 @@ class Main(tk.Tk):
         self.name = tk.StringVar()
         self.gender = tk.StringVar()
         self.race = tk.StringVar()
+        self.race2 = tk.StringVar()
+        self.klass = tk.StringVar()
+        self.klass2 = tk.StringVar()
         self.level = tk.IntVar()
         self.bonus = tk.IntVar()
         self.wallet = tk.IntVar()
@@ -65,6 +68,9 @@ class Main(tk.Tk):
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
         self.race.set(gameVar.PlayerAtribs.player_race)
+        self.race2.set(gameVar.PlayerAtribs.player_race2)
+        self.klass.set(gameVar.PlayerAtribs.player_klass)
+        self.klass2.set(gameVar.PlayerAtribs.player_klass2)
         self.level.set(gameVar.PlayerAtribs.player_level)
         self.bonus.set(gameVar.PlayerAtribs.player_bonus)
         self.wallet.set(gameVar.PlayerAtribs.player_wallet)
@@ -321,12 +327,13 @@ class MainLoop(tk.Frame):
         self.plframe.config(pady=20)
         self.plframe.pack(side='left', fill="y", ipadx=50)
 
-        player_info = {"Name: ": controller.name, "Gender: ": controller.gender, "Race: ": controller.race,
-                       "Level: ": controller.level,
-                       "Bonus: ": controller.bonus, "Wallet: ": controller.wallet, "L_hand: ": controller.l_hand,
-                       "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand, "Head Gear: ": controller.headgear,
-                       "Armor: ": controller.armor, "Knees: ": controller.knees, "Foot gear: ": controller.footgear,
-                       "Necklace": controller.necklace}
+        player_info = {"Name: ": controller.name, "Gender: ": controller.gender,
+                       "Level: ": controller.level, "Bonus: ": controller.bonus,  "Wallet: ": controller.wallet,
+                       "Race: ": controller.race, "Class: ": controller.klass}
+
+        player_defence = { "L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand,
+                           "Head Gear: ": controller.headgear, "Armor: ": controller.armor, "Knees: ": controller.knees,
+                           "Foot gear: ": controller.footgear, "Necklace": controller.necklace}
         row = 0
         for key, val in player_info.items():
 
@@ -335,7 +342,18 @@ class MainLoop(tk.Frame):
             self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
             self.l1b.grid(row=row, column=2, sticky='nsew')
             row += 1
-            # continue
+        " To work with player supermunch/halfbreed meths to turn on"
+        self.race2_option = tk.Label(self.plframe, text="Race_2:")
+        self.race2_optionb = tk.Label(self.plframe, textvariable=controller.race2)
+        self.klass2_option = tk.Label(self.plframe, text="Class_2:")
+        self.klass2_optionb = tk.Label(self.plframe, textvariable=controller.klass2)
+        row = 9
+        for key, val in player_defence.items():
+            self.l1 = tk.Label(self.plframe, text=key.title())
+            self.l1.grid(row=row, column=1, sticky='nsew')
+            self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
+            self.l1b.grid(row=row, column=2, sticky='nsew')
+            row += 1
 
 
         "Game Window"
@@ -364,6 +382,13 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door"""
         print(f"{app.name.get()} has kicked open the door!")
+        # test for super munchkin ~~ works
+        if gameVar.StartVariables.active_player.klass_unlock:
+            self.klass2_option.grid(row=8, column=1, sticky='nsew')
+            self.klass2_optionb.grid(row=8, column=2, sticky='nsew')
+            # self.klass2_option.grid()
+            # self.klass2_optionb.grid()
+
 
 
 

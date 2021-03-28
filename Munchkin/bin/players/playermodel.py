@@ -83,8 +83,10 @@ class Player(P_tools):
         self.wallet = 0
         self.race = "human" # string eval to True so will show
         self.race2 = ""
-        self.klass = ""
+        self.race_unlock = False # method by halfbread triggers this a True state (method to be added)
+        self.klass = "No class"
         self.klass2 = ""
+        self.klass_unlock = True # method by supermunchkin triggers this a True state
         self.big = "" # can carry only 1 big item
         self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""}
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.

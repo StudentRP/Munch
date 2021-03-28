@@ -54,6 +54,10 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_level = playerinst.level
         gameVar.PlayerAtribs.player_bonus = playerinst.bonus
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
+        gameVar.PlayerAtribs.player_race = playerinst.race
+        gameVar.PlayerAtribs.player_race2 = playerinst.race2
+        gameVar.PlayerAtribs.player_klass = playerinst.klass
+        gameVar.PlayerAtribs.player_klass2 = playerinst.klass2
         gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
         gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
