@@ -1,3 +1,7 @@
+
+"""
+test to determine the effect of the pack_forget()
+"""
 import tkinter as tk
 
 class Main(tk.Tk):
@@ -12,10 +16,10 @@ class Main(tk.Tk):
         Main.l1 = tk.Label(self.frm, text="cheesepuff")
         # Main.l1.pack()
 
-        self.b1 = tk.Button(self.frm, text="remove", command=self.removeme)
+        self.b1 = tk.Button(self.frm, text="remove", command=self.remove_me)
         self.b1.pack()
 
-    def removeme(self):
+    def remove_me(self):
         # Main.l1.pack_forget()
         Main.l1.pack()
 
