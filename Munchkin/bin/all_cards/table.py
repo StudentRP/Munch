@@ -50,9 +50,10 @@ class Dealer:
         elif option == "treasure" or x >= 5:
             """Deal Treasure cards"""
             print('From Treasure pile\n')
-            card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
-            # print(f"Card number: {pick},\nCard: {card}")
-            return card
+            for _amount in range(cardnum):
+                card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
+                # print(f"Card number: {pick},\nCard: {card}")
+                return card
 
         else:
             print("card error")
@@ -66,8 +67,8 @@ class Dealer:
         print(f"Card number: {pick},\nCard: {card}")
         return card
 
-    def start_deal(self):
-        pass
+    # def start_deal(self):
+    #     pass
 
 
     # def deal(self):

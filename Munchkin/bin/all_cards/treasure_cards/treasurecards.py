@@ -82,8 +82,8 @@ class Treasure(T_tools):
         #weapons: id, type, sub_type, name, des, bonus, klass_restriction, hold_weight, sell, asso_meth
         {"id": 22, "name": "Staff Of Napalm", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "des": "Usable by wizards only",
          "bonus": 5, "sell": 800, "klass_restriction": "wizard"},
-        # {"id": 23, "name": "Blessed", "type": "weapon", "subtype": "1hand", "hold_weight": 1, "des": "Usable by wizards only", "bonus": 2,
-        #  "sell": 800, "special": "item enhancer", "klass_restriction": "wizard"},
+        # {"id": 23, "name": "Blessed ", "type": "enhancer", "subtype": "start", "des": "Usable by wizards only", "bonus": 2,
+        #  "sell": 800, "klass_restriction": "wizard", meth_call:"enhancer"},
         {"id": 24, "name": "Broad Sword", "type": "weapon", "sub_type": "1hand", "hold_weight": 1, "des": "Not for females", "bonus": 3,
          "sell": 400, "special": "", "klass_restriction": "male"},
         {"id": 25, "name": "Sword Of Slaying Everything\nExcept squid..", "type": "weapon", "sub_type": "1hand", "hold_weight": 1,  "des": "long", "bonus": 4,

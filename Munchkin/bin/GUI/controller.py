@@ -336,7 +336,6 @@ class MainLoop(tk.Frame):
                            "Foot gear: ": controller.footgear, "Necklace": controller.necklace}
         row = 0
         for key, val in player_info.items():
-
             self.l1 = tk.Label(self.plframe, text=key.title())
             self.l1.grid(row=row, column=1, sticky='nsew')
             self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
@@ -347,7 +346,7 @@ class MainLoop(tk.Frame):
         self.race2_optionb = tk.Label(self.plframe, textvariable=controller.race2)
         self.klass2_option = tk.Label(self.plframe, text="Class_2:")
         self.klass2_optionb = tk.Label(self.plframe, textvariable=controller.klass2)
-        row = 9
+        row = 10
         for key, val in player_defence.items():
             self.l1 = tk.Label(self.plframe, text=key.title())
             self.l1.grid(row=row, column=1, sticky='nsew')
@@ -378,17 +377,19 @@ class MainLoop(tk.Frame):
         app.update_message()  # clears all messages
         app.update_message("show")
         app.update_frame() # updates the tk.vars in Main under the instance controller.
+        # Methods that need to run at start of every players turn.
+        if gameVar.StartVariables.active_player.race_unlock:
+            self.race2_option.grid(row=8, column=1, sticky='nsew')
+            self.race2_optionb.grid(row=8, column=2, sticky='nsew')
+        if gameVar.StartVariables.active_player.klass_unlock:
+            self.klass2_option.grid(row=9, column=1, sticky='nsew')
+            self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def door(self):
         """game actions for door. cards drawn from door"""
         print(f"{app.name.get()} has kicked open the door!")
-        # test for super munchkin ~~ works
-        if gameVar.StartVariables.active_player.klass_unlock:
-            self.klass2_option.grid(row=8, column=1, sticky='nsew')
-            self.klass2_optionb.grid(row=8, column=2, sticky='nsew')
-            # self.klass2_option.grid()
-            # self.klass2_optionb.grid()
-
+        engine.deal_handler("door")
+        self.b2.config(state="disabled")
 
 
 

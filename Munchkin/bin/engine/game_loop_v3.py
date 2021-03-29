@@ -54,10 +54,10 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_level = playerinst.level
         gameVar.PlayerAtribs.player_bonus = playerinst.bonus
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
-        gameVar.PlayerAtribs.player_race = playerinst.race
-        gameVar.PlayerAtribs.player_race2 = playerinst.race2
-        gameVar.PlayerAtribs.player_klass = playerinst.klass
-        gameVar.PlayerAtribs.player_klass2 = playerinst.klass2
+        gameVar.PlayerAtribs.player_race = playerinst.race.title()
+        gameVar.PlayerAtribs.player_race2 = playerinst.race2.title()
+        gameVar.PlayerAtribs.player_klass = playerinst.klass.title()
+        gameVar.PlayerAtribs.player_klass2 = playerinst.klass2.title()
         gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
         gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
@@ -75,7 +75,12 @@ class PlayerSetUp:
             for player in gameVar.StartVariables.session_players:
                 player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
-            print("your not at the start")
+            print("Opening the door....")
+            door_card = cards.card_sop.deal_cards("door")
+            cards.in_play.append(door_card)
+            print(cards.in_play)
+
+
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("You have been dealt a treasure card")
         else: # Require check to see how many in deck and in burn pile for prob solving
