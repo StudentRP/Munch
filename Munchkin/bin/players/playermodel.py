@@ -83,7 +83,7 @@ class Player(P_tools):
         self.wallet = 0
         self.race = "human" # string eval to True so will show
         self.race2 = ""
-        self.race_unlock = True # DEFAULT = False method by halfbread triggers this a True state (method to be added)
+        self.race_unlock = False # DEFAULT = False method by halfbread triggers this a True state (method to be added)
         self.klass = "No class"
         self.klass2 = ""
         self.klass_unlock = False # method by supermunchkin triggers this a True state

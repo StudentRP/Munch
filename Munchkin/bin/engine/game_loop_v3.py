@@ -77,9 +77,10 @@ class PlayerSetUp:
         elif option == "door": # Standard gameplay loop
             print("Opening the door....")
             door_card = cards.card_sop.deal_cards("door")
-            cards.in_play.append(door_card)
-            print(cards.in_play)
-
+            if door_card["type"] == "monster":
+                cards.in_play.append(door_card) # adds card to the in play list
+            else:
+                print("card is not a monster") #sorting required for curse method #####################
 
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("You have been dealt a treasure card")
@@ -193,6 +194,30 @@ class PlayerSetUp:
         gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
+    def card_type(self):
+        door_kicks = 0
+        while door_kicks < 2:
+            if cards.in_play[-1]["type"] == 'monster':
+                return True
+            else:
+                door_kicks +=1
+                return False
+        else:
+            print("exceeded") # two kicks only, second card goes in hand
+
+    def fight(self):
+        print("in the fight!")
+        card = cards.in_play.pop(-1) # end of cards on table
+        player = gameVar.StartVariables.active_player
+        if player.bonus + player.level >= card["lvl"]:
+            print("you win!")
+            cards.burn_card.append(card)
+
+        gameVar.GameObjects.message = f"You are fighting {card['name']}, level {card['lvl']}"
+
+
+    def run(self):
+        print("in run like the wind!")
 
 
 engine = PlayerSetUp()

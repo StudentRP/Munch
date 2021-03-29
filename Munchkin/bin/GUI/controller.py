@@ -1,3 +1,8 @@
+
+"""
+Main gui for Munchkin, version 4 (old: gui_v3)
+
+"""
 import tkinter as tk
 import tkinter.ttk as ttk
 from bin.engine.game_loop_v3 import engine
@@ -64,7 +69,7 @@ class Main(tk.Tk):
 
     def update_frame(self):
         """binds all the labels to the gamevar"""
-        self.geometry("800x500+720+50") # changes the geometry when called
+        self.geometry("800x600+720+50") # changes the geometry when called
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
         self.race.set(gameVar.PlayerAtribs.player_race)
@@ -275,7 +280,7 @@ class PlayerInfo(tk.Toplevel):
                 #~~~~~~~~~~~~~~~
 
                 engine.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
-                app.update_frame() # updates all lable variables from gameVar
+                app.update_frame() # updates all label variables from gameVar
                 app.update_message("show")
                 app.update_message("dev") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
@@ -321,6 +326,11 @@ class MainLoop(tk.Frame):
         self.b9.place(x=10, y=10)
         self.b10 = tk.Button(self.butframe, text="Help", command=self.ask_for_help)
         self.b10.place(x=10, y=10)
+
+        self.b11 = tk.Button(self.butframe, text="Fight!", command=self.fight, state="disabled")
+        self.b11.place(x=50, y=50)
+        self.b12 = tk.Button(self.butframe, text="Run!!", command=self.run, state="disabled")
+        self.b12.place(x=50, y=100)
 
         "frame player attribs"
         self.plframe = tk.LabelFrame(self, text='Player Info')
@@ -372,13 +382,19 @@ class MainLoop(tk.Frame):
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
+        self.b2.config(state="normal") # enables kick door button
+        self.b3.config(state="normal")  # weapons
+        self.b4.config(state="normal")  # armor
+        self.b6.config(state="normal")  # sell
+        self.b11.config(state="disabled")  # fight
+        self.b12.config(state="disabled")  # run
         app.update_message() #clears all messages
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
         app.update_message()  # clears all messages
         app.update_message("show")
         app.update_frame() # updates the tk.vars in Main under the instance controller.
-        # Methods that need to run at start of every players turn.
-        if gameVar.StartVariables.active_player.race_unlock:
+        # Methods that need to run at start of every next player turn.
+        if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
             self.race2_option.grid(row=8, column=1, sticky='nsew')
             self.race2_optionb.grid(row=8, column=2, sticky='nsew')
         if gameVar.StartVariables.active_player.klass_unlock:
@@ -388,13 +404,26 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door"""
         print(f"{app.name.get()} has kicked open the door!")
-        engine.deal_handler("door")
-        self.b2.config(state="disabled")
+        engine.deal_handler("door") # card gets sorted during this meth either mon or curse ect (not complete)
+        if engine.card_type():
+            self.b2.config(state="disabled") # kick door
+            self.b3.config(state="disabled") # weapons
+            self.b4.config(state="disabled") # armor
+            self.b6.config(state="disabled") # sell
+            self.b11.config(state="normal") # fight
+            self.b12.config(state="normal") # run
+
+        else:
+            print("meth to sort for card that is not a monster")
 
 
+    def fight(self):
+        engine.fight()
+        app.update_message("show") # name and lvl of monster
 
-    """ Method for building lists and calling a toplevel to show them. toplevel has own meth on actions to 
-    do with the items """
+    def run(self):
+        engine.run()
+
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
@@ -432,18 +461,19 @@ class MainLoop(tk.Frame):
         # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
-    def interfere(self):
+    def interfere(self): #not set
         gameVar.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
 
-    def ask_for_help(self):
+    def ask_for_help(self): #mot set
         gameVar.GameObjects.message = "Toplevel window where another player can help... for a price.."
         app.update_message("show")
 
     def list_sack(self):
         """shows all items in sack"""
-        gameVar.GameObjects.message = "The contents of your:"
+        gameVar.GameObjects.message = "The contents of sack:"
         app.update_message("show")
+        # no meth yet to show display
         print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
         gameVar.GameObjects.all_cards = gameVar.PlayerAtribs.player_unsorted # wont work with gui.. yet
         # OwnedItems("All items") #setup dif toplevel without check buttons more informal list
@@ -457,7 +487,7 @@ class MainLoop(tk.Frame):
 
 
 class OwnedItems(tk.Toplevel):
-    """generates toplevel from cards place in gameVar.GameObjects.selected_items."""
+    """generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made uon those cards"""
     def __init__(self, wind_title="Template", set_but=None):
         tk.Toplevel.__init__(self)
         self.wind_title = wind_title
@@ -523,28 +553,21 @@ class OwnedItems(tk.Toplevel):
         app.update_message("show")
 
     def equip(self):
-        engine.zipper("equip") # calls card_matcher() passing the parameter to it.
-        engine.varbinding(gameVar.StartVariables.active_player)
-        app.update_frame()
-        app.update_message("show")
+        Tools.common_set("equip")
         OwnedItems.destroy(self)
-        engine.scrub_lists()
         # app.update_message("show")
+        engine.scrub_lists()
+        app.update_message("show")
 
     def use_item(self):
         """wont work as cards not in this any more"""
-        engine.zipper("use") #builds cards associated to consumable items
-        # meth that changes things in respects to the one shot items
-        engine.varbinding(gameVar.StartVariables.active_player)
-        app.update_frame()
+        Tools.common_set("use")
         OwnedItems.destroy(self)
         engine.scrub_lists()
         app.update_message("show")
 
     def remove(self):
-        engine.zipper("remove")
-        engine.varbinding(gameVar.StartVariables.active_player)
-        app.update_frame()
+        Tools.common_set("remove")
         OwnedItems.destroy(self)
         engine.scrub_lists()
         app.update_message("show")
@@ -562,6 +585,21 @@ class CardVeiw(): # not currently working
         can.config(width=img.width(), height=img.height())
         can.create_image(2, 2, image=img, anchor=tk.NW)  # x, y coordinates
         win.mainloop()
+
+class Tools:
+    """method sets to uphold dry programing"""
+
+    # def __init__(self, keyword):
+    #     self.key_word = keyword
+    @staticmethod
+    def common_set(keyword):
+        engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
+        engine.varbinding(gameVar.StartVariables.active_player)
+        app.update_frame()
+
+
+
+
 
 
 

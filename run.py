@@ -3,5 +3,6 @@
 
 from Munchkin.bin.GUI.controller import Main
 
+
 app = Main()
 app.mainloop()
