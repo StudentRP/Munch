@@ -77,14 +77,10 @@ class PlayerSetUp:
         elif option == "door": # Standard gameplay loop
             print("Opening the door....")
             door_card = cards.card_sop.deal_cards("door")
-            if door_card["type"] == "monster":
-                cards.in_play.append(door_card) # adds card to the in play list
-            else:
-                print("card is not a monster") #sorting required for curse method #####################
-
+            cards.in_play.append(door_card) # adds card to the in_play list, card_type meth now sorts through.
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
-            print("You have been dealt a treasure card")
-        else: # Require check to see how many in deck and in burn pile for prob solving
+            print("You have been dealt a treasure card") # simple add to player items list
+        else:
             print("I guess the deck is empty....")
 
     def player_order(self, current_player): # called with gameVar rand_index
@@ -195,6 +191,7 @@ class PlayerSetUp:
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
     def card_type(self):
+        """meth for sorting through the table cards and defining next action"""
         door_kicks = 0
         while door_kicks < 2:
             if cards.in_play[-1]["type"] == 'monster':

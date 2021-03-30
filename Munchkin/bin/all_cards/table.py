@@ -27,7 +27,7 @@ class Dealer:
         dealing specific cards cardnum specific to the start/resurrect determines the amount of cards to of each type
         to deal players"""
 
-        x = randint(0, 10) # random card type generator
+        # requires catch meth if no cards are left. Throws indexerror otherwise
 
         if option == "start":
             """called at start to deal specific number of cards to pass to player"""
@@ -40,14 +40,14 @@ class Dealer:
                 # print(f" num of cards in pack:{len(Moncurse.door_cards)}, rand gen tres:{tpack} door:{dpack}") # should go down
             return starter_set # returns starter_set list to caller (player.unsorted)
 
-        elif option == "door" or x < 5:
+        elif option == "door":
             """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
             print('From Door pile\n')
             card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
             print(f"Your card is: {card['name']}\nCards left in deck: {len(Moncurse.door_cards) - 1}")
             return card
 
-        elif option == "treasure" or x >= 5:
+        elif option == "treasure":
             """Deal Treasure cards"""
             print('From Treasure pile\n')
             for _amount in range(cardnum):

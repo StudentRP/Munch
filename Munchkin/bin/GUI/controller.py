@@ -323,9 +323,9 @@ class MainLoop(tk.Frame):
         self.b8.place(x=450, y=80)
 
         self.b9 = tk.Button(self.butframe, text="Interfere", command=self.interfere)
-        self.b9.place(x=10, y=10)
-        self.b10 = tk.Button(self.butframe, text="Help", command=self.ask_for_help)
-        self.b10.place(x=10, y=10)
+        self.b9.place(x=10, y=20)
+        self.b10 = tk.Button(self.butframe, text="Help/Trade", command=self.ask_for_help)
+        self.b10.place(x=10, y=50)
 
         self.b11 = tk.Button(self.butframe, text="Fight!", command=self.fight, state="disabled")
         self.b11.place(x=50, y=50)
@@ -388,7 +388,7 @@ class MainLoop(tk.Frame):
         self.b6.config(state="normal")  # sell
         self.b11.config(state="disabled")  # fight
         self.b12.config(state="disabled")  # run
-        app.update_message() #clears all messages
+        # app.update_message() #clears all messages
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
         app.update_message()  # clears all messages
         app.update_message("show")
@@ -404,8 +404,8 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door"""
         print(f"{app.name.get()} has kicked open the door!")
-        engine.deal_handler("door") # card gets sorted during this meth either mon or curse ect (not complete)
-        if engine.card_type():
+        engine.deal_handler("door") # deals door card and puts it into in_play list.
+        if engine.card_type(): # expects a true return if the card type == monster.
             self.b2.config(state="disabled") # kick door
             self.b3.config(state="disabled") # weapons
             self.b4.config(state="disabled") # armor
@@ -415,6 +415,7 @@ class MainLoop(tk.Frame):
 
         else:
             print("meth to sort for card that is not a monster")
+            #method call for other types of card either add to sack or apply curse
 
 
     def fight(self):
