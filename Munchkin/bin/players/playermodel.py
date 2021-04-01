@@ -75,11 +75,11 @@ class Player(P_tools):
     def __init__(self, ref):
         self.ref = ref # simple form to keep track of players
         self.name = ""
-        self.sex = "male" # default required..dont think it works like this...
+        self.gender = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
         self.other_bonuses = [] # shoulder drag ect
-        self. enhancers = "" # most likely be equipped card search and for meths on card
+        self.enhancers = "" # most likely loose. to work on equip mode to run
         self.wallet = 0
         self.race = "human" # string eval to True so will show
         self.race2 = ""
@@ -88,15 +88,17 @@ class Player(P_tools):
         self.klass2 = ""
         self.klass_unlock = False # method by supermunchkin triggers this a True state
         self.big = "" # can carry only 1 big item
+        self.big2 = []
+        self.big_unlock = False
         self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""}
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
         self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
                       "necklace": "", "ring": "", "ring2": ""} # fill with card ids
         self.sack = [] # 5 max, pos editable later in an options
-        self.visible_cards = [] # will need to sort, simple branch on the return objs
+        self.hidden_cards = [] # for cards that should not be seen by others
         self.hireling = []
         self.cards_in_use = [] # enhances/curses applied, weapons/armour worn.
-        self.unsorted = [] # list of all cards that are used to by sorting
+        # self.unsorted = [] # Old! list of all cards that are used to by sorting
         self.alive = True
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
@@ -104,13 +106,13 @@ class Player(P_tools):
 
     def __repr__(self):
         """developer aid"""
-        return f"\nPLAYER REF:{self.ref}\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
+        return f"\nPLAYER REF:{self.ref}\nName:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
                f"\nBonus:{self.bonus}\nSack:{self.wallet}\n"
 
     # def __str__(self):
     #     """developer aid"""
-    #     return f"\nPLAYER INFO:\nName:{self.name}\nSex:{self.sex}\nLevel:{self.level}" \
-    #            f"\nBonus:{self.bonus}\nvisible_cards:{self.visible_cards}\n"
+    #     return f"\nPLAYER INFO:\nName:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
+    #            f"\nBonus:{self.bonus}\n"
 
     def update_bindings(self, carried):
         """just gets whats attached to the player"""
@@ -125,37 +127,37 @@ class Player(P_tools):
 
     def char_setup(self):
         # complete, prints to be removed
-        """sets up name and sex in gameVar and player instance when called"""
+        """sets up name and gender in gameVar and player instance when called"""
         na = P_tools.name() # method to set name
         self.name = na  # makes change to player
-        xy = P_tools.sex()
-        self.sex = xy
+        xy = P_tools.gender()
+        self.gender = xy
 
         if self.name == "The_Creator": # ................................................................... dev mode
-            self.sex = "bob"
+            self.gender = "bob"
             self.bonus = 200
             self.wallet = 20000
-            gameVar.PlayerAtribs.player_gender = self.sex
+            gameVar.PlayerAtribs.player_gender = self.gender
             gameVar.GameObjects.message2 = f"{self.name} is in play, a god among mer mortals!"
 
-        print(f"Your name is {self.name.title()} and you are {self.sex.title()}.")
+        print(f"Your name is {self.name.title()} and you are {self.gender.title()}.")
 
     def inventory(self, key, cardtype): # called from GUI on button press
-        """Returns list of dict from player unsorted cards that have the key and match the key to a specific value.
+        """Returns list of dict from player sack cards that have the key and match the key to a specific value.
         (ie sub_type == armour)."""
-        gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj[key] == cardtype]
+        gameVar.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
 
     def item_by_key(self, key):
-        """Returns list of cards form player unsorted list that contain the key x. (ie "sell") """
-        gameVar.GameObjects.selected_items = [obj for obj in self.unsorted if obj.get(key)]
+        """Returns list of cards form player sack list that contain the key x. (ie "sell") """
+        gameVar.GameObjects.selected_items = [obj for obj in self.sack if obj.get(key)]
 
     def sell_item(self, card): # called by player.sell_item so self bound to player
         """Call from zipper to sell items, remove cards, reset gameVars and call to add to burn pile"""
         self.wallet += card["sell"] #adds worth of card to player
-        gameVar.GameObjects.message = f"Selling unsorted {card['name']}, Card added to burn pile. Depth: {len(cards.burn_pile)}"
-        x = self.unsorted.pop(self.unsorted.index(card)) # removes card from player unsorted deck
+        gameVar.GameObjects.message = f"Selling sack {card['name']}, Card added to burn pile. Depth: {len(cards.burn_pile)}"
+        x = self.sack.pop(self.sack.index(card)) # removes card from player sack deck
         cards.add_to_burn(x)# adds card to burn pile on table
-        gameVar.GameObjects.message = f"Selling unsorted {card['name']}, " \
+        gameVar.GameObjects.message = f"Selling sack {card['name']}, " \
                                       f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
         # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
@@ -186,7 +188,7 @@ class Player(P_tools):
                         continue
                     elif action == "removal":
                         if card["id"] == cards["id"]:
-                            self.unsorted.append(card) # adds card back to player inventory
+                            self.sack.append(card) # adds card back to player inventory
                             obj[sub_menu] = ""
                             self.sum_of_bonuses()
                             self.weapon_count += card.get("hold_weight", 0)
@@ -206,13 +208,13 @@ class Player(P_tools):
             if card["sub_type"] == sub_type:  # matches card["sub_type] to list
                 occupied = isinstance(self.armor[sub_type], dict)
                 if not occupied:
-                    x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                    x = self.sack.pop(self.sack.index(card))  # removes cards from sack list
                     self.armor[sub_type] = x  # adds to player's attribs
                     break
                 elif occupied:
                     card_removed = self.armor.pop(sub_type)  # removing card from player's attrib
-                    self.unsorted.append(card_removed)
-                    x = self.unsorted.pop(self.unsorted.index(card))  # removes cards from unsorted list
+                    self.sack.append(card_removed)
+                    x = self.sack.pop(self.sack.index(card))  # removes cards from sack list
                     self.armor[sub_type] = x  # binds now card to player attribute
                     break
         gameVar.GameObjects.message = f"Equipping {card['name']}"
@@ -222,13 +224,13 @@ class Player(P_tools):
         """New simplified model. Checks L/R hands to see if full, equipping if not. Two hand items will not work when other hands full """
         if self.weapon_count > 0:
             if card["sub_type"] == "1hand" and not isinstance(self.weapons["L_hand"], dict): # not equipped
-                added_card = self.unsorted.pop(self.unsorted.index(card))
+                added_card = self.sack.pop(self.sack.index(card))
                 self.weapons["L_hand"] = added_card
                 self.weapon_count -= card.get("hold_weight")
                 gameVar.GameObjects.message = f"Equipping {card['name']} to left hand"
             elif card["sub_type"] == "1hand" and not isinstance(self.weapons["R_hand"], dict): # not equipped
                 gameVar.GameObjects.message = f"Equipping {card['name']} to right hand"
-                added_card = self.unsorted.pop(self.unsorted.index(card))
+                added_card = self.sack.pop(self.sack.index(card))
                 self.weapons["R_hand"] = added_card
                 self.weapon_count -= card.get("hold_weight")
             elif card["sub_type"] == "2hand" and not isinstance(self.weapons["two_hand"], dict):
@@ -236,7 +238,7 @@ class Player(P_tools):
                     gameVar.GameObjects.message = "You can not equip this item while you have items in your other hands"
                 elif not isinstance(self.weapons["L_hand"], dict) and not isinstance(self.weapons["R_hand"], dict):
                     gameVar.GameObjects.message = f"Equipping {card['name']} to both hands"
-                    added_card = self.unsorted.pop(self.unsorted.index(card))
+                    added_card = self.sack.pop(self.sack.index(card))
                     self.weapons["two_hand"] = added_card
                     self.weapon_count -= card.get("hold_weight")
             else: # cheat card section
@@ -267,7 +269,7 @@ if __name__ == '__main__':
     p1 = Player(1)
     print(p1)
     # p1.get_treasure() # duplicate val is print state from Handler class method (note is same: GOOD)
-    # p1.char_setup() # calls player name/sex setup, to be called after player number select
+    # p1.char_setup() # calls player name/gender setup, to be called after player number select
     # p1.inventory() # shows inventory of new built char
 
 

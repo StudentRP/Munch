@@ -2,7 +2,7 @@
 
 Considerations:
     user name  ...............................Complete
-    sex ......................................Complete
+    gender ......................................Complete
     play order, may be toplevel(engine)...........Complete, in engine!!
     number of players ........................... Complete in engine
 
@@ -44,7 +44,7 @@ class P_tools():
 
 
     @classmethod
-    def sex(cls):
+    def gender(cls):
         """Sets gender"""
         x = gameVar.PlayerAtribs.player_gender
         return x

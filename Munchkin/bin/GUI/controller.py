@@ -306,6 +306,7 @@ class MainLoop(tk.Frame):
         self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5, pady=10)
         self.b2.place(x=350, y=45)
 
+
         self.b3 = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
         self.b3.place(x=250, y=10)
         self.b4 = tk.Button(self.butframe, text="Armour", command=self.list_armor)
@@ -323,14 +324,19 @@ class MainLoop(tk.Frame):
         self.b8.place(x=450, y=80)
 
         self.b9 = tk.Button(self.butframe, text="Interfere", command=self.interfere)
-        self.b9.place(x=10, y=20)
+        self.b9.place(x=10, y=50)
         self.b10 = tk.Button(self.butframe, text="Help/Trade", command=self.ask_for_help)
-        self.b10.place(x=10, y=50)
+        self.b10.place(x=10, y=100)
 
         self.b11 = tk.Button(self.butframe, text="Fight!", command=self.fight, state="disabled")
-        self.b11.place(x=50, y=50)
+        self.b11.place(x=100, y=50)
         self.b12 = tk.Button(self.butframe, text="Run!!", command=self.run, state="disabled")
-        self.b12.place(x=50, y=100)
+        self.b12.place(x=100, y=100)
+
+        self.b13 = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
+        self.b13.place(x=360, y=90)
+
+
 
         "frame player attribs"
         self.plframe = tk.LabelFrame(self, text='Player Info')
@@ -338,7 +344,7 @@ class MainLoop(tk.Frame):
         self.plframe.pack(side='left', fill="y", ipadx=50)
 
         player_info = {"Name: ": controller.name, "Gender: ": controller.gender,
-                       "Level: ": controller.level, "Bonus: ": controller.bonus,  "Wallet: ": controller.wallet,
+                       "Level: ": controller.level, "Bonus: ": controller.bonus, "Wallet: ": controller.wallet,
                        "Race: ": controller.race, "Class: ": controller.klass}
 
         player_defence = { "L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand,
@@ -363,7 +369,6 @@ class MainLoop(tk.Frame):
             self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
             self.l1b.grid(row=row, column=2, sticky='nsew')
             row += 1
-
 
         "Game Window"
         self.tblframe = tk.LabelFrame(self, text='Table')
@@ -462,6 +467,14 @@ class MainLoop(tk.Frame):
         # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
+    def hand(self):
+        gameVar.GameObjects.message = "Hidden items selected"
+        app.update_message("show")
+        engine.scrub_lists()
+        player = gameVar.StartVariables.active_player
+        player.inventory("category", "door")
+        OwnedItems("Hidden Items", "hidden")
+
     def interfere(self): #not set
         gameVar.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
@@ -474,10 +487,11 @@ class MainLoop(tk.Frame):
         """shows all items in sack"""
         gameVar.GameObjects.message = "The contents of sack:"
         app.update_message("show")
-        # no meth yet to show display
-        print(f"{gameVar.PlayerAtribs.player_unsorted}") #~~~~~~~~~~~~to change to sack
-        gameVar.GameObjects.all_cards = gameVar.PlayerAtribs.player_unsorted # wont work with gui.. yet
-        # OwnedItems("All items") #setup dif toplevel without check buttons more informal list
+        engine.scrub_lists()
+        player = gameVar.StartVariables.active_player
+        player.inventory("category", "treasure")
+        OwnedItems("Sack Items")
+
 
     def list_equipped(self):
         """list showing all items that are equipped"""
@@ -488,8 +502,8 @@ class MainLoop(tk.Frame):
 
 
 class OwnedItems(tk.Toplevel):
-    """generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made uon those cards"""
-    def __init__(self, wind_title="Template", set_but=None):
+    """generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made on those cards"""
+    def __init__(self, wind_title="Template", set_but="No Buttons"): #title and buttons to be used for items
         tk.Toplevel.__init__(self)
         self.wind_title = wind_title
         self.title(self.wind_title)
@@ -498,7 +512,7 @@ class OwnedItems(tk.Toplevel):
 
         if not gameVar.GameObjects.selected_items:
             fm = tk.Frame(self)
-            tk.Label(fm, text="No cards to shop").pack()
+            tk.Label(fm, text="No cards to show").pack()
         else:
             f = tk.Frame(self)
             f.pack(side="top", expand=True)
@@ -506,8 +520,12 @@ class OwnedItems(tk.Toplevel):
             tk.Label(f, text="Type").grid(row=0, column=1, sticky="nw")
             if self.set_but == "sell":
                 tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw")
-            else:
+            # elif self.set_but == "hidden":
+            #     pass
+            elif self.set_but in " weap, armor, consume, equip, remove":
                 tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
+            # else:
+            #     tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
             tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw")
             set_row = 1
             for card in gameVar.GameObjects.selected_items:
@@ -519,13 +537,13 @@ class OwnedItems(tk.Toplevel):
                 if self.set_but == "sell":
                     l3 = tk.Label(f, text=card['sell'])
                     l3.grid(row=set_row, column=2, sticky="nw")
-                # elif self.set_but == "weap" or self.set_but == "armor" or self.set_but == "consume" or self.set_but == "equip": ### too long!!!
                 elif self.set_but in " weap, armor, consume, equip, remove":
                     l3 = tk.Label(f, text=card['bonus'])
                     l3.grid(row=set_row, column=2, sticky="nw")
-                    b1 = tk.Button(f, text="info", command=lambda c=card["id"]: self.showcard(c))
-                    b1.grid(row=set_row, column=4)
-                tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
+                if set_but != "No Buttons":
+                    tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
+                b1 = tk.Button(f, text="info", command=lambda c=card["id"]: self.showcard(c))
+                b1.grid(row=set_row, column=4)
 
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
@@ -533,12 +551,13 @@ class OwnedItems(tk.Toplevel):
 
         if self.set_but in "weap, armor, sell":
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
-        if self.set_but == "consume":
+        if self.set_but in "consume, hidden":
             tk.Button(self, text="Use item", command=self.use_item).pack(side="left")
         if self.set_but == "weap" or self.set_but == "armor":
             tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
+
 
     def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
@@ -561,8 +580,8 @@ class OwnedItems(tk.Toplevel):
         app.update_message("show")
 
     def use_item(self):
-        """wont work as cards not in this any more"""
-        Tools.common_set("use")
+        """for consumables and hidden objects"""
+        Tools.common_set("disposable")
         OwnedItems.destroy(self)
         engine.scrub_lists()
         app.update_message("show")

@@ -27,7 +27,13 @@ class Dealer:
         dealing specific cards cardnum specific to the start/resurrect determines the amount of cards to of each type
         to deal players"""
 
-        # requires catch meth if no cards are left. Throws indexerror otherwise
+        # requires catch meth if no cards are left. Throws indexerror otherwise prob quick check here before if statements
+        if len(Moncurse.door_cards) < cardnum:
+            print("Not enough door cards")
+            return # brakes out of game loop for mo
+        if len(Moncurse.door_cards) < cardnum:
+            print("Not enough Treasure cards")
+            return
 
         if option == "start":
             """called at start to deal specific number of cards to pass to player"""

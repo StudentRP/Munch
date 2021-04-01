@@ -50,7 +50,7 @@ class PlayerSetUp:
         """Method to bind all player atribs to gameVar, to be called with player instance when ever
         communication is required to gui"""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
-        gameVar.PlayerAtribs.player_gender = playerinst.sex.title()
+        gameVar.PlayerAtribs.player_gender = playerinst.gender.title()
         gameVar.PlayerAtribs.player_level = playerinst.level
         gameVar.PlayerAtribs.player_bonus = playerinst.bonus
         gameVar.PlayerAtribs.player_wallet = playerinst.wallet
@@ -59,7 +59,7 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_klass = playerinst.klass.title()
         gameVar.PlayerAtribs.player_klass2 = playerinst.klass2.title()
         gameVar.PlayerAtribs.player_sack = playerinst.sack
-        gameVar.PlayerAtribs.player_unsorted = playerinst.unsorted
+        gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
         gameVar.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
         gameVar.PlayerAtribs.player_two_hand = playerinst.update_bindings("two_hand")
@@ -73,7 +73,7 @@ class PlayerSetUp:
         """ Calls meth to deal cards for players dependent on option parameter."""
         if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
             for player in gameVar.StartVariables.session_players:
-                player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
+                player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
             print("Opening the door....")
             door_card = cards.card_sop.deal_cards("door")
@@ -114,7 +114,7 @@ class PlayerSetUp:
         print(f"number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
         gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
         # session binding to new variable gamevar
-        self.deal_handler("start") # Starts process of dealing cards to all players. results in putting in player.unsorted. Does not bind to gameVar
+        self.deal_handler("start") # Starts process of dealing cards to all players. results in putting in player.sack. Does not bind to gameVar
 
     def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
         """Call active player list, use index to ref each player instance, call """
@@ -141,11 +141,12 @@ class PlayerSetUp:
                 if tup[0] == card["id"] and tup[1]:
                     if action == "sell":
                         gameVar.StartVariables.active_player.sell_item(card)
-                    elif action == "equip":
+                    elif action in "equip, disposable ,use":
                         self.tri_qualifier(card) # test ~~ok~~
-                    elif action == "use":
-                        # gameVar.StartVariables.active_player.
-                        pass
+                    # elif action == "use": # could not think of a good enough reason not to go through tri_qualifier for all my needs
+                    #     "consider action for and against player"
+                    #     if card["category"] == "treasure":
+                    #         pass
                     elif action == "remove":
                         player = gameVar.StartVariables.active_player
                         player.equipped_items("removal", card)
@@ -155,7 +156,7 @@ class PlayerSetUp:
         race, class, gender """
         player = gameVar.StartVariables.active_player
         checks = {player.race: "race_restriction", player.race2: "race_restriction", player.klass: "klass_restriction",
-                  player.klass2: "klass_restriction", player.sex:"sex_restriction"}
+                  player.klass2: "klass_restriction", player.gender: "gender_restriction"}
         flag = 1 # True
         for key, val in checks.items():
             if card.get(val):  # if present in dict do this. Dont put string return in get meth. Must return none!!!
@@ -166,7 +167,7 @@ class PlayerSetUp:
                     print(f"{key} - Dev path")
                     continue
                 else:
-                    gameVar.GameObjects.message = f"You cant equip this card, {val}"
+                    gameVar.GameObjects.message = f"You cant use this card, {val}"
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
@@ -180,6 +181,8 @@ class PlayerSetUp:
             player.equip_armor(card)
         elif card.get("type") == "weapon":
             player.equip_weapon(card)
+        elif card.get("type") == "disposable":
+            pass # meth for selecting target and changing bonuses
 
 
     def scrub_lists(self):
