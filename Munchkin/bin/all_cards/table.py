@@ -27,13 +27,14 @@ class Dealer:
         dealing specific cards cardnum specific to the start/resurrect determines the amount of cards to of each type
         to deal players"""
 
-        # requires catch meth if no cards are left. Throws indexerror otherwise prob quick check here before if statements
+        # Catch meth if no cards are left. cards now loop if not enough instead of throwing IndexError
         if len(Moncurse.door_cards) < cardnum:
             print("Not enough door cards")
-            return # brakes out of game loop for mo
-        if len(Moncurse.door_cards) < cardnum:
+            Table.restock(cards)
+        if len(Treasure.treasure_cards) < cardnum:
             print("Not enough Treasure cards")
-            return
+            Table.restock(cards)
+
 
         if option == "start":
             """called at start to deal specific number of cards to pass to player"""
@@ -48,9 +49,9 @@ class Dealer:
 
         elif option == "door":
             """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
-            print('From Door pile\n')
+            print('From Door pile')
             card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
-            print(f"Your card is: {card['name']}\nCards left in deck: {len(Moncurse.door_cards) - 1}")
+            print(f"Your card is: {card['name']}\nCards left in deck: {len(Moncurse.door_cards)}")
             return card
 
         elif option == "treasure":
@@ -60,7 +61,6 @@ class Dealer:
                 card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
                 # print(f"Card number: {pick},\nCard: {card}")
                 return card
-
         else:
             print("card error")
 
@@ -73,14 +73,6 @@ class Dealer:
         print(f"Card number: {pick},\nCard: {card}")
         return card
 
-    # def start_deal(self):
-    #     pass
-
-
-    # def deal(self):
-    #     for card in range(4):
-    #         x = Selector.grabber(self)
-    #         return x
 
 
 class Table(Treasure, Moncurse): # inherits from
@@ -104,8 +96,19 @@ class Table(Treasure, Moncurse): # inherits from
             x = len(self.burn_pile) -1
             return self.burn_pile[:x]
 
+    def restock(self):
+        for card in self.burn_card: # cards is the instance
+            if card.get("category") == "door":
+                Moncurse.door_cards.append(card)
+            else:
+                Treasure.treasure_cards.append(card)
+        print("Card decks refilled", "\nmonster cards =", len(Moncurse.door_cards),  "\nTreasure cards =", len(Treasure.treasure_cards),
+              "\nBurn pile = ", len(self.burn_pile))
+
+
 cards = Table() # main instance to use - gives access to all card classes and methods.
 dice = Table()
+
 
 if __name__ == "__main__":
 

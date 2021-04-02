@@ -36,6 +36,10 @@ class Options:
     cards_dealt = 4 # number of each card type delt at start or on resurrection #4 std
     perm_death = False # dead players do not come back
 
+class CardDraw:
+    """variables associated to game play."""
+    num_of_kicks = 0
+
 
 class PlayerAtribs:
     """Must mirror whats in game_loop.PlayerSetUp.verbinding and call to bind here!"""

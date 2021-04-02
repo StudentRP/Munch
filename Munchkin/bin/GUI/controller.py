@@ -6,6 +6,7 @@ Main gui for Munchkin, version 4 (old: gui_v3)
 import tkinter as tk
 import tkinter.ttk as ttk
 from bin.engine.game_loop_v3 import engine
+# import bin.engine.game_loop_v3 as engine #for game loop clean up
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
@@ -343,7 +344,7 @@ class MainLoop(tk.Frame):
                        "Level: ": controller.level, "Bonus: ": controller.bonus, "Wallet: ": controller.wallet,
                        "Race: ": controller.race, "Class: ": controller.klass}
 
-        player_defence = { "L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand,
+        player_defence = {"L_hand: ": controller.l_hand, "R_hand: ": controller.r_hand, "two_hand: ": controller.two_hand,
                            "Head Gear: ": controller.headgear, "Armor: ": controller.armor, "Knees: ": controller.knees,
                            "Foot gear: ": controller.footgear, "Necklace": controller.necklace}
         row = 0
@@ -383,6 +384,7 @@ class MainLoop(tk.Frame):
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
+        gameVar.CardDraw.num_of_kicks = 0 # resets door kicks
         self.b2.config(state="normal") # enables kick door button
         self.b3.config(state="normal")  # weapons
         self.b4.config(state="normal")  # armor
@@ -395,32 +397,49 @@ class MainLoop(tk.Frame):
         app.update_message("show")
         app.update_frame() # updates the tk.vars in Main under the instance controller.
         # Methods that need to run at start of every next player turn.
-        if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
-            self.race2_option.grid(row=8, column=1, sticky='nsew')
-            self.race2_optionb.grid(row=8, column=2, sticky='nsew')
-        if gameVar.StartVariables.active_player.klass_unlock:
-            self.klass2_option.grid(row=9, column=1, sticky='nsew')
-            self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
+        # if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
+        #     self.race2_option.grid(row=8, column=1, sticky='nsew')
+        #     self.race2_optionb.grid(row=8, column=2, sticky='nsew')
+        # if gameVar.StartVariables.active_player.klass_unlock:
+        #     self.klass2_option.grid(row=9, column=1, sticky='nsew')
+        #     self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def door(self):
         """game actions for door. cards drawn from door"""
-        print(f"{app.name.get()} has kicked open the door!")
-        engine.deal_handler("door") # deals door card and puts it into in_play list.
-        if engine.card_type(): # expects a true return if the card type == monster.
-            self.b2.config(state="disabled") # kick door
-            self.b3.config(state="disabled") # weapons
-            self.b4.config(state="disabled") # armor
-            self.b6.config(state="disabled") # sell
-            self.b11.config(state="normal") # fight
-            self.b12.config(state="normal") # run
+        gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
+        app.update_message("show")
+        self.b1.config(state="disabled") # disables end turn button, enables at end of fight
+        if gameVar.CardDraw.num_of_kicks == 0:
+            door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
+            app.update_message("show")
+            if engine.card_type(): # if monster on table
+                self.b2.config(state="disabled") # kick door
+                self.b3.config(state="disabled") # weapons
+                self.b4.config(state="disabled") # armor
+                self.b6.config(state="disabled") # sell
+                self.b11.config(state="normal") # fight
+                self.b12.config(state="normal") # run
+                # place door_card on canvas
 
-        else:
-            print("meth to sort for card that is not a monster")
-            #method call for other types of card either add to sack or apply curse
+            # need to show first time so raise pic, Cardview class
+            app.update_message("show")
+            gameVar.CardDraw.num_of_kicks += 1 # always increments after first kick
+
+        elif gameVar.CardDraw.num_of_kicks == 1:
+            self.b2.config(state="disabled") # disables door button
+            engine.deal_handler("door", call=0)# call set to false
+            self.b1.config(state="normal") # enables fight
+            app.update_message("show")
 
     def fight(self):
-        engine.fight()
+        engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
+
+        engine.varbinding(gameVar.StartVariables.active_player) #####
+        app.update_frame() ###
+
+        # remove card form list and canvas ect
+        self.b1.config(state="normal") #end of fight enables end turn
 
     def run(self):
         engine.run()
@@ -551,7 +570,6 @@ class OwnedItems(tk.Toplevel):
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
 
-
     def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
         CardVeiw(card_id)
@@ -576,6 +594,7 @@ class OwnedItems(tk.Toplevel):
         """for consumables and hidden objects"""
         Tools.common_set("disposable")
         OwnedItems.destroy(self)
+
         engine.scrub_lists()
         app.update_message("show")
 

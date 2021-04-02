@@ -9,19 +9,33 @@ class MonTools:
 
     def supermunch(self, action):
         """player class_unlock bool option"""
+        print("in supermuinch")
 
         if action == "add":
-            print("return True")
+            self.klass_unlock = True
+            print("class unlocked!!!")
         else:
+            self.klass_unlock = False
             print("return False")
 
     def half_breed(self, action):
+        print("in halfbreed")
         if action == "add":
-            print("return True")
+            self.race_unlock = True
+            print("race unlocked!!")
         else:
+            self.race_unlock = False
             print("return False")
 
-    method_types = {'supermunch': supermunch, 'half_breed': half_breed}
+
+    def loose_footgear(self):
+        pass #pos zipper meth
+
+    def loose_level(self):
+        pass
+
+    method_types = {'supermunch': supermunch, 'half_breed': half_breed, 'loose_footgear': loose_footgear,
+                    "loose_level": loose_level}
 
 
 #####################################################################
@@ -37,7 +51,7 @@ class Moncurse(MonTools):
     door_cards = [
         # monster cards, Order : name, description, level, treasure, badstuff, loose
         {'id': 200, "category": "door", 'type': 'monster', 'name': 'Crabs', 'des': 'Cant outrun', 'lvl': 1, 'treasure': 1, 'bs': 'loose all armour below waist',
-            'loose': "footgear legs knees"},
+            'method': "footgear legs knees"},
         {'id': 201, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'des': 'fried chicken extra level if defeat with fire', 'lvl': 2, 'treasure': 1,
          'bs': 'loose level', 'loose': "one level"},
         {'id': 202, "category": "door", 'type': 'monster', 'name': 'Shade', 'des': 'undead -2 against thieves who are not fooled by shadows', 'lvl': 3, 'treasure': 1,
@@ -46,7 +60,7 @@ class Moncurse(MonTools):
          'bs': 'more fun than having poo thrown at you and hair pulled out', 'loose': "-1 level -1 small item"},
 
         # Curse cards,curse card list: name, des, bs
-        {'id': 204, "category": "door", 'type': 'cures', 'name': 'curse', 'bs': 'loose footgear'},
+        {'id': 204, "category": "door", 'type': 'curse', 'name': 'curse', 'method': 'loose_footgear'},
 
         # Monster Enhancers
 

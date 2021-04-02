@@ -18,6 +18,8 @@ from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 from Munchkin.bin.players.playersetup import P_tools
 import bin.GUI.gui_variables as gameVar
 from bin.all_cards.table import cards
+from bin.all_cards.door_cards.doorcards import MonTools
+from bin.all_cards.treasure_cards.treasurecards import T_tools
 from  itertools import cycle
 
 
@@ -40,36 +42,13 @@ attributes based on action outcomes."""
 ##########################################################################
 
 
-# class Player_atribs:
-#
-#
-#
-#     @classmethod
-#     def card_choice(cls, card):
-#         """card options"""
-#         print(card)
-#         choice = input("Options:\n1: Store card\n2: Use card\n3: equip.\n>>> ")
-#         while True:
-#             if choice == "1":
-#                 return 'store'
-#             elif choice == "2":
-#                 return 'use'
-#             elif choice == "3":
-#                 return 'equip'
-#             elif choice == "q":
-#                 print("Missed opportunity!")
-#                 quit()
-#             else:
-#                 print("Type number!")
-#                 continue
-
 
 #####################################################################
 # MAIN PLAYER CLASS
 #####################################################################
 
 
-class Player(P_tools):
+class Player(MonTools, T_tools):
     """Main player class"""
 
     def __init__(self, ref):
@@ -93,16 +72,17 @@ class Player(P_tools):
         self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""}
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
         self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
-                      "necklace": "", "ring": "", "ring2": ""} # fill with card ids
+                      "necklace": "", "ring": "", "ring2": ""} # fill with card
         self.sack = [] # 5 max, pos editable later in an options
-        self.hidden_cards = [] # for cards that should not be seen by others
+        self.active_cards = [] # cards that elicit an effect ie supermunch armor enhancers ect
         self.hireling = []
-        self.cards_in_use = [] # enhances/curses applied, weapons/armour worn.
         # self.unsorted = [] # Old! list of all cards that are used to by sorting
         self.alive = True
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
+        self.curses = [] # list of all active curses cards on player, can be removed with ork/wishing ring
+        self.curse_allowed = True #switched off with tin hat ect
 
     def __repr__(self):
         """developer aid"""
@@ -123,7 +103,6 @@ class Player(P_tools):
                 if isinstance(sub_cat[key], dict) and key == carried:
                     # gameVar.GameObjects.message = f'{sub_cat.get(key).get("name")} has been bound to {key}'
                     return sub_cat.get(key).get("name")
-
 
     def char_setup(self):
         # complete, prints to be removed
@@ -174,7 +153,6 @@ class Player(P_tools):
         if self.name == "The_Creator":
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
-
 
     def equipped_items(self, action, cards=None): # in use by gui list_equipped meth
         """sorts through equipped items, removing items that have been selected"""
@@ -247,6 +225,18 @@ class Player(P_tools):
             gameVar.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
+
+    def card_meths(self, card, action):
+        """link to card methods for active effect on player"""
+        print("in player meth")
+        if card.get("category") == "door":
+            for key, val in MonTools.method_types.items():
+                if key == card.get("method"):
+                    print(f"the key is {key}")
+                    val(self, action) # action is add or remove
+
+
+
 
 
 

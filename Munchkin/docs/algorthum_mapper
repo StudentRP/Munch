@@ -484,6 +484,7 @@ The end goal is to remove items from the player adding them to the burn pile and
     app.update_frame()
         updates the player info screen detailing changes to player wallet
 
+
 ##########################################################################
 # Equipping method
 ##########################################################################
@@ -519,7 +520,7 @@ MainLoop, class
                         if none exist the loop is exited resulting in the card being passed to the next method.
                         If the card contains a restriction it is compared to the player. In the event the player does not
                         qualify, the cards remains in the unsorted list unequipped. A flag is used to control passage.
-                        ############## small bug name can be r and still qualify if no gender set #######################
+                        ############## small bug name can be r and still qualify if no gender set ####################### ADDED DEFAULT GENDER
                         If qualified, card_designator(player, card) is called passing the card and player along.
 
                         card_designator(self, player, card), method
@@ -527,17 +528,6 @@ MainLoop, class
                             based on card type. in the case of armor: equip_armor is called from the player class
 
                             equip_armor(self, card)
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -557,10 +547,17 @@ way to screen cards race/gender... same for cursing??
 way to add to player or check if place is occupied already and remove player and add to sack
 
 
+##########################################################################
+# view method
+##########################################################################
+done
+
+
 
 #######################################################################
 # remove items
 #######################################################################
+done
 action =  engine,zipper("remove")>
 requires a search if player assets as no items will show in top level as they have been removed.
 
@@ -569,13 +566,83 @@ requires a search if player assets as no items will show in top level as they ha
 #######################################################################
 # enhancers
 #######################################################################
+not done
 most likely card associated methods that are called at start of play to enrich/encumber player
+
+
+#######################################################################
+# door
+#######################################################################
+door button triggers the advancement through the game by placing cards on the table. Two options are then present: the
+card is either a non fighting cards that requires resolving ie curse on player ect or, a monster card that needs to be
+fought to progress forward.
+
+Door button > door method
+     self.b1.config(state="disabled"), disables end_turn to prevent early escape
+     gameVar.CardDraw.num_of_kicks == 0, condition to enforce play order (non fight= 2nd door kick, fight = end)
+     door_card = engine.deal_handler("door", call=1) method that excepts return object(this will be card for pic)
+     call is for the card designator to handle cards in different way dependent upon how many times the door has been kicked.
+        deal_handler(self, option, call=1), method (option =start, door or treasure, call=conduit pass)
+           When kicking the door the option will always be "door".
+            door_card = cards.card_sop.deal_cards("door", 1), method, (type of card wanted, deck volume checker)
+                Runs the Table class that has a dealer() method that returns specific cards.
+                calls self.card_designator(door_card, call=call), method (sends new door card, sends call)
+            card_designator(self, card, call=1, num=0), method,
+                sorts the new card dependent on its type. If monster, and call is 1 (denoting first kick of door- eval to True)
+                adds to cards.in_play.append(card) ready for fight. else is used when call=0 denoting door kick is 2nd attempt
+                card in this case is added to the player hand.
+                curse cards on first attempt curse the player (method to run card to follow), 2nd attempt card goes in sack
+                all other cards go to sack. num is not used in this section with explanation left to winning fights and
+                gaining treasure. Final elif card.get("category") == "door" block catches cards that have no effect
+                directly and do not fit under the monster or curse. call is used to define how many times door has been pushed.
+        engine.card_type(), method, checks to see if monster has been added to the in_play stack. If returns true, buttons:
+        door, weapons, armor and sell are all disabled to prevent miss use. Buttons fight and run are enabled.
+        Importantly door disabled prevents further use and a second call on the door. reset is done by ending turn.
+
+    Both engine.card_type() and else statement result in incrementation of num_of_kicks by one.
+
+    With a card that is not a monster card on first instance, a second push of door is allowed. In this instance
+    gameVar.CardDraw.num_of_kicks == 1 evaluates correctly disabling door button for further use.
+    engine.deal_handler("door", call=0) is called again with the parameter call set to 0 (False)
+        engine.deal_handler("door", call=0), method
+            like before gets door card in turn calling card_designator again with the new call parameter of 0
+            card_designator(self, card, call=0), method
+                now triggers all else statements for the desired card type. In all instances this places the card in the
+                player sack and not on the table.
 
 
 #######################################################################
 # fight
 #######################################################################
+fight button becomes available when a monster is on the table within the in_play list. any additions to this list with
+force the player to battle monsters in a first in last out order until no monsters are left. This order is also apparent
+with the run button discussed later.
 
 
 
+#######################################################################
+# run
+#######################################################################
 
+
+#######################################################################
+# curses
+#######################################################################
+card_designator(self, card, call=1): look under curses to add meth
+
+
+#######################################################################
+# interfere method
+#######################################################################
+
+
+
+#######################################################################
+# help
+#######################################################################
+
+
+
+#######################################################################
+# pay to go up level
+#######################################################################

@@ -69,19 +69,62 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_footgear = playerinst.update_bindings("footgear")
         gameVar.PlayerAtribs.player_necklace = playerinst.update_bindings("necklace")
 
-    def deal_handler(self, option, instance=None): # instance for future use in case of player specific demand.
-        """ Calls meth to deal cards for players dependent on option parameter."""
+    def deal_handler(self, option, call=1, num=0):
+        """ Gets cards, type dependent on option parameter."""
+        playerinst = gameVar.StartVariables.active_player
         if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
             for player in gameVar.StartVariables.session_players:
                 player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
-            print("Opening the door....")
-            door_card = cards.card_sop.deal_cards("door")
-            cards.in_play.append(door_card) # adds card to the in_play list, card_type meth now sorts through.
+            door_card = cards.card_sop.deal_cards("door", 1) # gets card, 1 = min amount required in pack
+            self.card_designator(door_card, call=call)
+            return door_card
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
-            print("You have been dealt a treasure card") # simple add to player items list
+            print("dealt a treasure card") # test location
+            card = cards.in_play[-1] # last on on stack
+            my_treasure = cards.card_sop.deal_cards("treasure", num) # params = type of card, num of cards
+            playerinst.sack.append(my_treasure)
         else:
             print("I guess the deck is empty....")
+
+    def card_designator(self, card, call=1):
+        """where the card go"""
+        player = gameVar.StartVariables.active_player
+        if card.get("type") == "armor":
+            player.equip_armor(card)
+        elif card.get("type") == "weapon":
+            player.equip_weapon(card)
+        elif card.get("type") == "disposable":
+            pass # meth for selecting target and changing bonuses
+        elif card.get("type") == "monster":
+            if call:
+                gameVar.GameObjects.message = "Monster placed on table"
+                cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
+            else:
+                gameVar.GameObjects.message = "Adding card to sack"
+                player.sack.append(card)
+        elif card.get("type") == "curse":
+            if call:
+                gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
+                #run card meth, need to add efect to player info
+                player.curses.append(card) # meth required to run with curse. can tie into gameVar.kick_door for 2nd go action
+                print("in curse::", player.curses)
+            else:
+                gameVar.GameObjects.message = "Adding card to sack"
+                player.sack.append(card)
+        elif card.get("category") == "door": # must be after the mon/curse checks
+            print("Adding to sack")
+            # player = gameVar.StartVariables.active_player
+            player.sack.append(card) #needs to go into a active pile
+            if call:
+                gameVar.GameObjects.message = f"Adding {card.get('name')} to sack."
+                ################################################################testing
+                player.card_meths(card, "add")  # link to player to card meths. WORKS
+                print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth rend_turn move to after equip
+                ##############################################################
+                return card  # to show if first time only 2nd it hides
+            elif not call:
+                gameVar.GameObjects.message = "Adding 2nd card to sack"
 
     def player_order(self, current_player): # called with gameVar rand_index
         """Note initial player is set at this point+bound.
@@ -174,16 +217,7 @@ class PlayerSetUp:
 
         if flag: # only if flag remains True
             # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
-            self.card_designator(player, card) # new separator meth
-
-    def card_designator(self, player, card):
-        if card.get("type") == "armor":
-            player.equip_armor(card)
-        elif card.get("type") == "weapon":
-            player.equip_weapon(card)
-        elif card.get("type") == "disposable":
-            pass # meth for selecting target and changing bonuses
-
+            self.card_designator(card=card) # new separator meth... remove player param
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""
@@ -194,24 +228,25 @@ class PlayerSetUp:
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
     def card_type(self):
-        """meth for sorting through the table cards and defining next action"""
-        door_kicks = 0
-        while door_kicks < 2:
-            if cards.in_play[-1]["type"] == 'monster':
-                return True
-            else:
-                door_kicks +=1
-                return False
-        else:
-            print("exceeded") # two kicks only, second card goes in hand
+        """meth for checking the presents of table cards"""
+        if cards.in_play: # checks to see if cards in play
+            print("card_type", cards.in_play)
+            return True
+        else: # if list is empty the last card must have not been a monster
+            return False
 
-    def fight(self):
+    def fight(self, helpper=None):
         print("in the fight!")
         card = cards.in_play.pop(-1) # end of cards on table
         player = gameVar.StartVariables.active_player
         if player.bonus + player.level >= card["lvl"]:
             print("you win!")
+            player.card_meths(card) #####
             cards.burn_card.append(card)
+        else:
+            print("fight lost")
+
+
 
         gameVar.GameObjects.message = f"You are fighting {card['name']}, level {card['lvl']}"
 
