@@ -103,6 +103,7 @@ class Main(tk.Tk):
 # frames to build up interface
 ##########################################################################
 
+
 class StartPg(tk.Frame):
     """Starting page with options to enhance game play"""
     # window_color = "#160606" # Would like pic here of door
@@ -202,9 +203,6 @@ class PlayerSelect(tk.Frame):
         but1 = tk.Button(self, text="Confirm", command=self.playersetter)
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack(side="bottom")
-
-
-
 
     def playersetter(self):
         """Binds values from spinbox to gui_var for later use and calls next stage. calls player slice and meth to set
@@ -306,7 +304,6 @@ class MainLoop(tk.Frame):
         self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5, pady=10)
         self.b2.place(x=350, y=45)
 
-
         self.b3 = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
         self.b3.place(x=250, y=10)
         self.b4 = tk.Button(self.butframe, text="Armour", command=self.list_armor)
@@ -334,8 +331,7 @@ class MainLoop(tk.Frame):
         self.b12.place(x=100, y=100)
 
         self.b13 = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
-        self.b13.place(x=360, y=90)
-
+        self.b13.place(x=365, y=100)
 
 
         "frame player attribs"
@@ -422,14 +418,12 @@ class MainLoop(tk.Frame):
             print("meth to sort for card that is not a monster")
             #method call for other types of card either add to sack or apply curse
 
-
     def fight(self):
         engine.fight()
         app.update_message("show") # name and lvl of monster
 
     def run(self):
         engine.run()
-
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
@@ -491,7 +485,6 @@ class MainLoop(tk.Frame):
         player = gameVar.StartVariables.active_player
         player.inventory("category", "treasure")
         OwnedItems("Sack Items")
-
 
     def list_equipped(self):
         """list showing all items that are equipped"""
@@ -606,6 +599,7 @@ class CardVeiw(): # not currently working
         can.create_image(2, 2, image=img, anchor=tk.NW)  # x, y coordinates
         win.mainloop()
 
+
 class Tools:
     """method sets to uphold dry programing"""
 
@@ -616,9 +610,6 @@ class Tools:
         engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
-
-
-
 
 
 
