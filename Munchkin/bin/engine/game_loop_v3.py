@@ -87,7 +87,7 @@ class PlayerSetUp:
         else:
             print("I guess the deck is empty....")
 
-    def card_designator(self, card, call=1):
+    def card_designator(self, card, call=1): #linked from tri_qual and door button
         """where the card go"""
         player = gameVar.StartVariables.active_player
         if card.get("type") == "armor":

@@ -379,6 +379,7 @@ class MainLoop(tk.Frame):
 
         self.canvas = tk.Canvas(self.tblframe, bg='black')
         self.canvas.pack(anchor="n", expand="yes", fill=tk.BOTH)
+        self.canvas.pack(anchor="n", expand="yes", fill=tk.BOTH)
 
     "Handlers"
     def end_turn(self):
@@ -630,6 +631,15 @@ class Tools:
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
 
+    @staticmethod #not working Yet
+    def viewer(parent, card_id=None):
+        path = "..\\imgs\\cards\\"
+        win = tk.Frame(parent)
+        img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
+        can = tk.Canvas(win)
+        can.pack(fill=tk.BOTH)
+        can.config(width=img.width(), height=img.height())
+        can.create_image(2, 2, image=img, anchor=tk.NW)
 
 
 
