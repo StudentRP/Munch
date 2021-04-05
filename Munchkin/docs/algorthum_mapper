@@ -513,7 +513,7 @@ MainLoop, class
                 card_matcher(action), method - See sell , (brief - id matches cards with the unsorted. The tuples return
                     True to yield cards that can be used). The action parameter defines what happens to the card next).
 
-                    tri_qualifier(card), method - For any card to be equipped it must be checked to ensure that it is suited
+                    ,, method - For any card to be equipped it must be checked to ensure that it is suited
                         to the player in respects of race, class and gender. This is required as some cards have restrictions
                         who can use them. (This is an updated meth that does away with the a fractured 3 method approach).
                         Uses dict of key vals to loop over player and card. First card is checked for any restrictions,

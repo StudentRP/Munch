@@ -11,6 +11,7 @@ import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
 from PIL import ImageTk
+import os
 
 gamefont=('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
@@ -608,11 +609,13 @@ class OwnedItems(tk.Toplevel):
 
 class CardVeiw(): # not currently working
     def __init__(self, card_id=None):
-        path = "..\\imgs\\cards\\"
+        # path = "..\\imgs\\cards\\"
+        PIC = os.path.abspath(r"..\imgs\cards")
 
         win = tk.Toplevel()
         win.title("Card Info")
-        img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") # does not require pil but in case change format
+        # img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") # does not require pil but in case change format
+        img = ImageTk.PhotoImage(file=PIC + f"\\{str(card_id)}.png")
         can = tk.Canvas(win)
         can.pack(fill=tk.BOTH)
         can.config(width=img.width(), height=img.height())
@@ -631,15 +634,15 @@ class Tools:
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
 
-    @staticmethod #not working Yet
-    def viewer(parent, card_id=None):
-        path = "..\\imgs\\cards\\"
-        win = tk.Frame(parent)
-        img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
-        can = tk.Canvas(win)
-        can.pack(fill=tk.BOTH)
-        can.config(width=img.width(), height=img.height())
-        can.create_image(2, 2, image=img, anchor=tk.NW)
+    # @staticmethod #not working Yet
+    # def viewer(parent, card_id=None):
+    #     path = "..\\imgs\\cards\\"
+    #     win = tk.Frame(parent)
+    #     img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
+    #     can = tk.Canvas(win)
+    #     can.pack(fill=tk.BOTH)
+    #     can.config(width=img.width(), height=img.height())
+    #     can.create_image(2, 2, image=img, anchor=tk.NW)
 
 
 
