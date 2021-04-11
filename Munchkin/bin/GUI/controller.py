@@ -22,6 +22,7 @@ but_color = "#3EB0A1"
 # Main controller
 ##########################################################################
 
+
 class Main(tk.Tk):
     """main controller class that interchanges frames, updates variables with the frames"""
 
@@ -369,18 +370,19 @@ class MainLoop(tk.Frame):
             row += 1
 
         "Game Window"
-        self.tblframe = tk.LabelFrame(self, text='Table')
-        self.tblframe.config(bg='lightgrey'),
-        self.tblframe.pack( fill="both", expand=True)
+        self.tblframe = tk.LabelFrame(self, text='Table') # main back window
+        self.tblframe.config(bg='lightgrey')
+        self.tblframe.pack(fill="both", expand=True)
 
-        self.message = tk.Label(self.tblframe, textvariable=controller.message)
-        self.message.pack(anchor="n", fill="x", expand=True)
-        self.message = tk.Label(self.tblframe, textvariable=controller.message2)
-        self.message.pack(anchor="n", fill="x", expand=True)
+        self.notifications = tk.Frame(self.tblframe)
+        self.notifications.pack(anchor="n", side=tk.TOP, fill="x", expand=True)
+        self.message = tk.Label(self.notifications, textvariable=controller.message)
+        self.message.pack(side="top", fill="x", expand=True)
+        self.message = tk.Label(self.notifications, textvariable=controller.message2)
+        self.message.pack(side="top", fill="x", expand=True)
 
-        self.canvas = tk.Canvas(self.tblframe, bg='black')
-        self.canvas.pack(anchor="n", expand="yes", fill=tk.BOTH)
-        self.canvas.pack(anchor="n", expand="yes", fill=tk.BOTH)
+        self.canvas = tk.Canvas(self.tblframe, bg='black') # canvas not expanding in the correct dimensions
+        self.canvas.pack(side="top", fill="both", expand="yes") # without self should now be accessible for the class....
 
     "Handlers"
     def end_turn(self):
@@ -421,6 +423,8 @@ class MainLoop(tk.Frame):
                 self.b6.config(state="disabled") # sell
                 self.b11.config(state="normal") # fight
                 self.b12.config(state="normal") # run
+                #meth to return card, use id to put card pic
+                # self.canvas.
                 # place door_card on canvas
 
             # need to show first time so raise pic, Cardview class
