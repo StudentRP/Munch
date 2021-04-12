@@ -1,4 +1,4 @@
-,Game logic algorithmic determination
+Game logic algorithmic determination
 
 ##################################################
 START
@@ -102,9 +102,9 @@ END TURN
         reset condition
         END TURN
 
-
 ######################################################
-# classes and methods
+######################################################
+# classes, methods and logic
 ######################################################
 
 Player class:
@@ -387,6 +387,7 @@ PlayerSelect(), class
 #######################################################################
 # player rotation method, (initial start and game progression)
 #######################################################################
+
 Setting player rotation method and binding attributes. In previous section varbinding(player) and update_frame()
 set the player info to the random selected player. This is detailed in the player info to the left on the screen and
 goes first in the game. End turn button should trigger events that lead to the next player and the update of the
@@ -488,6 +489,7 @@ The end goal is to remove items from the player adding them to the burn pile and
 ##########################################################################
 # Equipping method
 ##########################################################################
+
 Accessed by either weapons or armour buttons.
 MainLoop, class
     Armor, Main screen button - calls list_armor method
@@ -495,18 +497,19 @@ MainLoop, class
     list_armor, method:
         gameVar.GameObjects.message & app.update_message("show") - Call simple message to the main window
 
-        engine.scrub_lists() - clears all lists ready for new item stack
+        engine.scrub_lists() - clears all lists ready for new item stack in the toplevel window.
 
-        player.inventory("type", "armor") - builds a list of all weapons from the unsorted list to contain only armor
-            This list is bound to gameVar.selected_items. Note that this meth take two params as it is looking for a
+        player.inventory("type", "armor") - searches player card list for cards that have a key of "type" and val of "armor".
+            Cards that meet this criteria are sent to gameVar.selected_items. Note that this meth take two params as it is looking for a
             specific key val pair. Note cards have "type":"armor" arrangement in the card dict.
 
         OwnedItems("Armor Owned", "armor") - TopLevel call with params for title other for button layout specific to armor.
 
-    OwnedItems(title, set_but) - Toplevel, Window is build with title and specific set of buttons for armor cards.
-        Buttons include: sell (method as above), Equip (This focus).
+    OwnedItems(title, set_but) - Toplevel, Window is built with title and specific set of buttons for armor cards found in the player.
+        Buttons include: sell (method as above), Equip (This focus), a check box and info (displays card) for each item.
 
-        equip - button method
+        equip - button method, ran on those items that have been checked.
+            calls common_set That calls a common set of methods found with many buttons.
                 engine.zipper("equip"), method -  See sell meth for action (brief - takes selected_items list and bools
                 from checkbox to make. Calls card_matcher)
 

@@ -16,7 +16,7 @@ Considerations;
 
 # from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 # creates circular
 # from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
-from Munchkin.bin.all_cards.table import cards
+from Munchkin.bin.all_cards.table import cards, dice
 # from Munchkin.bin.engine import cut_scenes as cs
 from random import randint, choice
 import bin.GUI.gui_variables as gameVar
@@ -77,28 +77,30 @@ class PlayerSetUp:
                 player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
             door_card = cards.card_sop.deal_cards("door", 1) # gets card, 1 = min amount required in pack
-            self.card_designator(door_card, call=call)
+            self.card_designator(door_card, call=call) # call needed to define where card goes dependent on how many timed door button pushed
             return door_card
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("dealt a treasure card") # test location
             card = cards.in_play[-1] # last on on stack
             my_treasure = cards.card_sop.deal_cards("treasure", num) # params = type of card, num of cards
-            playerinst.sack.append(my_treasure)
+            playerinst.sack.append(my_treasure) # adds strait to sack no ponit in card_desig
         else:
             print("I guess the deck is empty....")
 
-    def card_designator(self, card, call=1): #linked from tri_qual and door button
-        """where the card go"""
+    def card_designator(self, card, call=1, action=None): #linked from tri_qual and door button
+        """where the card go. action required for the cards coming in from use, disposable and
+        equip. ie what if use item that's not disposable?
+        """
         player = gameVar.StartVariables.active_player
         if card.get("type") == "armor":
-            player.equip_armor(card)
+            player.equip_armor(card) # leads to player meth for placing in right place
         elif card.get("type") == "weapon":
             player.equip_weapon(card)
-        elif card.get("type") == "disposable":
-            pass # meth for selecting target and changing bonuses
+        elif card.get("type") == "disposable": # for disposable throwable only
+            pass # meth for selecting target and changing bonuses,
         elif card.get("type") == "monster":
-            if call:
-                gameVar.GameObjects.message = "Monster placed on table"
+            if call: # determines if first kick of door (T or F), if 1 = first kick
+                gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
             else:
                 gameVar.GameObjects.message = "Adding card to sack"
@@ -106,25 +108,27 @@ class PlayerSetUp:
         elif card.get("type") == "curse":
             if call:
                 gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
-                #run card meth, need to add efect to player info
+                #run card meth, need to add efect to player info and check if the action is valid
                 player.curses.append(card) # meth required to run with curse. can tie into gameVar.kick_door for 2nd go action
                 print("in curse::", player.curses)
             else:
                 gameVar.GameObjects.message = "Adding card to sack"
                 player.sack.append(card)
-        elif card.get("category") == "door": # must be after the mon/curse checks
+        elif card.get("category") == "door": # if is a door but not mon/curse. must be after the mon/curse checks.
             print("Adding to sack")
             # player = gameVar.StartVariables.active_player
             player.sack.append(card) #needs to go into a active pile
-            if call:
-                gameVar.GameObjects.message = f"Adding {card.get('name')} to sack."
-                ################################################################testing
+            if call: # if 2nd kick or default call(norm equip ie halfbread)
+                gameVar.GameObjects.message = f"Adding/using {card.get('name')}."
+                ################################################################testing cards meths
                 player.card_meths(card, "add")  # link to player to card meths. WORKS
-                print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth rend_turn move to after equip
+                print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class, meths added at end_turn
+
                 ##############################################################
                 return card  # to show if first time only 2nd it hides
-            elif not call:
+            elif not call: # 2nd kick of door
                 gameVar.GameObjects.message = "Adding 2nd card to sack"
+                player.sack.append(card)
 
     def player_order(self, current_player): # called with gameVar rand_index
         """Note initial player is set at this point+bound.
@@ -140,12 +144,12 @@ class PlayerSetUp:
                 print(f"{gameVar.StartVariables.active_player.name} has been binded")
                 break
             elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
-                print(f"print player {current_player} is dead") #move in to conditional for permadeath
-                current_player.alive = True # resets player status ##########need peradeath bit here
+                print(f"print player {current_player} is dead") # move in to conditional for perm-a-death
+                current_player.alive = True # resets player status ##########need per-a-death bit here
                 gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
             else:
-                print(f"{y.name} did not match. Searching for player in list")
+                print(f"{y.name.title()} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
 
         gameVar.GameObjects.message = f"{gameVar.StartVariables.active_player.name.title()}'s turn..."
@@ -194,7 +198,7 @@ class PlayerSetUp:
                         player = gameVar.StartVariables.active_player
                         player.equipped_items("removal", card)
 
-    def tri_qualifier(self, card):
+    def tri_qualifier(self, card,):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
         race, class, gender """
         player = gameVar.StartVariables.active_player
@@ -247,12 +251,20 @@ class PlayerSetUp:
             print("fight lost")
 
 
-
         gameVar.GameObjects.message = f"You are fighting {card['name']}, level {card['lvl']}"
 
-
     def run(self):
-        print("in run like the wind!")
+        roll = dice.dice_sop.roll()
+        player = gameVar.StartVariables.active_player
+        print(f"You rolled a {roll}.")
+        if roll >= player.run:
+            print(f"You rolled a {roll}. You out ran your pursuer.")
+            remove = cards.in_play.pop(0)
+            cards.burn_pile.append(remove)
+        else:
+            print("Tried to run and slipped. Things are gona get ugly!")
+            # method for card bad stuff. check player alive.
+            # If dead remove all other cards to burn
 
 
 engine = PlayerSetUp()

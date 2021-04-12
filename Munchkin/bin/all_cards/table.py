@@ -74,7 +74,6 @@ class Dealer:
         return card
 
 
-
 class Table(Treasure, Moncurse): # inherits from
     """This is the table model and the attributes expected from the game tablel"""
     def __init__(self):

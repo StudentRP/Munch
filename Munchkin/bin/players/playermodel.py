@@ -83,6 +83,7 @@ class Player(MonTools, T_tools):
         self.cheat_card = 0 # card the player is cheating with
         self.curses = [] # list of all active curses cards on player, can be removed with ork/wishing ring
         self.curse_allowed = True #switched off with tin hat ect
+        self.run = 4 # ability to run, manipulable.
 
     def __repr__(self):
         """developer aid"""
@@ -122,12 +123,13 @@ class Player(MonTools, T_tools):
         print(f"Your name is {self.name.title()} and you are {self.gender.title()}.")
 
     def inventory(self, key, cardtype): # called from GUI on button press
-        """Returns list of dict from player sack cards that have the key and match the key to a specific value.
-        (ie sub_type == armour)."""
+        """Returns list of dict from player sack cards that have a specific key and specific value.
+        (ie sub_type == armour). returns all sub_types with the val of armor"""
         gameVar.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
 
-    def item_by_key(self, key):
-        """Returns list of cards form player sack list that contain the key x. (ie "sell") """
+    def item_by_key(self, key):# generalised meth for key search
+        """Returns list of cards form player sack list that contain the key x. (ie "sell").
+        This is generalised meth for key search """
         gameVar.GameObjects.selected_items = [obj for obj in self.sack if obj.get(key)]
 
     def sell_item(self, card): # called by player.sell_item so self bound to player

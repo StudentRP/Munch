@@ -12,6 +12,7 @@ import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
 from PIL import ImageTk
 import os
+# import bin.GUI.gui_tools as tools
 
 gamefont=('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
@@ -60,14 +61,14 @@ class Main(tk.Tk):
 
         "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
-            frame = frm(container, self) # passes container as the parent
+            frame = frm(container, self) # passes container as the parent each frame reps dif object id
             self.frames[frm] = frame
             frame.grid(row=0, column=0, sticky='nsew')
         self.show_frame(StartPg)
 
     def show_frame(self, content):
         """brings the fame to the fore front"""
-        frame = self.frames[content]
+        frame = self.frames[content] # loos in dict for the pg
         frame.tkraise()
 
     def update_frame(self):
@@ -290,13 +291,15 @@ class PlayerInfo(tk.Toplevel):
 
 ####################################################################################################################
 class MainLoop(tk.Frame):
-    """3 frames with game loop, function required to set index at random place """
+    """MainLoop configures main window presenting all buttons and handlers for gameplay. the gameplay area is split into
+    3 domains player info, button console and fight/message screen"""
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
         "frame for buttons - may create some buttons to inherit style from "
         self.butframe = tk.LabelFrame(self, text='Navigation')
-        self.butframe.config(bg=but_color, fg="blue")
+        self.butframe.config(bg="darkgrey", fg="red")
         self.butframe.pack(side='bottom', fill='x', ipady=80)
 
         self.b1 = tk.Button(self.butframe, text="End Turn", command=self.end_turn)
@@ -335,6 +338,9 @@ class MainLoop(tk.Frame):
 
         self.b13 = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
         self.b13.place(x=365, y=100)
+
+        self.b14 = tk.Button(self.butframe, text="Update info", command=self.update_info)  # for hidden objects
+        self.b14.place(x=10, y=10)
 
 
         "frame player attribs"
@@ -384,11 +390,13 @@ class MainLoop(tk.Frame):
         self.canvas = tk.Canvas(self.tblframe, bg='black') # canvas not expanding in the correct dimensions
         self.canvas.pack(side="top", fill="both", expand="yes") # without self should now be accessible for the class....
 
+
     "Handlers"
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         gameVar.CardDraw.num_of_kicks = 0 # resets door kicks
+        # Methods that need to be applied to a player for next turn.
         self.b2.config(state="normal") # enables kick door button
         self.b3.config(state="normal")  # weapons
         self.b4.config(state="normal")  # armor
@@ -400,20 +408,13 @@ class MainLoop(tk.Frame):
         app.update_message()  # clears all messages
         app.update_message("show")
         app.update_frame() # updates the tk.vars in Main under the instance controller.
-        # Methods that need to run at start of every next player turn.
-        # if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
-        #     self.race2_option.grid(row=8, column=1, sticky='nsew')
-        #     self.race2_optionb.grid(row=8, column=2, sticky='nsew')
-        # if gameVar.StartVariables.active_player.klass_unlock:
-        #     self.klass2_option.grid(row=9, column=1, sticky='nsew')
-        #     self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def door(self):
         """game actions for door. cards drawn from door"""
         gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
         app.update_message("show")
         self.b1.config(state="disabled") # disables end turn button, enables at end of fight
-        if gameVar.CardDraw.num_of_kicks == 0:
+        if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
             door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
             app.update_message("show")
             if engine.card_type(): # if monster on table
@@ -436,6 +437,15 @@ class MainLoop(tk.Frame):
             engine.deal_handler("door", call=0)# call set to false
             self.b1.config(state="normal") # enables fight
             app.update_message("show")
+
+    def update_info(self):
+        """method to update a player info window with any changes ie halfbreed ect"""
+        if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
+            self.race2_option.grid(row=8, column=1, sticky='nsew')
+            self.race2_optionb.grid(row=8, column=2, sticky='nsew')
+        if gameVar.StartVariables.active_player.klass_unlock:
+            self.klass2_option.grid(row=9, column=1, sticky='nsew')
+            self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
         engine.fight() # helper may be added when sorting it
@@ -560,7 +570,7 @@ class OwnedItems(tk.Toplevel):
                     l3.grid(row=set_row, column=2, sticky="nw")
                 if set_but != "No Buttons":
                     tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
-                b1 = tk.Button(f, text="info", command=lambda c=card["id"]: self.showcard(c))
+                b1 = tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c))
                 b1.grid(row=set_row, column=4)
 
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
@@ -571,7 +581,7 @@ class OwnedItems(tk.Toplevel):
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         if self.set_but in "consume, hidden":
             tk.Button(self, text="Use item", command=self.use_item).pack(side="left")
-        if self.set_but == "weap" or self.set_but == "armor":
+        if self.set_but in "weap armour hidden": # == "weap" or self.set_but == "armor":##### added hidden for wandering mon ect
             tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
@@ -596,9 +606,9 @@ class OwnedItems(tk.Toplevel):
         engine.scrub_lists()
         app.update_message("show")
 
-    def use_item(self):
+    def use_item(self): #hidden items path
         """for consumables and hidden objects"""
-        Tools.common_set("disposable")
+        Tools.common_set("disposable") # this param is for card_matcher and does not influence where it goes
         OwnedItems.destroy(self)
 
         engine.scrub_lists()
@@ -611,7 +621,7 @@ class OwnedItems(tk.Toplevel):
         app.update_message("show")
 
 
-class CardVeiw(): # not currently working
+class CardVeiw():
     def __init__(self, card_id=None):
         # path = "..\\imgs\\cards\\"
         PIC = os.path.abspath(r"..\imgs\cards")
@@ -637,6 +647,7 @@ class Tools:
         engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
+
 
     # @staticmethod #not working Yet
     # def viewer(parent, card_id=None):
