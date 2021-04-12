@@ -606,6 +606,7 @@ class OwnedItems(tk.Toplevel):
         engine.scrub_lists()
         app.update_message("show")
 
+
     def use_item(self): #hidden items path
         """for consumables and hidden objects"""
         Tools.common_set("disposable") # this param is for card_matcher and does not influence where it goes
