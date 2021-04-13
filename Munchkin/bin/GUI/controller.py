@@ -67,7 +67,7 @@ class Main(tk.Tk):
         self.show_frame(StartPg)
 
     def show_frame(self, content):
-        """brings the fame to the fore front"""
+        """brings the fame to the fore front. content being key word """
         frame = self.frames[content] # loos in dict for the pg
         frame.tkraise()
 
@@ -405,6 +405,7 @@ class MainLoop(tk.Frame):
         self.b12.config(state="disabled")  # run
         # app.update_message() #clears all messages
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
+        Tools.fluid_player_info() # adds or removes player class2/race2 option
         app.update_message()  # clears all messages
         app.update_message("show")
         app.update_frame() # updates the tk.vars in Main under the instance controller.
@@ -504,7 +505,7 @@ class MainLoop(tk.Frame):
         player.inventory("category", "door")
         OwnedItems("Hidden Items", "hidden")
 
-    def interfere(self): #not set
+    def interfere(self): #will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
         gameVar.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
 
@@ -581,7 +582,7 @@ class OwnedItems(tk.Toplevel):
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         if self.set_but in "consume, hidden":
             tk.Button(self, text="Use item", command=self.use_item).pack(side="left")
-        if self.set_but in "weap armour hidden": # == "weap" or self.set_but == "armor":##### added hidden for wandering mon ect
+        if self.set_but in "weap, armor": # == "weap" or self.set_but == "armor":##### added hidden for wandering mon ect
             tk.Button(self, text="Equip", command=self.equip).pack(side="left")
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
@@ -606,12 +607,11 @@ class OwnedItems(tk.Toplevel):
         engine.scrub_lists()
         app.update_message("show")
 
-
-    def use_item(self): #hidden items path
+    def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
         Tools.common_set("disposable") # this param is for card_matcher and does not influence where it goes
         OwnedItems.destroy(self)
-
+        Tools.fluid_player_info() # adds or removes player class2/race2 option
         engine.scrub_lists()
         app.update_message("show")
 
@@ -648,6 +648,24 @@ class Tools:
         engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
         engine.varbinding(gameVar.StartVariables.active_player)
         app.update_frame()
+
+    @staticmethod
+    def fluid_player_info():
+        """class for showing individual player info ie klass2 race2"""
+        selfid = app.frames[MainLoop]  # grabs the class self id from the dict created in the controller class
+
+        if not gameVar.StartVariables.active_player.race_unlock:
+            selfid.race2_option.grid_forget()
+            selfid.race2_optionb.grid_forget()
+        else:
+            selfid.race2_option.grid(row=8, column=1, sticky='nsew')
+            selfid.race2_optionb.grid(row=8, column=2, sticky='nsew')
+        if not gameVar.StartVariables.active_player.klass_unlock:
+            selfid.klass2_option.grid_forget()
+            selfid.klass2_optionb.grid_forget()
+        else:
+            selfid.klass2_option.grid(row=9, column=1, sticky='nsew')
+            selfid.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
 
     # @staticmethod #not working Yet

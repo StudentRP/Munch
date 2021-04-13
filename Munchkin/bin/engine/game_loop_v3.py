@@ -87,7 +87,7 @@ class PlayerSetUp:
         else:
             print("I guess the deck is empty....")
 
-    def card_designator(self, card, call=1, action=None): #linked from tri_qual and door button
+    def card_designator(self, card, call=1, action=None): #linked from tri_qual and door button# rename drawn_cards
         """where the card go. action required for the cards coming in from use, disposable and
         equip. ie what if use item that's not disposable?
         """
@@ -200,7 +200,7 @@ class PlayerSetUp:
 
     def tri_qualifier(self, card,):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
-        race, class, gender """
+        race, class, gender."""
         player = gameVar.StartVariables.active_player
         checks = {player.race: "race_restriction", player.race2: "race_restriction", player.klass: "klass_restriction",
                   player.klass2: "klass_restriction", player.gender: "gender_restriction"}
@@ -219,9 +219,10 @@ class PlayerSetUp:
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
 
-        if flag: # only if flag remains True
+        if flag: # only if flag remains True.
             # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
             self.card_designator(card=card) # new separator meth... remove player param
+            # create new method (player_cards_action) to handle the action so card designator is not used
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""
