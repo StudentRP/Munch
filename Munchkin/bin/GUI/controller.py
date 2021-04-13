@@ -609,7 +609,8 @@ class OwnedItems(tk.Toplevel):
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
-        Tools.common_set("disposable") # this param is for card_matcher and does not influence where it goes
+        Tools.common_set("disposable") # this param is for card_matcher and does not influence where it goes# #pas
+        # change disposable to generic turm and sort later?
         OwnedItems.destroy(self)
         Tools.fluid_player_info() # adds or removes player class2/race2 option
         engine.scrub_lists()
