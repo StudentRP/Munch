@@ -395,6 +395,7 @@ class MainLoop(tk.Frame):
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
+        # meth for checking sack size of player
         gameVar.CardDraw.num_of_kicks = 0 # resets door kicks
         # Methods that need to be applied to a player for next turn.
         self.b2.config(state="normal") # enables kick door button
@@ -404,6 +405,7 @@ class MainLoop(tk.Frame):
         self.b11.config(state="disabled")  # fight
         self.b12.config(state="disabled")  # run
         # app.update_message() #clears all messages
+
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
         Tools.fluid_player_info() # adds or removes player class2/race2 option
         app.update_message()  # clears all messages
@@ -417,8 +419,10 @@ class MainLoop(tk.Frame):
         self.b1.config(state="disabled") # disables end turn button, enables at end of fight
         if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
             door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
+            CardVeiw(door_card["id"])# to be placed on canvas
+            gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
-            if engine.card_type(): # if monster on table
+            if engine.card_type(): # returns True if monster on table
                 self.b2.config(state="disabled") # kick door
                 self.b3.config(state="disabled") # weapons
                 self.b4.config(state="disabled") # armor
@@ -426,11 +430,8 @@ class MainLoop(tk.Frame):
                 self.b11.config(state="normal") # fight
                 self.b12.config(state="normal") # run
                 #meth to return card, use id to put card pic
-                # self.canvas.
-                # place door_card on canvas
 
             # need to show first time so raise pic, Cardview class
-            app.update_message("show")
             gameVar.CardDraw.num_of_kicks += 1 # always increments after first kick
 
         elif gameVar.CardDraw.num_of_kicks == 1:
@@ -451,9 +452,8 @@ class MainLoop(tk.Frame):
     def fight(self):
         engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
+        Tools.fluid_player_info()
 
-        engine.varbinding(gameVar.StartVariables.active_player) #####
-        app.update_frame() ###
 
         # remove card form list and canvas ect
         self.b1.config(state="normal") #end of fight enables end turn
@@ -593,33 +593,29 @@ class OwnedItems(tk.Toplevel):
 
     def sell(self):
         """triggers sell event when pushed"""
-        engine.zipper("sell") # calls meth to make tuple from card ids and checkbutton converted bools
+        Tools.common_set("sell")# calls zipper with param
+        Tools.fluid_player_info() # calls an update method for gui to show all player changes, also cleans lists from zipper
         OwnedItems.destroy(self) # destroys toplevel window
-        engine.scrub_lists() # note lists are scrubbed when but pushed on main screen
-        engine.varbinding(gameVar.StartVariables.active_player) # explicitly ensures all vars ar correct
-        app.update_frame() # updates player info
         app.update_message("show")
 
     def equip(self):
         Tools.common_set("equip")
+        Tools.fluid_player_info()
         OwnedItems.destroy(self)
-        # app.update_message("show")
-        engine.scrub_lists()
+
         app.update_message("show")
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
-        Tools.common_set("disposable") # this param is for card_matcher and does not influence where it goes# #pas
-        # change disposable to generic turm and sort later?
-        OwnedItems.destroy(self)
+        Tools.common_set("disposable") #
         Tools.fluid_player_info() # adds or removes player class2/race2 option
-        engine.scrub_lists()
+        OwnedItems.destroy(self)
         app.update_message("show")
 
     def remove(self):
         Tools.common_set("remove")
+        Tools.fluid_player_info()
         OwnedItems.destroy(self)
-        engine.scrub_lists()
         app.update_message("show")
 
 
@@ -647,8 +643,8 @@ class Tools:
     @staticmethod
     def common_set(keyword):
         engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
-        engine.varbinding(gameVar.StartVariables.active_player)
-        app.update_frame()
+        # engine.varbinding(gameVar.StartVariables.active_player)
+        # app.update_frame()
 
     @staticmethod
     def fluid_player_info():
@@ -667,6 +663,11 @@ class Tools:
         else:
             selfid.klass2_option.grid(row=9, column=1, sticky='nsew')
             selfid.klass2_optionb.grid(row=9, column=2, sticky='nsew')
+
+        engine.varbinding(gameVar.StartVariables.active_player) # ensures all player info is up to
+        # date and sent to gameVar
+        app.update_frame() # updates the GUI with the new player info
+        engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
 
     # @staticmethod #not working Yet

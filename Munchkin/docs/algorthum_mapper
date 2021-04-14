@@ -526,11 +526,7 @@ MainLoop, class
                         ############## small bug name can be r and still qualify if no gender set ####################### ADDED DEFAULT GENDER
                         If qualified, card_designator(player, card) is called passing the card and player along.
 
-                        card_designator(self, player, card), method
-                            small method for distinguishing between weap and armor cards that then call the appropriate method
-                            based on card type. in the case of armor: equip_armor is called from the player class
 
-                            equip_armor(self, card)
 
 
 

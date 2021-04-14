@@ -87,46 +87,39 @@ class PlayerSetUp:
         else:
             print("I guess the deck is empty....")
 
-    def card_designator(self, card, call=1, action=None): #linked from tri_qual and door button# rename drawn_cards
-        """where the card go. action required for the cards coming in from use, disposable and
-        equip. ie what if use item that's not disposable?
+    def card_designator(self, card, call=1): # for all door cards that are drawn form the pack
+        """method that sort the cards that the player draws form the deck during play. this could be monster, curse ect.
+        Call is used to determine how many times the door has been kicked in a turn and in 2nd instance the door is put into the
+        players hand unseen. Mechanism is also used to trigger a curse
         """
         player = gameVar.StartVariables.active_player
-        if card.get("type") == "armor":
-            player.equip_armor(card) # leads to player meth for placing in right place
-        elif card.get("type") == "weapon":
-            player.equip_weapon(card)
-        elif card.get("type") == "disposable": # for disposable throwable only
-            pass # meth for selecting target and changing bonuses,
-        elif card.get("type") == "monster":
+        if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
             else:
-                gameVar.GameObjects.message = "Adding card to sack"
+                gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
                 player.sack.append(card)
-        elif card.get("type") == "curse":
+        elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
             if call:
+                print("In curse::", player.curses)
                 gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
-                #run card meth, need to add efect to player info and check if the action is valid
-                player.curses.append(card) # meth required to run with curse. can tie into gameVar.kick_door for 2nd go action
-                print("in curse::", player.curses)
+                if card.get("status") == "active": # for constant effect cures
+                    player.card_meths(card, "add") # links to curs meths to add to player
+                    player.curses.append(card) # meth required to run with curse. can tie into gameVar.kick_door for 2nd go action
+                elif card.get("status") == "passive": # for one shot effect
+                    player.card_meths(card, "add") # calls the one shot curse
+                    cards.burn_card.append(card) # disposes of to burn pile
             else:
                 gameVar.GameObjects.message = "Adding card to sack"
                 player.sack.append(card)
-        elif card.get("category") == "door": # if is a door but not mon/curse. must be after the mon/curse checks.
-            print("Adding to sack")
-            # player = gameVar.StartVariables.active_player
-            player.sack.append(card) #needs to go into a active pile
-            if call: # if 2nd kick or default call(norm equip ie halfbread)
+        else: # for all other cards that have no direct effect or influence.
+            print(f"Adding {card['name']}to sack.")
+            if call:
+                player.sack.append(card)  # adds card to player's items
                 gameVar.GameObjects.message = f"Adding/using {card.get('name')}."
-                ################################################################testing cards meths
-                player.card_meths(card, "add")  # link to player to card meths. WORKS
-                print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class, meths added at end_turn
-
-                ##############################################################
                 return card  # to show if first time only 2nd it hides
-            elif not call: # 2nd kick of door
+            else:
                 gameVar.GameObjects.message = "Adding 2nd card to sack"
                 player.sack.append(card)
 
@@ -188,17 +181,13 @@ class PlayerSetUp:
                 if tup[0] == card["id"] and tup[1]:
                     if action == "sell":
                         gameVar.StartVariables.active_player.sell_item(card)
-                    elif action in "equip, disposable ,use":
+                    elif action in "equip, disposable ,use": # equip/disposable will be treasures
                         self.tri_qualifier(card) # test ~~ok~~
-                    # elif action == "use": # could not think of a good enough reason not to go through tri_qualifier for all my needs
-                    #     "consider action for and against player"
-                    #     if card["category"] == "treasure":
-                    #         pass
                     elif action == "remove":
                         player = gameVar.StartVariables.active_player
                         player.equipped_items("removal", card)
 
-    def tri_qualifier(self, card,):
+    def tri_qualifier(self, card):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
         race, class, gender."""
         player = gameVar.StartVariables.active_player
@@ -218,11 +207,29 @@ class PlayerSetUp:
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
-
         if flag: # only if flag remains True.
-            # gameVar.StartVariables.message = f"{card.get('name')}  quipped."
-            self.card_designator(card=card) # new separator meth... remove player param
-            # create new method (player_cards_action) to handle the action so card designator is not used
+            if card["category"] == "treasure":  # for all treasure cards the player uses that was from their hand
+                self.player_treasure_cards(card) # for the use of treasure cards
+            elif card["category"] == "door":  # for all enhancers ect that the player has from their hand
+                self.player_door_cards(card) # for the use of door cards
+
+    def player_treasure_cards(self, card):
+        """method to sort the locations of treasure cards that the player has selected"""
+        player = gameVar.StartVariables.active_player
+        if card.get("type") == "armor":
+            player.equip_armor(card)  # leads to player meth for placing in right place
+        elif card.get("type") == "weapon":
+            player.equip_weapon(card)
+        elif card.get("type") == "disposable":  # for disposable throwable only
+            pass  # meth for selecting target and changing bonuses,
+        else:
+            pass # for all other cards ie steeds
+
+    def player_door_cards(self, card):
+        player = gameVar.StartVariables.active_player
+        player.card_meths(card, "add")  # link to player to card meths. WORKS
+        print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
+        # meths added at end_turn
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""

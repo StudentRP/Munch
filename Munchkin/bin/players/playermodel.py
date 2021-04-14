@@ -47,8 +47,7 @@ attributes based on action outcomes."""
 # MAIN PLAYER CLASS
 #####################################################################
 
-
-class Player(MonTools, T_tools):
+class Player(MonTools, T_tools): # inherits off card methods
     """Main player class"""
 
     def __init__(self, ref):
@@ -156,8 +155,9 @@ class Player(MonTools, T_tools):
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
 
-    def equipped_items(self, action, cards=None): # in use by gui list_equipped meth
-        """sorts through equipped items, removing items that have been selected"""
+    def equipped_items(self, action, my_cards=None, card_id=None): # in use by gui list_equipped meth
+        """Shows all items that have been equipped to the player. If remove, Sorts through equipped items,
+        removing items that have been selected"""
         locations = [self.weapons, self.armor]  # locations to search
         for obj in locations:  # looks at each object in list. obj is the dict of all the poss locations as seen in player attrbs
             for sub_menu in obj:  # sub_menu is the keys which link to the card is placed in: armor = {}
@@ -167,21 +167,18 @@ class Player(MonTools, T_tools):
                         gameVar.GameObjects.selected_items.append(card) #adds cards to selected_items list in gameVar
                         continue
                     elif action == "removal":
-                        if card["id"] == cards["id"]:
+                        if card["id"] == my_cards["id"]:
                             self.sack.append(card) # adds card back to player inventory
-                            obj[sub_menu] = ""
-                            self.sum_of_bonuses()
-                            self.weapon_count += card.get("hold_weight", 0)
+                            obj[sub_menu] = "" # resets player atrib location
+                            self.sum_of_bonuses() # recalculates bonuses
+                            self.weapon_count += card.get("hold_weight", 0) # adds the cards carry_weight for available hands, if available.
                             continue
-
-    def multi_equipper(self, card): # not used
-        """Possible meth for smooth equip of armour/weapons"""
-        locations = [self.weapons, self.armor]
-        for category in locations:
-            for dict_cat in category.keys():
-                pass
+                    elif action == "curse": # not tested
+                        print("In equipped items remove cured item")
+                        pass
 
     def equip_armor(self, card):
+        """ Equips armor to the player"""
         location = self.armor
         print("in armor")
         for sub_type in location.keys():
@@ -201,7 +198,8 @@ class Player(MonTools, T_tools):
         self.sum_of_bonuses()
 
     def equip_weapon(self, card):
-        """New simplified model. Checks L/R hands to see if full, equipping if not. Two hand items will not work when other hands full """
+        """New simplified model. Checks L/R hands to see if full, equipping if not.
+        Two hand items will not work when other hands full. """
         if self.weapon_count > 0:
             if card["sub_type"] == "1hand" and not isinstance(self.weapons["L_hand"], dict): # not equipped
                 added_card = self.sack.pop(self.sack.index(card))
@@ -236,9 +234,6 @@ class Player(MonTools, T_tools):
                 if key == card.get("method"):
                     print(f"the key is {key}")
                     val(self, action) # action is add or remove
-
-
-
 
 
 
