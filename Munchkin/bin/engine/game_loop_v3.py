@@ -81,7 +81,6 @@ class PlayerSetUp:
             return door_card
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("dealt a treasure card") # test location
-            card = cards.in_play[-1] # last on on stack
             my_treasure = cards.card_sop.deal_cards("treasure", num) # params = type of card, num of cards
             playerinst.sack.append(my_treasure) # adds strait to sack no ponit in card_desig
         else:
@@ -97,6 +96,7 @@ class PlayerSetUp:
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
+                print([x["name"] for x in cards.in_play])
             else:
                 gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
                 player.sack.append(card) # adds to player sack
@@ -238,27 +238,34 @@ class PlayerSetUp:
         gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
-    def card_type(self):
+    def card_type(self, card):
         """meth for checking the presents of table cards"""
         if cards.in_play: # checks to see if cards in play
+            gameVar.GameObjects.message = f"You are fighting {card['name']}, level {card['lvl']}"
             print("card_type", cards.in_play)
             return True
         else: # if list is empty the last card must have not been a monster
             return False
 
     def fight(self, helpper=None):
+        """for cards that are monsters and placed on the table"""
         print("In the fight!")
-        card = cards.in_play.pop(-1) # end of cards on table
+        card = cards.in_play.pop() # end of cards on table
         player = gameVar.StartVariables.active_player
+        player.card_meths(card, "conditions")
         if player.bonus + player.level >= card["lvl"]: # consideration required for player consumables and enhancers
-            print("You win!")
-            player.card_meths(card) #####
-            cards.burn_card.append(card)
+            print("Player wins!")
+            reward = card['treasure']
+            player.sack.append(self.deal_handler('treasure', reward))
+            gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
+            cards.burn_card.append(card) # removes card
+            return "win"
         else:
-            print("fight lost")
+            gameVar.GameObjects.message = "Fight lost"
+            print("Fight lost")
+            player.card_meths(card, "badstuff") # calls the defeat
 
-
-        gameVar.GameObjects.message = f"You are fighting {card['name']}, level {card['lvl']}"
+            return "lose"
 
     def run(self):
         roll = dice.dice_sop.roll()

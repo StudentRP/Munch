@@ -419,10 +419,14 @@ class MainLoop(tk.Frame):
         self.b1.config(state="disabled") # disables end turn button, enables at end of fight
         if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
             door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
-            # CardVeiw(door_card["id"]) # to be placed on canvas # hangs app UNKNOWN CAUSE
+
+            self.pic = Tools.viewer(door_card["id"]) # needs self of garbage collected!
+            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
+
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
-            if engine.card_type(): # returns True if monster on table
+            if engine.card_type(door_card): # returns True if monster on table
+                app.update_message("show") # shows  monster details
                 self.b2.config(state="disabled") # kick door
                 self.b3.config(state="disabled") # weapons
                 self.b4.config(state="disabled") # armor
@@ -440,7 +444,7 @@ class MainLoop(tk.Frame):
             self.b1.config(state="normal") # enables fight
             app.update_message("show")
 
-    def update_info(self):
+    def update_info(self): # may be redundant
         """method to update a player info window with any changes ie halfbreed ect"""
         if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
             self.race2_option.grid(row=8, column=1, sticky='nsew')
@@ -450,8 +454,15 @@ class MainLoop(tk.Frame):
             self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
-        engine.fight() # helper may be added when sorting it
+        selfobj = app.frames[MainLoop]
+        result = engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
+        if result == "win":
+            self.canvas.delete(selfobj.pic)
+            pass # remove single card off tablecards off table
+        elif result == "loose":
+            pass # clears table
+
         Tools.fluid_player_info()
 
 
@@ -670,15 +681,11 @@ class Tools:
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
 
-    # @staticmethod #not working Yet
-    # def viewer(parent, card_id=None):
-    #     path = "..\\imgs\\cards\\"
-    #     win = tk.Frame(parent)
-    #     img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
-    #     can = tk.Canvas(win)
-    #     can.pack(fill=tk.BOTH)
-    #     can.config(width=img.width(), height=img.height())
-    #     can.create_image(2, 2, image=img, anchor=tk.NW)
+    @staticmethod #not working Yet
+    def viewer( card_id=None):
+        path = "..\\imgs\\cards\\"
+        img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
+        return img
 
 
 
