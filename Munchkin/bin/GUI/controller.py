@@ -419,7 +419,7 @@ class MainLoop(tk.Frame):
         self.b1.config(state="disabled") # disables end turn button, enables at end of fight
         if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
             door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
-            CardVeiw(door_card["id"])# to be placed on canvas
+            # CardVeiw(door_card["id"]) # to be placed on canvas # hangs app UNKNOWN CAUSE
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
             if engine.card_type(): # returns True if monster on table

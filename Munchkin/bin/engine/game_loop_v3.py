@@ -76,7 +76,7 @@ class PlayerSetUp:
             for player in gameVar.StartVariables.session_players:
                 player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop
-            door_card = cards.card_sop.deal_cards("door", 1) # gets card, 1 = min amount required in pack
+            door_card = cards.card_sop.deal_cards("door", 1) # returns card, 1 =  amount required in pack
             self.card_designator(door_card, call=call) # call needed to define where card goes dependent on how many timed door button pushed
             return door_card
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
@@ -99,16 +99,15 @@ class PlayerSetUp:
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
             else:
                 gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
-                player.sack.append(card)
+                player.sack.append(card) # adds to player sack
         elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
-            if call:
+            if call: # 1st kick
                 print("In curse::", player.curses)
                 gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
+                player.card_meths(card, "add")  # actions card effect ............ almost complete
                 if card.get("status") == "active": # for constant effect cures
-                    player.card_meths(card, "add") # links to curs meths to add to player
-                    player.curses.append(card) # meth required to run with curse. can tie into gameVar.kick_door for 2nd go action
+                    player.curses.append(card) # adds card to player curse list
                 elif card.get("status") == "passive": # for one shot effect
-                    player.card_meths(card, "add") # calls the one shot curse
                     cards.burn_card.append(card) # disposes of to burn pile
             else:
                 gameVar.GameObjects.message = "Adding card to sack"
@@ -248,11 +247,11 @@ class PlayerSetUp:
             return False
 
     def fight(self, helpper=None):
-        print("in the fight!")
+        print("In the fight!")
         card = cards.in_play.pop(-1) # end of cards on table
         player = gameVar.StartVariables.active_player
-        if player.bonus + player.level >= card["lvl"]:
-            print("you win!")
+        if player.bonus + player.level >= card["lvl"]: # consideration required for player consumables and enhancers
+            print("You win!")
             player.card_meths(card) #####
             cards.burn_card.append(card)
         else:
