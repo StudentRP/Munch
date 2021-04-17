@@ -258,7 +258,8 @@ class PlayerSetUp:
             reward = card['treasure']
             player.sack.append(self.deal_handler('treasure', reward))
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
-            cards.burn_card.append(card) # removes card
+            cards.add_to_burn(card) # removes card
+            print(f"cards in the burn pile: {len(cards.burn_pile)}")
             return "win"
         else:
             gameVar.GameObjects.message = "Fight lost"

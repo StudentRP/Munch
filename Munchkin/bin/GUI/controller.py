@@ -389,7 +389,7 @@ class MainLoop(tk.Frame):
 
         self.canvas = tk.Canvas(self.tblframe, bg='black') # canvas not expanding in the correct dimensions
         self.canvas.pack(side="top", fill="both", expand="yes") # without self should now be accessible for the class....
-
+        self.pic = ""
 
     "Handlers"
     def end_turn(self):
@@ -420,8 +420,9 @@ class MainLoop(tk.Frame):
         if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
             door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
 
-            self.pic = Tools.viewer(door_card["id"]) # needs self of garbage collected!
+            self.pic = Tools.viewer(door_card["id"]) # needs self of garbage collected! maybe make this append a list in MainLoop init
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
+
 
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
@@ -435,7 +436,6 @@ class MainLoop(tk.Frame):
                 self.b12.config(state="normal") # run
                 #meth to return card, use id to put card pic
 
-            # need to show first time so raise pic, Cardview class
             gameVar.CardDraw.num_of_kicks += 1 # always increments after first kick
 
         elif gameVar.CardDraw.num_of_kicks == 1:
@@ -458,11 +458,15 @@ class MainLoop(tk.Frame):
         result = engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
         if result == "win":
-            self.canvas.delete(selfobj.pic)
-            pass # remove single card off tablecards off table
+            self.canvas.delete(self.pic) #not working imagine its an access prob#######################
+            # self.canvas.update()
+            print('remove off canvas?????? ')
+            # pass # remove single card off tablecards off table
         elif result == "loose":
             pass # clears table
 
+        self.b11.config(state="disabled")  # fight
+        self.b12.config(state="disabled")  # run
         Tools.fluid_player_info()
 
 
