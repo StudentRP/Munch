@@ -27,55 +27,48 @@ class Dealer:
         dealing specific cards cardnum specific to the start/resurrect determines the amount of cards to of each type
         to deal players"""
 
-        # Catch meth if no cards are left. cards now loop if not enough instead of throwing IndexError
+        print(f"In deal cards. Num of cards in: \nDoor stack: {len(Moncurse.door_cards)}\nTreasure stack: {len(Treasure.treasure_cards)}\n"
+              f"Burn pile: {len(cards.burn_pile)}\nIn-play stack: {len(cards.in_play)}\n") # dev print
+
+        # Checks
         if cardnum > len(Moncurse.door_cards):
-            print("Not enough door cards")
+            print(f"Not enough Door cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]}")
             cards.restock()
-            print(f"RESTOCKING MONSTERS WITH {cards.burn_pile}")
-            #need to catch a index error when depth exceeds the num of cards in burn
+            print(f"cards left in burn pile after restock {cards.burn_pile}") # test for change
         if cardnum > len(Treasure.treasure_cards):
-            print("Not enough Treasure cards")
+            print(f"Not enough Treasure cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]}")
             cards.restock()
 
-
+        # Main actions
         if option == "start":
             """called at start to deal specific number of cards to pass to player"""
             starter_set = []
             for i in range(cardnum): # takes attrib of number of loops for card dealing (set by gameVar.Options)
                 dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
                 starter_set.append(dobj) # adds door card to list
-                tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets t card. better rand required
+                tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets card. better rand required
                 starter_set.append(tobj) # adds treasure card to list,
                 # print(f" num of cards in pack:{len(Moncurse.door_cards)}, rand gen tres:{tpack} door:{dpack}") # should go down
             return starter_set # returns starter_set list to caller (player.unsorted)
 
         elif option == "door":
             """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
-            print('From Door pile')
+            print('Dealing from Door pile:')
             card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
-            print(f"Your card is: {card['name']}\nCards left in deck: {len(Moncurse.door_cards)}")
+            print(f"Your card is: {card['name']}\nCards left in Door deck: {len(Moncurse.door_cards)}\n")
             return card
 
         elif option == "treasure":
             """Deal Treasure cards"""
-            print('From Treasure pile\n')
-            cardlist=[]
-            for _amount in range(cardnum):
+            print('Dealing from treasure pile')
+            card_list = []
+            for _amount in range(cardnum): # supplies a number of treasure
                 card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
-                cardlist.append(card)
-                # print(f"Card number: {pick},\nCard: {card}")
-            return cardlist
+                print(f"Treasure cards is: {card['name']}\nCards left in Door deck: {len(Treasure.treasure_cards)}\n")
+                card_list.append(card)
+            return card_list
         else:
-            print("card error")
-
-
-    """remove duplication with branch above and default arg"""
-    def get_treasure(self):
-        pack = len(Treasure.treasure_cards) - 1 # needs to - all curse cards
-        pick = randint(1, pack)
-        card = Treasure.treasure_cards[pick]
-        print(f"Card number: {pick},\nCard: {card}")
-        return card
+            print("CARD ERROR!!!!!")
 
 
 class Table(Treasure, Moncurse): # inherits from
@@ -100,7 +93,7 @@ class Table(Treasure, Moncurse): # inherits from
             return self.burn_pile[:x]
 
     def restock(self):
-        for card in self.burn_card: # cards is the instance
+        for card in self.burn_pile: # cards is the instance
             if card.get("category") == "door":
                 Moncurse.door_cards.append(card)
                 print(Moncurse.door_cards)
@@ -121,7 +114,7 @@ if __name__ == "__main__":
 
     print(dice.dice_sop.roll())
 
-    # y = cards.card.get_treasure() # calls grabs treasure card
+
     # print(f"This is your treasure card:\n{y}")
 
 

@@ -75,13 +75,13 @@ class PlayerSetUp:
         if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
             for player in gameVar.StartVariables.session_players:
                 player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
-        elif option == "door": # Standard gameplay loop
-            door_card = cards.card_sop.deal_cards("door", 1) # returns card, 1 =  amount required in pack
+        elif option == "door": # Standard gameplay loop on door kick
+            door_card = cards.card_sop.deal_cards("door", cardnum=1) # returns card, 1 =  amount required in pack
             self.card_designator(door_card, call=call) # call needed to define where card goes dependent on how many timed door button pushed
             return door_card
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("dealt a treasure card") # test location
-            add_treasure = cards.card_sop.deal_cards("treasure", num) # params = type of card, num of cards
+            add_treasure = cards.card_sop.deal_cards("treasure", cardnum=num) # params = type of card, num of cards
             playerinst.sack = playerinst.sack + add_treasure # concats both lists and redefines player sack
         else:
             print("I guess the deck is empty....")
@@ -96,7 +96,7 @@ class PlayerSetUp:
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
-                print([x["name"] for x in cards.in_play])
+                print(f"In card_designator, monster added to table. Returned card is: {[x['name'] for x in cards.in_play]}\n")
             else:
                 gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
                 player.sack.append(card) # adds to player sack
@@ -130,7 +130,7 @@ class PlayerSetUp:
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
         while play:
             if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
-                print(f"Current player {current_player.name} turn ended")
+                print(f"Current player {current_player.name} turn ended\n")
                 gameVar.StartVariables.active_player = next(player_gen) # binds next player to rand_player, (changes x)
                 self.varbinding(gameVar.StartVariables.active_player) #  binds new player
                 print(f"{gameVar.StartVariables.active_player.name} has been binded")
@@ -238,22 +238,13 @@ class PlayerSetUp:
         gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
-    def card_type(self, card):
-        """meth for checking the presents of table cards"""
-        if cards.in_play: # checks to see if cards in play
-            gameVar.GameObjects.message = f"You are fighting {card['name']}, level {card['lvl']}"
-            print("card_type", cards.in_play)
-            return True
-        else: # if list is empty the last card must have not been a monster
-            return False
-
-    def fight(self, helpper=None):
+    def fight(self, helper=0, additional=0):# helper would be other player interactions. additional is anything else
         """for cards that are monsters and placed on the table"""
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
         player = gameVar.StartVariables.active_player
         player.card_meths(card, "conditions")
-        if player.bonus + player.level >= card["lvl"]: # consideration required for player consumables and enhancers
+        if player.bonus + player.level + helper + additional >= card["lvl"]: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
             self.deal_handler('treasure', num=reward) # fetches treasure for player#################################################

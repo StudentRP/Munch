@@ -267,7 +267,6 @@ class PlayerInfo(tk.Toplevel):
             gameVar.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
             engine.player_name_gender(PlayerInfo.indexing) # call game_loop with index for player instance
             PlayerInfo.indexing = PlayerInfo.indexing + 1 # increases player index ensuring correct player attribute assignment
-            print("Destroying toplevel")
             PlayerInfo.destroy(self) #destoys toplevel window
             gameVar.StartVariables.new_players = number # reduces number in gameVar for next  player in loop
 
@@ -414,18 +413,20 @@ class MainLoop(tk.Frame):
 
     def door(self):
         """game actions for door. cards drawn from door"""
+        print("\nKicking door!")
         gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
         app.update_message("show")
-        self.b1.config(state="disabled") # disables end turn button, enables at end of fight
+        self.b1.config(state="disabled") # disables end turn button, enabled at end of fight
+
         if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
-            door_card = engine.deal_handler("door", call=1) # returns card for pic, sorts card either to table, hand, or curse meth
-
-            self.pic = Tools.viewer(door_card["id"]) # needs self of garbage collected! maybe make this append a list in MainLoop init
+            door_card = engine.deal_handler("door", call=1) # Fetches card, returned card for pic, sorts card either to table, hand, or curse meth
+            self.pic = Tools.viewer(door_card["id"]) # gets card pic. needs self or garbage collected!
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
-
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
-            if engine.card_type(door_card): # returns True if monster on table
+
+            if door_card["type"] == "monster":
+
                 app.update_message("show") # shows  monster details
                 self.b2.config(state="disabled") # kick door
                 self.b3.config(state="disabled") # weapons
@@ -453,6 +454,7 @@ class MainLoop(tk.Frame):
             self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
+        print("Fight button pressed")
         selfobj = app.frames[MainLoop]
         result = engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
@@ -466,10 +468,13 @@ class MainLoop(tk.Frame):
 
         self.b11.config(state="disabled")  # fight
         self.b12.config(state="disabled")  # run
+        self.b2.config(state="disabled")  # kick door
 
         # remove card form list and canvas ect
-        self.b1.config(state="normal") #end of fight enables end turn
-        self.b2.config(state="normal") # turn on end turn
+        self.b1.config(state="normal") # end turn
+        self.b3.config(state="normal")  # weapons
+        self.b4.config(state="normal")  # armor
+        print("End of Fight\n")
         Tools.fluid_player_info()
 
 
