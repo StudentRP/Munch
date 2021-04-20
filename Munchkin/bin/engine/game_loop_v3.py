@@ -81,8 +81,8 @@ class PlayerSetUp:
             return door_card
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("dealt a treasure card") # test location
-            my_treasure = cards.card_sop.deal_cards("treasure", num) # params = type of card, num of cards
-            playerinst.sack.append(my_treasure) # adds strait to sack no ponit in card_desig
+            add_treasure = cards.card_sop.deal_cards("treasure", num) # params = type of card, num of cards
+            playerinst.sack = playerinst.sack + add_treasure # concats both lists and redefines player sack
         else:
             print("I guess the deck is empty....")
 
@@ -256,7 +256,7 @@ class PlayerSetUp:
         if player.bonus + player.level >= card["lvl"]: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
-            player.sack.append(self.deal_handler('treasure', reward))
+            self.deal_handler('treasure', num=reward) # fetches treasure for player#################################################
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             cards.add_to_burn(card) # removes card
             print(f"cards in the burn pile: {len(cards.burn_pile)}")

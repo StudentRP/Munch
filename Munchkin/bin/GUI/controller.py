@@ -423,7 +423,6 @@ class MainLoop(tk.Frame):
             self.pic = Tools.viewer(door_card["id"]) # needs self of garbage collected! maybe make this append a list in MainLoop init
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
 
-
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
             if engine.card_type(door_card): # returns True if monster on table
@@ -458,7 +457,7 @@ class MainLoop(tk.Frame):
         result = engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
         if result == "win":
-            self.canvas.delete(self.pic) #not working imagine its an access prob#######################
+            # selfobj.canvas.delete(selfobj.pic) #not working imagine its an access prob#######################
             # self.canvas.update()
             print('remove off canvas?????? ')
             # pass # remove single card off tablecards off table
@@ -467,11 +466,12 @@ class MainLoop(tk.Frame):
 
         self.b11.config(state="disabled")  # fight
         self.b12.config(state="disabled")  # run
-        Tools.fluid_player_info()
-
 
         # remove card form list and canvas ect
         self.b1.config(state="normal") #end of fight enables end turn
+        self.b2.config(state="normal") # turn on end turn
+        Tools.fluid_player_info()
+
 
     def run(self):
         engine.run()

@@ -28,12 +28,14 @@ class Dealer:
         to deal players"""
 
         # Catch meth if no cards are left. cards now loop if not enough instead of throwing IndexError
-        if len(Moncurse.door_cards) < cardnum:
+        if cardnum > len(Moncurse.door_cards):
             print("Not enough door cards")
-            Table.restock(cards)
-        if len(Treasure.treasure_cards) < cardnum:
+            cards.restock()
+            print(f"RESTOCKING MONSTERS WITH {cards.burn_pile}")
+            #need to catch a index error when depth exceeds the num of cards in burn
+        if cardnum > len(Treasure.treasure_cards):
             print("Not enough Treasure cards")
-            Table.restock(cards)
+            cards.restock()
 
 
         if option == "start":
@@ -57,10 +59,12 @@ class Dealer:
         elif option == "treasure":
             """Deal Treasure cards"""
             print('From Treasure pile\n')
+            cardlist=[]
             for _amount in range(cardnum):
                 card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
+                cardlist.append(card)
                 # print(f"Card number: {pick},\nCard: {card}")
-                return card
+            return cardlist
         else:
             print("card error")
 
@@ -99,6 +103,7 @@ class Table(Treasure, Moncurse): # inherits from
         for card in self.burn_card: # cards is the instance
             if card.get("category") == "door":
                 Moncurse.door_cards.append(card)
+                print(Moncurse.door_cards)
             else:
                 Treasure.treasure_cards.append(card)
         print("Card decks refilled", "\nmonster cards =", len(Moncurse.door_cards),  "\nTreasure cards =", len(Treasure.treasure_cards),

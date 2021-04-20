@@ -69,7 +69,7 @@ class Moncurse(MonTools):
          'bs': 'more fun than having poo thrown at you and hair pulled out', 'loose': "-1 level -1 small item"},
 
         # Curse cards: id, catagory, type, status, name, method,
-        {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
+        # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
         # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
 
         # Monster Enhancers
