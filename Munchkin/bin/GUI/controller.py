@@ -420,8 +420,10 @@ class MainLoop(tk.Frame):
 
         if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
             door_card = engine.deal_handler("door", call=1) # Fetches card, returned card for pic, sorts card either to table, hand, or curse meth
+
             self.pic = Tools.viewer(door_card["id"]) # gets card pic. needs self or garbage collected!
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
+
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
 
@@ -477,9 +479,13 @@ class MainLoop(tk.Frame):
         print("End of Fight\n")
         Tools.fluid_player_info()
 
-
     def run(self):
-        engine.run()
+        player = gameVar.StartVariables.active_player
+        if player.run_away:
+            engine.run()
+        else:
+            gameVar.GameObjects.message = "This is not a fight you can run from!"
+            app.update_message("show")
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """

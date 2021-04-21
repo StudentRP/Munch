@@ -96,6 +96,7 @@ class PlayerSetUp:
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
+                player.card_meths(card, "add")
                 print(f"In card_designator, monster added to table. Returned card is: {[x['name'] for x in cards.in_play]}\n")
             else:
                 gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
@@ -252,10 +253,11 @@ class PlayerSetUp:
             cards.add_to_burn(card) # removes card
             print(f"cards in the burn pile: {len(cards.burn_pile)}")
             return "win"
+        # need action to go up lvl note some cards do more than one level!
         else:
             gameVar.GameObjects.message = "Fight lost"
             print("Fight lost")
-            player.card_meths(card, "badstuff") # calls the defeat
+            player.card_meths(card, "remove") # calls the defeat
 
             return "lose"
 

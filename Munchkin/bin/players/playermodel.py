@@ -83,6 +83,7 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.curses = [] # list of all active curses cards on player, can be removed with ork/wishing ring
         self.curse_allowed = True #switched off with tin hat ect
         self.run = 4 # ability to run, manipulable.
+        self.run_away = True
 
     def __repr__(self):
         """developer aid"""
@@ -227,11 +228,12 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.sum_of_bonuses()
 
     def card_meths(self, card, action):
-        """link to card methods for active effect on player"""
+        """link to card methods for active effect on player
+        action =add, contitions or remove"""
         print("in player meth")
         if card.get("category") == "door":
             for key, val in MonTools.method_types.items():
-                if key == card.get("method"):
+                if key == card.get("method"): # method used for sm and hb
                     print(f"the key is {key}")
                     val(self, action) # action is add or remove
 
