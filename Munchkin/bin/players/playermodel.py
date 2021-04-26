@@ -227,17 +227,23 @@ class Player(MonTools, T_tools): # inherits off card methods
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, card, action):
+    def card_meths(self, card, calltype=None, action=None): # calltype = setter(action = a/r), static(no action),
         """link to card methods for active effect on player
         action =add, contitions or remove"""
-        print("in player meth")
-        if card.get("category") == "door":
-            for key, val in MonTools.method_types.items():
-                if key == card.get("method"): # method used for sm and hb
-                    print(f"the key is {key}")
-                    val(self, action) # action is add or remove
+        print("in player card_meth")
+        """will use add/remove suited to door cards, loose cases and curse canceling"""
+        for key, val in MonTools.method_types.items(): # look up meth
+            if key == card.get(calltype): # call type either 'method for general, and 'static' for const effects while in use
+                print(f"the key is {key}")
+                val(self, action) # action is on or off
 
 
+"""
+card meth to handle curse, monsters ect. must handle both a static action and methods associated to add and remove.
+calls required from; player select card, door kick for static ie no run, and loose scenario  
+
+
+"""
 
 
 p1 = Player(1) #passes reference (ref)

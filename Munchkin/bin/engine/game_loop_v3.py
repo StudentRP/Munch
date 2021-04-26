@@ -96,16 +96,16 @@ class PlayerSetUp:
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
-                player.card_meths(card, "add")
                 print(f"In card_designator, monster added to table. Returned card is: {[x['name'] for x in cards.in_play]}\n")
             else:
+                print("adding to sack")
                 gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
                 player.sack.append(card) # adds to player sack
         elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
             if call: # 1st kick
                 print("In curse::", player.curses)
                 gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
-                player.card_meths(card, "add")  # actions card effect ............ almost complete
+                player.card_meths(card, "method", "on")  # actions card effect ............ almost complete
                 if card.get("status") == "active": # for constant effect cures
                     player.curses.append(card) # adds card to player curse list
                 elif card.get("status") == "passive": # for one shot effect
@@ -225,9 +225,9 @@ class PlayerSetUp:
         else:
             pass # for all other cards ie steeds
 
-    def player_door_cards(self, card):
+    def player_door_cards(self, card): #card meth#####################################################
         player = gameVar.StartVariables.active_player
-        player.card_meths(card, "add")  # link to player to card meths. WORKS
+        player.card_meths(card, "method", "on")  # link to player to card meths.
         print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
         # meths added at end_turn
 
@@ -244,20 +244,21 @@ class PlayerSetUp:
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
         player = gameVar.StartVariables.active_player
-        player.card_meths(card, "conditions")
+        # player.card_meths(card, 'static', 'on') # static calls cards constant meth while in play
         if player.bonus + player.level + helper + additional >= card["lvl"]: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
-            self.deal_handler('treasure', num=reward) # fetches treasure for player#################################################
+            self.deal_handler('treasure', num=reward) # fetches treasure for player
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             cards.add_to_burn(card) # removes card
+            # player.card_meths(card, 'static', 'off') # turn off card static meth
             print(f"cards in the burn pile: {len(cards.burn_pile)}")
             return "win"
         # need action to go up lvl note some cards do more than one level!
         else:
             gameVar.GameObjects.message = "Fight lost"
             print("Fight lost")
-            player.card_meths(card, "remove") # calls the defeat
+            player.card_meths(card, 'method', 'on') # calls card bad stuff
 
             return "lose"
 

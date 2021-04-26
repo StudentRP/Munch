@@ -14,18 +14,18 @@ class MonTools:
 
     def supermunch(self, action=None):
         """player class_unlock bool option;  ln 227 player_door_cards engine! """
-        print("in supermuinch")
+        print(f"in supermuinch. action is {action}") # tester
 
-        if action == "add":
+        if action == "on":
             self.klass_unlock = True
             print("class unlocked!!!")
         else:
             self.klass_unlock = False
             print("return False")
 
-    def half_breed(self, action):
+    def half_breed(self, action=None):
         print("in halfbreed")
-        if action == "add":
+        if action == "on":
             self.race_unlock = True
             print("race unlocked!!")
         else:
@@ -33,12 +33,11 @@ class MonTools:
             print("return False")
 
     def no_run(self, action=None):
-        if action == "add":
+        print("monster method prevents run")
+        if action == "on":
             self.run_away = False
         else:
             self.run_away = True
-
-
 
     def below_waist(self, action=None):
         print("in loose items below waist")
@@ -62,7 +61,7 @@ class MonTools:
     method_types = {'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run}
 
-
+#may need to lambda these to pass args
 #####################################################################
 # MAIN MONCURS CLASS LISTING DOOR CARDS
 #####################################################################
@@ -73,14 +72,14 @@ class Moncurse(MonTools):
     """class to list all monster and curse cards."""
 
     door_cards = [
-        # monster cards:id, category,  type, name, description, level, treasure, method = bs, active = conditions at start of fight ie cant run.
-        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'des': 'Cant outrun', 'lvl': 1, 'treasure': 1, 'method': "below_waist", "active": "no_outrun"},
-        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'des': 'fried chicken extra level if defeat with fire', 'lvl': 2, 'treasure': 1, 'method': "loose_level"},
-        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'des': 'undead -2 against thieves who are not fooled by shadows', 'lvl': 3, 'treasure': 1, 'method': "loose_level"},
-        {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'des': '+ 2 to halflings', 'lvl': 6, 'treasure': 2, 'method': "monkey_business"},
+        # monster cards:id, category,  type, name, lexical, level, treasure, method = bs, static = conditions at start of fight ie cant run.
+        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'des': 'Cant outrun', 'lvl': 1, 'treasure': 1, 'method': "below_waist", "static": "no_outrun"},
+        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lexical': ['if fire used + level'], 'lvl': 2, 'treasure': 1, 'method': "loose_level"},
+        # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead -2 against thieves who are not fooled by shadows'], 'lvl': 3, 'treasure': 1, 'method': "loose_level"},
+        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, 'method': "monkey_business"},
 
         # Curse cards: id, category, type, status, name, method,
-        # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
+        {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
         # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
 
         # Monster Enhancers

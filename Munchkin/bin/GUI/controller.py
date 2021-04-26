@@ -414,21 +414,24 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door"""
         print("\nKicking door!")
+        player = gameVar.StartVariables.active_player
         gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
         app.update_message("show")
         self.b1.config(state="disabled") # disables end turn button, enabled at end of fight
 
-        if gameVar.CardDraw.num_of_kicks == 0: # needs reset. Located int end_turn.
+        if gameVar.CardDraw.num_of_kicks == 1: # set to true.
             door_card = engine.deal_handler("door", call=1) # Fetches card, returned card for pic, sorts card either to table, hand, or curse meth
 
-            self.pic = Tools.viewer(door_card["id"]) # gets card pic. needs self or garbage collected!
-            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
+            # self.pic = Tools.viewer(door_card["id"]) # gets card pic. needs self or garbage collected!
+            # self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
+
 
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
 
             if door_card["type"] == "monster":
-
+                player.card_meths(door_card, 'static', 'on') # gets any static methods associated to the monster
+                print("run=", player.run_away) # checking status
                 app.update_message("show") # shows  monster details
                 self.b2.config(state="disabled") # kick door
                 self.b3.config(state="disabled") # weapons
@@ -438,13 +441,20 @@ class MainLoop(tk.Frame):
                 self.b12.config(state="normal") # run
                 #meth to return card, use id to put card pic
 
-            gameVar.CardDraw.num_of_kicks += 1 # always increments after first kick
+            # else: # if the card is anything else on first kick
+            #     player.card_meths(door_card, 'method', 'on') # for curses to be activated
 
-        elif gameVar.CardDraw.num_of_kicks == 1:
+
+            gameVar.CardDraw.num_of_kicks = 0 # set to false
+
+        elif gameVar.CardDraw.num_of_kicks == 0:
             self.b2.config(state="disabled") # disables door button
             engine.deal_handler("door", call=0)# call set to false
             self.b1.config(state="normal") # enables fight
             app.update_message("show")
+
+        print("num of kicks", gameVar.CardDraw.num_of_kicks )
+
 
     def update_info(self): # may be redundant
         """method to update a player info window with any changes ie halfbreed ect"""
@@ -466,7 +476,7 @@ class MainLoop(tk.Frame):
             print('remove off canvas?????? ')
             # pass # remove single card off tablecards off table
         elif result == "loose":
-            pass # clears table
+            pass # clears table runs card method
 
         self.b11.config(state="disabled")  # fight
         self.b12.config(state="disabled")  # run
