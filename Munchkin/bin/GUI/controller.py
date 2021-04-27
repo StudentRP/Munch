@@ -417,14 +417,13 @@ class MainLoop(tk.Frame):
         player = gameVar.StartVariables.active_player
         gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
         app.update_message("show")
+
         self.b1.config(state="disabled") # disables end turn button, enabled at end of fight
+        door_card = engine.deal_handler("door", call=gameVar.CardDraw.num_of_kicks) # fetch a door card!!!!
 
-        if gameVar.CardDraw.num_of_kicks == 1: # set to true.
-            door_card = engine.deal_handler("door", call=1) # Fetches card, returned card for pic, sorts card either to table, hand, or curse meth
-
-            # self.pic = Tools.viewer(door_card["id"]) # gets card pic. needs self or garbage collected!
-            # self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
-
+        if gameVar.CardDraw.num_of_kicks == 1: # first kick of door (always get this at start of turn!)
+            self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
+            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas
 
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
@@ -444,10 +443,12 @@ class MainLoop(tk.Frame):
             # else: # if the card is anything else on first kick
             #     player.card_meths(door_card, 'method', 'on') # for curses to be activated
 
-
             gameVar.CardDraw.num_of_kicks = 0 # set to false
 
         elif gameVar.CardDraw.num_of_kicks == 0:
+            print("2nd kick activated")
+            self.pic = Tools.viewer(0)  # gets card pic face down
+            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
             self.b2.config(state="disabled") # disables door button
             engine.deal_handler("door", call=0)# call set to false
             self.b1.config(state="normal") # enables fight
@@ -456,7 +457,7 @@ class MainLoop(tk.Frame):
         print("num of kicks", gameVar.CardDraw.num_of_kicks )
 
 
-    def update_info(self): # may be redundant
+    def update_info(self): # may be redundant for TOOLS fluid_player_info
         """method to update a player info window with any changes ie halfbreed ect"""
         if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
             self.race2_option.grid(row=8, column=1, sticky='nsew')

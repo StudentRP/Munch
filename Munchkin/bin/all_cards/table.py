@@ -40,35 +40,38 @@ class Dealer:
             cards.restock()
 
         # Main actions
-        if option == "start":
-            """called at start to deal specific number of cards to pass to player"""
-            starter_set = []
-            for i in range(cardnum): # takes attrib of number of loops for card dealing (set by gameVar.Options)
-                dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
-                starter_set.append(dobj) # adds door card to list
-                tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets card. better rand required
-                starter_set.append(tobj) # adds treasure card to list,
-                # print(f" num of cards in pack:{len(Moncurse.door_cards)}, rand gen tres:{tpack} door:{dpack}") # should go down
-            return starter_set # returns starter_set list to caller (player.unsorted)
+        try :
+            if option == "start":
+                """called at start to deal specific number of cards to pass to player"""
+                starter_set = []
+                for i in range(cardnum): # takes attrib of number of loops for card dealing (set by gameVar.Options)
+                    dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
+                    starter_set.append(dobj) # adds door card to list
+                    tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets card. better rand required
+                    starter_set.append(tobj) # adds treasure card to list,
+                    # print(f" num of cards in pack:{len(Moncurse.door_cards)}, rand gen tres:{tpack} door:{dpack}") # should go down
+                return starter_set # returns starter_set list to caller (player.unsorted)
 
-        elif option == "door":
-            """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
-            print('Dealing from Door pile:')
-            card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
-            print(f"Your card is: {card['name']}\nCards left in Door deck: {len(Moncurse.door_cards)}\n")
-            return card
+            elif option == "door":
+                """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
+                print('Dealing from Door pile:')
+                card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
+                print(f"Your card is: {card['name']}\nCards left in Door deck: {len(Moncurse.door_cards)}\n")
+                return card
 
-        elif option == "treasure":
-            """Deal Treasure cards"""
-            print('Dealing from treasure pile')
-            card_list = []
-            for _amount in range(cardnum): # supplies a number of treasure
-                card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
-                print(f"Treasure cards is: {card['name']}\nCards left in Door deck: {len(Treasure.treasure_cards)}\n")
-                card_list.append(card)
-            return card_list
-        else:
-            print("CARD ERROR!!!!!")
+            elif option == "treasure":
+                """Deal Treasure cards"""
+                print('Dealing from treasure pile')
+                card_list = []
+                for _amount in range(cardnum): # supplies a number of treasure
+                    card = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1))
+                    print(f"Treasure cards is: {card['name']}\nCards left in Door deck: {len(Treasure.treasure_cards)}\n")
+                    card_list.append(card)
+                return card_list
+            else:
+                print("CARD ERROR!!!!!")
+        except ValueError:
+            print("DECK EMPTY! NO CARDS AVAILABLE!!!!")
 
 
 class Table(Treasure, Moncurse): # inherits from

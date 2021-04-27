@@ -70,7 +70,8 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_necklace = playerinst.update_bindings("necklace")
 
     def deal_handler(self, option, call=1, num=0):
-        """ Gets cards, type dependent on option parameter."""
+        """ Gets card/s, type dependent on option parameter call refrese to the number of times the door has been kicked
+        and num is number of cards requested(treasure cards)."""
         playerinst = gameVar.StartVariables.active_player
         if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
             for player in gameVar.StartVariables.session_players:
@@ -92,6 +93,8 @@ class PlayerSetUp:
         players hand unseen. Mechanism is also used to trigger a curse
         """
         player = gameVar.StartVariables.active_player
+        # if call: # runs on first kick
+        # else: # runs on 2nd kick
         if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"

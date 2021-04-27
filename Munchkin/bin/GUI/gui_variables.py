@@ -38,7 +38,7 @@ class Options:
 
 class CardDraw:
     """variables associated to game play."""
-    num_of_kicks = 1
+    num_of_kicks = 1 #default = 1 (True)
 
 
 class PlayerAtribs:

@@ -43,6 +43,14 @@ class MonTools:
         print("in loose items below waist")
         pass #pos zipper meth
 
+    def  sex_change(self, action):
+        print("curse change sex!")
+        print(self.gender)
+        if self.gender == "male":
+            self.gender = "female"
+        else:
+            self.gender = "male"
+
     def loose_armor(self, action=None):
         print("in loose_armor")
         # self.equipped_items("curse")
@@ -59,7 +67,7 @@ class MonTools:
         print(f"player level after is : {self.level}")
 
     method_types = {'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
-                    "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run}
+                    "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change":sex_change}
 
 #may need to lambda these to pass args
 #####################################################################
@@ -79,8 +87,10 @@ class Moncurse(MonTools):
         # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, 'method': "monkey_business"},
 
         # Curse cards: id, category, type, status, name, method,
-        {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
+        # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
         # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
+        {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change',
+         'method': 'sex_change'},
 
         # Monster Enhancers
 
