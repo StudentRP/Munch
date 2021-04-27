@@ -62,6 +62,7 @@ class MonTools:
         else:
             print("level not touched at not high enough")
 
+
     def loose_armor(self, action=None):
         print("in loose_armor")
         # self.equipped_items("curse")
