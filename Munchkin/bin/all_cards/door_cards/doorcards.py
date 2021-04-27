@@ -48,8 +48,10 @@ class MonTools:
         print(self.gender)
         if self.gender == "male":
             self.gender = "female"
-        else:
+        elif self.gender == "female":
             self.gender = "male"
+        else:
+            print("you are immune to sex change")
         print(f"Your sex is now: {self.gender}")
 
     def loose_level(self, action=None):
@@ -102,8 +104,8 @@ class Moncurse(MonTools):
         ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player)
         # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
         # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
-        # {'id': 403, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose level', 'method': 'loose_level'},
-        # {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change', 'method': 'sex_change'},
+        {'id': 403, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose level', 'method': 'loose_level'},
+        {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change', 'method': 'sex_change'},
         # {'id': 405, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose headgear', 'method': 'loose_headgear'},
         # {'id': 406, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
         # {'id': 407, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'income tax', 'method': 'income_tax'},
