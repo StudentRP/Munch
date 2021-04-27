@@ -87,17 +87,20 @@ class Moncurse(MonTools):
         # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, 'method': "monkey_business"},
 
         # Curse cards: id, category, type, status, name, method,
-        # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
-        # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
-        {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change',
-         'method': 'sex_change'},
+        {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
+        {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
+        {'id': 403, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose level', 'method': 'loose_level'},
+        {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change', 'method': 'sex_change'},
+        {'id': 405, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose headgear', 'method': 'loose_headgear'},
+        # {'id': 406, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
+        # {'id': 407, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'income tax', 'method': 'income_tax'},
 
         # Monster Enhancers
 
         # player enhancers
 
         # Joining cards
-        # {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
+        {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 502, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
