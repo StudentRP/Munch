@@ -78,8 +78,8 @@ class PlayerSetUp:
                 player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
         elif option == "door": # Standard gameplay loop on door kick
             door_card = cards.card_sop.deal_cards("door", cardnum=1) # returns card, 1 =  amount required in pack
-            self.card_designator(door_card, call=call) # call needed to define where card goes dependent on how many timed door button pushed
-            return door_card
+            self.card_designator(door_card, call=call) # defines where card goes and how many kicks of the door
+            return door_card # for pic use only in gui
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("dealt a treasure card") # test location
             add_treasure = cards.card_sop.deal_cards("treasure", cardnum=num) # params = type of card, num of cards
@@ -93,8 +93,6 @@ class PlayerSetUp:
         players hand unseen. Mechanism is also used to trigger a curse
         """
         player = gameVar.StartVariables.active_player
-        # if call: # runs on first kick
-        # else: # runs on 2nd kick
         if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
             if call: # determines if first kick of door (T or F), if 1 = first kick
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
@@ -104,15 +102,17 @@ class PlayerSetUp:
                 print("adding to sack")
                 gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
                 player.sack.append(card) # adds to player sack
+
         elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
             if call: # 1st kick
                 print("In curse::", player.curses)
                 gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
                 player.card_meths(card, "method", "on")  # actions card effect ............ almost complete
-                if card.get("status") == "active": # for constant effect cures
+                if card.get("status") == "active": # for constant effect curse
                     player.curses.append(card) # adds card to player curse list
                 elif card.get("status") == "passive": # for one shot effect
-                    cards.burn_card.append(card) # disposes of to burn pile
+                    cards.burn_pile.append(card) # disposes of to burn pile
+                    print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
             else:
                 gameVar.GameObjects.message = "Adding card to sack"
                 player.sack.append(card)
@@ -253,6 +253,7 @@ class PlayerSetUp:
             reward = card['treasure']
             self.deal_handler('treasure', num=reward) # fetches treasure for player
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
+            player.level += card["level_up"]
             cards.add_to_burn(card) # removes card
             # player.card_meths(card, 'static', 'off') # turn off card static meth
             print(f"cards in the burn pile: {len(cards.burn_pile)}")

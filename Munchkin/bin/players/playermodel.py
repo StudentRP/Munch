@@ -233,7 +233,7 @@ class Player(MonTools, T_tools): # inherits off card methods
         print("in player card_meth")
         """will use add/remove suited to door cards, loose cases and curse canceling"""
         for key, val in MonTools.method_types.items(): # look up meth
-            if key == card.get(calltype): # call type either 'method for general, and 'static' for const effects while in use
+            if key == card.get(calltype): # calltype either 'method for general, and 'static' for const effects while in use
                 print(f"the key is {key}")
                 val(self, action) # action is on or off
 

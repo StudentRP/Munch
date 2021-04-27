@@ -338,8 +338,8 @@ class MainLoop(tk.Frame):
         self.b13 = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
         self.b13.place(x=365, y=100)
 
-        self.b14 = tk.Button(self.butframe, text="Update info", command=self.update_info)  # for hidden objects
-        self.b14.place(x=10, y=10)
+        # self.b14 = tk.Button(self.butframe, text="Update info", command=self.update_info)  # for hidden objects
+        # self.b14.place(x=10, y=10)
 
 
         "frame player attribs"
@@ -395,7 +395,7 @@ class MainLoop(tk.Frame):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # meth for checking sack size of player
-        gameVar.CardDraw.num_of_kicks = 0 # resets door kicks
+        gameVar.CardDraw.num_of_kicks = 1 # resets door kicks
         # Methods that need to be applied to a player for next turn.
         self.b2.config(state="normal") # enables kick door button
         self.b3.config(state="normal")  # weapons
@@ -421,6 +421,7 @@ class MainLoop(tk.Frame):
         self.b1.config(state="disabled") # disables end turn button, enabled at end of fight
         door_card = engine.deal_handler("door", call=gameVar.CardDraw.num_of_kicks) # fetch a door card!!!!
 
+
         if gameVar.CardDraw.num_of_kicks == 1: # first kick of door (always get this at start of turn!)
             self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas
@@ -440,31 +441,26 @@ class MainLoop(tk.Frame):
                 self.b12.config(state="normal") # run
                 #meth to return card, use id to put card pic
 
-            # else: # if the card is anything else on first kick
-            #     player.card_meths(door_card, 'method', 'on') # for curses to be activated
-
-            gameVar.CardDraw.num_of_kicks = 0 # set to false
-
         elif gameVar.CardDraw.num_of_kicks == 0:
             print("2nd kick activated")
             self.pic = Tools.viewer(0)  # gets card pic face down
-            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")
+            self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
             self.b2.config(state="disabled") # disables door button
-            engine.deal_handler("door", call=0)# call set to false
             self.b1.config(state="normal") # enables fight
             app.update_message("show")
 
+        gameVar.CardDraw.num_of_kicks = 0  # set to false
+        Tools.fluid_player_info() # updates any changes cause by curses
         print("num of kicks", gameVar.CardDraw.num_of_kicks )
 
-
-    def update_info(self): # may be redundant for TOOLS fluid_player_info
-        """method to update a player info window with any changes ie halfbreed ect"""
-        if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
-            self.race2_option.grid(row=8, column=1, sticky='nsew')
-            self.race2_optionb.grid(row=8, column=2, sticky='nsew')
-        if gameVar.StartVariables.active_player.klass_unlock:
-            self.klass2_option.grid(row=9, column=1, sticky='nsew')
-            self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
+    # def update_info(self): # may be redundant for TOOLS fluid_player_info
+    #     """method to update a player info window with any changes ie halfbreed ect"""
+    #     if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
+    #         self.race2_option.grid(row=8, column=1, sticky='nsew')
+    #         self.race2_optionb.grid(row=8, column=2, sticky='nsew')
+    #     if gameVar.StartVariables.active_player.klass_unlock:
+    #         self.klass2_option.grid(row=9, column=1, sticky='nsew')
+    #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
         print("Fight button pressed")
@@ -472,6 +468,7 @@ class MainLoop(tk.Frame):
         result = engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
         if result == "win":
+
             # selfobj.canvas.delete(selfobj.pic) #not working imagine its an access prob#######################
             # self.canvas.update()
             print('remove off canvas?????? ')
