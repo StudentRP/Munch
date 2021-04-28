@@ -227,7 +227,7 @@ class Player(MonTools, T_tools): # inherits off card methods
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, card, calltype=None, action=None): # calltype = setter(action = a/r), static(no action),
+    def card_meths(self, card, calltype=None, action=None): # calltype = method or static, action on or off,
         """link to card methods for active effect on player
         action =add, contitions or remove"""
         print("in player card_meth")

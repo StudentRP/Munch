@@ -107,7 +107,7 @@ class PlayerSetUp:
             if call: # 1st kick
                 print("In curse::", player.curses)
                 gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
-                player.card_meths(card, "method", "on")  # actions card effect ............ almost complete
+                player.card_meths(card, "method", "on")  # actions curs card as soon as picked up
                 if card.get("status") == "active": # for constant effect curse
                     player.curses.append(card) # adds card to player curse list
                 elif card.get("status") == "passive": # for one shot effect
@@ -247,7 +247,7 @@ class PlayerSetUp:
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
         player = gameVar.StartVariables.active_player
-        # player.card_meths(card, 'static', 'on') # static calls cards constant meth while in play
+        player.card_meths(card, 'static', 'on') # turns on card static content for fight
         if player.bonus + player.level + helper + additional >= card["lvl"]: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
@@ -255,7 +255,7 @@ class PlayerSetUp:
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             player.level += card["level_up"]
             cards.add_to_burn(card) # removes card
-            # player.card_meths(card, 'static', 'off') # turn off card static meth
+            player.card_meths(card, 'static', 'off') # turns off static card content
             print(f"cards in the burn pile: {len(cards.burn_pile)}")
             return "win"
         # need action to go up lvl note some cards do more than one level!
@@ -263,7 +263,7 @@ class PlayerSetUp:
             gameVar.GameObjects.message = "Fight lost"
             print("Fight lost")
             player.card_meths(card, 'method', 'on') # calls card bad stuff
-
+            player.card_meths(card, 'static', 'off') # turns off static effect of card in play
             return "lose"
 
     def run(self):
@@ -273,12 +273,13 @@ class PlayerSetUp:
         if roll >= player.run:
             print(f"You rolled a {roll}. You out ran your pursuer.")
             remove = cards.in_play.pop(0)
+            player.card_meths(remove, 'static', 'off')# turns off static card content
             cards.burn_pile.append(remove)
+            return "success"
         else:
             print("Tried to run and slipped. Things are gona get ugly!")
-            # method for card bad stuff. check player alive.
-            # If dead remove all other cards to burn
-
+            # only fight is available now so that cna handle all the logic
+            return "fail"
 
 engine = PlayerSetUp()
 

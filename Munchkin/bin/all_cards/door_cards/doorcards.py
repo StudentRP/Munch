@@ -60,7 +60,7 @@ class MonTools:
             self.level -= 1
             print(f"level remove {self.level}")
         else:
-            print("level not touched at not high enough")
+            print("level not touched, not high enough")
 
 
     def loose_armor(self, action=None):
@@ -105,8 +105,8 @@ class Moncurse(MonTools):
         ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player)
         # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
         # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
-        {'id': 403, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose level', 'method': 'loose_level'},
-        {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change', 'method': 'sex_change'},
+        # {'id': 403, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose level', 'method': 'loose_level'},
+        # {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change', 'method': 'sex_change'},
         # {'id': 405, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose headgear', 'method': 'loose_headgear'},
         # {'id': 406, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
         # {'id': 407, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'income tax', 'method': 'income_tax'},
@@ -116,13 +116,13 @@ class Moncurse(MonTools):
         ## player enhancers
 
         ## Joining cards
-        {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
+        # {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 502, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
 
-        {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
+        # {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 601, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 602, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 603, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
@@ -144,7 +144,8 @@ class Moncurse(MonTools):
     def __repr__(cls):
         return cls.door_cards[0]["name"] # list index, dict name
 
-    def card_meths(self, card, action=None):
+    def card_meths(self, card, action=None): # is this even being used?????
+        print("is this even being used?????")
         if card["method"]:
             x = MonTools.method_types[card["method"]]
             x(self, action)

@@ -396,6 +396,7 @@ class MainLoop(tk.Frame):
         with app.update_frame() method call"""
         # meth for checking sack size of player
         gameVar.CardDraw.num_of_kicks = 1 # resets door kicks
+        self.canvas.delete("all")  # clears the canvas(table) for new player ..............not working
         # Methods that need to be applied to a player for next turn.
         self.b2.config(state="normal") # enables kick door button
         self.b3.config(state="normal")  # weapons
@@ -424,7 +425,7 @@ class MainLoop(tk.Frame):
 
         if gameVar.CardDraw.num_of_kicks == 1: # first kick of door (always get this at start of turn!)
             self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
-            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas
+            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas.. will need meth for this to add cards in linear fashion
 
             gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show")
@@ -451,9 +452,9 @@ class MainLoop(tk.Frame):
 
         gameVar.CardDraw.num_of_kicks = 0  # set to false
         Tools.fluid_player_info() # updates any changes cause by curses
-        print("num of kicks", gameVar.CardDraw.num_of_kicks )
+        print("num of kicks", gameVar.CardDraw.num_of_kicks)
 
-    # def update_info(self): # may be redundant for TOOLS fluid_player_info
+    # def update_info(self): # may be redundant for TOOLS fluid_player_info just button link left
     #     """method to update a player info window with any changes ie halfbreed ect"""
     #     if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
     #         self.race2_option.grid(row=8, column=1, sticky='nsew')
@@ -468,9 +469,7 @@ class MainLoop(tk.Frame):
         result = engine.fight() # helper may be added when sorting it
         app.update_message("show") # name and lvl of monster
         if result == "win":
-
-            # selfobj.canvas.delete(selfobj.pic) #not working imagine its an access prob#######################
-            # self.canvas.update()
+            self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
             print('remove off canvas?????? ')
             # pass # remove single card off tablecards off table
         elif result == "loose":
@@ -489,11 +488,19 @@ class MainLoop(tk.Frame):
 
     def run(self):
         player = gameVar.StartVariables.active_player
-        if player.run_away:
-            engine.run()
+        if player.run_away: # checks ability to run from player attrib
+            result = engine.run()
+            if result == "success":
+                self.b1.config(state="normal")  # end turn
+            else:
+                gameVar.GameObjects.message = "You are trapped! All that is left is to fight!"
+                app.update_message("show")
+                self.b12.config(state="disabled")  # run
+
         else:
             gameVar.GameObjects.message = "This is not a fight you can run from!"
             app.update_message("show")
+            self.b12.config(state="disabled")  # run
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
