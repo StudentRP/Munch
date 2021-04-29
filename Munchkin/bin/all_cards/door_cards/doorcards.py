@@ -32,12 +32,31 @@ class MonTools:
             self.race_unlock = False
             print("return False")
 
+    def klass_bonus(self, action=None):
+        if self.klass.get("name") == "thief":
+            pass
+
+    def race_bonus(self, action=None):
+        if self.race.get("name") == "thief":
+            pass
+
     def no_run(self, action=None):
         print("monster method prevents run")
         if action == "on":
             self.run_away = False
+            print("run disabled")
         else:
             self.run_away = True
+            print("run enabled")
+
+    def shade(self, action=None):
+        """may need a val in gameVar that in can manipulte for placing vals on monsters """
+        import bin.GUI.gui_variables as gameVar
+        if isinstance(self.klass, dict):
+            if self.klass.get("name") == "thief":
+                gameVar.Fight_enhancers.player_aid = 2
+        else:
+            print(f"not theif no bonus {gameVar.Fight_enhancers.player_aid}")
 
     def below_waist(self, action=None):
         print("in loose items below waist")
@@ -83,7 +102,7 @@ class MonTools:
 
     method_types = {'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
-                    "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear}
+                    "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade":klass_bonus}
 
 #may need to lambda these to pass args
 #####################################################################
@@ -99,7 +118,7 @@ class Moncurse(MonTools):
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
         {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lexical': ['Cant outrun'], 'lvl': 1, 'treasure': 1, "level_up":1, 'method': "below_waist", "static": "no_outrun"},
         {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lexical': ['kill with fire levelup'], 'lvl': 2, 'treasure': 1, "level_up":1, 'method': "loose_level"},
-        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead -2 against thieves'], 'lvl': 3, 'treasure': 1, "level_up":1, 'method': "loose_level"},
+        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead -2 against thieves'], 'lvl': 3, 'treasure': 1, "level_up":1, 'method': "loose_level", "static":"shade"},
         {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, "level_up":1, 'method': "monkey_business"},
 
         ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player)

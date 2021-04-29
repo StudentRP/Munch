@@ -29,6 +29,12 @@ class GameObjects:
     zipped_tup = [] # populated with bools of card ids & fetched checkbutton from (check_but_card_ids, check_but_boo)
 
 
+class Fight_enhancers:
+    player_aid = 0
+    monster_aid = 0
+
+
+
 class Options:
     """variables associated to start options that may be manipulated changing win parameters ect"""
     win_lvl = 10 # sets the leve that triggers win

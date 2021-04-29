@@ -492,6 +492,9 @@ class MainLoop(tk.Frame):
             result = engine.run()
             if result == "success":
                 self.b1.config(state="normal")  # end turn
+                self.b11.config(state="disabled")  # fight
+                self.b12.config(state="disabled")  # run
+                self.canvas.delete("all")  # clears the canvas, not quite right as will remove all cards TAG maybe?
             else:
                 gameVar.GameObjects.message = "You are trapped! All that is left is to fight!"
                 app.update_message("show")

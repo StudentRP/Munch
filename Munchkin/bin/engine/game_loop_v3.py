@@ -248,13 +248,14 @@ class PlayerSetUp:
         card = cards.in_play.pop() # end of cards on table
         player = gameVar.StartVariables.active_player
         player.card_meths(card, 'static', 'on') # turns on card static content for fight
-        if player.bonus + player.level + helper + additional >= card["lvl"]: # consideration required for player consumables and enhancers
+        if player.bonus + player.level + helper + gameVar.Fight_enhancers.player_aid \
+                >= card["lvl"] + gameVar.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
             self.deal_handler('treasure', num=reward) # fetches treasure for player
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             player.level += card["level_up"]
-            cards.add_to_burn(card) # removes card
+            cards.burn_pile.append(card) # removes card
             player.card_meths(card, 'static', 'off') # turns off static card content
             print(f"cards in the burn pile: {len(cards.burn_pile)}")
             return "win"
@@ -277,7 +278,7 @@ class PlayerSetUp:
             cards.burn_pile.append(remove)
             return "success"
         else:
-            print("Tried to run and slipped. Things are gona get ugly!")
+            print("Tried to run and slipped. Things are gona get ugly!\n")
             # only fight is available now so that cna handle all the logic
             return "fail"
 
