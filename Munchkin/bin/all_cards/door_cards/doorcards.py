@@ -6,7 +6,7 @@ Will need a processing level
 
 class MonTools:
     """methods for all cards associated to moncurse cards, self should be the player
-    *items/curses will have add abd remove meth
+    *items/ will have add abd remove meth
     * monsters have "conditions" ie -2 for theifs ect and "badstuff" ie event of loosing fight,  params
     so far: 'add' = to add item f=rom pack, 'remove' = bs outcome or curse
 

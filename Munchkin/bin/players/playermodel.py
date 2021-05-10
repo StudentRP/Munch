@@ -56,8 +56,6 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.gender = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
         self.bonus = 0
-        self.other_bonuses = [] # shoulder drag ect
-        self.enhancers = "" # most likely loose. to work on equip mode to run
         self.wallet = 0
         self.race = "human" # string eval to True so will show
         self.race2 = ""
@@ -80,7 +78,8 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
-        self.curses = [] # list of all active curses cards on player, can be removed with ork/wishing ring
+        self.active_effects = [] # list of active effects to be
+        self.passive_effects = [] # list of all passive effects to be applied at player turn start
         self.curse_allowed = True #switched off with tin hat ect
         self.run = 4 # ability to run, manipulable.
         self.run_away = True
