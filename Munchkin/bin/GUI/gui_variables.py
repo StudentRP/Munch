@@ -14,7 +14,7 @@ class StartVariables:
     player_rand = 1  # number for random player generator for PlayerSelect.playersetter
     players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] #all available players !to be sliced!
     session_players = None # (list) generated list slice from game_loop with all player instances in active session
-    active_player = None # selected random player from active players. becomes next player
+    active_player = None # initially random player from session_players players. Thereafter the current player in play
     # selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
 
 
@@ -32,7 +32,6 @@ class GameObjects:
 class Fight_enhancers:
     player_aid = 0
     monster_aid = 0
-
 
 
 class Options:
