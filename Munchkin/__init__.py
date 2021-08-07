@@ -2,3 +2,8 @@
 #
 #
 # NumberOfPlayers().select_players() # starts game
+
+# from bin.GUI.controller import app
+#
+#
+# app.mainloop()

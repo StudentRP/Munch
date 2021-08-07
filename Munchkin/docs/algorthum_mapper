@@ -613,7 +613,7 @@ Door button > door method
 #######################################################################
 # fight
 #######################################################################
-fight button becomes available when a monster is on the table within the in_play list. any additions to this list with
+fight button becomes available when a monster is on the table within the in_play list. any additions to this list will
 force the player to battle monsters in a first in last out order until no monsters are left. This order is also apparent
 with the run button discussed later.
 
@@ -622,6 +622,8 @@ with the run button discussed later.
 #######################################################################
 # run
 #######################################################################
+method looks up a players ability to run - as a bool 0 = false so no run and all other numbers = true.
+If true this number represents the roll required to escape
 
 
 #######################################################################

@@ -78,11 +78,11 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
-        self.active_effects = [] # list of active effects to be
+        self.active_effects = [] # list of all cards that effect player (curses ect)
         self.passive_effects = [] # list of all passive effects to be applied at player turn start
         self.curse_allowed = True #switched off with tin hat ect
-        self.run = 4 # ability to run, manipulable.
-        self.run_away = True
+        self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
+        self.run_away = True # locks ability toi run or not dependent on some monsters
 
     def __repr__(self):
         """developer aid"""

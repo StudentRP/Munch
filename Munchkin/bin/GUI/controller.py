@@ -14,7 +14,7 @@ from PIL import ImageTk
 import os
 # import bin.GUI.gui_tools as tools
 
-gamefont=('castellar', 12, 'bold')
+gamefont = ('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
 text_color ="#7A0600"
 but_color = "#3EB0A1"
@@ -29,7 +29,7 @@ class Main(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.geometry('500x200') # adding +x+y to the end provide window location
+        self.geometry('500x200') # adding +x+y to the end provide window location, maybe create option slider in menu
         self.title("Munchkin")
         container = tk.Frame(self)
         container.pack(side=tk.TOP, fill='both', expand=True)
@@ -338,6 +338,9 @@ class MainLoop(tk.Frame):
         self.b13 = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
         self.b13.place(x=365, y=100)
 
+        self.b15 = tk.Button(self.butframe, text="Status Effects", command=self.status_effect)# for player curses
+        self.b15.place(x=600, y=10)
+
         # self.b14 = tk.Button(self.butframe, text="Update info", command=self.update_info)  # for hidden objects
         # self.b14.place(x=10, y=10)
 
@@ -573,6 +576,10 @@ class MainLoop(tk.Frame):
         player.equipped_items("list_equipped")
         OwnedItems("Equipped Items", "remove")
 
+    def status_effect(self):
+        """method for showing what status effect are active on the current player"""
+        pass
+
 
 class OwnedItems(tk.Toplevel):
     """generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made on those cards"""
@@ -583,7 +590,7 @@ class OwnedItems(tk.Toplevel):
         # self.geometry("350x250+200+200")
         self.set_but = set_but
 
-        if not gameVar.GameObjects.selected_items:
+        if not gameVar.GameObjects.selected_items: # not work
             fm = tk.Frame(self)
             tk.Label(fm, text="No cards to show").pack()
         else:
@@ -727,4 +734,4 @@ if __name__ == "__main__":
 
     app.mainloop()
 
-# Main().mainloop(),
+# Main().mainloop(), # removes the instance (self) which is needed for later activities

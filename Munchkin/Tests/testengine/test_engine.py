@@ -40,3 +40,6 @@ from Munchkin.Tests.testgui.test_gui import *
 import Munchkin.bin.all_cards.treasure_cards
 import Munchkin.bin.all_cards.door_cards
 
+run = 2
+
+print(bool(run))

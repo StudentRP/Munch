@@ -87,7 +87,7 @@ class PlayerSetUp:
         else:
             print("I guess the deck is empty....")
 
-    def card_designator(self, card, call=1): # for all door cards that are drawn form the pack
+    def card_designator(self, card, call=1): # for all door cards that are drawn from the pack
         """method that sort the cards that the player draws form the deck during play. this could be monster, curse ect.
         Call is used to determine how many times the door has been kicked in a turn and in 2nd instance the door is put into the
         players hand unseen. Mechanism is also used to trigger a curse
