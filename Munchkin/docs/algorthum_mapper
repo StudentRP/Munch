@@ -141,7 +141,7 @@ class P_tools
     all player related methods unclutter player class
 
 
-gui#### should i have an intermediate gui script that holds all the variables? WORKING PROGRESS
+gui#### should (YES, IPC as better known) i have an intermediate gui script that holds all the variables? WORKING PROGRESS
 
 main_gui reports(sets vars) to gui_var script and engine get all variables from gui var script
 thus main_gui imports gui_var and engine imports gui_var. gui can then call the classes of engine without moving any variables
@@ -394,7 +394,7 @@ goes first in the game. End turn button should trigger events that lead to the n
 player info window.
 
     end_turn, button method
-    On button press player turn ends and another begins.
+    On button press player turn ends and another players turn begins.
         engine.player_order(gameVar.StartVariables.active_player) active_player bound in rand method above becomes
         current_player. while play is true (to be set as conditional for gameVar.Options.win_lvl) creates loop for
         players in game. With the use of itertools cycle is used to iterate over the session_players
@@ -629,7 +629,19 @@ If true this number represents the roll required to escape
 #######################################################################
 # curses
 #######################################################################
+consider curses that have effect and those that dont.
+    dont > back to burn pile
+    do > detrmine location of activity ( armor, weapon?) needs link to card that is effected (id) and storage
+    somewhere in player model. card active in correct situation then deactivation meth required
+
 card_designator(self, card, call=1): look under curses to add meth
+
+
+#######################################################################
+# enhancers method
+#######################################################################
+enchantment to stay on lost weapons!
+
 
 
 #######################################################################

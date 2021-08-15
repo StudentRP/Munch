@@ -406,7 +406,7 @@ class MainLoop(tk.Frame):
         self.b4.config(state="normal")  # armor
         self.b6.config(state="normal")  # sell
         self.b11.config(state="disabled")  # fight
-        self.b12.config(state="disabled")  # run
+        self.b12.config(state="disabled")  # runc
         # app.update_message() #clears all messages
 
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
@@ -589,6 +589,7 @@ class OwnedItems(tk.Toplevel):
         self.title(self.wind_title)
         # self.geometry("350x250+200+200")
         self.set_but = set_but
+        print(f"Top level self: {self}")
 
         if not gameVar.GameObjects.selected_items: # not work
             fm = tk.Frame(self)

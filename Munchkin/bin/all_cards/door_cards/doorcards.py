@@ -5,42 +5,67 @@ Will need a processing level
 
 
 class MonTools:
-    """methods for all cards associated to moncurse cards, self should be the player
+    """methods for all cards associated to Door cards, self should be the player
     *items/ will have add abd remove meth
     * monsters have "conditions" ie -2 for theifs ect and "badstuff" ie event of loosing fight,  params
-    so far: 'add' = to add item f=rom pack, 'remove' = bs outcome or curse
+    so far: 'add' = to add item from pack, 'remove' = bs outcome or curse
 
     """
+    def unknown(self, problem):
+        print(f"Problem found in method {problem}")
+
+    def level_up(self, action, value):
+        if action == "on": # add level
+            print(f"Current player level{self.level}", end=" ")
+            self.level += value
+            print(f"level changed to {self.level} increased by {value}")
+        else: # remove level
+            print(self.level)
+            self.level -= value
+            print(f"level changed to {self.level} decreased by {value}")
 
     def supermunch(self, action=None):
         """player class_unlock bool option;  ln 227 player_door_cards engine! """
-        print(f"in supermuinch. action is {action}") # tester
+        print(f"In supermunchkin. action is {action}") # location tester
 
         if action == "on":
             self.klass_unlock = True
             print("class unlocked!!!")
-        else:
+        elif action == "off":
             self.klass_unlock = False
             print("return False")
+        else:
+            self.unknown("SupperMunchkin")
 
     def half_breed(self, action=None):
         print("in halfbreed")
         if action == "on":
             self.race_unlock = True
             print("race unlocked!!")
-        else:
+        elif action == "off":
             self.race_unlock = False
             print("return False")
+        else:
+            self.unknown("half_breed")
 
-    def klass_bonus(self, action=None):
-        if self.klass.get("name") == "thief":
-            pass
+    def klass_bonus(self, action=None, *args):
+        if isinstance(self.klass, dict):
+            if self.klass.get("name") == "thief" or self.klass2.get("name") == "theif":
+                print("in thief meth")# location check
+                pass
+            elif self.klass.get("name") == "elf" or self.klass2.get("name") == "elf":
+                print("You are an Elf")
+        elif not isinstance(self.klass, dict):
+            print("No class detected with player for static action\n")
+            print(self.klass)
+        else:
+            self.unknown("klass_bonus error")
 
-    def race_bonus(self, action=None):
+    def race_bonus(self, action=None, *args):
         if self.race.get("name") == "thief":
             pass
 
-    def no_run(self, action=None):
+    def no_run(self, action=None, *args):
         print("monster method prevents run")
         if action == "on":
             self.run_away = False
@@ -49,16 +74,16 @@ class MonTools:
             self.run_away = True
             print("run enabled")
 
-    def shade(self, action=None):
-        """may need a val in gameVar that in can manipulte for placing vals on monsters """
-        import bin.GUI.gui_variables as gameVar
-        if isinstance(self.klass, dict):
-            if self.klass.get("name") == "thief":
-                gameVar.Fight_enhancers.player_aid = 2
-        else:
-            print(f"not theif no bonus {gameVar.Fight_enhancers.player_aid}")
+    # def shade(self, action=None, *args):
+    #     """Not used """
+    #     import bin.GUI.gui_variables as gameVar
+    #     if isinstance(self.klass, dict):
+    #         if self.klass.get("name") == "thief":
+    #             gameVar.Fight_enhancers.player_aid = 2
+    #     else:
+    #         print(f"not thief no bonus {gameVar.Fight_enhancers.player_aid}")
 
-    def below_waist(self, action=None):
+    def below_waist(self, action=None, *args):
         print("in loose items below waist")
         pass #pos zipper meth
 
@@ -73,34 +98,34 @@ class MonTools:
             print("you are immune to sex change")
         print(f"Your sex is now: {self.gender}")
 
-    def loose_level(self, action=None):
-        print(f"remove level {self.level}")
+    def loose_level(self, *args):
+        print(f"Your level is {self.level}")
         if self.level > 1:
             self.level -= 1
-            print(f"level remove {self.level}")
+            print(f"Level removed. You are now {self.level}")
         else:
             print("level not touched, not high enough")
 
 
-    def loose_armor(self, action=None):
+    def loose_armor(self, action=None, *args):
         print("in loose_armor")
         # self.equipped_items("curse")
 
-    def loose_footgear(self, action=None):
+    def loose_footgear(self, *args):
         print("in loose_footgear")
         # self.equipped_items("curse")
 
-    def loose_headgear(self, action=None):
+    def loose_headgear(self, *args):
         print("loose headgear meth to add")
 
-    def monkey_business(self, action=None):
+    def monkey_business(self, *args):
         """looses_level, loose_small_item"""
         print(f"player level is : {self.level}")
         if self.level > 1:
             self.level -= 1
         print(f"player level after is : {self.level}")
 
-    method_types = {'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
+    method_types = {'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
                     "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade":klass_bonus}
 
@@ -161,19 +186,31 @@ class Moncurse(MonTools):
 
     @classmethod
     def __repr__(cls):
+        """Card test request check"""
         return cls.door_cards[0]["name"] # list index, dict name
 
-    def card_meths(self, card, action=None): # is this even being used?????
-        print("is this even being used?????")
-        if card["method"]:
-            x = MonTools.method_types[card["method"]]
-            x(self, action)
+    def card_meths(self, card, action=None, value=None):
+        """method for the test of cards an associated methods within method_types list"""
+        print("CARD METHOD TEST")
+        test_type = "static" # card key. static, method,
+        if card.get(test_type, "Method not in card"):
+            value = card[test_type] # gets value stored at card key (test_type)
+            print(value)
+            list_method = MonTools.method_types[value] #returns inactive method #looks up method with key assigning inactive value
+            list_method(self, action, value) # action 'on' or 'off', value level to add/ remove
 
-
+    def __getattr__(self, item):
+        """simulates player atribs for card meths to test"""
+        if item == "level":
+            return 4 # provides m1 with player traits of level
+        elif item == "gender":
+            return "male"
+        elif item == "klass" or item == "klass2":
+            return {"name": "elf"} # mock class card dict, Change according to the required class
 
 m1 = Moncurse()
-
 if __name__ == "__main__":
-    card = m1.door_cards[6]
-    m1.card_meths(card, "add")
-    m1.card_meths(card, "remove")
+    card = m1.door_cards[2] # draws specific card
+    print(card) # show card
+    m1.card_meths(card, action="on") # for methods that require action to turn off or on.
+    # m1.card_meths(card, action="off")

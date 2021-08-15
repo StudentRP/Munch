@@ -7,7 +7,7 @@ from random import randint
 
 
 class T_tools:
-    """ Specific methods for Treasure card"""
+    """ Specific methods for Treasure cards"""
     pass
 
 

@@ -4,8 +4,12 @@
 #
 #     PlayerSetUp().select_players() # starts game
 
-from bin.GUI.controller import app
+""" creates circular import if __init__.py has same import"""
+# from bin.GUI.controller import Main
+#
+# app = Main()
+#
+#
+#
+# app.mainloop()
 
-
-
-app.mainloop()
