@@ -1,4 +1,50 @@
-Game logic algorithmic determination
+MUNCHKIN
+
+contents:
+    SCRIP DEPENDENCIES
+    PLAY CYCLE
+    CLASSES METHODS AND LOGIC
+    ALGORITHM MAPPER
+    PLANNED CHANGES
+
+****************************************************************************************************
+**************************************** GAME GENERAL ************************************
+****************************************************************************************************
+
+######################################################
+# SCRIP DEPENDENCIES
+######################################################
+
+controller.py: provides front end logic and building blocks for GUI
+
+gui_variables (referred to as game_var): acts as a IPC script that controller.py can interact with and game_loop.py
+can change without creating conflicting imports and unclear values of return statements.
+This create a clear uncomplicated area that values may be seen, like game options, or stored without obfuscation.
+
+game_loop.py (referred to as engine): location of all the backend logic that called from the GUI, generic card methods
+for sorting, player rotation, control of play and anything else that sits on top of the basic script logic.
+This script imports table.py giving access to both doorcards.py & treasurercards.py and playermodel.py.
+
+table.py: is modeled on a playing table and contains classes that relate to a dealer, dice and table. dealer will fetch
+cards from both doorcards.py & treasurercards.py returning the card back to the caller (usually game_loop).
+During a fight or when cards are discarded they go to the table. Recovery of cards from the burn pile is controlled
+by dealer.
+
+playermodel.py: with set number of instances to prevent card shortage, this class creates the fundamental player.
+Methods in this class are indicative of those that cause change to the players individual info or relate to the player
+some way. this calls inherits from  doorcards.MonCur so that method like curses can effect the player in question and
+treasurecards.T_tools for methods associated to enchanted items. playersetup.py is also imported using the P-tools class.
+this however has little functionality and may be absorbed into the player model.
+
+treasurecards.py: contains all cards for the treasure deck. This is a list of nested ditcionaries containing all
+information relevent to any of the cards in question. treasurecards.py inherits from T_tools that contains a dictioanry of all
+methods associated to a card as a value to the called key received from a card in or used during play.
+
+
+
+**********************************************************************************************
+****************************** play cycle *******************************
+**********************************************************************************************
 
 ##################################################
 START
@@ -103,6 +149,9 @@ END TURN
         END TURN
 
 ######################################################
+
+
+
 ######################################################
 # classes, methods and logic
 ######################################################
@@ -111,7 +160,7 @@ Player class:
 class for specific setup
 initialisation
     player attributes
-        self.ref = ref # simple form to keep track of players
+        self.ref = ref # simple form to keep track of players ( MAY CHANGE TO self.__str__() )
         self.name = None # to be set when called
         self.sex = None
         self.level = 1 # win lvl 10, make changeable so edit score to win
@@ -148,9 +197,6 @@ thus main_gui imports gui_var and engine imports gui_var. gui can then call the 
 or changing the self parameter
 
 
-######################################################
-# GUI considerations
-######################################################
 
 Controller:
     Controller serves up pages(frames) that are raised to the top.
@@ -202,7 +248,8 @@ instance associated
 
 mainloop class to define a method to send index to game_loop class.
 
-game_Loop.py
+game_Loop.py:
+
     Game_loop.py main directive is to either source logic from other classes, provide one shot logic demanded by the
     GUI and primarily to update gui_variables.py  that can be accessed by controller.py
 
@@ -225,6 +272,10 @@ game_Loop.py
     This update method must be called to refresh/concurrent the labels in the play area
 
 
+
+***************************************************************************************************
+******************************** ALGORITHM MAPPER **************************************
+***************************************************************************************************
 
 #######################################################################
 # Game start and options methods
@@ -659,3 +710,10 @@ enchantment to stay on lost weapons!
 #######################################################################
 # pay to go up level
 #######################################################################
+
+****************************************************************************************************
+**************************************** planned changes *************************************
+****************************************************************************************************
+
+game_loop.py
+* Splitting up this module into more defined classes will be needed.

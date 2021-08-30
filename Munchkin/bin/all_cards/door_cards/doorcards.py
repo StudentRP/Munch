@@ -184,13 +184,17 @@ class Moncurse(MonTools):
 
     ]
 
+
+#############################################################
+# TEST SUITE
+#############################################################
     @classmethod
     def __repr__(cls):
         """Card test request check"""
         return cls.door_cards[0]["name"] # list index, dict name
 
     def card_meths(self, card, action=None, value=None):
-        """method for the test of cards an associated methods within method_types list"""
+        """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
         print("CARD METHOD TEST")
         test_type = "static" # card key. static, method,
         if card.get(test_type, "Method not in card"):
@@ -200,13 +204,13 @@ class Moncurse(MonTools):
             list_method(self, action, value) # action 'on' or 'off', value level to add/ remove
 
     def __getattr__(self, item):
-        """simulates player atribs for card meths to test"""
-        if item == "level":
+        """simulates player atribs for the instance m1"""
+        if item == "level": # catches m1.level setting to 4 mimicking a player with a level of 4.
             return 4 # provides m1 with player traits of level
         elif item == "gender":
-            return "male"
+            return "male" # change according to requirement
         elif item == "klass" or item == "klass2":
-            return {"name": "elf"} # mock class card dict, Change according to the required class
+            return {"name": "elf"} # mock class card dict, Change elements according to the required class
 
 m1 = Moncurse()
 if __name__ == "__main__":
@@ -214,3 +218,4 @@ if __name__ == "__main__":
     print(card) # show card
     m1.card_meths(card, action="on") # for methods that require action to turn off or on.
     # m1.card_meths(card, action="off")
+    # print(dir(m1)) #shows all methods and inherited meths

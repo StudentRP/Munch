@@ -72,7 +72,7 @@ class Main(tk.Tk):
         frame.tkraise()
 
     def update_frame(self):
-        """binds all the labels to the gamevar"""
+        """binds all the labels to the gamevar for player change"""
         self.geometry("800x600+720+50") # changes the geometry when called
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
