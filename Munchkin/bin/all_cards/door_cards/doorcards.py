@@ -205,7 +205,7 @@ class Moncurse(MonTools):
 
     def __getattr__(self, item):
         """simulates player atribs for the instance m1"""
-        if item == "level": # catches m1.level setting to 4 mimicking a player with a level of 4.
+        if item == "level": # catches m1.level (FROM CARD METHS) setting to 4 mimicking a player with a level of 4.
             return 4 # provides m1 with player traits of level
         elif item == "gender":
             return "male" # change according to requirement

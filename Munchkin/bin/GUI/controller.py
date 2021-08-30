@@ -723,7 +723,7 @@ class Tools:
 
 
     @staticmethod #not working Yet
-    def viewer( card_id=None):
+    def viewer(card_id=None):
         path = "..\\imgs\\cards\\"
         img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
         return img
