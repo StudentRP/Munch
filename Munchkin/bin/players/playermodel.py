@@ -174,7 +174,7 @@ class Player(MonTools, T_tools): # inherits off card methods
                             self.weapon_count += card.get("hold_weight", 0) # adds the cards carry_weight for available hands, if available.
                             continue
                     elif action == "curse": # not tested
-                        print("In equipped items remove cured item")
+                        print("In equipped items remove cursed item")
                         pass
 
     def equip_armor(self, card):

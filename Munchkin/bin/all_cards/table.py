@@ -22,15 +22,15 @@ class Dice:
 
 class Dealer:
 
-    def deal_cards(self, option=None, cardnum=4): # option = set card type, cardnum=number of cards to deal set by game  options
-        """Method for dealing cards to players at start or during play. params: option selects the type/situation of
-        dealing specific cards cardnum specific to the start/resurrect determines the amount of cards to of each type
-        to deal players"""
+    def deal_cards(self, option=None, cardnum=4):
+        """Method for dealing cards to players at start or during play during certain game activities.
+        Option = set card deal mode/type expects: 'start', 'door', 'treasure').
+        cardnum=number cards dealt in given situation (game start, win, turn start)"""
 
         print(f"In deal cards. Num of cards in: \nDoor stack: {len(Moncurse.door_cards)}\nTreasure stack: {len(Treasure.treasure_cards)}\n"
               f"Burn pile: {len(cards.burn_pile)}\nIn-play stack: {len(cards.in_play)}\n") # dev print
 
-        # Checks
+        # Checks both card decks for requested card amount
         if cardnum > len(Moncurse.door_cards):
             print(f"Not enough Door cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]}")
             cards.restock()
@@ -40,12 +40,12 @@ class Dealer:
             cards.restock()
 
         # Main actions
-        try :
+        try:
             if option == "start":
                 """called at start to deal specific number of cards to pass to player"""
                 starter_set = []
                 for i in range(cardnum): # takes attrib of number of loops for card dealing (set by gameVar.Options)
-                    dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
+                    dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1)) # change to rand(0, range(len(blah)))
                     starter_set.append(dobj) # adds door card to list
                     tobj = Treasure.treasure_cards.pop(randint(0, len(Treasure.treasure_cards) - 1)) # gets card. better rand required
                     starter_set.append(tobj) # adds treasure card to list,
@@ -53,7 +53,7 @@ class Dealer:
                 return starter_set # returns starter_set list to caller (player.unsorted)
 
             elif option == "door":
-                """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
+                """Deal Door cards, meth requires cardnum""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
                 print('Dealing from Door pile:')
                 card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
                 print(f"Your card is: {card['name']}\nCards left in Door deck: {len(Moncurse.door_cards)}\n")
@@ -96,6 +96,8 @@ class Table(Treasure, Moncurse): # inherits from
             return self.burn_pile[:x]
 
     def restock(self):
+        """Empties burn pile refilling both door and treasure decks."""
+        print("Burn pile emptied, refilling door and treasure decks.")
         for card in self.burn_pile: # cards is the instance
             if card.get("category") == "door":
                 Moncurse.door_cards.append(card)

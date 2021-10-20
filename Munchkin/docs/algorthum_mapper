@@ -1,8 +1,12 @@
 MUNCHKIN
 
 contents:
-    SCRIP DEPENDENCIES
+    GAME GENERAL
+        SCRIP DEPENDENCIES
     PLAY CYCLE
+        START
+        GAME LOOP
+        END TURN
     CLASSES METHODS AND LOGIC
     ALGORITHM MAPPER
     PLANNED CHANGES
@@ -17,8 +21,8 @@ contents:
 
 controller.py: provides front end logic and building blocks for GUI
 
-gui_variables (referred to as game_var): acts as a IPC script that controller.py can interact with and game_loop.py
-can change without creating conflicting imports and unclear values of return statements.
+gui_variables.py (referred to as game_var): acts as a IPC script that controller.py can interact with and game_loop.py
+can change without creating conflicting imports and converluted return statements.
 This create a clear uncomplicated area that values may be seen, like game options, or stored without obfuscation.
 
 game_loop.py (referred to as engine): location of all the backend logic that called from the GUI, generic card methods
@@ -151,10 +155,10 @@ END TURN
 ######################################################
 
 
+****************************************************************************************************
+**************************************** CLASSES METHODS AND LOGIC ************************************
+****************************************************************************************************
 
-######################################################
-# classes, methods and logic
-######################################################
 
 Player class:
 class for specific setup

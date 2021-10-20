@@ -1,11 +1,11 @@
 
 """
-Main gui for Munchkin, version 4 (old: gui_v3)
+Main gui for Munchkin, version 4 (legacy: gui_v3)
 
 """
 import tkinter as tk
 import tkinter.ttk as ttk
-from bin.engine.game_loop_v3 import engine
+from bin.engine.game_loop_v3 import engine  # imports the instance
 # import bin.engine.game_loop_v3 as engine #for game loop clean up
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
@@ -35,7 +35,7 @@ class Main(tk.Tk):
         container.pack(side=tk.TOP, fill='both', expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-        self.frames = {}
+        self.frames = {} # app.frames
 
         #### all Game notifications ####
         self.message = tk.StringVar()
@@ -61,7 +61,7 @@ class Main(tk.Tk):
 
         "fills the dictionary, snapshot built instance frames"
         for frm in StartPg, PlayerSelect, MainLoop:
-            frame = frm(container, self) # passes container as the parent each frame reps dif object id
+            frame = frm(container, self) # passes container as the parent & self as controller  (app)
             self.frames[frm] = frame
             frame.grid(row=0, column=0, sticky='nsew')
         self.show_frame(StartPg)

@@ -1,16 +1,13 @@
 """Initiates player personalisation and runs game cycle for each player fetching cards and initiation
 each scene of play
 
-Considerations;
-    sets num of players                                         = = DONE
-    triggers player setup                                       = = DONE
-    triggers character play order                               = = DONE
-    starts game loop                                            = = DONE
-    triggers card calls                                         = = WORKING PROGRESS
-    correlation of player vs cards                              = = move to game logic
-    player intervention mechanics                               = = move to game logic
-    exports treasure/curse objects to player self               = = move to game logic
-    start GUI loop here and import from gui the inherited bits  = = to do
+Contents functions:
+    rand * picks single player from list of players
+    varbinding * binds all player attribs to IPC script
+    dealhandler *
+
+
+
 """
 
 
@@ -36,19 +33,60 @@ class PlayerSetUp:
     """class to determine number of players and hand to player order"""
 
     def __init__(self):
-        self.cycle = 0
+        self.cycle = 0 #needed?
+
+#meths associated to play
+
+    def select_players(self): # slices num of available players with gui entry
+        """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
+         deal_handler is called to provide starting number of cards for each player"""
+        num_of_players = gameVar.StartVariables.new_players # get int representing num of players in current session (from spinbox)
+        print(f"number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
+        gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
+        # session binding to new variable gamevar
+        self.deal_handler("start") # Starts process of dealing cards to all players. results in putting in player.sack. Does not bind to gameVar
+
+    def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
+        """Call active player list, use index to ref each player instance, call """
+        player = gameVar.StartVariables.session_players[playerindex]
+        player.char_setup() # calls playermodel.py method.
+        # print(player) # __repr__ method
 
     def rand(self):
-        """Game start, picks a random player in the session_players list. Setts player as active_player and calls meth
+        """Game start, picks a random player in the session_players list. Sets player as active_player and calls meth
         to load player atribs gor gui"""
-        player = choice(gameVar.StartVariables.session_players)
-        gameVar.StartVariables.active_player = player # send to game var for accessibility
+        player = choice(gameVar.StartVariables.session_players) # selects random player from list of players
+        gameVar.StartVariables.active_player = player # assigns the selected player to active player in gamevar for gui to see
         gameVar.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
-        self.varbinding(player) # set all gameVar to this player
+        self.varbinding(player) # arg not needed. Calls method to set all attribs in in gamevar of player
 
-    def varbinding(self, playerinst=gameVar.StartVariables.active_player):
-        """Method to bind all player atribs to gameVar, to be called with player instance when ever
-        communication is required to gui"""
+    def player_order(self, current_player): # called with gameVar rand_index
+        """Note initial player is set at this point+bound.
+        Player cycle loop for calling next player and call binding on new player"""
+        play = True # win condition need method that will check all players
+        player_gen = cycle(gameVar.StartVariables.session_players) # generator function that cycles a list indefinitely
+        y = next(player_gen) # yields players from the list, at start this would be first item = p1.
+        while play:
+            if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
+                print(f"Current player {current_player.name} turn ended\n")
+                gameVar.StartVariables.active_player = next(player_gen) # binds next player to rand_player, (changes x)
+                self.varbinding(gameVar.StartVariables.active_player) #  binds new player
+                print(f"{gameVar.StartVariables.active_player.name} has been binded")
+                break
+            elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
+                print(f"print player {current_player} is dead") # move in to conditional for perm-a-death
+                current_player.alive = True # resets player status ##########need per-a-death bit here
+                gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
+                continue
+            else:
+                print(f"{y.name.title()} did not match. Searching for player in list")
+                y = next(player_gen) # changes y to find commonality to x
+
+        gameVar.GameObjects.message = f"{gameVar.StartVariables.active_player.name.title()}'s turn..."
+
+    def varbinding(self, playerinst=gameVar.StartVariables.active_player): # defaults to gamevar activeplayer player
+        """Method to bind all player atribs to gameVar for current player stored in gamevar.SV.active_player. For
+        communication with gui. TO BE ADDED TO"""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
         gameVar.PlayerAtribs.player_gender = playerinst.gender.title()
         gameVar.PlayerAtribs.player_level = playerinst.level
@@ -69,13 +107,15 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_footgear = playerinst.update_bindings("footgear")
         gameVar.PlayerAtribs.player_necklace = playerinst.update_bindings("necklace")
 
+# card handling class:
+
     def deal_handler(self, option, call=1, num=0):
-        """ Gets card/s, type dependent on option parameter call refrese to the number of times the door has been kicked
+        """ Gets card/s, type dependent on option parameter call refers to the number of times the door has been kicked
         and num is number of cards requested(treasure cards)."""
-        playerinst = gameVar.StartVariables.active_player
-        if option == "start": # initial play or resurrection. called at player slice (select_players and resurrection
+        playerinst = gameVar.StartVariables.active_player # gets current player object
+        if option == "start": # initial play or resurrection option. called at player slice dealing each card/s
             for player in gameVar.StartVariables.session_players:
-                player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # links to table.py, called from PlayerSetUp.select_players
+                player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
         elif option == "door": # Standard gameplay loop on door kick
             door_card = cards.card_sop.deal_cards("door", cardnum=1) # returns card, 1 =  amount required in pack
             self.card_designator(door_card, call=call) # defines where card goes and how many kicks of the door
@@ -116,6 +156,7 @@ class PlayerSetUp:
             else:
                 gameVar.GameObjects.message = "Adding card to sack"
                 player.sack.append(card)
+
         else: # for all other cards that have no direct effect or influence.
             print(f"Adding {card['name']}to sack.")
             if call:
@@ -125,45 +166,6 @@ class PlayerSetUp:
             else:
                 gameVar.GameObjects.message = "Adding 2nd card to sack"
                 player.sack.append(card)
-
-    def player_order(self, current_player): # called with gameVar rand_index
-        """Note initial player is set at this point+bound.
-        Player cycle loop for calling next player and call binding on new player"""
-        play = True # win condition need method that will check all players
-        player_gen = cycle(gameVar.StartVariables.session_players) # generator function that cycles a list indefinitely
-        y = next(player_gen) # yields players from the list, at start this would be first item = p1.
-        while play:
-            if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
-                print(f"Current player {current_player.name} turn ended\n")
-                gameVar.StartVariables.active_player = next(player_gen) # binds next player to rand_player, (changes x)
-                self.varbinding(gameVar.StartVariables.active_player) #  binds new player
-                print(f"{gameVar.StartVariables.active_player.name} has been binded")
-                break
-            elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
-                print(f"print player {current_player} is dead") # move in to conditional for perm-a-death
-                current_player.alive = True # resets player status ##########need per-a-death bit here
-                gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
-                continue
-            else:
-                print(f"{y.name.title()} did not match. Searching for player in list")
-                y = next(player_gen) # changes y to find commonality to x
-
-        gameVar.GameObjects.message = f"{gameVar.StartVariables.active_player.name.title()}'s turn..."
-
-    def select_players(self): # slices num of available players with gui entry
-        """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
-         deal_handler is called to provide starting number of cards for each player"""
-        num_of_players = gameVar.StartVariables.new_players # get int representing num of players in current session (from spinbox)
-        print(f"number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
-        gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
-        # session binding to new variable gamevar
-        self.deal_handler("start") # Starts process of dealing cards to all players. results in putting in player.sack. Does not bind to gameVar
-
-    def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
-        """Call active player list, use index to ref each player instance, call """
-        player = gameVar.StartVariables.session_players[playerindex]
-        player.char_setup() # calls playermodel.py method.
-        # print(player) # __repr__ method
 
     def zipper(self, action=None):
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
@@ -198,8 +200,8 @@ class PlayerSetUp:
                   player.klass2: "klass_restriction", player.gender: "gender_restriction"}
         flag = 1 # True
         for key, val in checks.items():
-            if card.get(val):  # if present in dict do this. Dont put string return in get meth. Must return none!!!
-                if card.get(val) == key:
+            if card.get(val):  # checks card to see if restriction present
+                if card.get(val) == key: # compares restriction in card to player.atribs.
                     print(f"Main path for: {val}")
                     continue
                 elif player.name == "The_Creator":  # dev mode
@@ -242,6 +244,7 @@ class PlayerSetUp:
         gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list
 
+##################################################################
     def fight(self, helper=0, additional=0):# helper would be other player interactions. additional is anything else
         """for cards that are monsters and placed on the table"""
         print("In the fight!")
