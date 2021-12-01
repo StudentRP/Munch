@@ -31,10 +31,12 @@ class Main(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
         self.geometry('500x200') # adding +x+y to the end provide window location, maybe create option slider in menu
         self.title("Munchkin")
+        # main container for the different frames to be placed in
         container = tk.Frame(self)
-        container.pack(side=tk.TOP, fill='both', expand=True)
+        container.pack(side=tk.TOP, fill='both', expand=True) # creates frame that spans all of the main tk window
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+        # holds all the prebuilt frames for the container to look up
         self.frames = {} # app.frames
 
         #### all Game notifications ####
@@ -59,20 +61,21 @@ class Main(tk.Tk):
         self.footgear = tk.StringVar()
         self.necklace = tk.StringVar()
 
-        "fills the dictionary, snapshot built instance frames"
-        for frm in StartPg, PlayerSelect, MainLoop:
-            frame = frm(container, self) # passes container as the parent & self as controller  (app)
-            self.frames[frm] = frame
+        "Creates 3 frames all with the same parent and fills the dictionary with snapshots of built instances"
+        for frm in StartPg, PlayerSelect, MainLoop: # snapshot of the frames (classes) put into the dict
+            frame = frm(container, self) # Instance creation. Passes container as the parent frame & self as controller (app)
+            self.frames[frm] = frame  # adding to dict
             frame.grid(row=0, column=0, sticky='nsew')
-        self.show_frame(StartPg)
+        self.show_frame(StartPg) # calling correct pg to top of the frame, last one stacked will show otherwise
 
     def show_frame(self, content):
-        """brings the fame to the fore front. content being key word """
-        frame = self.frames[content] # loos in dict for the pg
-        frame.tkraise()
+        """ Brings the frame to the fore front within the pre packed parent frame. Content being name of frame class
+        packed into the container """
+        frame = self.frames[content] # looks up the frame in the dict
+        frame.tkraise() # brings the child frame to the forefront to be seen within the main container frame
 
     def update_frame(self):
-        """binds all the labels to the gamevar for player change"""
+        """Binds all the labels to the gamevar for player change with the set method"""
         self.geometry("800x600+720+50") # changes the geometry when called
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
@@ -96,7 +99,7 @@ class Main(tk.Tk):
 
     def update_message(self, action=None):
         if action == "show":
-            self.message.set(gameVar.GameObjects.message)
+            self.message.set(gameVar.GameObjects.message) # grabs message stored in gamevar messages
         elif action == "dev":
             self.message2.set(gameVar.GameObjects.message2)
         else:
@@ -109,24 +112,27 @@ class Main(tk.Tk):
 
 
 class StartPg(tk.Frame):
-    """Starting page with options to enhance game play"""
+    """Starting page linking buttons to game options and game start"""
     # window_color = "#160606" # Would like pic here of door
     # text_color ="#7A0600"
-    # but_color = "#3EB0A1"
+    # but_color = "#3EB0A1" # moved to top of script
 
-    def __init__(self, parent, controller): # access to Main methods through the controller
+    def __init__(self, parent, controller): # parent = container in Main class, controller = app object.
         tk.Frame.__init__(self, parent)
         self.config(bg=window_color)
 
-        label = tk.Label(self, text=f"{cs.start()}") # massage
+        # welcome massage
+        label = tk.Label(self, text=f"{cs.start()}")
         label.config(font=gamefont, bg=window_color, fg=text_color)
         label.pack(pady=10, padx=10)
 
+        #button to change frame seen in container
         but1 = tk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect))
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack()
         but1.focus_set()
 
+        # game options
         but2 = tk.Button(self, text="Options", command=GameOptions)
         but2.config(bg=but_color, fg=text_color, padx=40, activebackground='yellow', relief="raised")
         but2.pack(side="bottom")
@@ -136,23 +142,24 @@ class GameOptions(tk.Toplevel):
     """Toplevel window for setting in game options at start""" # WORKS need others added and style tidying
     def __init__(self):
         tk.Toplevel.__init__(self)
-        self.inital_deal = tk.IntVar()
+        self.geometry("275x275+400+50")
+
+        # Editable options binding
+        self.initial_deal = tk.IntVar()
         self.maxlvl = tk.IntVar()
         self.permadeath = tk.BooleanVar()
         self.carry_weight = tk.IntVar()
 
-
-        self.geometry("275x275+400+50")
-
+        #styling
         lf = tk.LabelFrame(self, text="Game Options")
         lf.config(font=gamefont)
         lf.pack(fill='both', expand=True)
 
         l1 = tk.Label(lf, text="Number of starting cards")
         l1.grid(column=0, row=0)
-        e1 = tk.Entry(lf, textvariable=self.inital_deal)
-        self.inital_deal.set(4)
-        e1.icursor(1) # sets index of cursor ready for change
+        e1 = tk.Entry(lf, textvariable=self.initial_deal)
+        self.initial_deal.set(4) # if options opened, sets this as default
+        e1.icursor(1) # sets blinking cursor to this index ready to change value in box
         e1.focus() # focuses on entry
         e1.grid(column=1, row=0)
 
@@ -178,20 +185,20 @@ class GameOptions(tk.Toplevel):
         b1.grid(column=0, row=4, columnspan=2)
 
     def setopts(self):
-        """sets in game options. Binds sack size to gameVar changing the number of cards you can carry"""
-        gameVar.Options.cards_dealt = self.inital_deal.get()
+        """Sets gamevar options to the new values provided with the get() method used for tkvars. """
+        gameVar.Options.cards_dealt = self.initial_deal.get() # gets value stored in the bound tkvar associated to initial_deal
         gameVar.Options.win_lvl = self.maxlvl.get()
         gameVar.Options.perm_death = self.permadeath.get()
         gameVar.Options.carry_weight = self.carry_weight.get()
         message = f"Starting deal: {gameVar.Options.cards_dealt}\nWin level:{gameVar.Options.win_lvl}\n" \
                   f"Carry weight: {gameVar.Options.carry_weight}\nPerm_a_death: {gameVar.Options.perm_death}"
-        messagebox.showinfo("Settings Changed!", message)
-        GameOptions.destroy(self)
+        messagebox.showinfo("Settings Changed!", message) # tk built in message
+        GameOptions.destroy(self) # destroys toplevel after all actions complete.
 
 
 class PlayerSelect(tk.Frame):
     """Selection on number of players and meth to deal initial cards"""
-    def __init__(self, parent, controller): # controller always passed in from main
+    def __init__(self, parent, controller): # controller always passed in from main, parent is Main container
         tk.Frame.__init__(self, parent)
         self.Num_of_players = tk.IntVar() # (int) of players in session
         self.count = tk.IntVar() # gameVar.StartVariables.new_players
@@ -200,7 +207,7 @@ class PlayerSelect(tk.Frame):
         label = tk.Label(self, text="Select number of players")
         label.config(font=gamefont, bg=window_color, fg=text_color)
         label.pack(pady=10, padx=10)
-        l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players)
+        l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players) # num of players select
         l1.focus()
         l1.set(1)
         l1.pack()
@@ -209,12 +216,12 @@ class PlayerSelect(tk.Frame):
         but1.pack(side="bottom")
 
     def playersetter(self):
-        """Binds values from spinbox to gui_var for later use and calls next stage. calls player slice and meth to set
-        initial player cards"""
+        """Binds values from spinbox to gui_var for later use and calls next stage. Calls player slice and meth to set
+        initial player cards. COULD USE A INSTANCE FACTORY TO BUILD PLAYERS"""
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        engine.select_players() # sets in motion player slice in game_loop.. and calls meth to deal firs set of cards
-        PlayerInfo() # calls toplevel for name and gender entry for each player
+        engine.select_players() #creates slice object (session_players) and calls dealer to hand each starting cards set
+        PlayerInfo() # each player in session_players sets their name and gender in a toplevel window.
 
 
 class PlayerInfo(tk.Toplevel):

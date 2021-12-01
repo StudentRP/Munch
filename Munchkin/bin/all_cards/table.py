@@ -72,10 +72,11 @@ class Dealer:
                 print("CARD ERROR!!!!!")
         except ValueError:
             print("DECK EMPTY! NO CARDS AVAILABLE!!!!")
+        
 
 
 class Table(Treasure, Moncurse): # inherits from
-    """This is the table model and the attributes expected from the game tablel"""
+    """This is the table model and the attributes expected from the game table"""
     def __init__(self):
         self.card_sop = Dealer() # has-a dealer
         self.burn_pile = []

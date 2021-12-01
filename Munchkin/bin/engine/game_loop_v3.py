@@ -44,7 +44,7 @@ class PlayerSetUp:
         print(f"number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
         gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
         # session binding to new variable gamevar
-        self.deal_handler("start") # Starts process of dealing cards to all players. results in putting in player.sack. Does not bind to gameVar
+        self.deal_handler("start") # Deals cards to all players. results in putting in player.sack. Does not bind to gameVar
 
     def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
         """Call active player list, use index to ref each player instance, call """
@@ -109,12 +109,12 @@ class PlayerSetUp:
 
 # card handling class:
 
-    def deal_handler(self, option, call=1, num=0):
+    def deal_handler(self, option, call=1, deal_amount=0):
         """ Gets card/s, type dependent on option parameter call refers to the number of times the door has been kicked
-        and num is number of cards requested(treasure cards)."""
+        and deal_amount is number of cards requested(treasure cards)."""
         playerinst = gameVar.StartVariables.active_player # gets current player object
         if option == "start": # initial play or resurrection option. called at player slice dealing each card/s
-            for player in gameVar.StartVariables.session_players:
+            for player in gameVar.StartVariables.session_players: #looks up number of players in current session
                 player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
         elif option == "door": # Standard gameplay loop on door kick
             door_card = cards.card_sop.deal_cards("door", cardnum=1) # returns card, 1 =  amount required in pack
@@ -122,10 +122,10 @@ class PlayerSetUp:
             return door_card # for pic use only in gui
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("dealt a treasure card") # test location
-            add_treasure = cards.card_sop.deal_cards("treasure", cardnum=num) # params = type of card, num of cards
+            add_treasure = cards.card_sop.deal_cards("treasure", cardnum=deal_amount) # params = type of card, num of cards
             playerinst.sack = playerinst.sack + add_treasure # concats both lists and redefines player sack
         else:
-            print("I guess the deck is empty....")
+            print("option parameter not defined/matched in deal_handler")
 
     def card_designator(self, card, call=1): # for all door cards that are drawn from the pack
         """method that sort the cards that the player draws form the deck during play. this could be monster, curse ect.
@@ -255,7 +255,7 @@ class PlayerSetUp:
                 >= card["lvl"] + gameVar.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
-            self.deal_handler('treasure', num=reward) # fetches treasure for player
+            self.deal_handler('treasure', deal_amount=reward) # fetches treasure for player
             gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             player.level += card["level_up"]
             cards.burn_pile.append(card) # removes card
