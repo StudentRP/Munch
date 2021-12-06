@@ -66,11 +66,11 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.big = "" # can carry only 1 big item
         self.big2 = []
         self.big_unlock = False
-        self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""}
+        self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""} # values will be cards
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
         self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
-                      "necklace": "", "ring": "", "ring2": ""} # fill with card
-        self.sack = [] # 5 max, pos editable later in an options
+                      "necklace": "", "ring": "", "ring2": ""}
+        self.sack = [] # 5 max, editable in options
         self.active_cards = [] # cards that elicit an effect ie supermunch armor enhancers ect
         self.hireling = []
         # self.unsorted = [] # Old! list of all cards that are used to by sorting
@@ -119,7 +119,9 @@ class Player(MonTools, T_tools): # inherits off card methods
             gameVar.PlayerAtribs.player_gender = self.gender
             gameVar.GameObjects.message2 = f"{self.name} is in play, a god among mer mortals!"
 
-        print(f"Your name is {self.name.title()} and you are {self.gender.title()}.")
+        #~~~~~~~~~~~~ info
+        print(f"The player {self.name.title()} with the gender {self.gender.title()} has been created.")
+        # ~~~~~~~~~~~~
 
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player sack cards that have a specific key and specific value.

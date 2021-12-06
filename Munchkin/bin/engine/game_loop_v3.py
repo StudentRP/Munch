@@ -41,28 +41,27 @@ class PlayerSetUp:
         """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
          deal_handler is called to provide starting number of cards for each player"""
         num_of_players = gameVar.StartVariables.new_players # get int representing num of players in current session (from spinbox)
-        print(f"number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
+        print(f"Number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
         gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
         # session binding to new variable gamevar
         self.deal_handler("start") # Deals cards to all players. results in putting in player.sack. Does not bind to gameVar
 
-    def player_name_gender(self, playerindex=0): #push in index for the number of players from controller gui script
-        """Call active player list, use index to ref each player instance, call """
-        player = gameVar.StartVariables.session_players[playerindex]
-        player.char_setup() # calls playermodel.py method.
-        # print(player) # __repr__ method
+    def player_name_gender(self, playerindex): # gui attrib, passes session_players index idetifying specific instance
+        """Gets player with list index and Sets name and gender to that player instance."""
+        player = gameVar.StartVariables.session_players[playerindex] #references a player objects from session_players
+        player.char_setup() # call to set name and gender of player instance.
 
-    def rand(self):
-        """Game start, picks a random player in the session_players list. Sets player as active_player and calls meth
-        to load player atribs gor gui"""
+    def set_random_player(self):
+        """Selects random player to start from session_players list. binds player to gameVar active_player and calls
+        method to load all attributes of the player (varbinding(). parameter is optional but explicit)"""
         player = choice(gameVar.StartVariables.session_players) # selects random player from list of players
         gameVar.StartVariables.active_player = player # assigns the selected player to active player in gamevar for gui to see
         gameVar.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
-        self.varbinding(player) # arg not needed. Calls method to set all attribs in in gamevar of player
+        self.player_attrib_ipc_updater(player) # arg not needed. Calls method to set all attribs in in gamevar of player
 
     def player_order(self, current_player): # called with gameVar rand_index
-        """Note initial player is set at this point+bound.
-        Player cycle loop for calling next player and call binding on new player"""
+        """triggered at end of turn. note 1st player was random and assigned to active_player, this is passed as a
+        para on call to this funct"""
         play = True # win condition need method that will check all players
         player_gen = cycle(gameVar.StartVariables.session_players) # generator function that cycles a list indefinitely
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
@@ -70,7 +69,7 @@ class PlayerSetUp:
             if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
                 print(f"Current player {current_player.name} turn ended\n")
                 gameVar.StartVariables.active_player = next(player_gen) # binds next player to rand_player, (changes x)
-                self.varbinding(gameVar.StartVariables.active_player) #  binds new player
+                self.player_attrib_ipc_updater(gameVar.StartVariables.active_player) #  binds new player
                 print(f"{gameVar.StartVariables.active_player.name} has been binded")
                 break
             elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
@@ -84,9 +83,8 @@ class PlayerSetUp:
 
         gameVar.GameObjects.message = f"{gameVar.StartVariables.active_player.name.title()}'s turn..."
 
-    def varbinding(self, playerinst=gameVar.StartVariables.active_player): # defaults to gamevar activeplayer player
-        """Method to bind all player atribs to gameVar for current player stored in gamevar.SV.active_player. For
-        communication with gui. TO BE ADDED TO"""
+    def player_attrib_ipc_updater(self, playerinst=gameVar.StartVariables.active_player): # defaults to gamevar activeplayer player
+        """Binds all player atribs to gameVar for current player activity. Can take param of a player or grab active_player."""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
         gameVar.PlayerAtribs.player_gender = playerinst.gender.title()
         gameVar.PlayerAtribs.player_level = playerinst.level
@@ -96,7 +94,6 @@ class PlayerSetUp:
         gameVar.PlayerAtribs.player_race2 = playerinst.race2.title()
         gameVar.PlayerAtribs.player_klass = playerinst.klass.title()
         gameVar.PlayerAtribs.player_klass2 = playerinst.klass2.title()
-        gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_sack = playerinst.sack
         gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
         gameVar.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
@@ -110,20 +107,29 @@ class PlayerSetUp:
 # card handling class:
 
     def deal_handler(self, option, call=1, deal_amount=0):
-        """ Gets card/s, type dependent on option parameter call refers to the number of times the door has been kicked
-        and deal_amount is number of cards requested(treasure cards)."""
-        playerinst = gameVar.StartVariables.active_player # gets current player object
-        if option == "start": # initial play or resurrection option. called at player slice dealing each card/s
-            for player in gameVar.StartVariables.session_players: #looks up number of players in current session
-                player.sack = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
+        """ Sends requests to the dealer, action is dependent upon option passed which defines card type type,
+        call that defines how many times a call has been made per player action and deal_amount to control the requested
+        number of cards returned."""
+
+        playerinst = gameVar.StartVariables.active_player # gets current player, at start this is none.
+
+        if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION
+            for player in gameVar.StartVariables.session_players: #loops over each player in session_players
+                player.sack = cards.card_sop.deal_cards(option, cardnum=gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
         elif option == "door": # Standard gameplay loop on door kick
-            door_card = cards.card_sop.deal_cards("door", cardnum=1) # returns card, 1 =  amount required in pack
+            print("retrieving door card")  # test location
+            door_card = cards.card_sop.deal_cards(option, cardnum=1) # returns card, 1 =  amount required in pack
             self.card_designator(door_card, call=call) # defines where card goes and how many kicks of the door
             return door_card # for pic use only in gui
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
-            print("dealt a treasure card") # test location
-            add_treasure = cards.card_sop.deal_cards("treasure", cardnum=deal_amount) # params = type of card, num of cards
+            print("retrieving treasure card/s") # test location
+            add_treasure = cards.card_sop.deal_cards(option, cardnum=deal_amount) # params = type of card, num of cards
             playerinst.sack = playerinst.sack + add_treasure # concats both lists and redefines player sack
+        elif option == "resurrect":
+            if gameVar.Options.perm_death:
+                playerinst.sack = cards.card_sop.deal_cards("start", cardnum=gameVar.Options.cards_dealt)
+            else:
+                print(f"Game over for {playerinst.name}, BUMMER!")
         else:
             print("option parameter not defined/matched in deal_handler")
 

@@ -46,7 +46,7 @@ class P_tools():
     @classmethod
     def gender(cls):
         """Sets gender"""
-        x = gameVar.PlayerAtribs.player_gender
+        x = gameVar.PlayerAtribs.player_gender # grabs gender stored in gamevar
         return x
 
     @classmethod

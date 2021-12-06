@@ -10,7 +10,7 @@ from bin.engine.game_loop_v3 import engine  # imports the instance
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
-from PIL import ImageTk
+from PIL import ImageTk, Image
 import os
 # import bin.GUI.gui_tools as tools
 
@@ -34,7 +34,7 @@ class Main(tk.Tk):
         # main container for the different frames to be placed in
         container = tk.Frame(self)
         container.pack(side=tk.TOP, fill='both', expand=True) # creates frame that spans all of the main tk window
-        container.grid_rowconfigure(0, weight=1)
+        container.grid_rowconfigure(0, weight=1) # params = row 0 expand(1, 0 for not expand)
         container.grid_columnconfigure(0, weight=1)
         # holds all the prebuilt frames for the container to look up
         self.frames = {} # app.frames
@@ -74,9 +74,9 @@ class Main(tk.Tk):
         frame = self.frames[content] # looks up the frame in the dict
         frame.tkraise() # brings the child frame to the forefront to be seen within the main container frame
 
-    def update_frame(self):
+    def update_atrib_frame(self):
         """Binds all the labels to the gamevar for player change with the set method"""
-        self.geometry("800x600+720+50") # changes the geometry when called
+        self.geometry("800x600+320+20") # changes the geometry when called ## need to move
         self.name.set(gameVar.PlayerAtribs.player_name)
         self.gender.set(gameVar.PlayerAtribs.player_gender)
         self.race.set(gameVar.PlayerAtribs.player_race)
@@ -105,6 +105,7 @@ class Main(tk.Tk):
         else:
             self.message.set("")
             self.message2.set("")
+
 
 ##########################################################################
 # frames to build up interface
@@ -220,29 +221,30 @@ class PlayerSelect(tk.Frame):
         initial player cards. COULD USE A INSTANCE FACTORY TO BUILD PLAYERS"""
         gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        engine.select_players() #creates slice object (session_players) and calls dealer to hand each starting cards set
+        engine.select_players() #creates slice object (session_players) and calls dealer to hand each a starting cards set
         PlayerInfo() # each player in session_players sets their name and gender in a toplevel window.
 
 
 class PlayerInfo(tk.Toplevel):
     """Top level for players to enter names and gender. Must: update title label with player number, store variables
     from entries, call game_loop with index para, increment index"""
-    counter = 1 # player identity title number for arbitrary label
+    counter = 1 # player identity title number for arbitrary label ie Player 1
     indexing = 0 # index to access correct player instance in list. Ensures player details are bound to the correct instance
 
     def __init__(self):
         tk.Toplevel.__init__(self)
         """throw-away vars for names/gender """
-        self.instname = tk.StringVar() # does not use Main self.name as no access as no controller passed on
+        self.instname = tk.StringVar()
         self.instgender = tk.StringVar()
         """main toplevel setup"""
         self.geometry('350x150+500+300')
+
         self.mainframe = tk.Frame(self)
         self.mainframe.pack(side='top', fill='both', expand=True)
-        self.mainframe.focus_set()  # foucus on this window objects
-        self.mainframe.grab_set()  # modal form
+        self.mainframe.focus_set()  # focus on this window objects
+        self.mainframe.grab_set()  # make modal
 
-        self.arbitary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.counter}") #title
+        self.arbitary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.counter}") # unique title
         self.arbitary.config(font=('castellar', 15, 'bold'), fg='blue')
         self.arbitary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
 
@@ -261,18 +263,18 @@ class PlayerInfo(tk.Toplevel):
         self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.initial_set)
         self.but2.config(bd=10, activebackground='green')
         self.but2.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
-        self.bind('<Return>', self.initial_set)  # creates event to be passed to test
+        self.bind('<Return>', self.initial_set)  # alternative to button press
 
     def initial_set(self, event=None):
         """button handler, binds name/gender to gameVar, increments arbitrary label and index for ensuring correct player instance,
          """
-        number = gameVar.StartVariables.new_players # (int) derived from gui_var .
-        if number >= 1:
+        number = gameVar.StartVariables.new_players # number  = total number of players in play ie 4.
+        if number >= 1: # loop wont work as branch needs to be restarted per player
             number -= 1 # decreases the num of new pLayer integer
-            PlayerInfo.counter += 1 # increase player counter for arbitrary label in __init__
-            gameVar.PlayerAtribs.player_name = self.instname.get() # entered name binds to gameVar
+            PlayerInfo.counter += 1 # increase player counter for arbitrary label in class scope
+            gameVar.PlayerAtribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
             gameVar.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
-            engine.player_name_gender(PlayerInfo.indexing) # call game_loop with index for player instance
+            engine.player_name_gender(PlayerInfo.indexing) # call game_loop method with index param to seek player in list and bind name and gender to them
             PlayerInfo.indexing = PlayerInfo.indexing + 1 # increases player index ensuring correct player attribute assignment
             PlayerInfo.destroy(self) #destoys toplevel window
             gameVar.StartVariables.new_players = number # reduces number in gameVar for next  player in loop
@@ -280,15 +282,17 @@ class PlayerInfo(tk.Toplevel):
             if number != 0: # loop for next player
                 PlayerInfo() # rebuilds toplevel anew for next player
             else:
-                PlayerInfo.destroy(self)
-                #~~~~~~~~ TO BE REMOVED + LOOP BELOW
-                print("Players in game:")
+                "once all player defaults have been set"
+                PlayerInfo.destroy(self) # final destruction of top window
+                #~~~~~~~~ debug loop
+                print("\nPlayers in game:", end=" ")
                 for players in gameVar.StartVariables.session_players: # loop to see all player names
-                    print(players.name.title()) # checks all players names for activity
+                    print(players.name.title(), end=", ") # checks all players names assigned in session_players
+                print("\n...............")
                 #~~~~~~~~~~~~~~~
 
-                engine.rand() # gets a random player from the active player list, auto calls varbinging binding all variables.
-                app.update_frame() # updates all label variables from gameVar
+                engine.set_random_player() # gets a random player from the active player list, auto calls varbinging binding all variables.
+                app.update_atrib_frame() # updates all label variables from gameVar to MainLoop frame.
                 app.update_message("show")
                 app.update_message("dev") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
@@ -297,7 +301,7 @@ class PlayerInfo(tk.Toplevel):
 
 ####################################################################################################################
 class MainLoop(tk.Frame):
-    """MainLoop configures main window presenting all buttons and handlers for gameplay. the gameplay area is split into
+    """MainLoop configures main window presenting all buttons and handlers for gameplay. The gameplay area is split into
     3 domains player info, button console and fight/message screen"""
 
     def __init__(self, parent, controller):
@@ -308,49 +312,48 @@ class MainLoop(tk.Frame):
         self.butframe.config(bg="darkgrey", fg="red")
         self.butframe.pack(side='bottom', fill='x', ipady=80)
 
-        self.b1 = tk.Button(self.butframe, text="End Turn", command=self.end_turn)
-        self.b1.config(activebackground='#0ABF28', bg="#B40BEE", padx=15, pady=20)
-        self.b1.place(x=600, y=45)
+        self.end_turn_button = tk.Button(self.butframe, text="End Turn", command=self.end_turn)
+        self.end_turn_button.config(activebackground='#0ABF28', bg="#B40BEE", padx=15, pady=20)
+        self.end_turn_button.place(x=600, y=45)
 
-        self.b2 = tk.Button(self.butframe, text="Kick Door", command=self.door)
-        self.b2.config(activebackground='#0ABF28', bg="#082EF6", padx=5, pady=10)
-        self.b2.place(x=350, y=45)
+        self.door_button = tk.Button(self.butframe, text="Kick Door", command=self.door)
+        self.door_button.config(activebackground='#0ABF28', bg="#082EF6", padx=5, pady=10)
+        self.door_button.place(x=350, y=45)
 
-        self.b3 = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
-        self.b3.place(x=250, y=10)
-        self.b4 = tk.Button(self.butframe, text="Armour", command=self.list_armor)
-        self.b4.place(x=225, y=45)
-        self.b5 = tk.Button(self.butframe, text="Consumables", command=self.consumables)
-        self.b5.place(x=250, y=80)
+        self.weapons_button = tk.Button(self.butframe, text="Weapons", command=self.list_weapons)
+        self.weapons_button.place(x=250, y=10)
+        self.armor_button = tk.Button(self.butframe, text="Armour", command=self.list_armor)
+        self.armor_button.place(x=225, y=45)
+        self.consumables_button = tk.Button(self.butframe, text="Consumables", command=self.consumables)
+        self.consumables_button.place(x=250, y=80)
 
-        self.b6 = tk.Button(self.butframe, text="Sell", command=self.list_sell)
-        self.b6.config(padx=15)
-        self.b6.place(x=450, y=10)
-        self.b7 = tk.Button(self.butframe, text="Sack", command=self.list_sack) ########### used as dummy atm
-        self.b7.config(padx=10)
-        self.b7.place(x=475, y=45)
-        self.b8 = tk.Button(self.butframe, text="Equipped items", command=self.list_equipped)
-        self.b8.place(x=450, y=80)
+        self.sell_button = tk.Button(self.butframe, text="Sell", command=self.list_sell)
+        self.sell_button.config(padx=15)
+        self.sell_button.place(x=450, y=10)
+        self.sack_button = tk.Button(self.butframe, text="Sack", command=self.list_sack) ########### used as dummy atm
+        self.sack_button.config(padx=10)
+        self.sack_button.place(x=475, y=45)
+        self.equipped_button = tk.Button(self.butframe, text="Equipped items", command=self.list_equipped)
+        self.equipped_button.place(x=450, y=80)
 
-        self.b9 = tk.Button(self.butframe, text="Interfere", command=self.interfere)
-        self.b9.place(x=10, y=50)
-        self.b10 = tk.Button(self.butframe, text="Help/Trade", command=self.ask_for_help)
-        self.b10.place(x=10, y=100)
+        self.interfere_button = tk.Button(self.butframe, text="Interfere", command=self.interfere)
+        self.interfere_button.place(x=10, y=50)
+        self.ask_for_help_button = tk.Button(self.butframe, text="Help/Trade", command=self.ask_for_help)
+        self.ask_for_help_button.place(x=10, y=100)
 
-        self.b11 = tk.Button(self.butframe, text="Fight!", command=self.fight, state="disabled")
-        self.b11.place(x=100, y=50)
-        self.b12 = tk.Button(self.butframe, text="Run!!", command=self.run, state="disabled")
-        self.b12.place(x=100, y=100)
+        self.fight_button = tk.Button(self.butframe, text="Fight!", command=self.fight, state="disabled")
+        self.fight_button.place(x=100, y=50)
+        self.run_away_button = tk.Button(self.butframe, text="Run!!", command=self.run, state="disabled")
+        self.run_away_button.place(x=100, y=100)
 
-        self.b13 = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
-        self.b13.place(x=365, y=100)
+        self.private_items_button = tk.Button(self.butframe, text="Hand", command=self.hand)  # for hidden objects
+        self.private_items_button.place(x=365, y=100)
 
-        self.b15 = tk.Button(self.butframe, text="Status Effects", command=self.status_effect)# for player curses
-        self.b15.place(x=600, y=10)
+        self.satatus_effect_button = tk.Button(self.butframe, text="Status Effects", command=self.status_effect)# for player curses
+        self.satatus_effect_button.place(x=600, y=10)
 
         # self.b14 = tk.Button(self.butframe, text="Update info", command=self.update_info)  # for hidden objects
         # self.b14.place(x=10, y=10)
-
 
         "frame player attribs"
         self.plframe = tk.LabelFrame(self, text='Player Info')
@@ -371,7 +374,7 @@ class MainLoop(tk.Frame):
             self.l1b = tk.Label(self.plframe, textvariable=val)  ## works binding strait to stringvar in Main
             self.l1b.grid(row=row, column=2, sticky='nsew')
             row += 1
-        " To work with player supermunch/halfbreed meths to turn on"
+        "To work with player supermunch/halfbreed meths to turn on"
         self.race2_option = tk.Label(self.plframe, text="Race_2:")
         self.race2_optionb = tk.Label(self.plframe, textvariable=controller.race2)
         self.klass2_option = tk.Label(self.plframe, text="Class_2:")
@@ -390,14 +393,16 @@ class MainLoop(tk.Frame):
         self.tblframe.pack(fill="both", expand=True)
 
         self.notifications = tk.Frame(self.tblframe)
-        self.notifications.pack(anchor="n", side=tk.TOP, fill="x", expand=True)
+        self.notifications.pack(side="top", fill="x", expand=True)
+
         self.message = tk.Label(self.notifications, textvariable=controller.message)
         self.message.pack(side="top", fill="x", expand=True)
-        self.message = tk.Label(self.notifications, textvariable=controller.message2)
-        self.message.pack(side="top", fill="x", expand=True)
+        self.message2 = tk.Label(self.notifications, textvariable=controller.message2)
+        self.message2.pack(side="top", fill="x", expand=True)
 
-        self.canvas = tk.Canvas(self.tblframe, bg='black') # canvas not expanding in the correct dimensions
-        self.canvas.pack(side="top", fill="both", expand="yes") # without self should now be accessible for the class....
+        self.canvas = tk.Canvas(self.tblframe, height=400) # canvas not dynamically expanding
+        self.canvas.config(bg="black")
+        self.canvas.pack(side="top", expand=True, fill="both") # without self should now be accessible for the class....
         self.pic = ""
 
     "Handlers"
@@ -405,22 +410,24 @@ class MainLoop(tk.Frame):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # meth for checking sack size of player
-        gameVar.CardDraw.num_of_kicks = 1 # resets door kicks
+        gameVar.CardDraw.num_of_kicks = 1 # resets door kicks for next player.. Should change to false
         self.canvas.delete("all")  # clears the canvas(table) for new player ..............not working
         # Methods that need to be applied to a player for next turn.
-        self.b2.config(state="normal") # enables kick door button
-        self.b3.config(state="normal")  # weapons
-        self.b4.config(state="normal")  # armor
-        self.b6.config(state="normal")  # sell
-        self.b11.config(state="disabled")  # fight
-        self.b12.config(state="disabled")  # runc
+        self.door_button.config(state="normal") # enables kick door button
+        self.weapons_button.config(state="normal")  # weapons
+        self.armor_button.config(state="normal")  # armor
+        self.sell_button.config(state="normal")  # sell
+        self.fight_button.config(state="disabled")  # fight
+        self.run_away_button.config(state="disabled")  # run
         # app.update_message() #clears all messages
 
         engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
         Tools.fluid_player_info() # adds or removes player class2/race2 option
         app.update_message()  # clears all messages
-        app.update_message("show")
-        app.update_frame() # updates the tk.vars in Main under the instance controller.
+        app.update_message("show") # updates main broadcast message
+        # self.message2.destroy() # destroys message2 for the dev mode
+        app.update_atrib_frame() # updates the tk.vars in Main under the instance controller.
+        print(" Turn ended!\n", "."*10, "\n")
 
     def door(self):
         """game actions for door. cards drawn from door"""
@@ -429,7 +436,7 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
         app.update_message("show")
 
-        self.b1.config(state="disabled") # disables end turn button, enabled at end of fight
+        self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
         door_card = engine.deal_handler("door", call=gameVar.CardDraw.num_of_kicks) # fetch a door card!!!!
 
 
@@ -444,20 +451,20 @@ class MainLoop(tk.Frame):
                 player.card_meths(door_card, 'static', 'on') # gets any static methods associated to the monster
                 print("run=", player.run_away) # checking status
                 app.update_message("show") # shows  monster details
-                self.b2.config(state="disabled") # kick door
-                self.b3.config(state="disabled") # weapons
-                self.b4.config(state="disabled") # armor
-                self.b6.config(state="disabled") # sell
-                self.b11.config(state="normal") # fight
-                self.b12.config(state="normal") # run
+                self.door_button.config(state="disabled") # kick door
+                self.weapons_button.config(state="disabled") # weapons
+                self.armor_button.config(state="disabled") # armor
+                self.sell_button.config(state="disabled") # sell
+                self.fight_button.config(state="normal") # fight
+                self.run_away_button.config(state="normal") # run
                 #meth to return card, use id to put card pic
 
         elif gameVar.CardDraw.num_of_kicks == 0:
             print("2nd kick activated")
             self.pic = Tools.viewer(0)  # gets card pic face down
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
-            self.b2.config(state="disabled") # disables door button
-            self.b1.config(state="normal") # enables fight
+            self.door_button.config(state="disabled") # disables door button
+            self.end_turn_button.config(state="normal") # enables fight
             app.update_message("show")
 
         gameVar.CardDraw.num_of_kicks = 0  # set to false
@@ -485,14 +492,14 @@ class MainLoop(tk.Frame):
         elif result == "loose":
             pass # clears table runs card method
 
-        self.b11.config(state="disabled")  # fight
-        self.b12.config(state="disabled")  # run
-        self.b2.config(state="disabled")  # kick door
+        self.fight_button.config(state="disabled")  # fight
+        self.run_away_button.config(state="disabled")  # run
+        self.door_button.config(state="disabled")  # kick door
 
         # remove card form list and canvas ect
-        self.b1.config(state="normal") # end turn
-        self.b3.config(state="normal")  # weapons
-        self.b4.config(state="normal")  # armor
+        self.end_turn_button.config(state="normal") # end turn
+        self.weapons_button.config(state="normal")  # weapons
+        self.armor_button.config(state="normal")  # armor
         print("End of Fight\n")
         Tools.fluid_player_info()
 
@@ -501,19 +508,19 @@ class MainLoop(tk.Frame):
         if player.run_away: # checks ability to run from player attrib
             result = engine.run()
             if result == "success":
-                self.b1.config(state="normal")  # end turn
-                self.b11.config(state="disabled")  # fight
-                self.b12.config(state="disabled")  # run
+                self.end_turn_button.config(state="normal")  # end turn
+                self.fight_button.config(state="disabled")  # fight
+                self.run_away_button.config(state="disabled")  # run
                 self.canvas.delete("all")  # clears the canvas, not quite right as will remove all cards TAG maybe?
             else:
                 gameVar.GameObjects.message = "You are trapped! All that is left is to fight!"
                 app.update_message("show")
-                self.b12.config(state="disabled")  # run
+                self.run_away_button.config(state="disabled")  # run
 
         else:
             gameVar.GameObjects.message = "This is not a fight you can run from!"
             app.update_message("show")
-            self.b12.config(state="disabled")  # run
+            self.run_away_button.config(state="disabled")  # run
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
@@ -708,7 +715,7 @@ class Tools:
     @staticmethod
     def fluid_player_info():
         """class for showing individual player info ie klass2 race2"""
-        selfid = app.frames[MainLoop]  # grabs the class self id from the dict created in the controller class
+        selfid = app.frames[MainLoop]  # simplifies attachment to value for direct access.
 
         if not gameVar.StartVariables.active_player.race_unlock:
             selfid.race2_option.grid_forget()
@@ -723,9 +730,9 @@ class Tools:
             selfid.klass2_option.grid(row=9, column=1, sticky='nsew')
             selfid.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
-        engine.varbinding(gameVar.StartVariables.active_player) # ensures all player info is up to
+        engine.player_attrib_ipc_updater(gameVar.StartVariables.active_player) # ensures all player info is up to
         # date and sent to gameVar
-        app.update_frame() # updates the GUI with the new player info
+        app.update_atrib_frame() # updates the GUI with the new player info
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
 

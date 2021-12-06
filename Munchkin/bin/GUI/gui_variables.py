@@ -42,6 +42,7 @@ class Options:
     cards_dealt = 0 # number of each card type delt at start or on resurrection. #4 std
     perm_death = False # dead players do not come back
 
+
 class CardDraw:
     """variables associated to game play."""
     num_of_kicks = 1 #default = 1 (True)

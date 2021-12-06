@@ -258,21 +258,21 @@ game_Loop.py:
     GUI and primarily to update gui_variables.py  that can be accessed by controller.py
 
         Main class: PlayerSetup:
-            rand method:
+            set_random_player method:
                 usees random choice function from the random module.
                 picks a random player instance from the generated active_players list
                 send result to verbinding method.
 
-            varbinding method:
+            player_attrib_ipc_updater method:
                 accepts parameter of a player instance
                 uses instance to bind all player attributes to gameVar
 
 
-    before MainLoop is called all tkVar need to be set up. this is handled by the controller by the method update_frame.
+    before MainLoop is called all tkVar need to be set up. this is handled by the controller by the method update_atrib_frame.
     At the end of Playerinfo class method test, game_loop will use index to determine the correct player in gameVar.active_players.
     indexed player will bind self to gameVar.player_atribs.x
     controller.Main class binds self.x to StringVar()
-    Main.update_frame method binds all player attributes to tk Variables and the gameVar script
+    Main.update_atrib_frame method binds all player attributes to tk Variables and the gameVar script
     This update method must be called to refresh/concurrent the labels in the play area
 
 
@@ -418,21 +418,21 @@ PlayerSelect(), class
                         zero. This will destroy the toplevel PlayerInfo permanently and trigger the next sequence of
                         events.
 
-                        engine.rand(), method
+                        engine.set_random_player(), method
                             method for selecting a player from the session_players to go first with the use of the
                             random module - player = choice(gameVar.StartVariables.session_players).
-                            This method then calls varbinding(player), a method specifically for binding the player
+                            This method then calls player_attrib_ipc_updater(player), a method specifically for binding the player
                             attributes to gameVar.
                             Importantly gameVar active_player is named: gameVar.StartVariables.active_player = player
                             used later in turn based assignment
 
-                            varbinding(player) method
+                            player_attrib_ipc_updater(player) method
                                 Binds all player attributes to gameVar.PlayerAtribs. Note this method can take in any
                                 player instance and bind to gameVar.PlayerAtribs.
 
-                        app.update_frame(), method
+                        app.update_atrib_frame(), method
                             part of controller.py class Main method that acts as the controller. Sets all tk.Vars with
-                            gameVar.PlayerAtribs. Act like a refresh for new bindings from varbinding that impacts upon
+                            gameVar.PlayerAtribs. Act like a refresh for new bindings from player_attrib_ipc_updater that impacts upon
                             MainLoop frame that calls controller.atrib. method also changes size of the Main window
                             ready for gameplay.
 
@@ -443,14 +443,14 @@ PlayerSelect(), class
 # player rotation method, (initial start and game progression)
 #######################################################################
 
-Setting player rotation method and binding attributes. In previous section varbinding(player) and update_frame()
+Setting player rotation method and binding attributes. In previous section player_attrib_ipc_updater(player) and update_atrib_frame()
 set the player info to the random selected player. This is detailed in the player info to the left on the screen and
 goes first in the game. End turn button should trigger events that lead to the next player and the update of the
 player info window.
 
     end_turn, button method
     On button press player turn ends and another players turn begins.
-        engine.player_order(gameVar.StartVariables.active_player) active_player bound in rand method above becomes
+        engine.player_order(gameVar.StartVariables.active_player) active_player bound in set_random_player method above becomes
         current_player. while play is true (to be set as conditional for gameVar.Options.win_lvl) creates loop for
         players in game. With the use of itertools cycle is used to iterate over the session_players
         player_gen = cycle(gameVar.StartVariables.session_players). next is called to yield next player and loop back
@@ -460,12 +460,12 @@ player info window.
         If the conditional in not met  current_player == y next is called again until current_player is found == y.
         When this happens there are 2 outcomes either the player is alive or the player is dead.
 
-        In the event of alive gameVar.active_player is updated to next(player_gen) thus next in line to play. varbinding
+        In the event of alive gameVar.active_player is updated to next(player_gen) thus next in line to play. player_attrib_ipc_updater
         is called with the new player argument gameVar.active_player. The loop is then broken preventing endless recursion.
 
         Death and its conditionals will be addressed later.
 
-        app.update_frame(), method
+        app.update_atrib_frame(), method
         method again updates the player info to the left of the screen
 
 
@@ -536,8 +536,8 @@ The end goal is to remove items from the player adding them to the burn pile and
         check_but_card_ids and zipped_tup. This reset allows new creation when recalled or new player.
 
     rebinding variables
-    engine.varbinding(gameVar.StartVariables.active_player)
-    app.update_frame()
+    engine.player_attrib_ipc_updater(gameVar.StartVariables.active_player)
+    app.update_atrib_frame()
         updates the player info screen detailing changes to player wallet
 
 
