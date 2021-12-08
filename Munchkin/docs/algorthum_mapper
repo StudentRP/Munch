@@ -579,7 +579,7 @@ MainLoop, class
                         If the card contains a restriction it is compared to the player. In the event the player does not
                         qualify, the cards remains in the unsorted list unequipped. A flag is used to control passage.
                         ############## small bug name can be r and still qualify if no gender set ####################### ADDED DEFAULT GENDER
-                        If qualified, card_designator(player, card) is called passing the card and player along.
+                        If qualified, door_card_designator(player, card) is called passing the card and player along.
 
 
 
@@ -640,8 +640,8 @@ Door button > door method
            When kicking the door the option will always be "door".
             door_card = cards.card_sop.deal_cards("door", 1), method, (type of card wanted, deck volume checker)
                 Runs the Table class that has a dealer() method that returns specific cards.
-                calls self.card_designator(door_card, call=call), method (sends new door card, sends call)
-            card_designator(self, card, call=1, num=0), method,
+                calls self.door_card_designator(door_card, call=call), method (sends new door card, sends call)
+            door_card_designator(self, card, call=1, num=0), method,
                 sorts the new card dependent on its type. If monster, and call is 1 (denoting first kick of door- eval to True)
                 adds to cards.in_play.append(card) ready for fight. else is used when call=0 denoting door kick is 2nd attempt
                 card in this case is added to the player hand.
@@ -659,8 +659,8 @@ Door button > door method
     gameVar.CardDraw.num_of_kicks == 1 evaluates correctly disabling door button for further use.
     engine.deal_handler("door", call=0) is called again with the parameter call set to 0 (False)
         engine.deal_handler("door", call=0), method
-            like before gets door card in turn calling card_designator again with the new call parameter of 0
-            card_designator(self, card, call=0), method
+            like before gets door card in turn calling door_card_designator again with the new call parameter of 0
+            door_card_designator(self, card, call=0), method
                 now triggers all else statements for the desired card type. In all instances this places the card in the
                 player sack and not on the table.
 
@@ -684,12 +684,30 @@ If true this number represents the roll required to escape
 #######################################################################
 # curses
 #######################################################################
+Consider that there are 3 kind of curses, 1 that effects the player in a single instance like a one_shot. Theses cards
+would have an effect and an action instantly, ie loose head_gear. Cards of this type would be returned to burn_pile after
+action complete or not.
+
+The second type is the continued effect. Theses cards will effect a player attribute until removed ie -1 to run away.
+When called the method is triggered (if valid for the player) and its effect implemented. Removal of the cures must trigger
+the curse card's remove method to ensure attributes are returned to normal. Theses cards will be stored under
+player.active_curses and NOT returned back to burn pile until a condition to do so is met. This ensures a record of the curse
+is kept and access to the removal method is possible.
+
+The 3rd type would be a single turn activity that last a single cycle of play.
+
+Cruse cards can be iterated over to find the one the player wants to remove when in the active_cures list of a player.
+
 consider curses that have effect and those that dont.
     dont > back to burn pile
     do > detrmine location of activity ( armor, weapon?) needs link to card that is effected (id) and storage
     somewhere in player model. card active in correct situation then deactivation meth required
 
-card_designator(self, card, call=1): look under curses to add meth
+door_card_designator(self, card, call=1): look under curses to add meth
+
+WHERE I AM NOW...
+meth needed to determine if player susceptible to curse. IDEA= all cards that premote and effect can have key word/s that are added to player lexacl or dict with meths.
+ cures would check against this list for resistant method
 
 
 #######################################################################

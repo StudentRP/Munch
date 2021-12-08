@@ -106,17 +106,28 @@ class MonTools:
         else:
             print("level not touched, not high enough")
 
-
     def loose_armor(self, action=None, *args):
         print("in loose_armor")
+        if isinstance(self.armor.get("armor"), dict):
+            print(f"Removing {self.name}'s armor") ###need meth to remove and add to burn pile
+        else:
+            print("No item to be removed by curse")
         # self.equipped_items("curse")
 
     def loose_footgear(self, *args):
-        print("in loose_footgear")
+        print("In loose_footgear")
+        if isinstance(self.armor.get("footgear"), dict):
+            print(f"Removing {self.name}'s foot gear")
+        else:
+            print("No item to be removed by curse")
         # self.equipped_items("curse")
 
     def loose_headgear(self, *args):
-        print("loose headgear meth to add")
+        print("Loose headgear meth to add")
+        if isinstance(self.armor.get("headgear"), dict):
+            print(f"Removing {self.name}'s head gear")
+        else:
+            print("No item to be removed by curse")
 
     def monkey_business(self, *args):
         """looses_level, loose_small_item"""
@@ -127,7 +138,7 @@ class MonTools:
 
     method_types = {'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
-                    "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade":klass_bonus}
+                    "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus}
 
 #may need to lambda these to pass args
 #####################################################################
@@ -146,15 +157,14 @@ class Moncurse(MonTools):
         {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead -2 against thieves'], 'lvl': 3, 'treasure': 1, "level_up":1, 'method': "loose_level", "static":"shade"},
         {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, "level_up":1, 'method': "monkey_business"},
 
-        ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player)
-        # {'id': 401, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose footgear', 'method': 'loose_footgear'},
-        # {'id': 402, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose armor!', 'method': 'loose_armor'},
-        # {'id': 403, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose level', 'method': 'loose_level'},
-        # {'id': 404, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'sex change', 'method': 'sex_change'},
-        # {'id': 405, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose headgear', 'method': 'loose_headgear'},
-        # {'id': 406, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
-        # {'id': 407, "category": "door", 'type': 'curse', 'status': 'passive', 'name': 'income tax', 'method': 'income_tax'},
-
+        ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
+        {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': 'loose_footgear'},
+        {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method': 'loose_armor'},
+        {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method': 'loose_level'},
+        {'id': 404, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'sex change', 'method': 'sex_change'},
+        {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method': 'loose_headgear'},
+        {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
+        {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method': 'income_one_shot'},
         ## Monster Enhancers
 
         ## player enhancers
@@ -166,7 +176,7 @@ class Moncurse(MonTools):
         # {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
 
-        # {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
+        {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 601, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 602, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 603, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},

@@ -228,8 +228,8 @@ class PlayerSelect(tk.Frame):
 class PlayerInfo(tk.Toplevel):
     """Top level for players to enter names and gender. Must: update title label with player number, store variables
     from entries, call game_loop with index para, increment index"""
-    counter = 1 # player identity title number for arbitrary label ie Player 1
-    indexing = 0 # index to access correct player instance in list. Ensures player details are bound to the correct instance
+    label_counter = 1 # player identity title number for arbitrary label ie Player 1
+    list_indexer = 0 # index to access correct player instance in list. Ensures player details are bound to the correct instance
 
     def __init__(self):
         tk.Toplevel.__init__(self)
@@ -244,7 +244,7 @@ class PlayerInfo(tk.Toplevel):
         self.mainframe.focus_set()  # focus on this window objects
         self.mainframe.grab_set()  # make modal
 
-        self.arbitary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.counter}") # unique title
+        self.arbitary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.label_counter}") # unique title
         self.arbitary.config(font=('castellar', 15, 'bold'), fg='blue')
         self.arbitary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
 
@@ -266,27 +266,30 @@ class PlayerInfo(tk.Toplevel):
         self.bind('<Return>', self.initial_set)  # alternative to button press
 
     def initial_set(self, event=None):
-        """button handler, binds name/gender to gameVar, increments arbitrary label and index for ensuring correct player instance,
-         """
-        number = gameVar.StartVariables.new_players # number  = total number of players in play ie 4.
-        if number >= 1: # loop wont work as branch needs to be restarted per player
-            number -= 1 # decreases the num of new pLayer integer
-            PlayerInfo.counter += 1 # increase player counter for arbitrary label in class scope
+        """Primary function: call method == session_players[list_indexer] for player instance setting name and gender,
+        & set a random player binding to active_player.
+        Secondary requirements: Increments arbitrary label_counter & counts down from the number of players in-game
+        ensuring all get attribute assignment. """
+
+        players_assign = gameVar.StartVariables.new_players # players_assign  = total players_assign of players in play ie 4.
+        if players_assign >= 1: # loop wont work as branch needs to be restarted per player
+            players_assign -= 1 # decreases the num of new pLayer integer to count down players_assign of players left to assign
+            PlayerInfo.label_counter += 1 # increase player counter for arbitrary label in class scope
             gameVar.PlayerAtribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
             gameVar.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
-            engine.player_name_gender(PlayerInfo.indexing) # call game_loop method with index param to seek player in list and bind name and gender to them
-            PlayerInfo.indexing = PlayerInfo.indexing + 1 # increases player index ensuring correct player attribute assignment
-            PlayerInfo.destroy(self) #destoys toplevel window
-            gameVar.StartVariables.new_players = number # reduces number in gameVar for next  player in loop
+            engine.player_name_gender(PlayerInfo.list_indexer) # method to index session_players list for specific player and set name and gender attribs
+            PlayerInfo.list_indexer = PlayerInfo.list_indexer + 1 # increases index value so looping will call next player in session_players list
+            PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
+            gameVar.StartVariables.new_players = players_assign # gamevar is bound to the new value for players_assign
 
-            if number != 0: # loop for next player
+            if players_assign != 0: # loop for next player
                 PlayerInfo() # rebuilds toplevel anew for next player
             else:
-                "once all player defaults have been set"
+                "once all player attribs have been set"
                 PlayerInfo.destroy(self) # final destruction of top window
                 #~~~~~~~~ debug loop
                 print("\nPlayers in game:", end=" ")
-                for players in gameVar.StartVariables.session_players: # loop to see all player names
+                for players in gameVar.GameObjects.session_players: # loop to see all player names
                     print(players.name.title(), end=", ") # checks all players names assigned in session_players
                 print("\n...............")
                 #~~~~~~~~~~~~~~~
@@ -302,7 +305,7 @@ class PlayerInfo(tk.Toplevel):
 ####################################################################################################################
 class MainLoop(tk.Frame):
     """MainLoop configures main window presenting all buttons and handlers for gameplay. The gameplay area is split into
-    3 domains player info, button console and fight/message screen"""
+    3 domains player info, button console and table cards/message screen"""
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -410,8 +413,8 @@ class MainLoop(tk.Frame):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # meth for checking sack size of player
-        gameVar.CardDraw.num_of_kicks = 1 # resets door kicks for next player.. Should change to false
-        self.canvas.delete("all")  # clears the canvas(table) for new player ..............not working
+        gameVar.CardDraw.door_attempts = 1 # resets door kicks for next player.. Should change to false
+        self.canvas.delete("all")  # clears the canvas(table) for new player
         # Methods that need to be applied to a player for next turn.
         self.door_button.config(state="normal") # enables kick door button
         self.weapons_button.config(state="normal")  # weapons
@@ -421,7 +424,7 @@ class MainLoop(tk.Frame):
         self.run_away_button.config(state="disabled")  # run
         # app.update_message() #clears all messages
 
-        engine.player_order(gameVar.StartVariables.active_player) # sends active player rebind new player in game_loop
+        engine.player_order(gameVar.GameObjects.active_player) # sends active player rebind new player in game_loop
         Tools.fluid_player_info() # adds or removes player class2/race2 option
         app.update_message()  # clears all messages
         app.update_message("show") # updates main broadcast message
@@ -432,15 +435,15 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door"""
         print("\nKicking door!")
-        player = gameVar.StartVariables.active_player
-        gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
-        app.update_message("show")
+        player = gameVar.GameObjects.active_player
+        # gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
+        # app.update_message("show") # message overridden later in method
 
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
-        door_card = engine.deal_handler("door", call=gameVar.CardDraw.num_of_kicks) # fetch a door card!!!!
+        door_card = engine.deal_handler("door", door_attempts=gameVar.CardDraw.door_attempts) # fetch a door card for viewing
 
-
-        if gameVar.CardDraw.num_of_kicks == 1: # first kick of door (always get this at start of turn!)
+        if gameVar.CardDraw.door_attempts: # first kick of door (always get this at start of turn!)
+            print("VIEWING CARD")
             self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas.. will need meth for this to add cards in linear fashion
 
@@ -459,7 +462,7 @@ class MainLoop(tk.Frame):
                 self.run_away_button.config(state="normal") # run
                 #meth to return card, use id to put card pic
 
-        elif gameVar.CardDraw.num_of_kicks == 0:
+        elif gameVar.CardDraw.door_attempts == 0:
             print("2nd kick activated")
             self.pic = Tools.viewer(0)  # gets card pic face down
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
@@ -467,16 +470,16 @@ class MainLoop(tk.Frame):
             self.end_turn_button.config(state="normal") # enables fight
             app.update_message("show")
 
-        gameVar.CardDraw.num_of_kicks = 0  # set to false
+        gameVar.CardDraw.door_attempts = 0  # set to false
         Tools.fluid_player_info() # updates any changes cause by curses
-        print("num of kicks", gameVar.CardDraw.num_of_kicks)
+        print("num of kicks", gameVar.CardDraw.door_attempts)
 
     # def update_info(self): # may be redundant for TOOLS fluid_player_info just button link left
     #     """method to update a player info window with any changes ie halfbreed ect"""
-    #     if gameVar.StartVariables.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
+    #     if gameVar.GameObjects.active_player.race_unlock: # packing for klass and race in the event of supermunch ect
     #         self.race2_option.grid(row=8, column=1, sticky='nsew')
     #         self.race2_optionb.grid(row=8, column=2, sticky='nsew')
-    #     if gameVar.StartVariables.active_player.klass_unlock:
+    #     if gameVar.GameObjects.active_player.klass_unlock:
     #         self.klass2_option.grid(row=9, column=1, sticky='nsew')
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
@@ -504,7 +507,7 @@ class MainLoop(tk.Frame):
         Tools.fluid_player_info()
 
     def run(self):
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         if player.run_away: # checks ability to run from player attrib
             result = engine.run()
             if result == "success":
@@ -527,7 +530,7 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = "Weapons list"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.inventory("type", "weapon")
         # print(gameVar.GameObjects.selected_items)  list all items
         OwnedItems("Weapons owned", "weap")
@@ -536,7 +539,7 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = "Armour list"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
         OwnedItems("Armor Owned", "armor")
 
@@ -544,7 +547,7 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = "Consumable items"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.inventory("type", "disposable")
         OwnedItems("One shot items", "consume")
 
@@ -553,7 +556,7 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = "Sell selected"
         app.update_message("show")
         engine.scrub_lists() # resets all lists for next action
-        player = gameVar.StartVariables.active_player # gets current player
+        player = gameVar.GameObjects.active_player # gets current player
         player.item_by_key("sell") # generates list of sellable cards passed on to gameVar.selected_items
         # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
@@ -562,7 +565,7 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = "Hidden items selected"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.inventory("category", "door")
         OwnedItems("Hidden Items", "hidden")
 
@@ -579,14 +582,14 @@ class MainLoop(tk.Frame):
         gameVar.GameObjects.message = "The contents of sack:"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.inventory("category", "treasure")
         OwnedItems("Sack Items")
 
     def list_equipped(self):
         """list showing all items that are equipped"""
         engine.scrub_lists()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.equipped_items("list_equipped")
         OwnedItems("Equipped Items", "remove")
 
@@ -709,7 +712,7 @@ class Tools:
     @staticmethod
     def common_set(keyword):
         engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
-        # engine.varbinding(gameVar.StartVariables.active_player)
+        # engine.varbinding(gameVar.GameObjects.active_player)
         # app.update_frame()
 
     @staticmethod
@@ -717,24 +720,23 @@ class Tools:
         """class for showing individual player info ie klass2 race2"""
         selfid = app.frames[MainLoop]  # simplifies attachment to value for direct access.
 
-        if not gameVar.StartVariables.active_player.race_unlock:
+        if not gameVar.GameObjects.active_player.race_unlock:
             selfid.race2_option.grid_forget()
             selfid.race2_optionb.grid_forget()
         else:
             selfid.race2_option.grid(row=8, column=1, sticky='nsew')
             selfid.race2_optionb.grid(row=8, column=2, sticky='nsew')
-        if not gameVar.StartVariables.active_player.klass_unlock:
+        if not gameVar.GameObjects.active_player.klass_unlock:
             selfid.klass2_option.grid_forget()
             selfid.klass2_optionb.grid_forget()
         else:
             selfid.klass2_option.grid(row=9, column=1, sticky='nsew')
             selfid.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
-        engine.player_attrib_ipc_updater(gameVar.StartVariables.active_player) # ensures all player info is up to
+        engine.player_attrib_ipc_updater(gameVar.GameObjects.active_player) # ensures all player info is up to
         # date and sent to gameVar
         app.update_atrib_frame() # updates the GUI with the new player info
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
-
 
     @staticmethod #not working Yet
     def viewer(card_id=None):

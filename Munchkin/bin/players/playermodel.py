@@ -78,9 +78,9 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
-        self.active_effects = [] # list of all cards that effect player (curses ect)
+        self.active_curses = [] # list of all curse cards effecting player. card remove meth should reverse player change
         self.passive_effects = [] # list of all passive effects to be applied at player turn start
-        self.curse_allowed = True #switched off with tin hat ect
+        self.curse_allowed = True #switched off with tin hat, Ork, ect
         self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
         self.run_away = True # locks ability toi run or not dependent on some monsters
 
@@ -229,9 +229,8 @@ class Player(MonTools, T_tools): # inherits off card methods
         self.sum_of_bonuses()
 
     def card_meths(self, card, calltype=None, action=None): # calltype = method or static, action on or off,
-        """link to card methods for active effect on player
-        action =add, contitions or remove"""
-        print(f"In player card_meth. Calltype: {calltype},, Action {action}") # info on meth used and status
+        """link to card methods for active effect on player action =add, contidions or remove"""
+        print(f"In player card_meth. Calltype: {calltype}, Action: {action}") # info on meth used and status
         """will use add/remove suited to door cards, loose cases and curse canceling"""
         for key, val in MonTools.method_types.items(): # look up meth
             if key == card.get(calltype): # calltype either 'method for general, and 'static' for const effects while in use

@@ -14,14 +14,16 @@ class StartVariables:
     new_players = 1 # (int) number associated to total players in current game
     player_rand = 1  # number for random player generator for PlayerSelect.playersetter
     players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] #all available players !to be sliced!
-    session_players = None # (list) generated list slice from game_loop with all player instances in active session
-    active_player = None # initially random player from session_players players. Thereafter the current player in play
-    # selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
+    selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
 
 
 class GameObjects:
+    """Main game objects"""
     message = ""
     message2 = ""
+
+    session_players = None  # (list) generated list slice from players_available
+    active_player = None # current game player
     all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
     check_but_intvar_gen = [] # populated with callable objects from checkbutton
@@ -44,8 +46,8 @@ class Options:
 
 
 class CardDraw:
-    """variables associated to game play."""
-    num_of_kicks = 1 #default = 1 (True)
+    """card variables associated to game play."""
+    door_attempts = 1 #default = 1 (True)
 
 
 class PlayerAtribs:

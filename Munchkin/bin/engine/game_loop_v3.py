@@ -13,8 +13,8 @@ Contents functions:
 
 # from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 # creates circular
 # from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
-from Munchkin.bin.all_cards.table import cards, dice
 # from Munchkin.bin.engine import cut_scenes as cs
+from Munchkin.bin.all_cards.table import cards, dice
 from random import randint, choice
 import bin.GUI.gui_variables as gameVar
 from itertools import cycle
@@ -42,48 +42,50 @@ class PlayerSetUp:
          deal_handler is called to provide starting number of cards for each player"""
         num_of_players = gameVar.StartVariables.new_players # get int representing num of players in current session (from spinbox)
         print(f"Number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
-        gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
+        gameVar.GameObjects.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
         # session binding to new variable gamevar
         self.deal_handler("start") # Deals cards to all players. results in putting in player.sack. Does not bind to gameVar
 
-    def player_name_gender(self, playerindex): # gui attrib, passes session_players index idetifying specific instance
+    def player_name_gender(self, playerindex): # gui attrib, passes session_players index identifying specific instance
         """Gets player with list index and Sets name and gender to that player instance."""
-        player = gameVar.StartVariables.session_players[playerindex] #references a player objects from session_players
+        player = gameVar.GameObjects.session_players[playerindex] #references a player objects from session_players
         player.char_setup() # call to set name and gender of player instance.
 
     def set_random_player(self):
-        """Selects random player to start from session_players list. binds player to gameVar active_player and calls
-        method to load all attributes of the player (varbinding(). parameter is optional but explicit)"""
-        player = choice(gameVar.StartVariables.session_players) # selects random player from list of players
-        gameVar.StartVariables.active_player = player # assigns the selected player to active player in gamevar for gui to see
+        """Selects random player to start from session_players list. Binds player as active_player and calls
+        method to load all attributes of the player (player_attrib_ipc_updater(). parameter is optional but explicit)"""
+        player = choice(gameVar.GameObjects.session_players) # selects random player from list of players
+        gameVar.GameObjects.active_player = player # assigns the selected player to active player in gamevar for gui to see
         gameVar.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
         self.player_attrib_ipc_updater(player) # arg not needed. Calls method to set all attribs in in gamevar of player
 
+# class Game_Play:
+
     def player_order(self, current_player): # called with gameVar rand_index
-        """triggered at end of turn. note 1st player was random and assigned to active_player, this is passed as a
-        para on call to this funct"""
+        """Triggered at end of turn. Note 1st player was random and assigned to active_player after player creation.
+        Current_player = active player"""
         play = True # win condition need method that will check all players
-        player_gen = cycle(gameVar.StartVariables.session_players) # generator function that cycles a list indefinitely
+        player_gen = cycle(gameVar.GameObjects.session_players) # generator function that cycles a list indefinitely
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
         while play:
             if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
                 print(f"Current player {current_player.name} turn ended\n")
-                gameVar.StartVariables.active_player = next(player_gen) # binds next player to rand_player, (changes x)
-                self.player_attrib_ipc_updater(gameVar.StartVariables.active_player) #  binds new player
-                print(f"{gameVar.StartVariables.active_player.name} has been binded")
+                gameVar.GameObjects.active_player = next(player_gen) # binds next player to rand_player, (changes x)
+                self.player_attrib_ipc_updater(gameVar.GameObjects.active_player) #  binds new player
+                print(f"{gameVar.GameObjects.active_player.name} has been binded")
                 break
             elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
                 print(f"print player {current_player} is dead") # move in to conditional for perm-a-death
                 current_player.alive = True # resets player status ##########need per-a-death bit here
-                gameVar.StartVariables.active_player = next(player_gen) # changes x without binding and moves to next player
+                gameVar.GameObjects.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
             else:
                 print(f"{y.name.title()} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
 
-        gameVar.GameObjects.message = f"{gameVar.StartVariables.active_player.name.title()}'s turn..."
+        gameVar.GameObjects.message = f"{gameVar.GameObjects.active_player.name.title()}'s turn..."
 
-    def player_attrib_ipc_updater(self, playerinst=gameVar.StartVariables.active_player): # defaults to gamevar activeplayer player
+    def player_attrib_ipc_updater(self, playerinst=gameVar.GameObjects.active_player): # defaults to gamevar active_player player
         """Binds all player atribs to gameVar for current player activity. Can take param of a player or grab active_player."""
         gameVar.PlayerAtribs.player_name = playerinst.name.title()
         gameVar.PlayerAtribs.player_gender = playerinst.gender.title()
@@ -106,25 +108,26 @@ class PlayerSetUp:
 
 # card handling class:
 
-    def deal_handler(self, option, call=1, deal_amount=0):
-        """ Sends requests to the dealer, action is dependent upon option passed which defines card type type,
-        call that defines how many times a call has been made per player action and deal_amount to control the requested
-        number of cards returned."""
+    def deal_handler(self, option, door_attempts=1, deal_amount=0):
+        """ Sends requests to the dealer based on the option parameter.
+        Door_attempts defines the action required be the proceeding method and the fate of the card. Finally deal_amount
+        defines how many of the cards are to be returned to a player.
+        """
 
-        playerinst = gameVar.StartVariables.active_player # gets current player, at start this is none.
+        playerinst = gameVar.GameObjects.active_player # gets current player, at start this is none.
 
-        if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION
-            for player in gameVar.StartVariables.session_players: #loops over each player in session_players
+        if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
+            for player in gameVar.GameObjects.session_players: #loops over each player in session_players
                 player.sack = cards.card_sop.deal_cards(option, cardnum=gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
         elif option == "door": # Standard gameplay loop on door kick
-            print("retrieving door card")  # test location
-            door_card = cards.card_sop.deal_cards(option, cardnum=1) # returns card, 1 =  amount required in pack
-            self.card_designator(door_card, call=call) # defines where card goes and how many kicks of the door
+            print("In deal_handler, retrieving door card & determining fate of card")  # test location
+            door_card = cards.card_sop.deal_cards(option, cardnum=1) # fetches 1 door card,
+            self.door_card_designator(door_card, door_attempts=door_attempts) # defines what happens to the door card
             return door_card # for pic use only in gui
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("retrieving treasure card/s") # test location
-            add_treasure = cards.card_sop.deal_cards(option, cardnum=deal_amount) # params = type of card, num of cards
-            playerinst.sack = playerinst.sack + add_treasure # concats both lists and redefines player sack
+            add_treasure = cards.card_sop.deal_cards(option, cardnum=deal_amount) # cardnum is usually determined by the treasures a monster holds.
+            playerinst.sack = playerinst.sack + add_treasure # DUMPS ALL IN THE ACTIVE_PLAYER.....TODO::Sort how treasure is handled when used as currency for another players help
         elif option == "resurrect":
             if gameVar.Options.perm_death:
                 playerinst.sack = cards.card_sop.deal_cards("start", cardnum=gameVar.Options.cards_dealt)
@@ -133,45 +136,47 @@ class PlayerSetUp:
         else:
             print("option parameter not defined/matched in deal_handler")
 
-    def card_designator(self, card, call=1): # for all door cards that are drawn from the pack
-        """method that sort the cards that the player draws form the deck during play. this could be monster, curse ect.
-        Call is used to determine how many times the door has been kicked in a turn and in 2nd instance the door is put into the
-        players hand unseen. Mechanism is also used to trigger a curse
+    def door_card_designator(self, card, door_attempts=1): # for all door cards that are drawn from the pack
+        """Takes in door card and door_attempts as params to decide card fate.
+        Cards have different fates dependent upon the type of card it is ie: monster, curse, other and the number of
+        times the door button is clicked.
         """
-        player = gameVar.StartVariables.active_player
-        if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
-            if call: # determines if first kick of door (T or F), if 1 = first kick
+        player = gameVar.GameObjects.active_player
+
+        if door_attempts: # == 1 or True On first kick of the door
+
+            # if monster, put on table ready to fight
+            if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
-                print(f"In card_designator, monster added to table. Returned card is: {[x['name'] for x in cards.in_play]}\n")
-            else:
-                print("adding to sack")
-                gameVar.GameObjects.message = "Adding card to sack" # 2nd kick
-                player.sack.append(card) # adds to player sack
+                print(f"In door_card_designator. Monster added to table: {[x['name'] for x in cards.in_play]}\n")
 
-        elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
-            if call: # 1st kick
-                print("In curse::", player.curses)
-                gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
-                player.card_meths(card, "method", "on")  # actions curs card as soon as picked up
-                if card.get("status") == "active": # for constant effect curse
-                    player.curses.append(card) # adds card to player curse list
-                elif card.get("status") == "passive": # for one shot effect
+            # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
+            elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
+                print("In curse::", player.active_curses) # Pointless... was curses but no attrib made..................................
+                # ~~~~~~~~~~~~~ curse checker required ie tin had ect
+                # gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
+                player.card_meths(card, "method", "on")  ########## actions curs card as soon as picked up  JUST CHECKS CURSES WORK ATM
+                if card.get("duration") == "active": # for constant effect curse
+                    player.active_curses.append(card) # adds card to player curse list
+                elif card.get("duration") == "one_shot": ########### for one shot effect
                     cards.burn_pile.append(card) # disposes of to burn pile
                     print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
-            else:
-                gameVar.GameObjects.message = "Adding card to sack"
-                player.sack.append(card)
+                elif card.get("duration") == "timed": ########## for time dependent effect
+                    cards.burn_pile.append(card) # disposes of to burn pile
+                    print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
 
-        else: # for all other cards that have no direct effect or influence.
-            print(f"Adding {card['name']}to sack.")
-            if call:
+            else: # for all other cards that have no direct effect or influence.
+                print(f"Adding {card['name']}to sack.")
                 player.sack.append(card)  # adds card to player's items
                 gameVar.GameObjects.message = f"Adding/using {card.get('name')}."
                 return card  # to show if first time only 2nd it hides
-            else:
-                gameVar.GameObjects.message = "Adding 2nd card to sack"
-                player.sack.append(card)
+
+        else:
+            "2nd kick of door (looting room). Will need condition statement if player wants to fight mon from hand, rather than std flow to sack"
+            print("adding to sack")
+            gameVar.GameObjects.message = "Adding card to sack"  # 2nd kick
+            player.sack.append(card)  # adds to player sack
 
     def zipper(self, action=None):
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
@@ -191,17 +196,17 @@ class PlayerSetUp:
             for tup in gameVar.GameObjects.zipped_tup: # loops over coupled (card_id, bool tuples).
                 if tup[0] == card["id"] and tup[1]:
                     if action == "sell":
-                        gameVar.StartVariables.active_player.sell_item(card)
+                        gameVar.GameObjects.active_player.sell_item(card)
                     elif action in "equip, disposable ,use": # equip/disposable will be treasures
                         self.tri_qualifier(card) # test ~~ok~~
                     elif action == "remove":
-                        player = gameVar.StartVariables.active_player
+                        player = gameVar.GameObjects.active_player
                         player.equipped_items("removal", card)
 
     def tri_qualifier(self, card):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
         race, class, gender."""
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         checks = {player.race: "race_restriction", player.race2: "race_restriction", player.klass: "klass_restriction",
                   player.klass2: "klass_restriction", player.gender: "gender_restriction"}
         flag = 1 # True
@@ -226,7 +231,7 @@ class PlayerSetUp:
 
     def player_treasure_cards(self, card):
         """method to sort the locations of treasure cards that the player has selected"""
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         if card.get("type") == "armor":
             player.equip_armor(card)  # leads to player meth for placing in right place
         elif card.get("type") == "weapon":
@@ -237,7 +242,7 @@ class PlayerSetUp:
             pass # for all other cards ie steeds
 
     def player_door_cards(self, card): #card meth#####################################################
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.card_meths(card, "method", "on")  # link to player to card meths.
         print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
         # meths added at end_turn
@@ -255,7 +260,7 @@ class PlayerSetUp:
         """for cards that are monsters and placed on the table"""
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         player.card_meths(card, 'static', 'on') # turns on card static content for fight
         if player.bonus + player.level + helper + gameVar.Fight_enhancers.player_aid \
                 >= card["lvl"] + gameVar.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
@@ -278,7 +283,7 @@ class PlayerSetUp:
 
     def run(self):
         roll = dice.dice_sop.roll()
-        player = gameVar.StartVariables.active_player
+        player = gameVar.GameObjects.active_player
         print(f"You rolled a {roll}.")
         if roll >= player.run:
             print(f"You rolled a {roll}. You out ran your pursuer.")
@@ -300,3 +305,50 @@ if __name__ == "__main__":
     engine.player_name_gender()
 
 
+
+
+
+# old
+# def door_card_designator(self, card, door_attempts=1):  # for all door cards that are drawn from the pack
+#     """method that sort the cards that the player draws from the deck during play. This could be monster, curse ect.
+#     door0-attempts is used to determine how many times the door has been kicked in a turn and in 2nd instance the door is put into the
+#     players hand unseen. Mechanism is also used to trigger a curse
+#     """
+#     player = gameVar.GameObjects.active_player
+#
+#     if door_attempts:
+#         if card.get("type") == "monster":  # if the cards a monster #1st/2nd kicks covered
+#             if door_attempts:  # determines if first kick of door (T or F), if 1 = first kick
+#                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
+#                 cards.in_play.append(
+#                     card)  # adds to table # careful as cards selected from hand will go strait to table
+#                 print(
+#                     f"In door_card_designator, monster added to table. Returned card is: {[x['name'] for x in cards.in_play]}\n")
+#             else:
+#                 print("adding to sack")
+#                 gameVar.GameObjects.message = "Adding card to sack"  # 2nd kick
+#                 player.sack.append(card)  # adds to player sack
+#
+#         elif card.get("type") == "curse":  # if the cards a monster #1st/2nd kicks covered
+#             if door_attempts:  # 1st kick
+#                 print("In curse::", player.curses)
+#                 gameVar.GameObjects.message = "You have been cursed!"  # look at card meth and action
+#                 player.card_meths(card, "method", "on")  # actions curs card as soon as picked up
+#                 if card.get("status") == "active":  # for constant effect curse
+#                     player.curses.append(card)  # adds card to player curse list
+#                 elif card.get("status") == "passive":  # for one shot effect
+#                     cards.burn_pile.append(card)  # disposes of to burn pile
+#                     print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
+#             else:
+#                 gameVar.GameObjects.message = "Adding card to sack"
+#                 player.sack.append(card)
+#
+#         else:  # for all other cards that have no direct effect or influence.
+#             print(f"Adding {card['name']}to sack.")
+#             if door_attempts:
+#                 player.sack.append(card)  # adds card to player's items
+#                 gameVar.GameObjects.message = f"Adding/using {card.get('name')}."
+#                 return card  # to show if first time only 2nd it hides
+#             else:
+#                 gameVar.GameObjects.message = "Adding 2nd card to sack"
+#                 player.sack.append(card)
