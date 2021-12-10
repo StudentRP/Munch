@@ -319,7 +319,8 @@ player can now either re-enter options of press start
 #######################################################################
 # Name/gender, random player to start and deal starting set of cards
 #######################################################################
-Details method for setting name/gender, random player to start and deal initial cards
+Details method for setting a players name/gender, dealling them a starter set of cards, setting random player to initally
+and binding that player to the active_player variable
 
 PlayerSelect(), class
     creates spinbox with textvariable=self.Num_of_players bound to tk.IntVar()
@@ -444,7 +445,7 @@ PlayerSelect(), class
 #######################################################################
 
 Setting player rotation method and binding attributes. In previous section player_attrib_ipc_updater(player) and update_atrib_frame()
-set the player info to the random selected player. This is detailed in the player info to the left on the screen and
+set the player info to the random selected player. This is detailed in the player info to the left on the game screen and
 goes first in the game. End turn button should trigger events that lead to the next player and the update of the
 player info window.
 
@@ -627,31 +628,42 @@ most likely card associated methods that are called at start of play to enrich/e
 #######################################################################
 # door
 #######################################################################
-door button triggers the advancement through the game by placing cards on the table. Two options are then present: the
-card is either a non fighting cards that requires resolving ie curse on player ect or, a monster card that needs to be
-fought to progress forward.
+Door button triggers the advancement through the game by placing cards on the table. 3 types of card can be door cards.
+The three types include: monster, curse or other. In the case of a non-fighting card the player may have the option to
+loot the room (another kick of the door that send a card strait to the players hand) or look for trouble
+(fight a monster from their hand).
+
+Curses come in 3 flavours, one_shot, time dependent (lasts certain amount of time usually a turn) and permanent until a
+condition is met. More on curses under curse section.
+
 
 Door button > door method
-     self.b1.config(state="disabled"), disables end_turn to prevent early escape
-     gameVar.CardDraw.num_of_kicks == 0, condition to enforce play order (non fight= 2nd door kick, fight = end)
-     door_card = engine.deal_handler("door", call=1) method that excepts return object(this will be card for pic)
-     call is for the card designator to handle cards in different way dependent upon how many times the door has been kicked.
-        deal_handler(self, option, call=1), method (option =start, door or treasure, call=conduit pass)
-           When kicking the door the option will always be "door".
-            door_card = cards.card_sop.deal_cards("door", 1), method, (type of card wanted, deck volume checker)
-                Runs the Table class that has a dealer() method that returns specific cards.
-                calls self.door_card_designator(door_card, call=call), method (sends new door card, sends call)
-            door_card_designator(self, card, call=1, num=0), method,
-                sorts the new card dependent on its type. If monster, and call is 1 (denoting first kick of door- eval to True)
-                adds to cards.in_play.append(card) ready for fight. else is used when call=0 denoting door kick is 2nd attempt
-                card in this case is added to the player hand.
-                curse cards on first attempt curse the player (method to run card to follow), 2nd attempt card goes in sack
-                all other cards go to sack. num is not used in this section with explanation left to winning fights and
-                gaining treasure. Final elif card.get("category") == "door" block catches cards that have no effect
-                directly and do not fit under the monster or curse. call is used to define how many times door has been pushed.
-        engine.card_type(), method, checks to see if monster has been added to the in_play stack. If returns true, buttons:
-        door, weapons, armor and sell are all disabled to prevent miss use. Buttons fight and run are enabled.
-        Importantly door disabled prevents further use and a second call on the door. reset is done by ending turn.
+     self.end_turn_button.config(state="disabled"), disables end_turn to prevent incorrect usage.
+
+     door_card = engine.deal_handler("door", door_attempts=gameVar.CardDraw.door_attempts)
+        Is one of the main method and excepts a return object. The card returned is dependent on the string parameter used.
+        In this case the parameter 'door' is used to retrieve a door card. This is the value to the key 'category' within the card's dict.
+        door_attempts as a parameter exerts control over where the card ends up and in the current class defines how the
+        card is viewed. The returned card is used for the picture on canvas and trigger the card method.
+
+        deal_handler(self, option, deal_amount=0)
+           This method is used to define what call is made to the dealer by the option parameter.
+           'door' now re-defined as option controls the type of card to get from the deck. As a default cardnum will always be 1
+           returning only 1 door card from the dealer.
+
+            door_card = cards.card_sop.deal_cards(option, cardnum=1)
+                Runs the Table class that has a dealer() method that returns a door cards. Note, dealer will check the pack first
+                and if insufficient cards are present it will epty and sort the burn_pile to refresh the card decks.
+
+        engine.door_card_designator(door_card, door_attempts=door_attempts)
+            Method first checks door_attempts as this will define where the card is placed. Consider a monster, 1st
+            kick would be placed on table while 2nd would be placed in hand.
+            Branch statements there after defines the fate of the card dependent upon the card type ('door', 'curse', other).
+            else block catches the cards that do not fall into the monster/curse scenarios.
+            The final else block relates to the outer branch for door_attempts providing a generic catch that places
+            a card in the player hand. ##################################################### (TO BE UPDATED WITH A LOOT_ROOM OR LOOK FOR TROUBLE).
+
+        Further branches in the door method control message broadcasting, button disabling,
 
     Both engine.card_type() and else statement result in incrementation of num_of_kicks by one.
 
@@ -707,7 +719,8 @@ door_card_designator(self, card, call=1): look under curses to add meth
 
 WHERE I AM NOW...
 meth needed to determine if player susceptible to curse. IDEA= all cards that premote and effect can have key word/s that are added to player lexacl or dict with meths.
- cures would check against this list for resistant method
+cures would check against this list for resistant method
+ie: lexical would be fillid with class bonus words and other bonuses like tinhat. These would be looked up by curse and if non compatible would reject cures.
 
 
 #######################################################################

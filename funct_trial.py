@@ -72,11 +72,16 @@
 #
 #
 
-d = {"hat": "", "chair": {"p":"winner"}}
+# d = {"hat": "", "chair": {"p":"winner"}}
+#
+# if isinstance(d.get("chair"), dict):
+#     print("true")
+# else:
+#     print("false")
 
-if isinstance(d.get("chair"), dict):
-    print("true")
-else:
-    print("false")
+def x(n):
+    l = [1,2,3]
+    print(l[int(n)])
 
+x(-1)
 # app.mainloop()

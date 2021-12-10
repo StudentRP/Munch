@@ -152,19 +152,19 @@ class Moncurse(MonTools):
 
     door_cards = [
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
-        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lexical': ['Cant outrun'], 'lvl': 1, 'treasure': 1, "level_up":1, 'method': "below_waist", "static": "no_outrun"},
-        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lexical': ['kill with fire levelup'], 'lvl': 2, 'treasure': 1, "level_up":1, 'method': "loose_level"},
-        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead -2 against thieves'], 'lvl': 3, 'treasure': 1, "level_up":1, 'method': "loose_level", "static":"shade"},
-        {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, "level_up":1, 'method': "monkey_business"},
-
-        ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
-        {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': 'loose_footgear'},
-        {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method': 'loose_armor'},
-        {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method': 'loose_level'},
-        {'id': 404, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'sex change', 'method': 'sex_change'},
-        {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method': 'loose_headgear'},
-        {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
-        {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method': 'income_one_shot'},
+        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lexical': ['Cant_outrun'], 'lvl': 1, 'treasure': 1, "level_up":1, 'method': "below_waist", "static": "no_outrun"},
+        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lexical': ['sensitive_to_fire', 'extra lvl'], 'lvl': 2, 'treasure': 1, "level_up":1, 'method': "loose_level"},
+        # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead', '-2 against_thieves'], 'lvl': 3, 'treasure': 1, "level_up":1, 'method': "loose_level", "static":"shade"},
+        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, "level_up":1, 'method': "monkey_business"},
+        #
+        # ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
+        # {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': 'loose_footgear'},
+        # {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method': 'loose_armor'},
+        # {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method': 'loose_level'},
+        # {'id': 404, "category": "door", 'type': 'curse', 'duration': 'timed', 'name': 'sex change', 'method': 'sex_change'}, # has another timed condition
+        # {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method': 'loose_headgear'},
+        # {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
+        # {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method': 'income_one_shot'},
         ## Monster Enhancers
 
         ## player enhancers
@@ -176,7 +176,7 @@ class Moncurse(MonTools):
         # {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
 
-        {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
+        # {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 601, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 602, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
         # {'id': 603, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": 'half_breed'},
@@ -203,7 +203,7 @@ class Moncurse(MonTools):
         """Card test request check"""
         return cls.door_cards[0]["name"] # list index, dict name
 
-    def card_meths(self, card, action=None, value=None):
+    def card_meth(self, card, action=None, value=None):
         """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
         print("CARD METHOD TEST")
         test_type = "static" # card key. static, method,
@@ -224,8 +224,9 @@ class Moncurse(MonTools):
 
 m1 = Moncurse()
 if __name__ == "__main__":
+    # print(Moncurse)
     card = m1.door_cards[2] # draws specific card
     print(card) # show card
-    m1.card_meths(card, action="on") # for methods that require action to turn off or on.
-    # m1.card_meths(card, action="off")
+    m1.card_meth(card, action="on") # for methods that require action to turn off or on.
+    m1.card_meth(card, action="off")
     # print(dir(m1)) #shows all methods and inherited meths

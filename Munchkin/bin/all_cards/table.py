@@ -80,9 +80,10 @@ class Table(Treasure, Moncurse): # inherits from
     """This is the table model and the attributes expected from the game table"""
     def __init__(self):
         self.card_sop = Dealer() # has-a dealer
+        self.dice_sop = Dice()
         self.burn_pile = []
         self.in_play = []
-        self.dice_sop = Dice()
+
 
     def add_to_burn(self, discard):
         """adding to burn pile"""

@@ -403,7 +403,7 @@ class MainLoop(tk.Frame):
         self.message2 = tk.Label(self.notifications, textvariable=controller.message2)
         self.message2.pack(side="top", fill="x", expand=True)
 
-        self.canvas = tk.Canvas(self.tblframe, height=400) # canvas not dynamically expanding
+        self.canvas = tk.Canvas(self.tblframe, height=450) # canvas not dynamically expanding
         self.canvas.config(bg="black")
         self.canvas.pack(side="top", expand=True, fill="both") # without self should now be accessible for the class....
         self.pic = ""
@@ -436,24 +436,31 @@ class MainLoop(tk.Frame):
         """game actions for door. cards drawn from door"""
         print("\nKicking door!")
         player = gameVar.GameObjects.active_player
-        # gameVar.GameObjects.message = f"{app.name.get()} has kicked open the door!"
-        # app.update_message("show") # message overridden later in method
+        self.message2.destroy()  # removes dev label
 
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
-        door_card = engine.deal_handler("door", door_attempts=gameVar.CardDraw.door_attempts) # fetch a door card for viewing
 
+        #main actions
+        door_card = engine.deal_handler("door") # fetch a door card
+        engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts)  # defines the actions to be taken with he card
+
+
+        #card viewing
         if gameVar.CardDraw.door_attempts: # first kick of door (always get this at start of turn!)
             print("VIEWING CARD")
+
             self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas.. will need meth for this to add cards in linear fashion
 
-            gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
-            app.update_message("show")
+            #broadcast
+            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # updated from door_card_designator if a monster
+                gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
+            app.update_message("show") #update the broadcast message
 
+            #if monster do this and turn off these buttons.
             if door_card["type"] == "monster":
-                player.card_meths(door_card, 'static', 'on') # gets any static methods associated to the monster
-                print("run=", player.run_away) # checking status
-                app.update_message("show") # shows  monster details
+                # player.card_meths(door_card, 'static', 'on')  ######## will cause probs with monster individuality ######################
+
                 self.door_button.config(state="disabled") # kick door
                 self.weapons_button.config(state="disabled") # weapons
                 self.armor_button.config(state="disabled") # armor
@@ -462,8 +469,11 @@ class MainLoop(tk.Frame):
                 self.run_away_button.config(state="normal") # run
                 #meth to return card, use id to put card pic
 
+        # 2nd attempt circumstance
         elif gameVar.CardDraw.door_attempts == 0:
             print("2nd kick activated")
+            gameVar.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
+            app.update_message("show")  # update the broadcast message
             self.pic = Tools.viewer(0)  # gets card pic face down
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
             self.door_button.config(state="disabled") # disables door button
@@ -507,6 +517,8 @@ class MainLoop(tk.Frame):
         Tools.fluid_player_info()
 
     def run(self):
+        engine.card_method_activator("persistent", "on", card_num=0) # grabs the 1st card put on the table to run persistent method. TODO: change card_num for a card selector
+
         player = gameVar.GameObjects.active_player
         if player.run_away: # checks ability to run from player attrib
             result = engine.run()

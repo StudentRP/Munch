@@ -108,10 +108,9 @@ class PlayerSetUp:
 
 # card handling class:
 
-    def deal_handler(self, option, door_attempts=1, deal_amount=0):
-        """ Sends requests to the dealer based on the option parameter.
-        Door_attempts defines the action required be the proceeding method and the fate of the card. Finally deal_amount
-        defines how many of the cards are to be returned to a player.
+    def deal_handler(self, option, deal_amount=0):
+        """ Sends requests to the dealer based on the option parameter to define card type.
+        Deal_amount defines how many of the cards are to be returned to a player.
         """
 
         playerinst = gameVar.GameObjects.active_player # gets current player, at start this is none.
@@ -119,20 +118,23 @@ class PlayerSetUp:
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
             for player in gameVar.GameObjects.session_players: #loops over each player in session_players
                 player.sack = cards.card_sop.deal_cards(option, cardnum=gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
+
         elif option == "door": # Standard gameplay loop on door kick
             print("In deal_handler, retrieving door card & determining fate of card")  # test location
             door_card = cards.card_sop.deal_cards(option, cardnum=1) # fetches 1 door card,
-            self.door_card_designator(door_card, door_attempts=door_attempts) # defines what happens to the door card
             return door_card # for pic use only in gui
+
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("retrieving treasure card/s") # test location
             add_treasure = cards.card_sop.deal_cards(option, cardnum=deal_amount) # cardnum is usually determined by the treasures a monster holds.
             playerinst.sack = playerinst.sack + add_treasure # DUMPS ALL IN THE ACTIVE_PLAYER.....TODO::Sort how treasure is handled when used as currency for another players help
+
         elif option == "resurrect":
             if gameVar.Options.perm_death:
                 playerinst.sack = cards.card_sop.deal_cards("start", cardnum=gameVar.Options.cards_dealt)
             else:
                 print(f"Game over for {playerinst.name}, BUMMER!")
+
         else:
             print("option parameter not defined/matched in deal_handler")
 
@@ -143,23 +145,25 @@ class PlayerSetUp:
         """
         player = gameVar.GameObjects.active_player
 
-        if door_attempts: # == 1 or True On first kick of the door
+        if door_attempts: #On first kick of the door. Decides what to do with the cards dependent on situation
 
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
-                cards.in_play.append(card) # adds to table # careful as cards selected from hand will go strait to table
-                print(f"In door_card_designator. Monster added to table: {[x['name'] for x in cards.in_play]}\n")
+                cards.in_play.append(card) # places card on table. functionality returned to gui ######################## creates lol
+                # print(f"In door_card_designator. Monster added to table: {[x['name'] for y in cards.in_play for x in y]}\n")
+                print(cards.in_play)
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
+                gameVar.GameObjects.message = f"The room you have entered ahs the curse {card.get('name').title()}.\n Lets hope you have protection!"
                 print("In curse::", player.active_curses) # Pointless... was curses but no attrib made..................................
                 # ~~~~~~~~~~~~~ curse checker required ie tin had ect
                 # gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
-                player.card_meths(card, "method", "on")  ########## actions curs card as soon as picked up  JUST CHECKS CURSES WORK ATM
-                if card.get("duration") == "active": # for constant effect curse
+                if card.get("duration") == "persistent": # for constant effect curse
                     player.active_curses.append(card) # adds card to player curse list
-                elif card.get("duration") == "one_shot": ########### for one shot effect
+                elif card.get("duration") == "one_shot": ########### matches card key to the one_shot action
+                    player.card_meths(card, "method", "on")  ########## calls card method and switches it on TO BE REMOVED
                     cards.burn_pile.append(card) # disposes of to burn pile
                     print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
                 elif card.get("duration") == "timed": ########## for time dependent effect
@@ -177,6 +181,17 @@ class PlayerSetUp:
             print("adding to sack")
             gameVar.GameObjects.message = "Adding card to sack"  # 2nd kick
             player.sack.append(card)  # adds to player sack
+
+    def card_method_activator(self, scenario, action, card_num): # will need to be a selector
+        """method to activate a card dependent upon the scenario of having a specific monster in play and action to
+        switch on or off the condition"""
+        card = cards.in_play[int(card_num)] # selects the monster in the fight on the table
+        player = gameVar.GameObjects.active_player
+        if scenario == "persistent":
+            player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
+
+
+
 
     def zipper(self, action=None):
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
@@ -261,7 +276,7 @@ class PlayerSetUp:
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
         player = gameVar.GameObjects.active_player
-        player.card_meths(card, 'static', 'on') # turns on card static content for fight
+        player.card_meths(card, 'static', 'on') # turns on card static content for fight TODO change to something more relevant than "static"
         if player.bonus + player.level + helper + gameVar.Fight_enhancers.player_aid \
                 >= card["lvl"] + gameVar.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
             print("Player wins!")
