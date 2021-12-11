@@ -182,10 +182,10 @@ class PlayerSetUp:
             gameVar.GameObjects.message = "Adding card to sack"  # 2nd kick
             player.sack.append(card)  # adds to player sack
 
-    def card_method_activator(self, scenario, action, card_num): # will need to be a selector
-        """method to activate a card dependent upon the scenario of having a specific monster in play and action to
+    def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
+        """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
         switch on or off the condition"""
-        card = cards.in_play[int(card_num)] # selects the monster in the fight on the table
+        card = cards.in_play[int(table_card_index)] # selects the monster in the fight on the table
         player = gameVar.GameObjects.active_player
         if scenario == "persistent":
             player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
