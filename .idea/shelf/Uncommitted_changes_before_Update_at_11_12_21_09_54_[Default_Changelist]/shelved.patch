@@ -1,0 +1,9 @@
+diff --git a/Munchkin/bin/GUI/gui_v3.py b/Munchkin/old/gui_v3.py
+rename from Munchkin/bin/GUI/gui_v3.py
+rename to Munchkin/old/gui_v3.py
+diff --git a/Munchkin/bin/GUI/gamevis.py b/Munchkin/old/gamevis.py
+rename from Munchkin/bin/GUI/gamevis.py
+rename to Munchkin/old/gamevis.py
+diff --git a/Munchkin/bin/GUI/gui_v2.py b/Munchkin/old/gui_v2.py
+rename from Munchkin/bin/GUI/gui_v2.py
+rename to Munchkin/old/gui_v2.py
