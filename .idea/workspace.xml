@@ -23,20 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f574ba83-86b1-410d-a8e8-5c763ecc23ce" name="Default Changelist" comment="pc unknown changes">
-      <change beforePath="$PROJECT_DIR$/.idea/MyPackages.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MyPackages.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/gui_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/old/gui_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/game_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/old/game_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playersetup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playersetup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/old/gameCycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/old/gameCycle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/old/game_loop_v2.1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/old/game_loop_v2.1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/old/game_loop_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/old/game_loop_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/controller.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -506,21 +493,7 @@
       <workItem from="1635081157029" duration="69000" />
       <workItem from="1639178455255" duration="88000" />
       <workItem from="1639215785103" duration="362000" />
-      <workItem from="1639216210958" duration="1061000" />
-    </task>
-    <task id="LOCAL-00001" summary="new draft for gui">
-      <created>1602703129915</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1602703129915</updated>
-    </task>
-    <task id="LOCAL-00002" summary="good progress on gui structure. script to be added into gameloop fro functionality test.">
-      <created>1602706997740</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1602706997740</updated>
+      <workItem from="1639216210958" duration="2048000" />
     </task>
     <task id="LOCAL-00003" summary="good progress on gui structure. script to be added into gameloop fro functionality test.">
       <created>1602709092872</created>
@@ -851,7 +824,21 @@
       <option name="project" value="LOCAL" />
       <updated>1630330604061</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="pc unknown changes">
+      <created>1639217296114</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1639217296114</updated>
+    </task>
+    <task id="LOCAL-00051" summary="pc unknown changes">
+      <created>1639217322149</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1639217322149</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -906,11 +893,6 @@
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/controller.py</url>
-          <line>406</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/engine/game_loop_v3.py</url>
           <line>214</line>
           <option name="timeStamp" value="37" />
@@ -935,8 +917,8 @@
     <SUITE FILE_PATH="coverage/Working_git_projects$cascading_frames.coverage" NAME="cascading_frames Coverage Results" MODIFIED="1606569227994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/methods" />
     <SUITE FILE_PATH="coverage/Working_git_projects$client.coverage" NAME="client Coverage Results" MODIFIED="1607734581411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
     <SUITE FILE_PATH="coverage/gui_v3_py$controler.coverage" NAME="controler Coverage Results" MODIFIED="1614511168277" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$controller__1_.coverage" NAME="controller (1) Coverage Results" MODIFIED="1632168523775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/gui_v3_py$pic_test.coverage" NAME="pic_test Coverage Results" MODIFIED="1616512660881" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/Tool_box" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$controller__1_.coverage" NAME="controller (1) Coverage Results" MODIFIED="1639218287704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/gui_v3_py$test_engine.coverage" NAME="test_engine Coverage Results" MODIFIED="1614457569538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests/testengine" />
     <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1615720610908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
     <SUITE FILE_PATH="coverage/Working_git_projects$components.coverage" NAME="components Coverage Results" MODIFIED="1606571460461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/methods" />

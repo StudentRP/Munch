@@ -16,7 +16,7 @@ import os
 
 gamefont = ('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
-text_color ="#7A0600"
+text_color = "#7A0600"
 but_color = "#3EB0A1"
 
 ##########################################################################
@@ -161,7 +161,7 @@ class GameOptions(tk.Toplevel):
         e1 = tk.Entry(lf, textvariable=self.initial_deal)
         self.initial_deal.set(4) # if options opened, sets this as default
         e1.icursor(1) # sets blinking cursor to this index ready to change value in box
-        e1.focus() # focuses on entry
+        e1.focus() # focuses on entry,,
         e1.grid(column=1, row=0)
 
         l2 = tk.Label(lf, text="Set max level")
