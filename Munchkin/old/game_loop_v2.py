@@ -16,12 +16,10 @@ Considerations;
 
 
 from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10
-from Munchkin.bin.engine.game_logic import start_choice
+from old.game_logic import start_choice
 from Munchkin.bin.all_cards.table import Dealer
 from Munchkin.bin.engine import cut_scenes as cs
 from random import randint
-from time import sleep
-
 
 ##################################################################
 # main loop

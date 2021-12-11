@@ -222,6 +222,7 @@ class Moncurse(MonTools):
         elif item == "klass" or item == "klass2":
             return {"name": "elf"} # mock class card dict, Change elements according to the required class
 
+
 m1 = Moncurse()
 if __name__ == "__main__":
     # print(Moncurse)

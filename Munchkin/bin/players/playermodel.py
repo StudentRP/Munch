@@ -1,10 +1,13 @@
 """
 Class to build model players and assign new attributes associated with cards through gameplay.
 
+Consider what the player class is responsible for...
+
 Considerations:
     Player model
-    Death
-    New build
+    player setup name & gender
+    Death and reset
+    accessing player and changing player resources
     save -- most likely shelve objects
     stats access
 
@@ -15,40 +18,23 @@ from Munchkin.bin.all_cards.table import Table # most likely not used here (pos 
 # import but may require for adding to player inventory and stats (note same card in engine will return here)
 from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
-from Munchkin.bin.players.playersetup import P_tools
+from Munchkin.bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
 import bin.GUI.gui_variables as gameVar
 from bin.all_cards.table import cards
 from bin.all_cards.door_cards.doorcards import MonTools
 from bin.all_cards.treasure_cards.treasurecards import T_tools
-from  itertools import cycle
-
-
-
-
-"""adding items to player"""
-################### CHECKER (works)
-# cards = Handler()
-# x = cards.card.grabber() # to be called further up stream for sorting
-# print("RETURNED VALUE:", x)
-#####################
+from itertools import cycle
 
 """This is the player class. It will have all setting to configure players and modify attributes that are set to that
 player. It will inherit from moncurse and treasure so that a player can add items to their attributes and modify
 attributes based on action outcomes."""
 
-
-##########################################################################
-# Player attributes and methods
-##########################################################################
-
-
-
 #####################################################################
 # MAIN PLAYER CLASS
 #####################################################################
 
-class Player(MonTools, T_tools): # inherits off card methods
-    """Main player class"""
+class Player(MonTools, T_tools):
+    """Main player class, inherits off card methods making changes to the player."""
 
     def __init__(self, ref):
         self.ref = ref # simple form to keep track of players
@@ -95,9 +81,23 @@ class Player(MonTools, T_tools): # inherits off card methods
     #     return f"\nPLAYER INFO:\nName:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
     #            f"\nBonus:{self.bonus}\n"
 
+    @classmethod
+    def gender(cls):
+        """Sets gender"""
+        x = gameVar.PlayerAtribs.player_gender # grabs string stored in in game var
+        return x
+
+    @classmethod
+    def name(cls):
+        """Sets name"""
+        x = gameVar.PlayerAtribs.player_name
+        if x == "rory":  # ......................................................................... dev mode
+            y = "The_Creator"
+            return y
+        return x
+
     def update_bindings(self, carried):
         """just gets whats attached to the player"""
-
         category = [self.weapons, self.armor]  # locations to search
         for sub_cat in category:  # is the dict as a whole
             for key in sub_cat:
@@ -108,9 +108,9 @@ class Player(MonTools, T_tools): # inherits off card methods
     def char_setup(self):
         # complete, prints to be removed
         """sets up name and gender in gameVar and player instance when called"""
-        na = P_tools.name() # method to set name
+        na = Player.name() # method to set name
         self.name = na  # makes change to player
-        xy = P_tools.gender()
+        xy = Player.gender()
         self.gender = xy
 
         if self.name == "The_Creator": # ................................................................... dev mode

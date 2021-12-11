@@ -13,10 +13,11 @@ contents:
 
 ****************************************************************************************************
 **************************************** GAME GENERAL ************************************
-****************************************************************************************************
+****************************************************************************************************,
+
 
 ######################################################
-# SCRIP DEPENDENCIES
+# SCRIPT DEPENDENCIES
 ######################################################
 
 controller.py: provides front end logic and building blocks for GUI
@@ -587,16 +588,16 @@ MainLoop, class
 
 
 PREBUILD CONSIDERATIONS PLAN
-consider changing card to fit ie equip:True then loop over for equipped items. good to detrmine bonuses, use re for
+consider changing card to fit ie equip:True then loop over for equipped items. good to dete,rmine bonuses, use re for
 status effects/qualifiers. name of equipped item for player info = verbinding can call meth that returns it or none
 
 need to set up vars in Main
 access to them
 separate player list for equipped/curse/status effects
-method to select equipable items and populate selected_items
-way to screen items dependent on player ie for dewarfs only ect
+method to select equipperble items and populate selected_items
+way to screen items dependent on player ie for dwarfs only ect
 
-stepes needed:::
+steps needed:::
 way to screen cards race/gender... same for cursing??
 
 way to add to player or check if place is occupied already and remove player and add to sack
@@ -653,7 +654,7 @@ Door button > door method
 
             door_card = cards.card_sop.deal_cards(option, cardnum=1)
                 Runs the Table class that has a dealer() method that returns a door cards. Note, dealer will check the pack first
-                and if insufficient cards are present it will epty and sort the burn_pile to refresh the card decks.
+                and if insufficient cards are present it will em,pty and sort the burn_pile to refresh the card decks.
 
         engine.door_card_designator(door_card, door_attempts=door_attempts)
             Method first checks door_attempts as this will define where the card is placed. Consider a monster, 1st
@@ -712,15 +713,15 @@ Cruse cards can be iterated over to find the one the player wants to remove when
 
 consider curses that have effect and those that dont.
     dont > back to burn pile
-    do > detrmine location of activity ( armor, weapon?) needs link to card that is effected (id) and storage
+    do > determine location of activity ( armor, weapon?) needs link to card that is effected (id) and storage
     somewhere in player model. card active in correct situation then deactivation meth required
 
 door_card_designator(self, card, call=1): look under curses to add meth
 
 WHERE I AM NOW...
-meth needed to determine if player susceptible to curse. IDEA= all cards that premote and effect can have key word/s that are added to player lexacl or dict with meths.
+meth needed to determine if player susceptible to curse. IDEA= all cards that promote and effect can have key word/s that are added to player lexacl or dict with meths.
 cures would check against this list for resistant method
-ie: lexical would be fillid with class bonus words and other bonuses like tinhat. These would be looked up by curse and if non compatible would reject cures.
+ie: lexical would be filled with class bonus words and other bonuses like tinhat. These would be looked up by curse and if non compatible would reject cures.
 
 
 #######################################################################
@@ -749,6 +750,9 @@ enchantment to stay on lost weapons!
 ****************************************************************************************************
 **************************************** planned changes *************************************
 ****************************************************************************************************
+
+Consider ownership of action handling ie who is responsible for what in the programme ie what is responsible
+for sorting cards or game flow?
 
 game_loop.py
 * Splitting up this module into more defined classes will be needed.
