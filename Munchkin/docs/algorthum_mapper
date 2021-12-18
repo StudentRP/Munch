@@ -285,7 +285,7 @@ game_Loop.py:
 #######################################################################
 # Game start and options methods
 #######################################################################
-deatails method for start page and game options
+Detailed method for start page and game options
 
 controller.StartPg, class
     Presents two options start or options
@@ -635,7 +635,8 @@ loot the room (another kick of the door that send a card strait to the players h
 (fight a monster from their hand).
 
 Curses come in 3 flavours, one_shot, time dependent (lasts certain amount of time usually a turn) and permanent until a
-condition is met. More on curses under curse section.
+condition is met. More on curses under curse section. Their action is strictly kicking (1st turn) a door and player
+intervention. This means activation can only happen in theses circumstances.
 
 
 Door button > door method

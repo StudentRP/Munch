@@ -149,15 +149,16 @@ class MonTools:
 # class Moncurs(M_tools, C_tools, O_tools):
 class Moncurse(MonTools):
     """class to list all monster and curse cards."""
+    """ I think dif types of cards will have to have an array of different keys that can be searched with the get funct. ie weakness, ect """
 
     door_cards = [
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
-        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lexical': ['Cant_outrun'], 'lvl': 1, 'treasure': 1, "level_up":1, 'method': "below_waist", "static": "no_outrun"},
-        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lexical': ['sensitive_to_fire', 'extra lvl'], 'lvl': 2, 'treasure': 1, "level_up":1, 'method': "loose_level"},
-        # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lexical': ['undead', '-2 against_thieves'], 'lvl': 3, 'treasure': 1, "level_up":1, 'method': "loose_level", "static":"shade"},
-        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lexical': ['+ 2 to halflings'], 'lvl': 6, 'treasure': 2, "level_up":1, 'method': "monkey_business"},
-        #
-        # ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
+        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method': "below_waist", "static": "no_outrun"},
+        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': "loose_level"},
+        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': "loose_level", "static":"shade"},
+        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': "monkey_business"},
+
+        ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
         # {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': 'loose_footgear'},
         # {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method': 'loose_armor'},
         # {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method': 'loose_level'},
@@ -165,10 +166,32 @@ class Moncurse(MonTools):
         # {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method': 'loose_headgear'},
         # {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': 'loose_small_item'},
         # {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method': 'income_one_shot'},
-        ## Monster Enhancers
-
-        ## player enhancers
-
+        # # Monster Enhancers
+        # #
+        # # card modifiers ## methods to add to list
+        # {'id': 800, "category": "door", 'type': 'modifier', 'name': 'Intelligent +5 to monster', 'method': ['add_5'], 'win': 'extra_treasure'},
+        # {'id': 801, "category": "door", 'type': 'modifier', 'name': 'Underdressed +5 to monster', 'method': ['add_5'], 'win': 'extra_treasure'},
+        # {'id': 802, "category": "door", 'type': 'modifier', 'name': 'Enraged +5 to monster', 'method': ['add_5'], 'win': 'extra_treasure'},
+        # {'id': 803, "category": "door", 'type': 'modifier', 'name': '....From Hell +5 to monster', 'method': ['add_5', 'ename_edit', 'add_5_if_cleric'], 'win': 'extra_treasure'},
+        # {'id': 804, "category": "door", 'type': 'modifier', 'name': '....From Hell +5 to monster', 'method': ['add_5', 'ename_edit', 'add_5_if_cleric'], 'win': 'extra_treasure'},
+        # {'id': 805, "category": "door", 'type': 'modifier', 'name': '....With Bagpipes +5 to monster', 'method': ['add_5', 'ename_edit', 'add_5_if_bard'], 'win': 'extra_treasure'},
+        # {'id': 806, "category": "door", 'type': 'modifier', 'name': 'Armored +5 to monster', 'method': ['add_5', 'add_5_if_warrior'], 'win': 'extra_treasure'},
+        # {'id': 807, "category": "door", 'type': 'modifier', 'name': 'Stealthy +5 to monster', 'method': ['add_5', 'add_5_if_thief'], 'win': 'extra_treasure'},
+        # {'id': 808, "category": "door", 'type': 'modifier', 'name': 'Magic Resistant +5 to monster', 'method': ['add_5', 'add_5_if_wizard', 'immune_to_charm'], 'win': 'extra_treasure'},
+        # {'id': 809, "category": "door", 'type': 'modifier', 'name': 'Brood +10 to monster', 'method': ['add_10'], 'win': '2extra_treasure'},
+        # {'id': 810, "category": "door", 'type': 'modifier', 'name': 'Ancient +10 to monster', 'method': ['add_10'], 'win': '2extra_treasure'},
+        # {'id': 811, "category": "door", 'type': 'modifier', 'name': 'Ravenous +10 to monster', 'method': ['add_10'], 'win': '2extra_treasure'},
+        # {'id': 812, "category": "door", 'type': 'modifier', 'name': 'Humongous +10 to monster', 'method': ['add_10'], 'win': '2extra_treasure'},
+        # {'id': 813, "category": "door", 'type': 'modifier', 'name': 'Saber-Toothed +10 to monster', 'method': ['add_10'], 'win': '2extra_treasure'},
+        # {'id': 814, "category": "door", 'type': 'modifier', 'name': 'Big Honking Sword of Character Whipping +10 to monster', 'method': ['add_10'], 'win': '2extra_treasure'},
+        # {'id': 0, "category": "door", 'type': 'modifier', 'name': 'Undead +5 to monster', 'method': ['add_5', 'undead'], 'win': '2extra_treasure'},
+        # {'id': 0, "category": "door", 'type': 'modifier', 'name': 'Undead +5 to monster', 'method': ['add_5', 'undead'], 'win': '2extra_treasure'},
+        # {'id': 0, "category": "door", 'type': 'modifier', 'name': 'Baby -5 to monster', 'method': ['subtract_5'], 'win': '1less_treasure'},
+        # {'id': 0, "category": "door", 'type': 'modifier', 'name': 'Half A .... -5 to monster', 'method': ['subtract_5', 'fname_edit'], 'win': '1less_treasure'},
+        # {'id': 0, "category": "door", 'type': 'modifier', 'name': 'Very Depressed -5 to monster', 'method': ['subtract_5', 'not_compat_enraged'], 'win': '1less_treasure'},
+        # {'id': 0, "category": "door", 'type': 'modifier', 'name': 'Sleeping -5 to monster',
+        #  'method': ['subtract_5', 'not_compat_enraged', 'not_compat_friendly'], 'win': '1less_treasure'},
+        #
         ## Joining cards
         # {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
         # {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": 'supermunch'},
@@ -206,15 +229,15 @@ class Moncurse(MonTools):
     def card_meth(self, card, action=None, value=None):
         """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
         print("CARD METHOD TEST")
-        test_type = "static" # card key. static, method,
+        test_type = "method" # card key.  method,
         if card.get(test_type, "Method not in card"):
             value = card[test_type] # gets value stored at card key (test_type)
             print(value)
-            list_method = MonTools.method_types[value] #returns inactive method #looks up method with key assigning inactive value
-            list_method(self, action, value) # action 'on' or 'off', value level to add/ remove
+            get_method = MonTools.method_types[value] #returns inactive method #looks up method with key assigning inactive value
+            get_method(self, action, value) # action 'on' or 'off', value level to add/ remove
 
     def __getattr__(self, item):
-        """simulates player atribs for the instance m1"""
+        """simulates player attribs for the instance m1 when called by monster mehtods"""
         if item == "level": # catches m1.level (FROM CARD METHS) setting to 4 mimicking a player with a level of 4.
             return 4 # provides m1 with player traits of level
         elif item == "gender":

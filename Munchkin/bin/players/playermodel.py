@@ -57,17 +57,16 @@ class Player(MonTools, T_tools):
         self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
                       "necklace": "", "ring": "", "ring2": ""}
         self.sack = [] # 5 max, editable in options
-        self.active_cards = [] # cards that elicit an effect ie supermunch
         self.hireling = []
         # self.unsorted = [] # Old! list of all cards that are used to by sorting
         self.alive = True
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
-        self.active_curses = [] # place to store all curse cards effecting player. card remove meth should reverse player change
+        self.enhancer_cards = []  # cards that elicit an effect ie supermunch/class card, ect. card lexical must be added to enhancer lexical
         self.enhancers_lexical = set() # all positive effects strings for comparative evaluation. only added when card installed on player.
+        self.active_curses = []  # place to store all curse cards effecting player. card remove meth should reverse player change
         self.negative_lexical = set() # all negative effects strings for comparative evaluation. only added when card installed on player.
-        self.curse_allowed = True #switched off with tin hat, Ork, ect
         self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
         self.run_away = True # locks ability toi run or not dependent on some monsters
 
@@ -204,8 +203,8 @@ class Player(MonTools, T_tools):
         """New simplified model. Checks L/R hands to see if full, equipping if not.
         Two hand items will not work when other hands full. """
         if self.weapon_count > 0:
-            if card["sub_type"] == "1hand" and not isinstance(self.weapons["L_hand"], dict): # not equipped
-                added_card = self.sack.pop(self.sack.index(card))
+            if card["sub_type"] == "1hand" and not isinstance(self.weapons["L_hand"], dict): # if 1handed weap and no card in players left hand...
+                added_card = self.sack.pop(self.sack.index(card)) # gets list index for pop by calling index() on object thus returning index
                 self.weapons["L_hand"] = added_card
                 self.weapon_count -= card.get("hold_weight")
                 gameVar.GameObjects.message = f"Equipping {card['name']} to left hand"
@@ -222,7 +221,7 @@ class Player(MonTools, T_tools):
                     added_card = self.sack.pop(self.sack.index(card))
                     self.weapons["two_hand"] = added_card
                     self.weapon_count -= card.get("hold_weight")
-            else: # cheat card section
+            else: # cheat card section/ big item
                 pass
         else:
             gameVar.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"

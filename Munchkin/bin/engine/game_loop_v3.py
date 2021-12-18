@@ -138,10 +138,10 @@ class PlayerSetUp:
         else:
             print("option parameter not defined/matched in deal_handler")
 
-    def door_card_designator(self, card, door_attempts=1): # for all door cards that are drawn from the pack
+    def door_card_designator(self, card, door_attempts=1): # for all door cards that are drawn from the pack or placed by another player.
         """Takes in door card and door_attempts as params to decide card fate.
         Cards have different fates dependent upon the type of card it is ie: monster, curse, other and the number of
-        times the door button is clicked.
+        times the door button is clicked. Also update the message dependent on action
         """
         player = gameVar.GameObjects.active_player
 
@@ -151,35 +151,36 @@ class PlayerSetUp:
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play.append(card) # places card on table. functionality returned to gui ######################## creates lol
-                # print(f"In door_card_designator. Monster added to table: {[x['name'] for y in cards.in_play for x in y]}\n")
                 print(cards.in_play)
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
-                gameVar.GameObjects.message = f"The room you have entered ahs the curse {card.get('name').title()}.\n Lets hope you have protection!"
-                print("In curse::", player.active_curses) # Pointless... was curses but no attrib made..................................
-                # ~~~~~~~~~~~~~ curse checker required ie tin had ect
-                # gameVar.GameObjects.message = "You have been cursed!" # look at card meth and action
+                gameVar.GameObjects.message = f"The room you have entered has a curse {card.get('name').title()}.\n Lets hope you have protection!"
+                print("In curse::", player.active_curses)
+                # ~~~~~~~~~~~~~TODO  curse checker method required ie tin hat, ork ect
                 if card.get("duration") == "persistent": # for constant effect curse
-                    player.active_curses.append(card) # adds card to player curse list
+                    player.card_meths(card, "method", "on") # switches card on.
+                    player.active_curses.append(card) # adds card to player curse list so method can be called o remove
                 elif card.get("duration") == "one_shot": ########### matches card key to the one_shot action
                     player.card_meths(card, "method", "on")  ########## calls card method and switches it on TO BE REMOVED
                     cards.burn_pile.append(card) # disposes of to burn pile
-                    print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
+                    print(f"card duration is one_shot, added to burn pile check:\nBurn pile {cards.burn_pile}")
                 elif card.get("duration") == "timed": ########## for time dependent effect
+                    gameVar.GameObjects.message = f"timed curse card not configured yet" # overrides top message
+                    #TODO meth for timed
                     cards.burn_pile.append(card) # disposes of to burn pile
                     print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
 
             else: # for all other cards that have no direct effect or influence.
                 print(f"Adding {card['name']}to sack.")
                 player.sack.append(card)  # adds card to player's items
-                gameVar.GameObjects.message = f"Adding/using {card.get('name')}."
+                gameVar.GameObjects.message = f"Adding 2nd draw to sack." # need to be removed dont want to broadcast what other player gets
                 return card  # to show if first time only 2nd it hides
 
         else:
             "2nd kick of door (looting room). Will need condition statement if player wants to fight mon from hand, rather than std flow to sack"
             print("adding to sack")
-            gameVar.GameObjects.message = "Adding card to sack"  # 2nd kick
+            gameVar.GameObjects.message = "2nd kck, Adding card to sack"  # 2nd kick
             player.sack.append(card)  # adds to player sack
 
     def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
@@ -193,23 +194,23 @@ class PlayerSetUp:
 
 
 
-    def zipper(self, action=None):
+    def zipper(self, action):
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
         action is conduit for card_matcher"""
         gameVar.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
-        for create_boo in gameVar.GameObjects.check_but_intvar_gen:
-            gameVar.GameObjects.check_but_boo.append(create_boo.get()) # creates a list of 1s & 0s from check buttons status
+        for status in gameVar.GameObjects.check_but_intvar_gen: # gets attribute from object then from the attribute which is an object gets the value stored (list>intvar>get()>1 or 0)
+            gameVar.GameObjects.check_but_boo.append(status.get()) # creates a list of 1s & 0s from check buttons status
             x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
-            gameVar.GameObjects.zipped_tup = list(zip(x, y))
+            gameVar.GameObjects.zipped_tup = list(zip(x, y)) # result [(card_id,  bool), (card_id, bool)]
         # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
         self.card_matcher(action)
 
     def card_matcher(self, action):
         """compares tuple to selected_items searching for matching card ids and only passes on cards that contain
         a tuple with the boolean true. Action determines the whats happening to the cards next. """
-        for card in gameVar.GameObjects.selected_items: # loops over specific card items
-            for tup in gameVar.GameObjects.zipped_tup: # loops over coupled (card_id, bool tuples).
-                if tup[0] == card["id"] and tup[1]:
+        for card in gameVar.GameObjects.selected_items: # for every card in selected_items
+            for tup in gameVar.GameObjects.zipped_tup: # go over every tuple in  zipped_tup. (card_id, bool tuples).
+                if tup[0] == card["id"] and tup[1]: # if tup id matches card fid from selected items and bool is True from the checkbox
                     if action == "sell":
                         gameVar.GameObjects.active_player.sell_item(card)
                     elif action in "equip, disposable ,use": # equip/disposable will be treasures
@@ -220,29 +221,41 @@ class PlayerSetUp:
 
     def tri_qualifier(self, card):
         """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
-        race, class, gender."""
+        race, class, gender. Screens equipment, weapons, one_shot items"""
         player = gameVar.GameObjects.active_player
-        checks = {player.race: "race_restriction", player.race2: "race_restriction", player.klass: "klass_restriction",
-                  player.klass2: "klass_restriction", player.gender: "gender_restriction"}
+        checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
+                  player.klass2: "klass_requirement", player.gender: "gender_requirement"}
         flag = 1 # True
-        for key, val in checks.items():
-            if card.get(val):  # checks card to see if restriction present
-                if card.get(val) == key: # compares restriction in card to player.atribs.
-                    print(f"Main path for: {val}")
-                    continue
-                elif player.name == "The_Creator":  # dev mode
-                    print(f"{key} - Dev path")
+        for player_attribs, card_dict_key in checks.items():
+            if player_attribs in card.get('restriction'):  # checks all player attribs to see if in restricted treasure card list #
+                # THINK ABOUT CARDS YOU ARE APPLYING THEM TOO; TREASURE!
+                print('In Restriction')
+                if player.name == "The_Creator":  # dev mode
+                    print(f"{player_attribs} - Restriction Dev path")
                     continue
                 else:
-                    gameVar.GameObjects.message = f"You cant use this card, {val}"
+                    print('Restricted, cad cant be used.')
+                    flag = 0
+                    break
+
+            if card.get(card_dict_key):  # checks card to see if requirement present
+                if card.get(card_dict_key) == player_attribs: # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
+                    print(f"Main path for: {card_dict_key}")
+                    continue # checks next requirement parameter for conformance
+                elif player.name == "The_Creator":  # dev mode
+                    print(f"{player_attribs} - Dev path")
+                    continue
+                else:
+                    gameVar.GameObjects.message = f"You cant use this card, {card_dict_key}"
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
-        if flag: # only if flag remains True.
+
+        if flag: # only if flag remains True, compliant to non restrictions.
             if card["category"] == "treasure":  # for all treasure cards the player uses that was from their hand
                 self.player_treasure_cards(card) # for the use of treasure cards
-            elif card["category"] == "door":  # for all enhancers ect that the player has from their hand
-                self.player_door_cards(card) # for the use of door cards
+            # elif card["category"] == "door":  # for all enhancers ect that the player has from their hand  DO DOOR CARDS REALLY COME DOWN THIS ROUTE! however thowables???
+            #     self.player_door_cards(card) # for the use of door cards
 
     def player_treasure_cards(self, card):
         """method to sort the locations of treasure cards that the player has selected"""
@@ -252,7 +265,7 @@ class PlayerSetUp:
         elif card.get("type") == "weapon":
             player.equip_weapon(card)
         elif card.get("type") == "disposable":  # for disposable throwable only
-            pass  # meth for selecting target and changing bonuses,
+            pass  # meth for selecting target and changing bonuses, # TODO
         else:
             pass # for all other cards ie steeds
 

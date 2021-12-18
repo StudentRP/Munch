@@ -444,7 +444,6 @@ class MainLoop(tk.Frame):
         door_card = engine.deal_handler("door") # fetch a door card
         engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts)  # defines the actions to be taken with he card
 
-
         #card viewing
         if gameVar.CardDraw.door_attempts: # first kick of door (always get this at start of turn!)
             print("VIEWING CARD")
@@ -453,7 +452,7 @@ class MainLoop(tk.Frame):
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas.. will need meth for this to add cards in linear fashion
 
             #broadcast
-            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # updated from door_card_designator if a monster
+            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # updated from door_card_designator for genearl object not monster or curse
                 gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show") #update the broadcast message
 
@@ -494,6 +493,7 @@ class MainLoop(tk.Frame):
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
+        ### NEEDS CONTROL TO ASK WHICH MONSTER TO FIGHT IF MORE THATN ONE THEN WAY TO TURN ON ANY MONSTER METHODS, THINK TL WITH CB & CARD INFO
         print("Fight button pressed")
         selfobj = app.frames[MainLoop]
         result = engine.fight() # helper may be added when sorting it
@@ -543,8 +543,8 @@ class MainLoop(tk.Frame):
         app.update_message("show")
         engine.scrub_lists()
         player = gameVar.GameObjects.active_player
-        player.inventory("type", "weapon")
-        # print(gameVar.GameObjects.selected_items)  list all items
+        player.inventory("type", "weapon") # key= 'type', value = 'weapon'
+        # print(gameVar.GameObjects.selected_items)  list all items placed in list that meet the criteria above.
         OwnedItems("Weapons owned", "weap")
 
     def list_armor(self):
@@ -611,54 +611,55 @@ class MainLoop(tk.Frame):
 
 
 class OwnedItems(tk.Toplevel):
-    """generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made on those cards"""
+    """Generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made on those cards.
+    Buttons will be dependent upon the type of cards selected prior."""
     def __init__(self, wind_title="Template", set_but="No Buttons"): #title and buttons to be used for items
         tk.Toplevel.__init__(self)
-        self.wind_title = wind_title
-        self.title(self.wind_title)
+        self.title(wind_title)
         # self.geometry("350x250+200+200")
         self.set_but = set_but
-        print(f"Top level self: {self}")
+        # print(f"Top level self: {self}")
 
-        if not gameVar.GameObjects.selected_items: # not work
+        if not gameVar.GameObjects.selected_items: # if nothing in list display a label message
             fm = tk.Frame(self)
-            tk.Label(fm, text="No cards to show").pack()
+            fm.pack(side="top", expand=True)
+            tk.Label(fm, text="No cards to show").pack(side='top')
+
+        # main toplevel window for displaying items and button choices dependent on the set_but string
         else:
             f = tk.Frame(self)
             f.pack(side="top", expand=True)
-            tk.Label(f, text="Name").grid(row=0, column=0, sticky="nw")
+            tk.Label(f, text="Name").grid(row=0, column=0, sticky="nw")# column titles
             tk.Label(f, text="Type").grid(row=0, column=1, sticky="nw")
             if self.set_but == "sell":
-                tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw")
+                tk.Label(f, text="Value").grid(row=0, column=2, sticky="nw") # column title if item has gold value
             # elif self.set_but == "hidden":
             #     pass
-            elif self.set_but in " weap, armor, consume, equip, remove":
-                tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
+            elif self.set_but in " weap, armor, consume, equip, remove":# same column title requirement
+                tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw") # column title set to Bonus to see bonus values for items
             # else:
             #     tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
-            tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw")
-            set_row = 1
-            for card in gameVar.GameObjects.selected_items:
-                status = tk.IntVar() # for keeping track of check buttons
-                l1 = tk.Label(f, text=card['name'])
-                l1.grid(row=set_row, column=0, sticky="nw")
-                l2 = tk.Label(f, text=card['type'])
-                l2.grid(row=set_row, column=1, sticky="nw")
+            tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw") # title column for check boxes
+
+            # specific labels and tk variable
+            set_row = 1 # row incrementor for loop
+            for card in gameVar.GameObjects.selected_items: # for each card in the selected items
+                status = tk.IntVar() # for keeping track of check buttons, 1 per loop
+                tk.Label(f, text=card['name']).grid(row=set_row, column=0, sticky="nw")
+                tk.Label(f, text=card['type']).grid(row=set_row, column=1, sticky="nw")
                 if self.set_but == "sell":
-                    l3 = tk.Label(f, text=card['sell'])
-                    l3.grid(row=set_row, column=2, sticky="nw")
+                    tk.Label(f, text=card['sell']).grid(row=set_row, column=2, sticky="nw")
                 elif self.set_but in " weap, armor, consume, equip, remove":
-                    l3 = tk.Label(f, text=card['bonus'])
-                    l3.grid(row=set_row, column=2, sticky="nw")
+                    tk.Label(f, text=card['bonus']).grid(row=set_row, column=2, sticky="nw")
                 if set_but != "No Buttons":
                     tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
-                b1 = tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c))
-                b1.grid(row=set_row, column=4)
+                tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c)).grid(row=set_row, column=4)
 
                 gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
 
+        # specific buttons
         if self.set_but in "weap, armor, sell":
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         if self.set_but in "consume, hidden":
@@ -722,8 +723,8 @@ class Tools:
     # def __init__(self, keyword):
     #     self.key_word = keyword
     @staticmethod
-    def common_set(keyword):
-        engine.zipper(keyword)  # calls card_matcher() passing the parameter to it.
+    def common_set(action):
+        engine.zipper(action)  # calls card_matcher() passing the parameter to it.
         # engine.varbinding(gameVar.GameObjects.active_player)
         # app.update_frame()
 
@@ -752,6 +753,7 @@ class Tools:
 
     @staticmethod #not working Yet
     def viewer(card_id=None):
+
         path = "..\\imgs\\cards\\"
         img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
         return img

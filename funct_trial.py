@@ -79,9 +79,17 @@
 # else:
 #     print("false")
 
-def x(n):
-    l = [1,2,3]
-    print(l[int(n)])
+# def x(n):
+#     l = [1,2,3]
+#     print(l[int(n)])
+#
+# x(-1)
 
-x(-1)
+f = {'rest': ["tester", 'pop', 'not_man']}
+
+if 'not_man' in f.get('rest'):
+    print("yep")
+
+else:
+    print("nope")
 # app.mainloop()
