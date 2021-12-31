@@ -7,6 +7,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from bin.engine.game_loop_v3 import engine  # imports the instance
 # import bin.engine.game_loop_v3 as engine #for game loop clean up
+from bin.all_cards.table import cards
 import bin.engine.cut_scenes as cs
 import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
@@ -588,6 +589,7 @@ class MainLoop(tk.Frame):
     def ask_for_help(self): #mot set
         gameVar.GameObjects.message = "Toplevel window where another player can help... for a price.."
         app.update_message("show")
+        Table_Target_Selector()
 
     def list_sack(self):
         """shows all items in sack"""
@@ -644,7 +646,7 @@ class OwnedItems(tk.Toplevel):
             # specific labels and tk variable
             set_row = 1 # row incrementor for loop
             for card in gameVar.GameObjects.selected_items: # for each card in the selected items
-                status = tk.IntVar() # for keeping track of check buttons, 1 per loop
+                status = tk.IntVar() # for keeping track of check buttons, 1 per loop ### TODO can i change to bool? will loose list then
                 tk.Label(f, text=card['name']).grid(row=set_row, column=0, sticky="nw")
                 tk.Label(f, text=card['type']).grid(row=set_row, column=1, sticky="nw")
                 if self.set_but == "sell":
@@ -701,6 +703,28 @@ class OwnedItems(tk.Toplevel):
         app.update_message("show")
 
 
+class Table_Target_Selector(tk.Toplevel):
+
+    # player = gameVar.GameObjects.active_player
+    # all_players = gameVar.GameObjects.session_players
+
+
+    def __init__(self):
+        tk.Toplevel.__init__(self)
+        self.title('Target Selector')
+        self.frame = tk.Frame()
+
+        self.player = gameVar.GameObjects.active_player
+        self.all_players = gameVar.GameObjects.session_players
+
+        self.frame.pack(fill='both', expand=True)
+        # print(self.all_players)
+        print("cards in play:", cards.in_play)
+
+        # for object in Table_Target_Selector.all_players + table.cards.in_play:
+        #     print(object)
+
+
 class CardVeiw():
     def __init__(self, card_id=None):
         # path = "..\\imgs\\cards\\"
@@ -715,6 +739,8 @@ class CardVeiw():
         can.config(width=img.width(), height=img.height())
         can.create_image(2, 2, image=img, anchor=tk.NW)  # x, y coordinates
         win.mainloop()
+
+
 
 
 class Tools:

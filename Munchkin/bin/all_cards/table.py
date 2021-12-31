@@ -40,7 +40,7 @@ class Dealer:
             cards.restock()
 
         # Main actions
-        try :
+        try:
             if option == "start":
                 """called at start to deal specific number of cards to pass to player"""
                 starter_set = []

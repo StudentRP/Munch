@@ -150,8 +150,9 @@ class PlayerSetUp:
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
-                cards.in_play.append(card) # places card on table. functionality returned to gui ######################## creates lol
-                print(cards.in_play)
+                cards.in_play.append(card) # places card on table. functionality returned to gui. TODO this is where to create lol on table
+                print("This is the card in play;", cards.in_play)
+
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
@@ -220,33 +221,40 @@ class PlayerSetUp:
                         player.equipped_items("removal", card)
 
     def tri_qualifier(self, card):
-        """Combines the 3 qualifier methods in to one tidy loop. Checks the player against the card for the 3 qualifiers
-        race, class, gender. Screens equipment, weapons, one_shot items"""
-        player = gameVar.GameObjects.active_player
-        checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
-                  player.klass2: "klass_requirement", player.gender: "gender_requirement"}
-        flag = 1 # True
-        for player_attribs, card_dict_key in checks.items():
-            if player_attribs in card.get('restriction'):  # checks all player attribs to see if in restricted treasure card list #
-                # THINK ABOUT CARDS YOU ARE APPLYING THEM TOO; TREASURE!
-                print('In Restriction')
-                if player.name == "The_Creator":  # dev mode
-                    print(f"{player_attribs} - Restriction Dev path")
-                    continue
-                else:
-                    print('Restricted, cad cant be used.')
-                    flag = 0
-                    break
+        """ Checks player attribs against an item card before it can be used by the player. Split into 2 parts:
+        1st: checks card for a specific restriction that would count against a player due to a specific attrib, ie if u are human u cant use this card.
+        2nd part: """
 
-            if card.get(card_dict_key):  # checks card to see if requirement present
-                if card.get(card_dict_key) == player_attribs: # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
-                    print(f"Main path for: {card_dict_key}")
+        player = gameVar.GameObjects.active_player
+
+        checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
+                  player.klass2: "klass_requirement", player.gender: "gender_requirement"} # card specific requirements to use
+        flag = 1 # True
+
+        for player_attribs, card_requirement in checks.items():
+            # checks card restrict method lexical for non use cases. If found player cant use.
+            if card.get('restriction', False): # checks to see if there is a key named 'restriction' in card if not return False
+                print("Searching card restriction method")
+                if player_attribs in card.get('restriction'):  # checks all player attribs to see if in restricted treasure card list #
+                    # THINK ABOUT CARDS YOU ARE APPLYING THEM TOO; TREASURE!
+                    print('Restriction found in card')
+                    if player.name == "The_Creator":  # dev mode
+                        print(f"{player_attribs} - Restriction avoided: Dev path")
+                        break
+                    else: # sets flag so card cant be used
+                        print('Restricted, card cant be used.')
+                        flag = 0
+                        break
+            # checks cards for player dependent attribs to use card
+            if card.get(card_requirement):  # checks card to see if requirement present
+                if card.get(card_requirement) == player_attribs: # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
+                    print(f"Main path for: {card_requirement}")
                     continue # checks next requirement parameter for conformance
                 elif player.name == "The_Creator":  # dev mode
                     print(f"{player_attribs} - Dev path")
                     continue
                 else:
-                    gameVar.GameObjects.message = f"You cant use this card, {card_dict_key}"
+                    gameVar.GameObjects.message = f"You cant use this card, {card_requirement}"
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break

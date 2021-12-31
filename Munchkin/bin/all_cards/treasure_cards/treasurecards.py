@@ -45,10 +45,10 @@ class Treasure(T_tools):
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, "bonus": 5},
         # {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", "sell": 100, "bonus":3, "lexical": ["fire"]},
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Royal Oil", "sell": 100, "bonus": 3},
-        {"id": 0, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, "bonus": 3, 'lexical': ['freeze']},
+        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, "bonus": 3, 'lexical': ['freeze']},
         # {"id": 4, "category": "treasure", "type": "disposable", 'name': "Instant Wall", 'sell': 300, 'method': 'auto_escape'},
         # {"id": 5, "category": "treasure", "type": "disposable", "name": "Flask Of Glue", "sell": 100, 'method': "re-roll_escape"},
-        {"id": 0, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
+        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
 
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
         # {"id": 6, "category": "treasure", "name": "The Occasionally Reliable Amulet", "type": "armor", "sub_type": "necklace",
@@ -65,11 +65,11 @@ class Treasure(T_tools):
 
         # armor/armor (complete set)
         #race_requirements= needs to be this, restriction = cant be this, or have this
-        {"id": 11, "category": "treasure", "name": "Short Wide Armour", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 400, "race_requirement": "dwarfs"},
+        # {"id": 11, "category": "treasure", "name": "Short Wide Armour", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 400, "race_requirement": "dwarfs"},
         # {"id": 12, "category": "treasure", "name": "Raincoat", "type": "armor", "sub_type": "armor", "sell": 100, "special": "over armor",
         #  "restrictions": "loose with armour", "bonus": 0},
         # {"id": 13, "category": "treasure", "name": "Slimy Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 200},
-        {"id": 14, "category": "treasure", "name": "Mithril Armor", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 600, "restriction": ["big, wizard"]},####not wizards
+        {"id": 14, "category": "treasure", "name": "Mithril Armor", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 600, "restriction": ['big', 'wizard', 'human']},####not wizards
         # {"id": 15, "category": "treasure", "name": "Budget Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 100},
         # {"id": 16, "category": "treasure", "name": "Flaming Armour", "type": "armor", "sub_type": "armor", "bonus": 2, "sell": 400},
         # {"id": 17, "category": "treasure", "name": "Spudded Leather Armor", "type": "armor", "sub_type": "armor", "bonus": 2, "sell": 400},

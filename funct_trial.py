@@ -84,12 +84,16 @@
 #     print(l[int(n)])
 #
 # x(-1)
-
+#
 f = {'rest': ["tester", 'pop', 'not_man']}
 
 if 'not_man' in f.get('rest'):
     print("yep")
+    print(f.get('res', False)) # none object, can now return false
 
-else:
-    print("nope")
+# for x in f['rest']:
+#     print(x)
+#
+# else:
+#     print("nope")
 # app.mainloop()

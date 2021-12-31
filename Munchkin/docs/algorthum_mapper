@@ -730,6 +730,10 @@ ie: lexical would be filled with class bonus words and other bonuses like tinhat
 #######################################################################
 enchantment to stay on lost weapons!
 
+# may be not a requirement. method can be run by card when used to attach to item and run a remove meth when chosen
+(ie with on or off param for adding/removing)
+
+
 
 
 #######################################################################
@@ -757,3 +761,29 @@ for sorting cards or game flow?
 
 game_loop.py
 * Splitting up this module into more defined classes will be needed.
+
+
+
+########## NOTES FOR CHANGE ###
+change table system to display monsters as list of list with dicts eg:  [ [{monster card},{monster enhancers}],[{monster},{wandering monster] ]
+
+This gives each monster on the table the player has to fight a way to enhance, run monster specific methods and provide a way to run from specific monsters.
+Basically this provides and environment so that each monster can become independent.
+
+The thought with this is the idea that if a single monster is placed on the table the fight can continue normally.
+However, when more than one is present and in the case where players want to intervene, a selection toplevel window would be required.
+The top level would require a tick box, to select monster/player to use a card against, names of the objects, and  a button to handel the events.
+Weather zipper can be used for this is unknown...
+
+Top level would be used when: selecting a monster to fight, adding an item to the proceeding fight, (note when fight button pushed all interference ceases),
+seleting which one to run from, to use a crd against, and all things that require clarity in a target.
+
+Q:: how to run a monster conditions method (method that is ran when facing a specific monster on the table?
+    * need auto method on single monster, check required in many cases.
+        # check required on run, fight, use
+    * to switch off is another monster is added to the table. or to switch on when:
+        * assured only one monster on the field of battle, or, suitable selection is made to define which monster is to be challenged.
+    * switch on when another monster is chosen.
+
+
+
