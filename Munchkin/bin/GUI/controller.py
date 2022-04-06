@@ -13,6 +13,7 @@ import bin.GUI.gui_variables as gameVar
 from tkinter import messagebox
 from PIL import ImageTk, Image
 import os
+from pathlib import Path
 # import bin.GUI.gui_tools as tools
 
 gamefont = ('castellar', 12, 'bold')
@@ -780,8 +781,11 @@ class Tools:
     @staticmethod #not working Yet
     def viewer(card_id=None):
 
-        path = "..\\imgs\\cards\\"
-        img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png")
+        # path = "..\\imgs\\cards\\" # this path will not work on linux requires os module and resolve() method
+        # img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") #dependent on windows os
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(card_id)}.png')) # works regardless of os
+
         return img
 
 
@@ -792,3 +796,13 @@ if __name__ == "__main__":
     app.mainloop()
 
 # Main().mainloop(), # removes the instance (self) which is needed for later activities
+from pathlib import Path
+import os
+
+
+#
+# print(str(Path(__file__).resolve().parent.parent))
+# BASE_DIR = Path(__file__).resolve().parent.parent
+#
+# print(os.path.join(BASE_DIR, 'bin', 'imgs', 'cards', f'{str(card_id)}.png'))
+
