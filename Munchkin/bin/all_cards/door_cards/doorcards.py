@@ -154,9 +154,9 @@ class Moncurse(MonTools):
     door_cards = [
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
         {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method': "below_waist", "static": "no_outrun"},
-        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': "loose_level"},
-        # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': "loose_level", "static":"shade"},
-        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': "monkey_business"},
+        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': "loose_level"},
+        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': "loose_level", "static":"shade"},
+        {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': "monkey_business"},
 
         ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
         # {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': 'loose_footgear'},
@@ -224,32 +224,33 @@ class Moncurse(MonTools):
     @classmethod
     def __repr__(cls):
         """Card test request check"""
-        return cls.door_cards[0]["name"] # list index, dict name
+        return cls.door_cards[0]["name"] # list index, dict name cls=
 
     def card_meth(self, card, action=None, value=None):
         """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
         print("CARD METHOD TEST")
-        test_type = "method" # card key.  method,
-        if card.get(test_type, "Method not in card"):
+        test_type = "static" # card key.  method, This ois to be passed before play when selecting a monster to action
+        if card.get(test_type, "Method not in card"): # checks to see if test_type in card.
             value = card[test_type] # gets value stored at card key (test_type)
             print(value)
-            get_method = MonTools.method_types[value] #returns inactive method #looks up method with key assigning inactive value
+            get_method = MonTools.method_types[value] # returns inactive method #looks up method with key assigning inactive value
             get_method(self, action, value) # action 'on' or 'off', value level to add/ remove
 
-    def __getattr__(self, item):
-        """simulates player attribs for the instance m1 when called by monster mehtods"""
-        if item == "level": # catches m1.level (FROM CARD METHS) setting to 4 mimicking a player with a level of 4.
+    def __getattr__(self, attrib):
+        """simulates player attribs for the instance m1 when called by monster mehtods. Acts as attribute not found lookup."""
+        if attrib == "level": # catches m1.level (FROM CARD METHS) setting to 4 mimicking a player with a level of 4.
             return 4 # provides m1 with player traits of level
-        elif item == "gender":
+        elif attrib == "gender":
             return "male" # change according to requirement
-        elif item == "klass" or item == "klass2":
+        elif attrib == "klass" or attrib == "klass2":
             return {"name": "elf"} # mock class card dict, Change elements according to the required class
 
 
 m1 = Moncurse()
 if __name__ == "__main__":
+    print(m1)
     # print(Moncurse)
-    card = m1.door_cards[2] # draws specific card
+    card = m1.door_cards[0] # draws specific card
     print(card) # show card
     m1.card_meth(card, action="on") # for methods that require action to turn off or on.
     m1.card_meth(card, action="off")

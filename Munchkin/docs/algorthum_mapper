@@ -23,7 +23,7 @@ contents:
 controller.py: provides front end logic and building blocks for GUI
 
 gui_variables.py (referred to as game_var): acts as a IPC script that controller.py can interact with and game_loop.py
-can change without creating conflicting imports and converluted return statements.
+can change without creating conflicting imports and convoluted return statements.
 This create a clear uncomplicated area that values may be seen, like game options, or stored without obfuscation.
 
 game_loop.py (referred to as engine): location of all the backend logic that called from the GUI, generic card methods
@@ -93,7 +93,10 @@ info on outcome
         other player interference, selecting items to use for or against
 
     FIGHT OPTION:
-        fight monster/s (first in list)
+        fight monster/s (first in list or selected...)
+        If monster has a static method (const effect) this need to be activated before any actions.
+        if additional players want to interfere/help action the methods
+
 
         FIGHT OUTCOME:
             Constant outcome:
@@ -102,8 +105,8 @@ info on outcome
             Win specific:
                 any assisting players help condition met (if treasure distribute according to terms, gold transfer)
                 treasure distributed
-                level increase +1 per monster
-                END FIGHT
+                level increase +n dependent on monster
+
 
             Death/BADSTUFF:
                 if Death:
@@ -114,7 +117,11 @@ info on outcome
                     END PLAYER TURN
                 If BADSTUFF:
                     referer to Monster card as associated methods (require processor function)
-                    END FIGHT
+
+
+            END FIGHT
+            Remove monster specific static methods
+
     RUN OPTION:
        check run attempt condition true or false (cant run from same monmster unless item allows)
        other player/s interference option
