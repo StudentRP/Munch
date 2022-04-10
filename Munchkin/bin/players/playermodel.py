@@ -228,14 +228,14 @@ class Player(MonTools, T_tools):
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, card, calltype=None, action=None): # calltype = method or static, action on or off,
+    def card_meths(self, card, calltype=None, action=None, *args, **kwargs): # calltype = method or static, action on or off.
         """link to card methods for active effect on player action =add, conditions or remove"""
         print(f"In player card_meth. Calltype: {calltype}, Action: {action}") # info on meth used and status
         """will use add/remove suited to door cards, loose cases and curse canceling"""
         for key, val in MonTools.method_types.items(): # look up methods associated to all cards in doorcards.py
-            if key == card.get(calltype): # key = "loose_footgear", if the key matches the value of the cards ie method: "loose_footgear" method is to be called
+            if key == card.get(calltype): # tests all keys agains all methods/static in a card.ie key = "loose_footgear", if the key matches the value of the cards 'method' or 'static': "loose_footgear" this method is called
                 print(f"the key is {key}")
-                val(self, action) # action is on or off
+                val(self, action, args, kwargs) # take the value of the key and calls the method associated to it with the given parameters; action is on or off. Simple on/off switch for the card to make changes to the player (self arg).
 
 
 """

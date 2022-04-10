@@ -47,7 +47,7 @@ class Options:
 
 class CardDraw:
     """card variables associated to game play."""
-    door_attempts = 1 #default = 1 (True)
+    door_attempts_remaining = 1 #default = 1 (True)
 
 
 class PlayerAtribs:

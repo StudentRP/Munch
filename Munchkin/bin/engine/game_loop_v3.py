@@ -150,7 +150,7 @@ class PlayerSetUp:
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
-                cards.in_play.append(card) # places card on table. functionality returned to gui. TODO this is where to create lol on table, need downstream processing changed
+                cards.in_play[0].append(card) # places card on table in the lol for the first fight. functionality returned to gui. TODO need downstream processing changed for the fight
                 print("This is the card in play;", cards.in_play)
 
 

@@ -38,6 +38,7 @@ class MonTools:
             self.unknown("SupperMunchkin")
 
     def half_breed(self, action=None):
+        """method for changing player flag"""
         print("in halfbreed")
         if action == "on":
             self.race_unlock = True
@@ -136,8 +137,8 @@ class MonTools:
             self.level -= 1
         print(f"player level after is : {self.level}")
 
-    def wandering_monster(self):
-        return lol_builder(card)
+    # def wandering_monster(self):
+    #     return lol_builder(card)
 
     method_types = {'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
