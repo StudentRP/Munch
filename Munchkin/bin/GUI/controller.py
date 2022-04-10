@@ -398,6 +398,7 @@ class MainLoop(tk.Frame):
         self.tblframe.pack(fill="both", expand=True)
 
         self.notifications = tk.Frame(self.tblframe)
+
         self.notifications.pack(side="top", fill="x", expand=True)
 
         self.message = tk.Label(self.notifications, textvariable=controller.message)
@@ -444,7 +445,7 @@ class MainLoop(tk.Frame):
 
         #main actions
         door_card = engine.deal_handler("door") # fetch a door card
-        engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts)  # defines the actions to be taken with he card
+        engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts)  # defines the actions to be taken with he card...TODO should this be moved to bottom???
 
         #card viewing
         if gameVar.CardDraw.door_attempts: # first kick of door (always get this at start of turn!)
@@ -742,8 +743,6 @@ class CardVeiw():
         win.mainloop()
 
 
-
-
 class Tools:
     """method sets to uphold dry programing"""
 
@@ -778,7 +777,7 @@ class Tools:
         app.update_atrib_frame() # updates the GUI with the new player info
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
-    @staticmethod #not working Yet
+    @staticmethod
     def viewer(card_id=None):
 
         # path = "..\\imgs\\cards\\" # this path will not work on linux requires os module and resolve() method
@@ -789,20 +788,11 @@ class Tools:
         return img
 
 
-
 if __name__ == "__main__":
     app = Main()
 
     app.mainloop()
 
 # Main().mainloop(), # removes the instance (self) which is needed for later activities
-from pathlib import Path
-import os
 
-
-#
-# print(str(Path(__file__).resolve().parent.parent))
-# BASE_DIR = Path(__file__).resolve().parent.parent
-#
-# print(os.path.join(BASE_DIR, 'bin', 'imgs', 'cards', f'{str(card_id)}.png'))
 

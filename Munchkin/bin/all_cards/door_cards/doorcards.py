@@ -136,6 +136,9 @@ class MonTools:
             self.level -= 1
         print(f"player level after is : {self.level}")
 
+    def wandering_monster(self):
+        return lol_builder(card)
+
     method_types = {'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
                     "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus}

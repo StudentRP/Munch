@@ -150,7 +150,7 @@ class PlayerSetUp:
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
-                cards.in_play.append(card) # places card on table. functionality returned to gui. TODO this is where to create lol on table
+                cards.in_play.append(card) # places card on table. functionality returned to gui. TODO this is where to create lol on table, need downstream processing changed
                 print("This is the card in play;", cards.in_play)
 
 
@@ -339,6 +339,7 @@ if __name__ == "__main__":
     # NumberOfPlayers().select_players() # starts game by activating NOP building the objects, and activating select_players
     # running wach line.
     engine.player_name_gender()
+
 
 
 

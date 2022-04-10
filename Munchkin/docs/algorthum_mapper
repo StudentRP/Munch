@@ -156,7 +156,7 @@ END TURN
 #####################################################
  Next player
  condition check alive
-    if True
+    if alive == False and premdeath == False
         reset condition
         END TURN
 
@@ -320,7 +320,7 @@ GameOptions, toplevel
 
     GameOptions.destroy(self), tk.method
         toplevel with options is destroyed after acknowledging messagebox
-
++
 controller.StartPg
 player can now either re-enter options of press start
 
