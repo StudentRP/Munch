@@ -79,7 +79,7 @@ class Table(Treasure, Moncurse): # inherits from
     def __init__(self):
         self.card_sop = Dealer() # has-a dealer
         self.burn_pile = []
-        self.in_play = []
+        self.in_play = [[]] # lol for first monster
         self.dice_sop = Dice()
 
     def add_to_burn(self, discard):

@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="docs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/game_loop_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/game_loop_v3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,8 +174,7 @@
       <workItem from="1640952454199" duration="648000" />
       <workItem from="1649103067776" duration="360000" />
       <workItem from="1649237457571" duration="2195000" />
-      <workItem from="1649273824130" duration="6676000" />
-      <workItem from="1649938477233" duration="1987000" />
+      <workItem from="1649273824130" duration="6052000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -201,14 +204,7 @@
       <option name="project" value="LOCAL" />
       <updated>1649280322103</updated>
     </task>
-    <task id="LOCAL-00005" summary="docs">
-      <created>1649619777519</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1649619777519</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

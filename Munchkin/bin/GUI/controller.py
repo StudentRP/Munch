@@ -416,7 +416,7 @@ class MainLoop(tk.Frame):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # meth for checking sack size of player
-        gameVar.CardDraw.door_attempts = 1 # resets door kicks for next player.. Should change to false
+        gameVar.CardDraw.door_attempts_remaining = 1 # resets door kicks for next player.. Should change to false
         self.canvas.delete("all")  # clears the canvas(table) for new player
         # Methods that need to be applied to a player for next turn.
         self.door_button.config(state="normal") # enables kick door button
@@ -436,32 +436,33 @@ class MainLoop(tk.Frame):
         print(" Turn ended!\n", "."*10, "\n")
 
     def door(self):
-        """game actions for door. cards drawn from door"""
+        """game actions for door. cards drawn from door and put in location ready for next action if monster, actioned if other."""
         print("\nKicking door!")
         player = gameVar.GameObjects.active_player
         self.message2.destroy()  # removes dev label
 
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
 
-        #main actions
+        # main actions
         door_card = engine.deal_handler("door") # fetch a door card
-        engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts)  # defines the actions to be taken with he card...TODO should this be moved to bottom???
+        engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts_remaining)  # defines the actions to be taken with the card ie if monster/curse ect or 2nd draw action.
 
-        #card viewing
-        if gameVar.CardDraw.door_attempts: # first kick of door (always get this at start of turn!)
+        # 1st attempt, gui setup
+        if gameVar.CardDraw.door_attempts_remaining: # first kick of door (always get this at start of turn!) == 1(True)
             print("VIEWING CARD")
 
+            # actions to display card
             self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
-            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas.. will need meth for this to add cards in linear fashion
+            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas. will need meth for this to add cards in linear fashion
 
-            #broadcast
-            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # updated from door_card_designator for genearl object not monster or curse
+            # broadcast new message
+            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # gui side action for a card that not mon/curse
                 gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
-            app.update_message("show") #update the broadcast message
+            app.update_message("show") # update the broadcast message
 
-            #if monster do this and turn off these buttons.
+            # if monster set the following button configs.
             if door_card["type"] == "monster":
-                # player.card_meths(door_card, 'static', 'on')  ######## will cause probs with monster individuality ######################
+                player.card_meths(door_card, 'static', 'on')  ######## will cause probs with monster individuality ######################
 
                 self.door_button.config(state="disabled") # kick door
                 self.weapons_button.config(state="disabled") # weapons
@@ -469,10 +470,10 @@ class MainLoop(tk.Frame):
                 self.sell_button.config(state="disabled") # sell
                 self.fight_button.config(state="normal") # fight
                 self.run_away_button.config(state="normal") # run
-                #meth to return card, use id to put card pic
+                # meth to return card, use id to put card pic
 
         # 2nd attempt circumstance
-        elif gameVar.CardDraw.door_attempts == 0:
+        elif gameVar.CardDraw.door_attempts_remaining == 0:
             print("2nd kick activated")
             gameVar.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
             app.update_message("show")  # update the broadcast message
@@ -482,9 +483,10 @@ class MainLoop(tk.Frame):
             self.end_turn_button.config(state="normal") # enables fight
             app.update_message("show")
 
-        gameVar.CardDraw.door_attempts = 0  # set to false
-        Tools.fluid_player_info() # updates any changes cause by curses
-        print("num of kicks", gameVar.CardDraw.door_attempts)
+        # final end of method setup
+        gameVar.CardDraw.door_attempts_remaining = 0  # set to false after first kick (always runs on this button)
+        Tools.fluid_player_info() # updates any changes cause by status effecting cards to the player............................right place?
+        print("Door attempts:zero= last attempt:: ", gameVar.CardDraw.door_attempts_remaining)
 
     # def update_info(self): # may be redundant for TOOLS fluid_player_info just button link left
     #     """method to update a player info window with any changes ie halfbreed ect"""
@@ -497,9 +499,12 @@ class MainLoop(tk.Frame):
 
     def fight(self):
         ### NEEDS CONTROL TO ASK WHICH MONSTER TO FIGHT IF MORE THATN ONE THEN WAY TO TURN ON ANY MONSTER METHODS, THINK TL WITH CB & CARD INFO
+        #method to call monster selection
         print("Fight button pressed")
         selfobj = app.frames[MainLoop]
-        result = engine.fight() # helper may be added when sorting it
+
+        result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
+
         app.update_message("show") # name and lvl of monster
         if result == "win":
             self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
@@ -756,10 +761,10 @@ class Tools:
 
     @staticmethod
     def fluid_player_info():
-        """class for showing individual player info ie klass2 race2"""
+        """class for showing individual player info ie klass2 race2 and updating any changes that may affect the player"""
         selfid = app.frames[MainLoop]  # simplifies attachment to value for direct access.
 
-        if not gameVar.GameObjects.active_player.race_unlock:
+        if not gameVar.GameObjects.active_player.race_unlock: # linked to player flag triggered by specific card.
             selfid.race2_option.grid_forget()
             selfid.race2_optionb.grid_forget()
         else:
