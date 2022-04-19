@@ -9,7 +9,7 @@ Considerations:
 
     """
 
-import bin.GUI.gui_variables as gameVar
+import bin.GUI.variables_library as gameVar
 
 
 class P_tools():

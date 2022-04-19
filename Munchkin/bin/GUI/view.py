@@ -5,11 +5,10 @@ Main gui for Munchkin, version 4 (legacy: gui_v3)
 """
 import tkinter as tk
 import tkinter.ttk as ttk
-from bin.engine.game_loop_v3 import engine  # imports the instance
-# import bin.engine.game_loop_v3 as engine #for game loop clean up
+from bin.engine.controller import engine  # imports the instance
 from bin.all_cards.table import cards
 import bin.engine.cut_scenes as cs
-import bin.GUI.gui_variables as gameVar
+import bin.GUI.variables_library as library
 from tkinter import messagebox
 from PIL import ImageTk, Image
 import os
@@ -79,31 +78,31 @@ class Main(tk.Tk):
     def update_atrib_frame(self):
         """Binds all the labels to the gamevar for player change with the set method"""
         self.geometry("800x600+320+20") # changes the geometry when called ## need to move
-        self.name.set(gameVar.PlayerAtribs.player_name)
-        self.gender.set(gameVar.PlayerAtribs.player_gender)
-        self.race.set(gameVar.PlayerAtribs.player_race)
-        self.race2.set(gameVar.PlayerAtribs.player_race2)
-        self.klass.set(gameVar.PlayerAtribs.player_klass)
-        self.klass2.set(gameVar.PlayerAtribs.player_klass2)
-        self.level.set(gameVar.PlayerAtribs.player_level)
-        self.bonus.set(gameVar.PlayerAtribs.player_bonus)
-        self.wallet.set(gameVar.PlayerAtribs.player_wallet)
+        self.name.set(library.PlayerAtribs.player_name)
+        self.gender.set(library.PlayerAtribs.player_gender)
+        self.race.set(library.PlayerAtribs.player_race)
+        self.race2.set(library.PlayerAtribs.player_race2)
+        self.klass.set(library.PlayerAtribs.player_klass)
+        self.klass2.set(library.PlayerAtribs.player_klass2)
+        self.level.set(library.PlayerAtribs.player_level)
+        self.bonus.set(library.PlayerAtribs.player_bonus)
+        self.wallet.set(library.PlayerAtribs.player_wallet)
 
-        self.l_hand.set(gameVar.PlayerAtribs.player_l_hand)
-        self.r_hand.set(gameVar.PlayerAtribs.player_r_hand)
-        self.two_hand.set(gameVar.PlayerAtribs.player_two_hand)
+        self.l_hand.set(library.PlayerAtribs.player_l_hand)
+        self.r_hand.set(library.PlayerAtribs.player_r_hand)
+        self.two_hand.set(library.PlayerAtribs.player_two_hand)
 
-        self.headgear.set(gameVar.PlayerAtribs.player_headgear)
-        self.armor.set(gameVar.PlayerAtribs.player_armor)
-        self.knees.set(gameVar.PlayerAtribs.player_knees)
-        self.footgear.set(gameVar.PlayerAtribs.player_footgear)
-        self.necklace.set(gameVar.PlayerAtribs.player_necklace)
+        self.headgear.set(library.PlayerAtribs.player_headgear)
+        self.armor.set(library.PlayerAtribs.player_armor)
+        self.knees.set(library.PlayerAtribs.player_knees)
+        self.footgear.set(library.PlayerAtribs.player_footgear)
+        self.necklace.set(library.PlayerAtribs.player_necklace)
 
     def update_message(self, action=None):
         if action == "show":
-            self.message.set(gameVar.GameObjects.message) # grabs message stored in gamevar messages
+            self.message.set(library.GameObjects.message) # grabs message stored in gamevar messages
         elif action == "dev":
-            self.message2.set(gameVar.GameObjects.message2)
+            self.message2.set(library.GameObjects.message2)
         else:
             self.message.set("")
             self.message2.set("")
@@ -189,12 +188,12 @@ class GameOptions(tk.Toplevel):
 
     def setopts(self):
         """Sets gamevar options to the new values provided with the get() method used for tkvars. """
-        gameVar.Options.cards_dealt = self.initial_deal.get() # gets value stored in the bound tkvar associated to initial_deal
-        gameVar.Options.win_lvl = self.maxlvl.get()
-        gameVar.Options.perm_death = self.permadeath.get()
-        gameVar.Options.carry_weight = self.carry_weight.get()
-        message = f"Starting deal: {gameVar.Options.cards_dealt}\nWin level:{gameVar.Options.win_lvl}\n" \
-                  f"Carry weight: {gameVar.Options.carry_weight}\nPerm_a_death: {gameVar.Options.perm_death}"
+        library.Options.cards_dealt = self.initial_deal.get() # gets value stored in the bound tkvar associated to initial_deal
+        library.Options.win_lvl = self.maxlvl.get()
+        library.Options.perm_death = self.permadeath.get()
+        library.Options.carry_weight = self.carry_weight.get()
+        message = f"Starting deal: {library.Options.cards_dealt}\nWin level:{library.Options.win_lvl}\n" \
+                  f"Carry weight: {library.Options.carry_weight}\nPerm_a_death: {library.Options.perm_death}"
         messagebox.showinfo("Settings Changed!", message) # tk built in message
         GameOptions.destroy(self) # destroys toplevel after all actions complete.
 
@@ -221,8 +220,8 @@ class PlayerSelect(tk.Frame):
     def playersetter(self):
         """Binds values from spinbox to gui_var for later use and calls next stage. Calls player slice and meth to set
         initial player cards. COULD USE A INSTANCE FACTORY TO BUILD PLAYERS"""
-        gameVar.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
-        gameVar.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
+        library.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
+        library.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
         engine.select_players() #creates slice object (session_players) and calls dealer to hand each a starting cards set
         PlayerInfo() # each player in session_players sets their name and gender in a toplevel window.
 
@@ -273,16 +272,16 @@ class PlayerInfo(tk.Toplevel):
         Secondary requirements: Increments arbitrary label_counter & counts down from the number of players in-game
         ensuring all get attribute assignment. """
 
-        players_assign = gameVar.StartVariables.new_players # players_assign  = total players_assign of players in play ie 4.
+        players_assign = library.StartVariables.new_players # players_assign  = total players_assign of players in play ie 4.
         if players_assign >= 1: # loop wont work as branch needs to be restarted per player
             players_assign -= 1 # decreases the num of new pLayer integer to count down players_assign of players left to assign
             PlayerInfo.label_counter += 1 # increase player counter for arbitrary label in class scope
-            gameVar.PlayerAtribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
-            gameVar.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
+            library.PlayerAtribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
+            library.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
             engine.player_name_gender(PlayerInfo.list_indexer) # method to index session_players list for specific player and set name and gender attribs
             PlayerInfo.list_indexer = PlayerInfo.list_indexer + 1 # increases index value so looping will call next player in session_players list
             PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
-            gameVar.StartVariables.new_players = players_assign # gamevar is bound to the new value for players_assign
+            library.StartVariables.new_players = players_assign # gamevar is bound to the new value for players_assign
 
             if players_assign != 0: # loop for next player
                 PlayerInfo() # rebuilds toplevel anew for next player
@@ -291,7 +290,7 @@ class PlayerInfo(tk.Toplevel):
                 PlayerInfo.destroy(self) # final destruction of top window
                 #~~~~~~~~ debug loop
                 print("\nPlayers in game:", end=" ")
-                for players in gameVar.GameObjects.session_players: # loop to see all player names
+                for players in library.GameObjects.session_players: # loop to see all player names
                     print(players.name.title(), end=", ") # checks all players names assigned in session_players
                 print("\n...............")
                 #~~~~~~~~~~~~~~~
@@ -416,7 +415,7 @@ class MainLoop(tk.Frame):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # meth for checking sack size of player
-        gameVar.CardDraw.door_attempts_remaining = 1 # resets door kicks for next player.. Should change to false
+        library.CardDraw.door_attempts_remaining = 1 # resets door kicks for next player.. Should change to false
         self.canvas.delete("all")  # clears the canvas(table) for new player
         # Methods that need to be applied to a player for next turn.
         self.door_button.config(state="normal") # enables kick door button
@@ -427,7 +426,7 @@ class MainLoop(tk.Frame):
         self.run_away_button.config(state="disabled")  # run
         # app.update_message() #clears all messages
 
-        engine.player_order(gameVar.GameObjects.active_player) # sends active player rebind new player in game_loop
+        engine.player_order(library.GameObjects.active_player) # sends active player rebind new player in game_loop
         Tools.fluid_player_info() # adds or removes player class2/race2 option
         app.update_message()  # clears all messages
         app.update_message("show") # updates main broadcast message
@@ -438,17 +437,17 @@ class MainLoop(tk.Frame):
     def door(self):
         """game actions for door. cards drawn from door and put in location ready for next action if monster, actioned if other."""
         print("\nKicking door!")
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         self.message2.destroy()  # removes dev label
 
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
 
         # main actions
         door_card = engine.deal_handler("door") # fetch a door card
-        engine.door_card_designator(door_card, door_attempts=gameVar.CardDraw.door_attempts_remaining)  # defines the actions to be taken with the card ie if monster/curse ect or 2nd draw action.
+        engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining)  # defines the actions to be taken with the card ie if monster/curse ect or 2nd draw action.
 
         # 1st attempt, gui setup
-        if gameVar.CardDraw.door_attempts_remaining: # first kick of door (always get this at start of turn!) == 1(True)
+        if library.CardDraw.door_attempts_remaining: # first kick of door (always get this at start of turn!) == 1(True)
             print("VIEWING CARD")
 
             # actions to display card
@@ -457,7 +456,7 @@ class MainLoop(tk.Frame):
 
             # broadcast new message
             if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # gui side action for a card that not mon/curse
-                gameVar.GameObjects.message = f"Your card is: {door_card.get('name')}"
+                library.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show") # update the broadcast message
 
             # if monster set the following button configs.
@@ -473,9 +472,9 @@ class MainLoop(tk.Frame):
                 # meth to return card, use id to put card pic
 
         # 2nd attempt circumstance
-        elif gameVar.CardDraw.door_attempts_remaining == 0:
+        elif library.CardDraw.door_attempts_remaining == 0:
             print("2nd kick activated")
-            gameVar.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
+            library.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
             app.update_message("show")  # update the broadcast message
             self.pic = Tools.viewer(0)  # gets card pic face down
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
@@ -484,9 +483,9 @@ class MainLoop(tk.Frame):
             app.update_message("show")
 
         # final end of method setup
-        gameVar.CardDraw.door_attempts_remaining = 0  # set to false after first kick (always runs on this button)
+        library.CardDraw.door_attempts_remaining = 0  # set to false after first kick (always runs on this button)
         Tools.fluid_player_info() # updates any changes cause by status effecting cards to the player............................right place?
-        print("Door attempts:zero= last attempt:: ", gameVar.CardDraw.door_attempts_remaining)
+        print("Door attempts:zero= last attempt:: ", library.CardDraw.door_attempts_remaining)
 
     # def update_info(self): # may be redundant for TOOLS fluid_player_info just button link left
     #     """method to update a player info window with any changes ie halfbreed ect"""
@@ -527,7 +526,7 @@ class MainLoop(tk.Frame):
     def run(self):
         engine.card_method_activator("persistent", "on", table_card_index=0) # grabs the 1st card put on the table to run persistent method. TODO: change card_num for a card selector
 
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         if player.run_away: # checks ability to run from player attrib
             result = engine.run()
             if result == "success":
@@ -536,81 +535,81 @@ class MainLoop(tk.Frame):
                 self.run_away_button.config(state="disabled")  # run
                 self.canvas.delete("all")  # clears the canvas, not quite right as will remove all cards TAG maybe?
             else:
-                gameVar.GameObjects.message = "You are trapped! All that is left is to fight!"
+                library.GameObjects.message = "You are trapped! All that is left is to fight!"
                 app.update_message("show")
                 self.run_away_button.config(state="disabled")  # run
 
         else:
-            gameVar.GameObjects.message = "This is not a fight you can run from!"
+            library.GameObjects.message = "This is not a fight you can run from!"
             app.update_message("show")
             self.run_away_button.config(state="disabled")  # run
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
-        gameVar.GameObjects.message = "Weapons list"
+        library.GameObjects.message = "Weapons list"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.inventory("type", "weapon") # key= 'type', value = 'weapon'
         # print(gameVar.GameObjects.selected_items)  list all items placed in list that meet the criteria above.
         OwnedItems("Weapons owned", "weap")
 
     def list_armor(self):
-        gameVar.GameObjects.message = "Armour list"
+        library.GameObjects.message = "Armour list"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
         OwnedItems("Armor Owned", "armor")
 
     def consumables(self):
-        gameVar.GameObjects.message = "Consumable items"
+        library.GameObjects.message = "Consumable items"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.inventory("type", "disposable")
         OwnedItems("One shot items", "consume")
 
     def list_sell(self):
         """builds toplevel with sellable items"""
-        gameVar.GameObjects.message = "Sell selected"
+        library.GameObjects.message = "Sell selected"
         app.update_message("show")
         engine.scrub_lists() # resets all lists for next action
-        player = gameVar.GameObjects.active_player # gets current player
+        player = library.GameObjects.active_player # gets current player
         player.item_by_key("sell") # generates list of sellable cards passed on to gameVar.selected_items
         # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
     def hand(self):
-        gameVar.GameObjects.message = "Hidden items selected"
+        library.GameObjects.message = "Hidden items selected"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.inventory("category", "door")
         OwnedItems("Hidden Items", "hidden")
 
     def interfere(self): #will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
-        gameVar.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
+        library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
 
     def ask_for_help(self): #mot set
-        gameVar.GameObjects.message = "Toplevel window where another player can help... for a price.."
+        library.GameObjects.message = "Toplevel window where another player can help... for a price.."
         app.update_message("show")
         Table_Target_Selector()
 
     def list_sack(self):
         """shows all items in sack"""
-        gameVar.GameObjects.message = "The contents of sack:"
+        library.GameObjects.message = "The contents of sack:"
         app.update_message("show")
         engine.scrub_lists()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.inventory("category", "treasure")
         OwnedItems("Sack Items")
 
     def list_equipped(self):
         """list showing all items that are equipped"""
         engine.scrub_lists()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.equipped_items("list_equipped")
         OwnedItems("Equipped Items", "remove")
 
@@ -629,7 +628,7 @@ class OwnedItems(tk.Toplevel):
         self.set_but = set_but
         # print(f"Top level self: {self}")
 
-        if not gameVar.GameObjects.selected_items: # if nothing in list display a label message
+        if not library.GameObjects.selected_items: # if nothing in list display a label message
             fm = tk.Frame(self)
             fm.pack(side="top", expand=True)
             tk.Label(fm, text="No cards to show").pack(side='top')
@@ -652,7 +651,7 @@ class OwnedItems(tk.Toplevel):
 
             # specific labels and tk variable
             set_row = 1 # row incrementor for loop
-            for card in gameVar.GameObjects.selected_items: # for each card in the selected items
+            for card in library.GameObjects.selected_items: # for each card in the selected items
                 status = tk.IntVar() # for keeping track of check buttons, 1 per loop ### TODO can i change to bool? will loose list then
                 tk.Label(f, text=card['name']).grid(row=set_row, column=0, sticky="nw")
                 tk.Label(f, text=card['type']).grid(row=set_row, column=1, sticky="nw")
@@ -664,8 +663,8 @@ class OwnedItems(tk.Toplevel):
                     tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
                 tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c)).grid(row=set_row, column=4)
 
-                gameVar.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
-                gameVar.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
+                library.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
+                library.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
 
         # specific buttons
@@ -721,8 +720,8 @@ class Table_Target_Selector(tk.Toplevel):
         self.title('Target Selector')
         self.frame = tk.Frame()
 
-        self.player = gameVar.GameObjects.active_player
-        self.all_players = gameVar.GameObjects.session_players
+        self.player = library.GameObjects.active_player
+        self.all_players = library.GameObjects.session_players
 
         self.frame.pack(fill='both', expand=True)
         # print(self.all_players)
@@ -764,20 +763,20 @@ class Tools:
         """class for showing individual player info ie klass2 race2 and updating any changes that may affect the player"""
         selfid = app.frames[MainLoop]  # simplifies attachment to value for direct access.
 
-        if not gameVar.GameObjects.active_player.race_unlock: # linked to player flag triggered by specific card.
+        if not library.GameObjects.active_player.race_unlock: # linked to player flag triggered by specific card.
             selfid.race2_option.grid_forget()
             selfid.race2_optionb.grid_forget()
         else:
             selfid.race2_option.grid(row=8, column=1, sticky='nsew')
             selfid.race2_optionb.grid(row=8, column=2, sticky='nsew')
-        if not gameVar.GameObjects.active_player.klass_unlock:
+        if not library.GameObjects.active_player.klass_unlock:
             selfid.klass2_option.grid_forget()
             selfid.klass2_optionb.grid_forget()
         else:
             selfid.klass2_option.grid(row=9, column=1, sticky='nsew')
             selfid.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
-        engine.player_attrib_ipc_updater(gameVar.GameObjects.active_player) # ensures all player info is up to
+        engine.player_attrib_ipc_updater(library.GameObjects.active_player) # ensures all player info is up to
         # date and sent to gameVar
         app.update_atrib_frame() # updates the GUI with the new player info
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search

@@ -19,7 +19,7 @@ from Munchkin.bin.all_cards.table import Table # most likely not used here (pos 
 from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
 from Munchkin.bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
-import bin.GUI.gui_variables as gameVar
+import bin.GUI.variables_library as gameVar
 from bin.all_cards.table import cards
 from bin.all_cards.door_cards.doorcards import MonTools
 from bin.all_cards.treasure_cards.treasurecards import T_tools

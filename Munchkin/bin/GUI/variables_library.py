@@ -1,6 +1,6 @@
 """
 ..IPC script..
-local area for all tkinter variables use in the game linking controller.py with engine(game_loop_v3.py).
+local area for all tkinter variables use in the game linking view.py with engine(controller.py).
 This script is updated by gui_v3 with game-loop_v2 requesting data for the logic.
 
 

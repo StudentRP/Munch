@@ -1,4 +1,6 @@
-"""Initiates player personalisation and runs game cycle for each player fetching cards and initiation
+"""
+Controller provudes backend logic to the view script and makes changes to variable library
+Initiates player personalisation and runs game cycle for each player fetching cards and initiation
 each scene of play
 
 Contents functions:
@@ -16,7 +18,7 @@ Contents functions:
 # from Munchkin.bin.engine import cut_scenes as cs
 from Munchkin.bin.all_cards.table import cards, dice
 from random import randint, choice
-import bin.GUI.gui_variables as gameVar
+import bin.GUI.variables_library as library
 from itertools import cycle
 
 from time import sleep
@@ -35,28 +37,28 @@ class PlayerSetUp:
     def __init__(self):
         self.cycle = 0 #needed?
 
-#meths associated to play
+# meths associated to play
 
     def select_players(self): # slices num of available players with gui entry
         """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
          deal_handler is called to provide starting number of cards for each player"""
-        num_of_players = gameVar.StartVariables.new_players # get int representing num of players in current session (from spinbox)
+        num_of_players = library.StartVariables.new_players # get int representing num of players in current session (from spinbox)
         print(f"Number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
-        gameVar.GameObjects.session_players = gameVar.StartVariables.players_available[:num_of_players] # slice creates new list of players in
+        library.GameObjects.session_players = library.StartVariables.players_available[:num_of_players] # slice creates new list of players in
         # session binding to new variable gamevar
         self.deal_handler("start") # Deals cards to all players. results in putting in player.sack. Does not bind to gameVar
 
     def player_name_gender(self, playerindex): # gui attrib, passes session_players index identifying specific instance
         """Gets player with list index and Sets name and gender to that player instance."""
-        player = gameVar.GameObjects.session_players[playerindex] #references a player objects from session_players
+        player = library.GameObjects.session_players[playerindex] #references a player objects from session_players
         player.char_setup() # call to set name and gender of player instance.
 
     def set_random_player(self):
         """Selects random player to start from session_players list. Binds player as active_player and calls
         method to load all attributes of the player (player_attrib_ipc_updater(). parameter is optional but explicit)"""
-        player = choice(gameVar.GameObjects.session_players) # selects random player from list of players
-        gameVar.GameObjects.active_player = player # assigns the selected player to active player in gamevar for gui to see
-        gameVar.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
+        player = choice(library.GameObjects.session_players) # selects random player from list of players
+        library.GameObjects.active_player = player # assigns the selected player to active player in gamevar for gui to see
+        library.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
         self.player_attrib_ipc_updater(player) # arg not needed. Calls method to set all attribs in in gamevar of player
 
 # class Game_Play:
@@ -65,46 +67,46 @@ class PlayerSetUp:
         """Triggered at end of turn. Note 1st player was random and assigned to active_player after player creation.
         Current_player = active player"""
         play = True # win condition need method that will check all players
-        player_gen = cycle(gameVar.GameObjects.session_players) # generator function that cycles a list indefinitely
+        player_gen = cycle(library.GameObjects.session_players) # generator function that cycles a list indefinitely
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
         while play:
             if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
                 print(f"Current player {current_player.name} turn ended\n")
-                gameVar.GameObjects.active_player = next(player_gen) # binds next player to rand_player, (changes x)
-                self.player_attrib_ipc_updater(gameVar.GameObjects.active_player) #  binds new player
-                print(f"{gameVar.GameObjects.active_player.name} has been binded")
+                library.GameObjects.active_player = next(player_gen) # binds next player to rand_player, (changes x)
+                self.player_attrib_ipc_updater(library.GameObjects.active_player) #  binds new player
+                print(f"{library.GameObjects.active_player.name} has been binded")
                 break
-            elif current_player == y and not current_player.alive and not gameVar.Options.perm_death:
+            elif current_player == y and not current_player.alive and not library.Options.perm_death:
                 print(f"print player {current_player} is dead") # move in to conditional for perm-a-death
                 current_player.alive = True # resets player status ##########need per-a-death bit here
-                gameVar.GameObjects.active_player = next(player_gen) # changes x without binding and moves to next player
+                library.GameObjects.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
             else:
                 print(f"{y.name.title()} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
 
-        gameVar.GameObjects.message = f"{gameVar.GameObjects.active_player.name.title()}'s turn..."
+        library.GameObjects.message = f"{library.GameObjects.active_player.name.title()}'s turn..."
 
-    def player_attrib_ipc_updater(self, playerinst=gameVar.GameObjects.active_player): # defaults to gamevar active_player player
+    def player_attrib_ipc_updater(self, playerinst=library.GameObjects.active_player): # defaults to gamevar active_player player
         """Binds all player atribs to gameVar for current player activity. Can take param of a player or grab active_player."""
-        gameVar.PlayerAtribs.player_name = playerinst.name.title()
-        gameVar.PlayerAtribs.player_gender = playerinst.gender.title()
-        gameVar.PlayerAtribs.player_level = playerinst.level
-        gameVar.PlayerAtribs.player_bonus = playerinst.bonus
-        gameVar.PlayerAtribs.player_wallet = playerinst.wallet
-        gameVar.PlayerAtribs.player_race = playerinst.race.title()
-        gameVar.PlayerAtribs.player_race2 = playerinst.race2.title()
-        gameVar.PlayerAtribs.player_klass = playerinst.klass.title()
-        gameVar.PlayerAtribs.player_klass2 = playerinst.klass2.title()
-        gameVar.PlayerAtribs.player_sack = playerinst.sack
-        gameVar.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
-        gameVar.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
-        gameVar.PlayerAtribs.player_two_hand = playerinst.update_bindings("two_hand")
-        gameVar.PlayerAtribs.player_headgear = playerinst.update_bindings("headgear")
-        gameVar.PlayerAtribs.player_armor = playerinst.update_bindings("armor")
-        gameVar.PlayerAtribs.player_knees = playerinst.update_bindings("knees")
-        gameVar.PlayerAtribs.player_footgear = playerinst.update_bindings("footgear")
-        gameVar.PlayerAtribs.player_necklace = playerinst.update_bindings("necklace")
+        library.PlayerAtribs.player_name = playerinst.name.title()
+        library.PlayerAtribs.player_gender = playerinst.gender.title()
+        library.PlayerAtribs.player_level = playerinst.level
+        library.PlayerAtribs.player_bonus = playerinst.bonus
+        library.PlayerAtribs.player_wallet = playerinst.wallet
+        library.PlayerAtribs.player_race = playerinst.race.title()
+        library.PlayerAtribs.player_race2 = playerinst.race2.title()
+        library.PlayerAtribs.player_klass = playerinst.klass.title()
+        library.PlayerAtribs.player_klass2 = playerinst.klass2.title()
+        library.PlayerAtribs.player_sack = playerinst.sack
+        library.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
+        library.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
+        library.PlayerAtribs.player_two_hand = playerinst.update_bindings("two_hand")
+        library.PlayerAtribs.player_headgear = playerinst.update_bindings("headgear")
+        library.PlayerAtribs.player_armor = playerinst.update_bindings("armor")
+        library.PlayerAtribs.player_knees = playerinst.update_bindings("knees")
+        library.PlayerAtribs.player_footgear = playerinst.update_bindings("footgear")
+        library.PlayerAtribs.player_necklace = playerinst.update_bindings("necklace")
 
 # card handling class:
 
@@ -113,11 +115,11 @@ class PlayerSetUp:
         Deal_amount defines how many of the cards are to be returned to a player.
         """
 
-        playerinst = gameVar.GameObjects.active_player # gets current player, at start this is none.
+        playerinst = library.GameObjects.active_player # gets current player, at start this is none.
 
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
-            for player in gameVar.GameObjects.session_players: #loops over each player in session_players
-                player.sack = cards.card_sop.deal_cards(option, cardnum=gameVar.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
+            for player in library.GameObjects.session_players: #loops over each player in session_players
+                player.sack = cards.card_sop.deal_cards(option, cardnum=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
 
         elif option == "door": # Standard gameplay loop on door kick
             print("In deal_handler, retrieving door card & determining fate of card")  # test location
@@ -130,8 +132,8 @@ class PlayerSetUp:
             playerinst.sack = playerinst.sack + add_treasure # DUMPS ALL IN THE ACTIVE_PLAYER.....TODO::Sort how treasure is handled when used as currency for another players help
 
         elif option == "resurrect":
-            if gameVar.Options.perm_death:
-                playerinst.sack = cards.card_sop.deal_cards("start", cardnum=gameVar.Options.cards_dealt)
+            if library.Options.perm_death:
+                playerinst.sack = cards.card_sop.deal_cards("start", cardnum=library.Options.cards_dealt)
             else:
                 print(f"Game over for {playerinst.name}, BUMMER!")
 
@@ -143,20 +145,20 @@ class PlayerSetUp:
         Cards have different fates dependent upon the type of card it is ie: monster, curse, other and the number of
         times the door button is clicked. Also update the message dependent on action
         """
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
 
         if door_attempts: #On first kick of the door. Decides what to do with the cards dependent on situation
 
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
-                gameVar.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
+                library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
                 cards.in_play[0].append(card) # places card on table in the lol for the first fight. functionality returned to gui. TODO need downstream processing changed for the fight
                 print("This is the card in play;", cards.in_play)
 
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
-                gameVar.GameObjects.message = f"The room you have entered has a curse {card.get('name').title()}.\n Lets hope you have protection!"
+                library.GameObjects.message = f"The room you have entered has a curse {card.get('name').title()}.\n Lets hope you have protection!"
                 print("In curse::", player.active_curses)
                 # ~~~~~~~~~~~~~TODO  curse checker method required ie tin hat, ork ect
                 if card.get("duration") == "persistent": # for constant effect curse
@@ -167,7 +169,7 @@ class PlayerSetUp:
                     cards.burn_pile.append(card) # disposes of to burn pile
                     print(f"card duration is one_shot, added to burn pile check:\nBurn pile {cards.burn_pile}")
                 elif card.get("duration") == "timed": ########## for time dependent effect
-                    gameVar.GameObjects.message = f"timed curse card not configured yet" # overrides top message
+                    library.GameObjects.message = f"timed curse card not configured yet" # overrides top message
                     #TODO meth for timed
                     cards.burn_pile.append(card) # disposes of to burn pile
                     print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
@@ -175,20 +177,20 @@ class PlayerSetUp:
             else: # for all other cards that have no direct effect or influence.
                 print(f"Adding {card['name']}to sack.")
                 player.sack.append(card)  # adds card to player's items
-                gameVar.GameObjects.message = f"Adding 2nd draw to sack." # need to be removed dont want to broadcast what other player gets
+                library.GameObjects.message = f"Adding 2nd draw to sack." # need to be removed dont want to broadcast what other player gets
                 return card  # to show if first time only 2nd it hides
 
         else:
             "2nd kick of door (looting room). Will need condition statement if player wants to fight mon from hand, rather than std flow to sack"
             print("adding to sack")
-            gameVar.GameObjects.message = "2nd kck, Adding card to sack"  # 2nd kick
+            library.GameObjects.message = "2nd kck, Adding card to sack"  # 2nd kick
             player.sack.append(card)  # adds to player sack
 
     def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
         """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
         switch on or off the condition"""
         card = cards.in_play[int(table_card_index)] # selects the monster in the fight on the table
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         if scenario == "persistent":
             player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
 
@@ -198,26 +200,26 @@ class PlayerSetUp:
     def zipper(self, action):
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
         action is conduit for card_matcher"""
-        gameVar.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
-        for status in gameVar.GameObjects.check_but_intvar_gen: # gets attribute from object then from the attribute which is an object gets the value stored (list>intvar>get()>1 or 0)
-            gameVar.GameObjects.check_but_boo.append(status.get()) # creates a list of 1s & 0s from check buttons status
-            x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
-            gameVar.GameObjects.zipped_tup = list(zip(x, y)) # result [(card_id,  bool), (card_id, bool)]
+        library.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
+        for status in library.GameObjects.check_but_intvar_gen: # gets attribute from object then from the attribute which is an object gets the value stored (list>intvar>get()>1 or 0)
+            library.GameObjects.check_but_boo.append(status.get()) # creates a list of 1s & 0s from check buttons status
+            x, y = library.GameObjects.check_but_card_ids, library.GameObjects.check_but_boo
+            library.GameObjects.zipped_tup = list(zip(x, y)) # result [(card_id,  bool), (card_id, bool)]
         # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
         self.card_matcher(action)
 
     def card_matcher(self, action):
         """compares tuple to selected_items searching for matching card ids and only passes on cards that contain
         a tuple with the boolean true. Action determines the whats happening to the cards next. """
-        for card in gameVar.GameObjects.selected_items: # for every card in selected_items
-            for tup in gameVar.GameObjects.zipped_tup: # go over every tuple in  zipped_tup. (card_id, bool tuples).
+        for card in library.GameObjects.selected_items: # for every card in selected_items
+            for tup in library.GameObjects.zipped_tup: # go over every tuple in  zipped_tup. (card_id, bool tuples).
                 if tup[0] == card["id"] and tup[1]: # if tup id matches card fid from selected items and bool is True from the checkbox
                     if action == "sell":
-                        gameVar.GameObjects.active_player.sell_item(card)
+                        library.GameObjects.active_player.sell_item(card)
                     elif action in "equip, disposable ,use": # equip/disposable will be treasures
                         self.tri_qualifier(card) # test ~~ok~~
                     elif action == "remove":
-                        player = gameVar.GameObjects.active_player
+                        player = library.GameObjects.active_player
                         player.equipped_items("removal", card)
 
     def tri_qualifier(self, card):
@@ -225,7 +227,7 @@ class PlayerSetUp:
         1st: checks card for a specific restriction that would count against a player due to a specific attrib, ie if u are human u cant use this card.
         2nd part: """
 
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
 
         checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
                   player.klass2: "klass_requirement", player.gender: "gender_requirement"} # card specific requirements to use
@@ -254,7 +256,7 @@ class PlayerSetUp:
                     print(f"{player_attribs} - Dev path")
                     continue
                 else:
-                    gameVar.GameObjects.message = f"You cant use this card, {card_requirement}"
+                    library.GameObjects.message = f"You cant use this card, {card_requirement}"
                     flag = 0
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
@@ -267,7 +269,7 @@ class PlayerSetUp:
 
     def player_treasure_cards(self, card):
         """method to sort the locations of treasure cards that the player has selected"""
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         if card.get("type") == "armor":
             player.equip_armor(card)  # leads to player meth for placing in right place
         elif card.get("type") == "weapon":
@@ -278,32 +280,32 @@ class PlayerSetUp:
             pass # for all other cards ie steeds
 
     def player_door_cards(self, card): #card meth#####################################################
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.card_meths(card, "method", "on")  # link to player to card meths.
         print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
         # meths added at end_turn
 
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""
-        gameVar.GameObjects.selected_items.clear()  # clears the card objects list
-        gameVar.GameObjects.check_but_intvar_gen.clear()  # clears list of intVar objects from check buttons
-        gameVar.GameObjects.check_but_boo.clear()  # clears boolean list
-        gameVar.GameObjects.check_but_card_ids.clear()  # clears card id list
-        gameVar.GameObjects.zipped_tup.clear()  # clears tup list
+        library.GameObjects.selected_items.clear()  # clears the card objects list
+        library.GameObjects.check_but_intvar_gen.clear()  # clears list of intVar objects from check buttons
+        library.GameObjects.check_but_boo.clear()  # clears boolean list
+        library.GameObjects.check_but_card_ids.clear()  # clears card id list
+        library.GameObjects.zipped_tup.clear()  # clears tup list
 
 ##################################################################
     def fight(self, helper=0, additional=0):# helper would be other player interactions. additional is anything else
         """for cards that are monsters and placed on the table"""
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         player.card_meths(card, 'static', 'on') # turns on card static content for fight TODO change to something more relevant than "static"
-        if player.bonus + player.level + helper + gameVar.Fight_enhancers.player_aid \
-                >= card["lvl"] + gameVar.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
+        if player.bonus + player.level + helper + library.Fight_enhancers.player_aid \
+                >= card["lvl"] + library.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
             self.deal_handler('treasure', deal_amount=reward) # fetches treasure for player
-            gameVar.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
+            library.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             player.level += card["level_up"]
             cards.burn_pile.append(card) # removes card
             player.card_meths(card, 'static', 'off') # turns off static card content
@@ -311,7 +313,7 @@ class PlayerSetUp:
             return "win"
         # need action to go up lvl note some cards do more than one level!
         else:
-            gameVar.GameObjects.message = "Fight lost"
+            library.GameObjects.message = "Fight lost"
             print("Fight lost")
             player.card_meths(card, 'method', 'on') # calls card bad stuff
             player.card_meths(card, 'static', 'off') # turns off static effect of card in play
@@ -319,7 +321,7 @@ class PlayerSetUp:
 
     def run(self):
         roll = dice.dice_sop.roll()
-        player = gameVar.GameObjects.active_player
+        player = library.GameObjects.active_player
         print(f"You rolled a {roll}.")
         if roll >= player.run:
             print(f"You rolled a {roll}. You out ran your pursuer.")
