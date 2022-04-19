@@ -222,7 +222,8 @@ class PlayerSelect(tk.Frame):
         initial player cards. COULD USE A INSTANCE FACTORY TO BUILD PLAYERS"""
         library.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         library.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        engine.select_players() #creates slice object (session_players) and calls dealer to hand each a starting cards set
+
+        engine.active_player_creation() # creates list of session players for the game
         PlayerInfo() # each player in session_players sets their name and gender in a toplevel window.
 
 

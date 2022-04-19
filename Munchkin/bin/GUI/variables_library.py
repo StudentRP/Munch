@@ -5,15 +5,12 @@ This script is updated by gui_v3 with game-loop_v2 requesting data for the logic
 
 
 """
-from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10
-
 
 class StartVariables:
 
     # Start game variables
     new_players = 1 # (int) number associated to total players in current game
     player_rand = 1  # number for random player generator for PlayerSelect.playersetter
-    players_available = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10] #all available players !to be sliced!
     selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
 
 
@@ -22,7 +19,7 @@ class GameObjects:
     message = ""
     message2 = ""
 
-    session_players = None  # (list) generated list slice from players_available
+    session_players = []  # (list) generated list slice from players_available CHANGED IN TEST FROM NONE!!!!
     active_player = None # current game player
     all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
@@ -51,7 +48,7 @@ class CardDraw:
 
 
 class PlayerAtribs:
-    """Must mirror whats in game_loop.PlayerSetUp.verbinding and call to bind here!"""
+    """Must mirror whats in controller.PlayerSetUp.verbinding and call to bind here!"""
     player_ref = 0
     player_name = 'BOB' # current session player name
     player_gender = 'male'  # current session player gender

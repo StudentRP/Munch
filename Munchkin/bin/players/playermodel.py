@@ -19,7 +19,7 @@ from Munchkin.bin.all_cards.table import Table # most likely not used here (pos 
 from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
 from Munchkin.bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
-import bin.GUI.variables_library as gameVar
+import bin.GUI.variables_library as library
 from bin.all_cards.table import cards
 from bin.all_cards.door_cards.doorcards import MonTools
 from bin.all_cards.treasure_cards.treasurecards import T_tools
@@ -36,8 +36,7 @@ attributes based on action outcomes."""
 class Player(MonTools, T_tools):
     """Main player class, inherits off card methods making changes to the player."""
 
-    def __init__(self, ref):
-        self.ref = ref # simple form to keep track of players
+    def __init__(self):
         self.name = ""
         self.gender = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
@@ -75,21 +74,20 @@ class Player(MonTools, T_tools):
         return f"\nPLAYER REF:{self.ref}\nName:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
                f"\nBonus:{self.bonus}\nSack:{self.wallet}\n"
 
-    # def __str__(self):
-    #     """developer aid"""
-    #     return f"\nPLAYER INFO:\nName:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
-    #            f"\nBonus:{self.bonus}\n"
+    @classmethod
+    def factory(cls):
+        return Player()
 
     @classmethod
     def gender(cls):
         """Sets gender"""
-        x = gameVar.PlayerAtribs.player_gender # grabs string stored in in game var
+        x = library.PlayerAtribs.player_gender # grabs string stored in in game var
         return x
 
     @classmethod
     def name(cls):
         """Sets name"""
-        x = gameVar.PlayerAtribs.player_name
+        x = library.PlayerAtribs.player_name
         if x == "rory":  # ......................................................................... dev mode
             y = "The_Creator"
             return y
@@ -116,8 +114,8 @@ class Player(MonTools, T_tools):
             self.gender = "bob"
             self.bonus = 200
             self.wallet = 20000
-            gameVar.PlayerAtribs.player_gender = self.gender
-            gameVar.GameObjects.message2 = f"{self.name} is in play, a god among mer mortals!"
+            library.PlayerAtribs.player_gender = self.gender
+            library.GameObjects.message2 = f"{self.name} is in play, A God among mortals!"
 
         #~~~~~~~~~~~~ info
         print(f"The player {self.name.title()} with the gender {self.gender.title()} has been created.")
@@ -126,20 +124,20 @@ class Player(MonTools, T_tools):
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player sack cards that have a specific key and specific value.
         (ie sub_type == armour). returns all sub_types with the val of armor"""
-        gameVar.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
+        library.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
 
     def item_by_key(self, key):# generalised meth for key search
         """Returns list of cards form player sack list that contain the key x. (ie "sell").
         This is generalised meth for key search """
-        gameVar.GameObjects.selected_items = [obj for obj in self.sack if obj.get(key)]
+        library.GameObjects.selected_items = [obj for obj in self.sack if obj.get(key)]
 
     def sell_item(self, card): # called by player.sell_item so self bound to player
         """Call from zipper to sell items, remove cards, reset gameVars and call to add to burn pile"""
         self.wallet += card["sell"] #adds worth of card to player
-        gameVar.GameObjects.message = f"Selling sack {card['name']}, Card added to burn pile. Depth: {len(cards.burn_pile)}"
+        library.GameObjects.message = f"Selling sack {card['name']}, Card added to burn pile. Depth: {len(cards.burn_pile)}"
         x = self.sack.pop(self.sack.index(card)) # removes card from player sack deck
         cards.add_to_burn(x)# adds card to burn pile on table
-        gameVar.GameObjects.message = f"Selling sack {card['name']}, " \
+        library.GameObjects.message = f"Selling sack {card['name']}, " \
                                       f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
         # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
@@ -166,7 +164,7 @@ class Player(MonTools, T_tools):
                 if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
                     card = obj.get(sub_menu) # x is the card object
                     if action == "list_equipped":
-                        gameVar.GameObjects.selected_items.append(card) #adds cards to selected_items list in gameVar
+                        library.GameObjects.selected_items.append(card) #adds cards to selected_items list in gameVar
                         continue
                     elif action == "removal":
                         if card["id"] == my_cards["id"]:
@@ -196,7 +194,7 @@ class Player(MonTools, T_tools):
                     x = self.sack.pop(self.sack.index(card))  # removes cards from sack list
                     self.armor[sub_type] = x  # binds now card to player attribute
                     break
-        gameVar.GameObjects.message = f"Equipping {card['name']}"
+        library.GameObjects.message = f"Equipping {card['name']}"
         self.sum_of_bonuses()
 
     def equip_weapon(self, card):
@@ -207,24 +205,24 @@ class Player(MonTools, T_tools):
                 added_card = self.sack.pop(self.sack.index(card)) # gets list index for pop by calling index() on object thus returning index
                 self.weapons["L_hand"] = added_card
                 self.weapon_count -= card.get("hold_weight")
-                gameVar.GameObjects.message = f"Equipping {card['name']} to left hand"
+                library.GameObjects.message = f"Equipping {card['name']} to left hand"
             elif card["sub_type"] == "1hand" and not isinstance(self.weapons["R_hand"], dict): # not equipped
-                gameVar.GameObjects.message = f"Equipping {card['name']} to right hand"
+                library.GameObjects.message = f"Equipping {card['name']} to right hand"
                 added_card = self.sack.pop(self.sack.index(card))
                 self.weapons["R_hand"] = added_card
                 self.weapon_count -= card.get("hold_weight")
             elif card["sub_type"] == "2hand" and not isinstance(self.weapons["two_hand"], dict):
                 if isinstance(self.weapons["L_hand"], dict) or isinstance(self.weapons["R_hand"], dict):
-                    gameVar.GameObjects.message = "You can not equip this item while you have items in your other hands"
+                    library.GameObjects.message = "You can not equip this item while you have items in your other hands"
                 elif not isinstance(self.weapons["L_hand"], dict) and not isinstance(self.weapons["R_hand"], dict):
-                    gameVar.GameObjects.message = f"Equipping {card['name']} to both hands"
+                    library.GameObjects.message = f"Equipping {card['name']} to both hands"
                     added_card = self.sack.pop(self.sack.index(card))
                     self.weapons["two_hand"] = added_card
                     self.weapon_count -= card.get("hold_weight")
             else: # cheat card section/ big item
                 pass
         else:
-            gameVar.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"
+            library.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
@@ -246,22 +244,8 @@ calls required from; player select card, door kick for static ie no run, and loo
 """
 
 
-p1 = Player(1) #passes reference (ref)
-p2 = Player(2)
-p3 = Player(3)
-p4 = Player(4)
-p5 = Player(5)
-p6 = Player(6)
-p7 = Player(7)
-p8 = Player(8)
-p9 = Player(9)
-p10 = Player(10)
-# p1.get_treasure()
-
-
-
 if __name__ == '__main__':
-    p1 = Player(1)
+    p1 = Player()
     print(p1)
     # p1.get_treasure() # duplicate val is print state from Handler class method (note is same: GOOD)
     # p1.char_setup() # calls player name/gender setup, to be called after player number select

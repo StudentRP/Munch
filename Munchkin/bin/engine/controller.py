@@ -13,9 +13,7 @@ Contents functions:
 """
 
 
-# from Munchkin.bin.players.playermodel import p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 # creates circular
-# from Munchkin.bin.engine.game_logic import start_choice as game_logic_start_choice
-# from Munchkin.bin.engine import cut_scenes as cs
+from Munchkin.bin.players.playermodel import Player
 from Munchkin.bin.all_cards.table import cards, dice
 from random import randint, choice
 import bin.GUI.variables_library as library
@@ -27,8 +25,7 @@ from time import sleep
 ##################################################################
 # main loop
 ##################################################################
-# first = True
-""" V3.0  """
+""" V4.0  """
 
 
 class PlayerSetUp:
@@ -39,14 +36,11 @@ class PlayerSetUp:
 
 # meths associated to play
 
-    def select_players(self): # slices num of available players with gui entry
-        """called from gui (playersetter method) takes gameVar int and uses to slice list of player instances and binds to new gameVar (active_players).
-         deal_handler is called to provide starting number of cards for each player"""
-        num_of_players = library.StartVariables.new_players # get int representing num of players in current session (from spinbox)
-        print(f"Number of players in session: {num_of_players}") ## GUI test for number acceptance# remove at end. calls __repr__ for each instance
-        library.GameObjects.session_players = library.StartVariables.players_available[:num_of_players] # slice creates new list of players in
-        # session binding to new variable gamevar
-        self.deal_handler("start") # Deals cards to all players. results in putting in player.sack. Does not bind to gameVar
+    def active_player_creation(self): # TEST instance factory
+        for person in range(library.StartVariables.new_players + 1):
+            player = Player.factory()
+            library.GameObjects.session_players.append(player)
+        self.deal_handler("start")
 
     def player_name_gender(self, playerindex): # gui attrib, passes session_players index identifying specific instance
         """Gets player with list index and Sets name and gender to that player instance."""
@@ -118,7 +112,7 @@ class PlayerSetUp:
         playerinst = library.GameObjects.active_player # gets current player, at start this is none.
 
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
-            for player in library.GameObjects.session_players: #loops over each player in session_players
+            for player in library.GameObjects.session_players: # loops over each player in session_players
                 player.sack = cards.card_sop.deal_cards(option, cardnum=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
 
         elif option == "door": # Standard gameplay loop on door kick

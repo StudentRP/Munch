@@ -20,24 +20,24 @@ contents:
 # SCRIPT DEPENDENCIES
 ######################################################
 
-controller.py: provides front end logic and building blocks for GUI
+view.py: provides front end logic and building blocks for GUI
 
-gui_variables.py (referred to as game_var): acts as a IPC script that controller.py can interact with and game_loop.py
+variables_library.py (referred to as library): acts as a IPC script that view.py can interact with and controller.py
 can change without creating conflicting imports and convoluted return statements.
 This create a clear uncomplicated area that values may be seen, like game options, or stored without obfuscation.
 
-game_loop.py (referred to as engine): location of all the backend logic that called from the GUI, generic card methods
+controller.py (referred to as engine): location of all the backend logic that called from the GUI, generic card methods
 for sorting, player rotation, control of play and anything else that sits on top of the basic script logic.
 This script imports table.py giving access to both doorcards.py & treasurercards.py and playermodel.py.
 
 table.py: is modeled on a playing table and contains classes that relate to a dealer, dice and table. dealer will fetch
-cards from both doorcards.py & treasurercards.py returning the card back to the caller (usually game_loop).
+cards from both doorcards.py & treasurercards.py returning the card back to the caller (usually engine).
 During a fight or when cards are discarded they go to the table. Recovery of cards from the burn pile is controlled
 by dealer.
 
 playermodel.py: with set number of instances to prevent card shortage, this class creates the fundamental player.
 Methods in this class are indicative of those that cause change to the players individual info or relate to the player
-some way. this calls inherits from  doorcards.MonCur so that method like curses can effect the player in question and
+some way. This calls inherits from  doorcards.MonCur so that method like curses can effect the player in question and
 treasurecards.T_tools for methods associated to enchanted items. playersetup.py is also imported using the P-tools class.
 this however has little functionality and may be absorbed into the player model.
 
@@ -213,7 +213,7 @@ or changing the self parameter
 Controller:
     Controller serves up pages(frames) that are raised to the top.
     These are pre-build at the beginning
-    An update method is required that binds all tk.Vars to gameVar scrip (updated from player model)
+    An update method is required that binds all tk.Vars to library scrip (updated from player model)
 
 
 Pages:
@@ -221,16 +221,16 @@ Pages:
         welcomes with start button that progresses to options toplevel
 
     options-
-        sets game options in gui_variables.py.Options.  These will be game flags for certain activities
+        sets game options in variables_library.py.Options.  These will be game flags for certain activities
         modal infobox detailing changes on conformation button press
 
     player select-
         spin box with player select. textvariable = num_of_players
         button leads to player details playersetter method
         playersetter-
-            num_of_players = IntVar() binds to 2 variables in gameVar -
-                1) gameVar.StartVariables.new_players that manipulates label in Toplevel
-                2) gameVar.StartVariables.player_rand that drives the index for the instances in the list during selection
+            num_of_players = IntVar() binds to 2 variables in library -
+                1) library.StartVariables.new_players that manipulates label in Toplevel
+                2) library.StartVariables.player_rand that drives the index for the instances in the list during selection
 
 
         PlayerInfo:
@@ -249,21 +249,21 @@ Pages:
 
                         calls player method
                         for each instance (in order) from Maxplayers
-                            fetches gui_variables and binds to player
+                            fetches variable_library and binds to player
                             yields player
 
                     calls next() method
 
 
-for main play window the gui must have the gamevars ready linking to the instance in question. button will change the
+for main play window the gui must have the librarys ready linking to the instance in question. button will change the
 instance associated
 
 mainloop class to define a method to send index to game_loop class.
 
-game_Loop.py:
+controller.py:
 
-    Game_loop.py main directive is to either source logic from other classes, provide one shot logic demanded by the
-    GUI and primarily to update gui_variables.py  that can be accessed by controller.py
+    controller.py main directive is to either source logic from other classes, provide one shot logic demanded by the
+    GUI and primarily to update variables_library.py  that can be accessed by view.py
 
         Main class: PlayerSetup:
             set_random_player method:
@@ -273,14 +273,14 @@ game_Loop.py:
 
             player_attrib_ipc_updater method:
                 accepts parameter of a player instance
-                uses instance to bind all player attributes to gameVar
+                uses instance to bind all player attributes to library
 
 
     before MainLoop is called all tkVar need to be set up. this is handled by the controller by the method update_atrib_frame.
-    At the end of Playerinfo class method test, game_loop will use index to determine the correct player in gameVar.active_players.
-    indexed player will bind self to gameVar.player_atribs.x
+    At the end of Playerinfo class method test, game_loop will use index to determine the correct player in library.active_players.
+    indexed player will bind self to library.player_atribs.x
     controller.Main class binds self.x to StringVar()
-    Main.update_atrib_frame method binds all player attributes to tk Variables and the gameVar script
+    Main.update_atrib_frame method binds all player attributes to tk Variables and the library script
     This update method must be called to refresh/concurrent the labels in the play area
 
 
@@ -304,16 +304,16 @@ start button
         See player rotation method detailed in independent section bellow
 
 GameOptions, toplevel
-    presents options that change gameVar.Options that act as flags for specific in game methods
-    Defaults are set in gameVar. Options for are:
-        gameVar.Options.cards_delt = self.inital_deal.get()     # number of each type of card to deal on start
-        gameVar.Options.win_lvl = self.maxlvl.get()             # level needed to win game
-        gameVar.Options.perm_death = self.permadeath.get()      # game death permanency
-        gameVar.Options.carry_weight = self.carry_weight.get()  # number of cards that can be placed in sack
+    presents options that change library.Options that act as flags for specific in game methods
+    Defaults are set in library. Options for are:
+        library.Options.cards_delt = self.inital_deal.get()     # number of each type of card to deal on start
+        library.Options.win_lvl = self.maxlvl.get()             # level needed to win game
+        library.Options.perm_death = self.permadeath.get()      # game death permanency
+        library.Options.carry_weight = self.carry_weight.get()  # number of cards that can be placed in sack
     'Ok' button calls method setopts(self)
 
     setopts(self), method
-        Fetches all tk variables and binds to all gameVar variables.
+        Fetches all tk variables and binds to all library variables.
         creates a message variable with all f-string of all new values
         messagebox.showinfo(title,contents) is called
         messagebox.showinfo("Settings Changed!", message) is called highlighting the changes
@@ -335,29 +335,29 @@ PlayerSelect(), class
     and Confirm Button that calls self.playersetter method
 
     playersetter, method
-        gameVar.StartVariables.new_players = self.Num_of_players.get()
-            pulls the number of selected players from the spinbox and binds to gameVar new_players
+        library.StartVariables.new_players = self.Num_of_players.get()
+            pulls the number of selected players from the spinbox and binds to library new_players
             This is the number of players wanted in the current game.
 
-        gameVar.StartVariables.player_rand = self.Num_of_players.get()
+        library.StartVariables.player_rand = self.Num_of_players.get()
             Binds player_rand to Num_of_players also.
 
-        engine.select_players(), method
-            method is used to slice total available players with the number of players wanted then call deal_handler() to
-            provide cards to all players in session.
+        engine.active_player_creation(), method
+            method is used to call Player.factory building player instances and placing them into a list of sesion_players.
+            deal_handler() is then called which deals cards to each player in the game session.
 
-            num_of_players = gameVar.StartVariables.new_players
-            actual players named session_players which is then stored in gameVar.
+            num_of_players = library.StartVariables.new_players
+            actual players named session_players which is then stored in library.
                 This is used to slice available_players list into a list of
-                gameVar.StartVariables.session_players = gameVar.StartVariables.players_available[:num_of_players]
+                library.StartVariables.session_players = library.StartVariables.players_available[:num_of_players]
 
             deal_handler("start"), method
             Flexible method created to deal cards either at start, after death or specific cards (door/treasure).
-            player.unsorted = cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt)
+            player.unsorted = cards.card_sop.deal_cards("start", library.Options.cards_dealt)
                 Used to issue cards to all players. "start" parameter is used to define the the type of deal wanted.
                 This then loops over the players in session_players calling cards.card_sop.deal_cards() table.py
 
-                cards.card_sop.deal_cards("start", gameVar.Options.cards_dealt)
+                cards.card_sop.deal_cards("start", library.Options.cards_dealt)
                     Calls Table class and the card method card_sop for the Dealer class (a table has-a Dealer) with the
                     method deal_cards. The arguments "start" and ameVar.Options.cards_dealt specify the mode of deal
                     through the branch and the number of each card to deal laid out by the game options respectively.
@@ -373,27 +373,27 @@ PlayerSelect(), class
                     counter = 1  #  player identity title number for arbitrary label
                     indexing = 0 # index to access correct player instance in session_players list and ensures
                     details are bound to the correct player instance.
-                    note a 3rd is used but located in gameVar (new_players) set by the playersetter method above.
+                    note a 3rd is used but located in library (new_players) set by the playersetter method above.
 
                 Players enter their details and press "confirm" button that triggers initial_set (return button does
                 same thing).
 
-                    number = gameVar.StartVariables.new_players
+                    number = library.StartVariables.new_players
 
                 initial_set, method
-                    Branch is created for checking the number of players in gameVar.StartVariables.new_players assigned
+                    Branch is created for checking the number of players in library.StartVariables.new_players assigned
                     to the variable name = number. Each time this method is called it reduces number by 1 ensuring that
                     the final entry is the last to redraw the toplevel window. (number -= 1)
 
                     PlayerInfo.counter += 1 is used to increase the number for the arbitrary player label
 
-                    gameVar.PlayerAtribs.player_name = self.instname.get()
-                    gameVar.PlayerAtribs.player_gender = self.instgender.get()
-                    Both bind the player attribs provided to the player name in gameVar
+                    library.PlayerAtribs.player_name = self.instname.get()
+                    library.PlayerAtribs.player_gender = self.instgender.get()
+                    Both bind the player attribs provided to the player name in library
                     engine.player_name_gender(PlayerInfo.indexing) is then called
 
                     engine.player_name_gender(PlayerInfo.indexing), engine class method
-                        player = gameVar.StartVariables.session_players[playerindex]
+                        player = library.StartVariables.session_players[playerindex]
                             class indexing variable is used to pass to player_name_gender method to access the correct
                             player in session_players.
                             player is now a specific player instance
@@ -406,18 +406,18 @@ PlayerSelect(), class
                             if the return val is == to the dev mode other attribs will be attributed to the player
 
                             P_tools.name()
-                                x = gameVar.PlayerAtribs.player_name
-                                returns name stored in gameVar with title method
+                                x = library.PlayerAtribs.player_name
+                                returns name stored in library with title method
                                 or dev mode name if criteria met
 
                             P_tools.name()
-                            x = gameVar.PlayerAtribs.player_gender
+                            x = library.PlayerAtribs.player_gender
                             return x.title()
 
                     PlayerInfo.indexing = PlayerInfo.indexing + 1 is increased for the next player when passed back into
                     engine.player_name_gender(self, playerindex)    NOTE: index == playerindex as it becomes method argument
                     PlayerInfo.destroy(self) is called to destroy the toplevel window
-                    gameVar.StartVariables.new_players = number changes the number new_players in gameVar to the new
+                    library.StartVariables.new_players = number changes the number new_players in library to the new
                     decreased number.
 
                         Inner loop triggered if number not equal to 0 triggering toplevel to rebuild with the new
@@ -429,19 +429,19 @@ PlayerSelect(), class
 
                         engine.set_random_player(), method
                             method for selecting a player from the session_players to go first with the use of the
-                            random module - player = choice(gameVar.StartVariables.session_players).
+                            random module - player = choice(library.StartVariables.session_players).
                             This method then calls player_attrib_ipc_updater(player), a method specifically for binding the player
-                            attributes to gameVar.
-                            Importantly gameVar active_player is named: gameVar.StartVariables.active_player = player
+                            attributes to library.
+                            Importantly library active_player is named: library.StartVariables.active_player = player
                             used later in turn based assignment
 
                             player_attrib_ipc_updater(player) method
-                                Binds all player attributes to gameVar.PlayerAtribs. Note this method can take in any
-                                player instance and bind to gameVar.PlayerAtribs.
+                                Binds all player attributes to library.PlayerAtribs. Note this method can take in any
+                                player instance and bind to library.PlayerAtribs.
 
                         app.update_atrib_frame(), method
-                            part of controller.py class Main method that acts as the controller. Sets all tk.Vars with
-                            gameVar.PlayerAtribs. Act like a refresh for new bindings from player_attrib_ipc_updater that impacts upon
+                            part of view.py class Main method that acts as the controller. Sets all tk.Vars with
+                            library.PlayerAtribs. Act like a refresh for new bindings from player_attrib_ipc_updater that impacts upon
                             MainLoop frame that calls controller.atrib. method also changes size of the Main window
                             ready for gameplay.
 
@@ -459,18 +459,18 @@ player info window.
 
     end_turn, button method
     On button press player turn ends and another players turn begins.
-        engine.player_order(gameVar.StartVariables.active_player) active_player bound in set_random_player method above becomes
-        current_player. while play is true (to be set as conditional for gameVar.Options.win_lvl) creates loop for
+        engine.player_order(library.StartVariables.active_player) active_player bound in set_random_player method above becomes
+        current_player. while play is true (to be set as conditional for library.Options.win_lvl) creates loop for
         players in game. With the use of itertools cycle is used to iterate over the session_players
-        player_gen = cycle(gameVar.StartVariables.session_players). next is called to yield next player and loop back
+        player_gen = cycle(library.StartVariables.session_players). next is called to yield next player and loop back
         to the beginning of the list.
 
         within the while loop there is a branch. current_player is compared to next(player_gen) that is called y.
         If the conditional in not met  current_player == y next is called again until current_player is found == y.
         When this happens there are 2 outcomes either the player is alive or the player is dead.
 
-        In the event of alive gameVar.active_player is updated to next(player_gen) thus next in line to play. player_attrib_ipc_updater
-        is called with the new player argument gameVar.active_player. The loop is then broken preventing endless recursion.
+        In the event of alive library.active_player is updated to next(player_gen) thus next in line to play. player_attrib_ipc_updater
+        is called with the new player argument library.active_player. The loop is then broken preventing endless recursion.
 
         Death and its conditionals will be addressed later.
 
@@ -488,39 +488,39 @@ The end goal is to remove items from the player adding them to the burn pile and
     Mainloop the sell (sell_list) button-
         From controller.Mainloop the sell button calls sell_list.
         sell_list first calls scrub_lists. This important as all linked lists ar appended and not built anew.
-        calls player from active_player in gameVar
+        calls player from active_player in library
 
         Player has method called item_by_key. This takes 1 argument 'sell' defined as key on other end
         (but could be anything specific from a game card)
         item_by_key(self, key) generates a list from all cards in player.unsorted (a list of cards delt to the player during
         controller.PlayerSelect.playersetter during player slice) that are specific in the fact they have in card dictionary
         a key called 'sell'. Under list comprehension this generates a list of only sellable objects in the player deck.
-        this list is binded to gameVar.GameObjects.selected items.
+        this list is binded to library.GameObjects.selected items.
 
         Returning to controller, OwnedItems(window_title) Toplevel is now called with the arg "Sellable Items".
         OwnedItems loops over objects in selected_items creating a list format each with a name,type,value and a checkbox.
         ** consider adding info buttion that either raise the pic of the card or text description.
-        gameVar.GameObjects.check_but_intvar_gen.append(status) is also build per item and bound to checkbutton changing
+        library.GameObjects.check_but_intvar_gen.append(status) is also build per item and bound to checkbutton changing
         independently with checkbutton activity.
-        The id of each card is appended to a new list in gameVar.GameObjects.check_but_card_ids.
+        The id of each card is appended to a new list in library.GameObjects.check_but_card_ids.
         This order is the same order as Checkbutton object in the other list.
         The button is use to call sell method
 
     sell button -
     engine.zipper() # passes string arg for card_matcher (method acts as conduit)
         Calls engine.zipper method (generic method for zipping 2 list together into a tuple)
-        gameVar.GameObjects.zipped_tup.clear() is called to ensure list is clear.
+        library.GameObjects.zipped_tup.clear() is called to ensure list is clear.
         First step required is the conversion of the Checkbutton objects to the boolean value (0 or 1) from
-        gameVar.GameObjects.check_but_intvar_gen, a list of all tk Vars, associated to the check button, requiring .get method.
-        This creates new list of booleans called gameVar.GameObjects.check_but_boo consisting of the boolean values.
-        x, y = gameVar.GameObjects.check_but_card_ids, gameVar.GameObjects.check_but_boo
-        gameVar.GameObjects.zipped_tup = list(zip(x, y)) function is to zip cards independent ids to their bool.
-        This creates tuple pairs of (id,0/1) for each card in gameVar.GameObjects.selected items.
+        library.GameObjects.check_but_intvar_gen, a list of all tk Vars, associated to the check button, requiring .get method.
+        This creates new list of booleans called library.GameObjects.check_but_boo consisting of the boolean values.
+        x, y = library.GameObjects.check_but_card_ids, library.GameObjects.check_but_boo
+        library.GameObjects.zipped_tup = list(zip(x, y)) function is to zip cards independent ids to their bool.
+        This creates tuple pairs of (id,0/1) for each card in library.GameObjects.selected items.
         engine.card_matcher(action) is then called.
 
     engine.card_matcher(action) CREATED FOR FLEXIBILITY OF INPUTS AND FORWARD PASS
-        creates loop for each card in gameVar.GameObjects.selected_items that iterates over cards then
-        creates an inner loop or tup in gameVar.GameObjects.zipped_tup for each card, NOTE:tup contains (card id, 0or1).
+        creates loop for each card in library.GameObjects.selected_items that iterates over cards then
+        creates an inner loop or tup in library.GameObjects.zipped_tup for each card, NOTE:tup contains (card id, 0or1).
         Conditional if tup[0] == card["id"] and tup[1] filters the cards by matching ids (tup[0]) and only if the
         tup[1] value is == 1 (True).
         After qualification a branch is created calling the correct method associated to action parameter, in this case "sell"
@@ -545,7 +545,7 @@ The end goal is to remove items from the player adding them to the burn pile and
         check_but_card_ids and zipped_tup. This reset allows new creation when recalled or new player.
 
     rebinding variables
-    engine.player_attrib_ipc_updater(gameVar.StartVariables.active_player)
+    engine.player_attrib_ipc_updater(library.StartVariables.active_player)
     app.update_atrib_frame()
         updates the player info screen detailing changes to player wallet
 
@@ -559,12 +559,12 @@ MainLoop, class
     Armor, Main screen button - calls list_armor method
 
     list_armor, method:
-        gameVar.GameObjects.message & app.update_message("show") - Call simple message to the main window
+        library.GameObjects.message & app.update_message("show") - Call simple message to the main window
 
         engine.scrub_lists() - clears all lists ready for new item stack in the toplevel window.
 
         player.inventory("type", "armor") - searches player card list for cards that have a key of "type" and val of "armor".
-            Cards that meet this criteria are sent to gameVar.selected_items. Note that this meth take two params as it is looking for a
+            Cards that meet this criteria are sent to library.selected_items. Note that this meth take two params as it is looking for a
             specific key val pair. Note cards have "type":"armor" arrangement in the card dict.
 
         OwnedItems("Armor Owned", "armor") - TopLevel call with params for title other for button layout specific to armor.
@@ -649,7 +649,7 @@ intervention. This means activation can only happen in theses circumstances.
 Door button > door method
      self.end_turn_button.config(state="disabled"), disables end_turn to prevent incorrect usage.
 
-     door_card = engine.deal_handler("door", door_attempts=gameVar.CardDraw.door_attempts)
+     door_card = engine.deal_handler("door", door_attempts=library.CardDraw.door_attempts)
         Is one of the main method and excepts a return object. The card returned is dependent on the string parameter used.
         In this case the parameter 'door' is used to retrieve a door card. This is the value to the key 'category' within the card's dict.
         door_attempts as a parameter exerts control over where the card ends up and in the current class defines how the
@@ -677,7 +677,7 @@ Door button > door method
     Both engine.card_type() and else statement result in incrementation of num_of_kicks by one.
 
     With a card that is not a monster card on first instance, a second push of door is allowed. In this instance
-    gameVar.CardDraw.num_of_kicks == 1 evaluates correctly disabling door button for further use.
+    library.CardDraw.num_of_kicks == 1 evaluates correctly disabling door button for further use.
     engine.deal_handler("door", call=0) is called again with the parameter call set to 0 (False)
         engine.deal_handler("door", call=0), method
             like before gets door card in turn calling door_card_designator again with the new call parameter of 0
@@ -766,7 +766,7 @@ enchantment to stay on lost weapons!
 Consider ownership of action handling ie who is responsible for what in the programme ie what is responsible
 for sorting cards or game flow?
 
-game_loop.py
+controller.py
 * Splitting up this module into more defined classes will be needed.
 
 
