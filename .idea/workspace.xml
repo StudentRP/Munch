@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="renaming scripts">
+    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="V4 starting for new player factory, fight mechanics, naming, dependencies ect">
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/variables_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/variables_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,6 +104,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="funct_trial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MyPackages" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/funct_trial.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="game_loop_v3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MyPackages" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -116,28 +140,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Munchkin/bin/engine/game_loop_v3.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="general_tests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MyPackages" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Munchkin/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Munchkin/Tests/general_tests.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -171,10 +173,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.view" />
+        <item itemvalue="Python.funct_trial" />
         <item itemvalue="Python.game_loop_v3" />
         <item itemvalue="Python.doorcards" />
         <item itemvalue="Python.controller" />
-        <item itemvalue="Python.general_tests" />
       </list>
     </recent_temporary>
   </component>
@@ -238,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650360756678</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="V4 starting for new player factory, fight mechanics, naming, dependencies ect">
+      <created>1650380422544</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1650380422544</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,15 +271,33 @@
     <MESSAGE value="changes image recall file structure to handle different os with pathlib module" />
     <MESSAGE value="docs" />
     <MESSAGE value="renaming scripts" />
-    <option name="LAST_COMMIT_MESSAGE" value="renaming scripts" />
+    <MESSAGE value="V4 starting for new player factory, fight mechanics, naming, dependencies ect" />
+    <option name="LAST_COMMIT_MESSAGE" value="V4 starting for new player factory, fight mechanics, naming, dependencies ect" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
+          <line>518</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Munchkin/bin/engine/controller.py</url>
+          <line>162</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Munch$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1650457265508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Munch$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1650360495937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
     <SUITE FILE_PATH="coverage/Munch$controller.coverage" NAME="controller Coverage Results" MODIFIED="1649254694799" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/MyPackages$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1639811290752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
     <SUITE FILE_PATH="coverage/Munch$general_tests.coverage" NAME="general_tests Coverage Results" MODIFIED="1649253557839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests" />
     <SUITE FILE_PATH="coverage/Munch$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1649279228321" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
-    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1650378079914" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1650458453729" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/MyPackages$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1640266776710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MyPackages$controller.coverage" NAME="controller Coverage Results" MODIFIED="1640513926303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
   </component>

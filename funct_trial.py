@@ -85,11 +85,11 @@
 #
 # x(-1)
 #
-f = {'rest': ["tester", 'pop', 'not_man']}
-
-if 'not_man' in f.get('rest'):
-    print("yep")
-    print(f.get('res', False)) # none object, can now return false
+# f = {'rest': ["tester", 'pop', 'not_man']}
+#
+# if 'not_man' in f.get('rest'):
+#     print("yep")
+#     print(f.get('res', False)) # none object, can now return false
 
 # for x in f['rest']:
 #     print(x)
@@ -97,3 +97,25 @@ if 'not_man' in f.get('rest'):
 # else:
 #     print("nope")
 # app.mainloop()
+
+def card_meth(*arg, **kwargs):
+    for a in arg:
+        if a == 'foo':
+            print(a)
+        else:
+            print('nope')
+
+
+    if kwargs.get('foo'):
+        print('in dict')
+# card_meth('foo', 'bar', foo='foobar')
+
+
+f = [ [{'mon': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}], [{'mon': ["b", 'bb', 'bbb']}] ]
+
+print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
+print(f[0][0])
+print(len(f[0][0]))
+print(len(f))
+x=f
+print(id(f), id(x))

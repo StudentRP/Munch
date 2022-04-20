@@ -71,7 +71,7 @@ class Player(MonTools, T_tools):
 
     def __repr__(self):
         """developer aid"""
-        return f"\nPLAYER REF:{self.ref}\nName:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
+        return f"\nPLAYER Name:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
                f"\nBonus:{self.bonus}\nSack:{self.wallet}\n"
 
     @classmethod
@@ -231,7 +231,7 @@ class Player(MonTools, T_tools):
         print(f"In player card_meth. Calltype: {calltype}, Action: {action}") # info on meth used and status
         """will use add/remove suited to door cards, loose cases and curse canceling"""
         for key, val in MonTools.method_types.items(): # look up methods associated to all cards in doorcards.py
-            if key == card.get(calltype): # tests all keys agains all methods/static in a card.ie key = "loose_footgear", if the key matches the value of the cards 'method' or 'static': "loose_footgear" this method is called
+            if key == card.get(calltype): # tests all keys against all methods/static in a card.ie key = "loose_footgear", if the key matches the value of the cards 'method' or 'static': "loose_footgear" this method is called
                 print(f"the key is {key}")
                 val(self, action, args, kwargs) # take the value of the key and calls the method associated to it with the given parameters; action is on or off. Simple on/off switch for the card to make changes to the player (self arg).
 

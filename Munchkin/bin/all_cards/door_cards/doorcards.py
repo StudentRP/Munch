@@ -11,6 +11,11 @@ class MonTools:
     so far: 'add' = to add item from pack, 'remove' = bs outcome or curse
 
     """
+    def wandering_mon(self, *args, **kwargs):
+        """needs to take in a card and build a list with monster in it and put in Table.in_play lol"""
+
+
+
     def unknown(self, problem):
         print(f"Problem found in method {problem}")
 
@@ -137,12 +142,11 @@ class MonTools:
             self.level -= 1
         print(f"player level after is : {self.level}")
 
-    # def wandering_monster(self):
-    #     return lol_builder(card)
-
     method_types = {'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
-                    "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus}
+                    "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus,
+                    'wandering_mon': wandering_mon
+                    }
 
 #may need to lambda these to pass args
 #####################################################################

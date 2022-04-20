@@ -6,14 +6,18 @@ Main gui for Munchkin, version 4 (legacy: gui_v3)
 import tkinter as tk
 import tkinter.ttk as ttk
 from bin.engine.controller import engine  # imports the instance
-from bin.all_cards.table import cards
+# from bin.all_cards.table import cards
 import bin.engine.cut_scenes as cs
 import bin.GUI.variables_library as library
 from tkinter import messagebox
 from PIL import ImageTk, Image
 import os
 from pathlib import Path
+
+from bin.GUI.variables_library import cards
 # import bin.GUI.gui_tools as tools
+print('view', id(library.cards))
+
 
 gamefont = ('castellar', 12, 'bold')
 window_color = "#160606" # Would like pic here of door
@@ -436,43 +440,42 @@ class MainLoop(tk.Frame):
         print(" Turn ended!\n", "."*10, "\n")
 
     def door(self):
-        """game actions for door. cards drawn from door and put in location ready for next action if monster, actioned if other."""
-        print("\nKicking door!")
-        player = library.GameObjects.active_player
-        self.message2.destroy()  # removes dev label
+        """Calls methods associated to kicking the door. End result is to move cards to the desired location ie on table
+        ready for fight (and display) or in to the players handCommits a player to game action by disabling buttons. """
 
+        print("\nKicking door method")
+        # Commits player to game loop
+        self.message2.destroy()  # removes dev label
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
 
-        # main actions
+        # main actions, get card, define where it belongs activate static meths
         door_card = engine.deal_handler("door") # fetch a door card
-        engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining)  # defines the actions to be taken with the card ie if monster/curse ect or 2nd draw action.
+        engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining) # Assigns card to destination. switches on static meths of curses and monsters
 
         # 1st attempt, gui setup
         if library.CardDraw.door_attempts_remaining: # first kick of door (always get this at start of turn!) == 1(True)
             print("VIEWING CARD")
 
-            # actions to display card
+            # display card
             self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas. will need meth for this to add cards in linear fashion
 
             # broadcast new message
-            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # gui side action for a card that not mon/curse
+            if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # General card that is NOT a mon or a curse
                 library.GameObjects.message = f"Your card is: {door_card.get('name')}"
             app.update_message("show") # update the broadcast message
 
             # if monster set the following button configs.
             if door_card["type"] == "monster":
-                player.card_meths(door_card, 'static', 'on')  ######## will cause probs with monster individuality ######################
-
                 self.door_button.config(state="disabled") # kick door
                 self.weapons_button.config(state="disabled") # weapons
                 self.armor_button.config(state="disabled") # armor
                 self.sell_button.config(state="disabled") # sell
                 self.fight_button.config(state="normal") # fight
                 self.run_away_button.config(state="normal") # run
-                # meth to return card, use id to put card pic
 
-        # 2nd attempt circumstance
+
+                # 2nd attempt circumstance
         elif library.CardDraw.door_attempts_remaining == 0:
             print("2nd kick activated")
             library.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
@@ -483,7 +486,8 @@ class MainLoop(tk.Frame):
             self.end_turn_button.config(state="normal") # enables fight
             app.update_message("show")
 
-        # final end of method setup
+        # final end of methods
+
         library.CardDraw.door_attempts_remaining = 0  # set to false after first kick (always runs on this button)
         Tools.fluid_player_info() # updates any changes cause by status effecting cards to the player............................right place?
         print("Door attempts:zero= last attempt:: ", library.CardDraw.door_attempts_remaining)
@@ -498,10 +502,24 @@ class MainLoop(tk.Frame):
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
-        ### NEEDS CONTROL TO ASK WHICH MONSTER TO FIGHT IF MORE THATN ONE THEN WAY TO TURN ON ANY MONSTER METHODS, THINK TL WITH CB & CARD INFO
-        #method to call monster selection
-        print("Fight button pressed")
-        selfobj = app.frames[MainLoop]
+        """ selecting monster and fighting"""
+        print("Fight button pressed") # TEST
+        #fight select setup
+        player_obj = library.GameObjects.active_player # for grabing card_meths
+
+        if len(cards.in_play) > 1:
+            # run monster selection toplevel selector
+            print('more than one monster present!!!!!!!!!!!')
+            pass
+
+        else:
+            # grab first card
+            self.selected_card = cards.in_play[0][0] # [fight selector], [monster selector/enhancer selector]. to be defined by monster selector tl
+            print(self.selected_card, id(cards.in_play))
+        player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
+
+
+        selfobj = app.frames[MainLoop] # what is this doing?
 
         result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
 

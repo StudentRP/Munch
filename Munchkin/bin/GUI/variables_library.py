@@ -5,6 +5,7 @@ This script is updated by gui_v3 with game-loop_v2 requesting data for the logic
 
 
 """
+from bin.all_cards.table import cards
 
 class StartVariables:
 
@@ -12,6 +13,7 @@ class StartVariables:
     new_players = 1 # (int) number associated to total players in current game
     player_rand = 1  # number for random player generator for PlayerSelect.playersetter
     selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
+    cards = cards
 
 
 class GameObjects:

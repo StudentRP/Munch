@@ -14,12 +14,16 @@ Contents functions:
 
 
 from Munchkin.bin.players.playermodel import Player
-from Munchkin.bin.all_cards.table import cards, dice
+from Munchkin.bin.all_cards.table import dice # , cards
 from random import randint, choice
 import bin.GUI.variables_library as library
 from itertools import cycle
 
+from bin.GUI.variables_library import cards
+print('controller', id(library.cards))
 from time import sleep
+
+
 
 
 ##################################################################
@@ -30,13 +34,15 @@ from time import sleep
 
 class PlayerSetUp:
     """class to determine number of players and hand to player order"""
+    card_from_engine = cards
 
     def __init__(self):
         self.cycle = 0 #needed?
 
-# meths associated to play
+# meths associated to play setup
 
-    def active_player_creation(self): # TEST instance factory
+    def active_player_creation(self):
+        """ calls Player.factory creating player instances"""
         for person in range(library.StartVariables.new_players + 1):
             player = Player.factory()
             library.GameObjects.session_players.append(player)
@@ -109,7 +115,7 @@ class PlayerSetUp:
         Deal_amount defines how many of the cards are to be returned to a player.
         """
 
-        playerinst = library.GameObjects.active_player # gets current player, at start this is none.
+        playerinst = library.GameObjects.active_player # gets current player. Not set at start default=None.
 
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
             for player in library.GameObjects.session_players: # loops over each player in session_players
@@ -145,9 +151,12 @@ class PlayerSetUp:
 
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
-                library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}"
-                cards.in_play[0].append(card) # places card on table in the lol for the first fight. functionality returned to gui. TODO need downstream processing changed for the fight
-                print("This is the card in play;", cards.in_play)
+                library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
+                cards.in_play[0].append(card) # places card on table in the lol for the first fight.
+                ## ACTIVATE CARD STATIC METHODS
+                engine.card_activation(card, static='on')
+
+                print("This is the card in play;", cards.in_play, 'id', id(cards.in_play)) # TEST INFO
 
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
@@ -179,17 +188,6 @@ class PlayerSetUp:
             print("adding to sack")
             library.GameObjects.message = "2nd kck, Adding card to sack"  # 2nd kick
             player.sack.append(card)  # adds to player sack
-
-    def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
-        """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
-        switch on or off the condition"""
-        card = cards.in_play[int(table_card_index)] # selects the monster in the fight on the table
-        player = library.GameObjects.active_player
-        if scenario == "persistent":
-            player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
-
-
-
 
     def zipper(self, action):
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
@@ -312,6 +310,20 @@ class PlayerSetUp:
             player.card_meths(card, 'method', 'on') # calls card bad stuff
             player.card_meths(card, 'static', 'off') # turns off static effect of card in play
             return "lose"
+
+    def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
+        """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
+        switch on or off the condition"""
+        card = cards.in_play[int(table_card_index)][0] # selects the monster in the fight on the table
+        player = library.GameObjects.active_player
+        if scenario == "persistent":
+            player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
+
+    def card_activation(self, card, *args, **kwargs):
+        player = library.GameObjects.active_player
+        print('card received for processing..................')
+        print('Action required for:', player.name, args, kwargs)
+        pass
 
     def run(self):
         roll = dice.dice_sop.roll()

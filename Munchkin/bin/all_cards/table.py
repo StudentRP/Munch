@@ -75,7 +75,7 @@ class Dealer:
 
 
 class Table(Treasure, Moncurse): # inherits from
-    """This is the table model and the attributes expected from the game tablel"""
+    """This is the table model and the attributes expected from the game table"""
     def __init__(self):
         self.card_sop = Dealer() # has-a dealer
         self.burn_pile = []
@@ -106,7 +106,7 @@ class Table(Treasure, Moncurse): # inherits from
               "\nBurn pile = ", len(self.burn_pile))
 
 
-cards = Table() # main instance to use - gives access to all card classes and methods.
+cards = Table() # ID PROBLEM ACROSS SCRIPTS THINK DOWN TO IMPORTS
 dice = Table()
 
 
