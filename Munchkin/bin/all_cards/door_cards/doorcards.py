@@ -71,9 +71,9 @@ class MonTools:
         if self.race.get("name") == "thief":
             pass
 
-    def no_run(self, action=None, *args):
+    def no_run(self, *args): # args sent include : ('static', 'on')
         print("monster method prevents run")
-        if action == "on":
+        if "on" in args:
             self.run_away = False
             print("run disabled")
         else:
@@ -162,9 +162,9 @@ class Moncurse(MonTools):
     door_cards = [
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
         {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method': "below_waist", "static": "no_outrun"},
-        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': "loose_level"},
-        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': "loose_level", "static":"shade"},
-        {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': "monkey_business"},
+        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': "loose_level"},
+        # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': "loose_level", "static":"shade"},
+        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': "monkey_business"},
 
         ## Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
         # {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': 'loose_footgear'},

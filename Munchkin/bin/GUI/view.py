@@ -518,7 +518,6 @@ class MainLoop(tk.Frame):
             print(self.selected_card, id(cards.in_play))
         player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
 
-
         selfobj = app.frames[MainLoop] # what is this doing?
 
         result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection

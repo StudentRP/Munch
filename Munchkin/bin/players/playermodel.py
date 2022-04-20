@@ -33,6 +33,7 @@ attributes based on action outcomes."""
 # MAIN PLAYER CLASS
 #####################################################################
 
+
 class Player(MonTools, T_tools):
     """Main player class, inherits off card methods making changes to the player."""
 
@@ -226,14 +227,20 @@ class Player(MonTools, T_tools):
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, card, calltype=None, action=None, *args, **kwargs): # calltype = method or static, action on or off.
-        """link to card methods for active effect on player action =add, conditions or remove"""
-        print(f"In player card_meth. Calltype: {calltype}, Action: {action}") # info on meth used and status
-        """will use add/remove suited to door cards, loose cases and curse canceling"""
-        for key, val in MonTools.method_types.items(): # look up methods associated to all cards in doorcards.py
-            if key == card.get(calltype): # tests all keys against all methods/static in a card.ie key = "loose_footgear", if the key matches the value of the cards 'method' or 'static': "loose_footgear" this method is called
-                print(f"the key is {key}")
-                val(self, action, args, kwargs) # take the value of the key and calls the method associated to it with the given parameters; action is on or off. Simple on/off switch for the card to make changes to the player (self arg).
+    def card_meths(self, *args, **kwargs):
+        """link to card methods, args should be the card, kwards the different card meths and actions to take
+        ie 'static':'on' """
+        print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") # info on meth used and status
+
+        for k, v in kwargs.items(): # loops supplied kwards
+            print(k, v)
+            if k in args[0]: # looks for kward key in monster card. ie is there a static key in card?
+                print(f'confirmed match of {k}')
+                method = args[0].get(k) # gets method of the found key in card ie static : no_run
+                print(method)
+                if method in MonTools.method_types: # checks to see if method (the value from above) is in dict
+                    action = MonTools.method_types.get(method)
+                    action(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
 
 
 """

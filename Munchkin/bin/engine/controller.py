@@ -153,10 +153,10 @@ class PlayerSetUp:
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
                 cards.in_play[0].append(card) # places card on table in the lol for the first fight.
-                ## ACTIVATE CARD STATIC METHODS
-                engine.card_activation(card, static='on')
 
-                print("This is the card in play;", cards.in_play, 'id', id(cards.in_play)) # TEST INFO
+                player.card_meths(card, static='on') # activates any static meths for the card
+                # print(f'player in game:: {player.name}')
+                # print("This is the card in play;", cards.in_play, 'id', id(cards.in_play)) # TEST INFO
 
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
@@ -319,12 +319,6 @@ class PlayerSetUp:
         if scenario == "persistent":
             player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
 
-    def card_activation(self, card, *args, **kwargs):
-        player = library.GameObjects.active_player
-        print('card received for processing..................')
-        print('Action required for:', player.name, args, kwargs)
-        pass
-
     def run(self):
         roll = dice.dice_sop.roll()
         player = library.GameObjects.active_player
@@ -339,6 +333,7 @@ class PlayerSetUp:
             print("Tried to run and slipped. Things are gona get ugly!\n")
             # only fight is available now so that cna handle all the logic
             return "fail"
+
 
 engine = PlayerSetUp()
 
