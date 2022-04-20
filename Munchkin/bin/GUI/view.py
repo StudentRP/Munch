@@ -542,8 +542,6 @@ class MainLoop(tk.Frame):
         Tools.fluid_player_info()
 
     def run(self):
-        engine.card_method_activator("persistent", "on", table_card_index=0) # grabs the 1st card put on the table to run persistent method. TODO: change card_num for a card selector
-
         player = library.GameObjects.active_player
         if player.run_away: # checks ability to run from player attrib
             result = engine.run()
