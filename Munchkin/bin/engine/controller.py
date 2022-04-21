@@ -43,7 +43,7 @@ class PlayerSetUp:
 
     def active_player_creation(self):
         """ calls Player.factory creating player instances"""
-        for person in range(library.StartVariables.new_players + 1):
+        for person in range(library.StartVariables.new_players):
             player = Player.factory()
             library.GameObjects.session_players.append(player)
         self.deal_handler("start")

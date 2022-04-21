@@ -443,6 +443,8 @@ class MainLoop(tk.Frame):
         """Calls methods associated to kicking the door. End result is to move cards to the desired location ie on table
         ready for fight (and display) or in to the players handCommits a player to game action by disabling buttons. """
 
+        for player in library.GameObjects.session_players:
+            print(player)
         print("\nKicking door method")
         # Commits player to game loop
         self.message2.destroy()  # removes dev label

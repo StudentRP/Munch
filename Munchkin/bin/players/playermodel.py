@@ -36,8 +36,11 @@ attributes based on action outcomes."""
 
 class Player(MonTools, T_tools):
     """Main player class, inherits off card methods making changes to the player."""
+    num_of_instances = 0
 
     def __init__(self):
+        Player.num_of_instances = Player.num_of_instances + 1
+        self.ref = Player.num_of_instances
         self.name = ""
         self.gender = "male" # default required..dont think it works like this...
         self.level = 1 # win lvl 10, make changeable so edit score to win
@@ -72,7 +75,7 @@ class Player(MonTools, T_tools):
 
     def __repr__(self):
         """developer aid"""
-        return f"\nPLAYER Name:{self.name}\ngender:{self.gender}\nLevel:{self.level}" \
+        return f"\nPLAYER Ref:{self.ref}\nName:{self.name}\nGender:{self.gender}\nLevel:{self.level}" \
                f"\nBonus:{self.bonus}\nSack:{self.wallet}\n"
 
     @classmethod
@@ -228,19 +231,20 @@ class Player(MonTools, T_tools):
         self.sum_of_bonuses()
 
     def card_meths(self, *args, **kwargs):
-        """link to card methods, args should be the card, kwards the different card meths and actions to take
+        """ link to card methods, args should be the card, kwards the different card meths and actions to take
         ie 'static':'on' """
         print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") # info on meth used and status
-
-        for k, v in kwargs.items(): # loops supplied kwards
-            print(k, v)
-            if k in args[0]: # looks for kward key in monster card. ie is there a static key in card?
+        # single cards processing...just use another layer for processing more than one card
+        for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
+            # print(k, v)
+            if k in args[0]: # 1st arg of tuple. Looks for kward key in provided card. ie is there a static key in card? (kward key == card key)
                 print(f'confirmed match of {k}')
-                method = args[0].get(k) # gets method of the found key in card ie static : no_run
-                print(method)
-                if method in MonTools.method_types: # checks to see if method (the value from above) is in dict
-                    action = MonTools.method_types.get(method)
-                    action(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
+                method = args[0].get(k) # gets method of the found key in card ie static : no_run........ THIS COULD VERY EASILY BE A LIST THAT CAN BE LOOPED OVER TO IMPLEMENT SEVERAL METHS
+                for action in method: # loops over the list value  in card provided by the key.
+                    print(f"this card has {method} methods that will all be {v}")
+                    if action in MonTools.method_types: # checks to see if method (the value from above) is in dict
+                        method_call = MonTools.method_types.get(action)
+                        method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
 
 
 """

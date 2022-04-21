@@ -11,6 +11,13 @@ class MonTools:
     so far: 'add' = to add item from pack, 'remove' = bs outcome or curse
 
     """
+
+    def test_meth(self, *args):
+        print('In test meth expecting level change to 500')
+        if "on" in args:
+            self.level = 500
+
+
     def wandering_mon(self, *args, **kwargs):
         """needs to take in a card and build a list with monster in it and put in Table.in_play lol"""
 
@@ -67,7 +74,7 @@ class MonTools:
         else:
             self.unknown("klass_bonus error")
 
-    def race_bonus(self, action=None, *args):
+    def race_bonus(self, *args):
         if self.race.get("name") == "thief":
             pass
 
@@ -142,7 +149,7 @@ class MonTools:
             self.level -= 1
         print(f"player level after is : {self.level}")
 
-    method_types = {'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
+    method_types = {'test_meth': test_meth, 'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
                     "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
                     "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus,
                     'wandering_mon': wandering_mon
@@ -161,7 +168,7 @@ class Moncurse(MonTools):
 
     door_cards = [
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
-        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method': "below_waist", "static": "no_outrun"},
+        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method': ["below_waist"], "static": ["no_outrun", 'test_meth']},
         # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': "loose_level"},
         # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': "loose_level", "static":"shade"},
         # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': "monkey_business"},

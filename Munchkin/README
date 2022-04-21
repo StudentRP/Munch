@@ -3,6 +3,10 @@ Welcome to Munchkin Python style.
 This game seeks to bring the experience of Munchkin to the digital world. Battle through the dungeon fighting
 friends or foe as the lines become blurred.
 
-This game in not for retail/financial gain and mealy a practise for programing.
+This program is not for retail/financial gain and mealy a vessel to practise programing of a well loved game.
 
+
+To play run the view.py script.
+
+Only dependency is pillow. Tested on linux and windows 10. (Note gui widget placement changes dependent on system, be grateful i resolved the path issue!)
 
