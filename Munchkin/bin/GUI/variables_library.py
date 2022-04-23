@@ -50,7 +50,7 @@ class CardDraw:
     door_attempts_remaining = 1 #default = 1 (True)
 
 
-class PlayerAtribs:
+class PlayerAttribs:
     """Must mirror whats in controller.PlayerSetUp.verbinding and call to bind here!"""
     player_ref = 0
     player_name = 'BOB' # current session player name

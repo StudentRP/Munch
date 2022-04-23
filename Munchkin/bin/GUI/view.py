@@ -79,28 +79,28 @@ class Main(tk.Tk):
         frame = self.frames[content] # looks up the frame in the dict
         frame.tkraise() # brings the child frame to the forefront to be seen within the main container frame
 
-    def update_atrib_frame(self):
+    def update_attrib_frame(self):
         """Binds all the labels to the gamevar for player change with the set method"""
         self.geometry("800x600+320+20") # changes the geometry when called ## need to move
-        self.name.set(library.PlayerAtribs.player_name)
-        self.gender.set(library.PlayerAtribs.player_gender)
-        self.race.set(library.PlayerAtribs.player_race)
-        self.race2.set(library.PlayerAtribs.player_race2)
-        self.klass.set(library.PlayerAtribs.player_klass)
-        self.klass2.set(library.PlayerAtribs.player_klass2)
-        self.level.set(library.PlayerAtribs.player_level)
-        self.bonus.set(library.PlayerAtribs.player_bonus)
-        self.wallet.set(library.PlayerAtribs.player_wallet)
+        self.name.set(library.PlayerAttribs.player_name)
+        self.gender.set(library.PlayerAttribs.player_gender)
+        self.race.set(library.PlayerAttribs.player_race)
+        self.race2.set(library.PlayerAttribs.player_race2)
+        self.klass.set(library.PlayerAttribs.player_klass)
+        self.klass2.set(library.PlayerAttribs.player_klass2)
+        self.level.set(library.PlayerAttribs.player_level)
+        self.bonus.set(library.PlayerAttribs.player_bonus)
+        self.wallet.set(library.PlayerAttribs.player_wallet)
 
-        self.l_hand.set(library.PlayerAtribs.player_l_hand)
-        self.r_hand.set(library.PlayerAtribs.player_r_hand)
-        self.two_hand.set(library.PlayerAtribs.player_two_hand)
+        self.l_hand.set(library.PlayerAttribs.player_l_hand)
+        self.r_hand.set(library.PlayerAttribs.player_r_hand)
+        self.two_hand.set(library.PlayerAttribs.player_two_hand)
 
-        self.headgear.set(library.PlayerAtribs.player_headgear)
-        self.armor.set(library.PlayerAtribs.player_armor)
-        self.knees.set(library.PlayerAtribs.player_knees)
-        self.footgear.set(library.PlayerAtribs.player_footgear)
-        self.necklace.set(library.PlayerAtribs.player_necklace)
+        self.headgear.set(library.PlayerAttribs.player_headgear)
+        self.armor.set(library.PlayerAttribs.player_armor)
+        self.knees.set(library.PlayerAttribs.player_knees)
+        self.footgear.set(library.PlayerAttribs.player_footgear)
+        self.necklace.set(library.PlayerAttribs.player_necklace)
 
     def update_message(self, action=None):
         if action == "show":
@@ -110,7 +110,6 @@ class Main(tk.Tk):
         else:
             self.message.set("")
             self.message2.set("")
-
 
 ##########################################################################
 # frames to build up interface
@@ -281,8 +280,8 @@ class PlayerInfo(tk.Toplevel):
         if players_assign >= 1: # loop wont work as branch needs to be restarted per player
             players_assign -= 1 # decreases the num of new pLayer integer to count down players_assign of players left to assign
             PlayerInfo.label_counter += 1 # increase player counter for arbitrary label in class scope
-            library.PlayerAtribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
-            library.PlayerAtribs.player_gender = self.instgender.get() # entered gender binds to gameVar
+            library.PlayerAttribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
+            library.PlayerAttribs.player_gender = self.instgender.get() # entered gender binds to gameVar
             engine.player_name_gender(PlayerInfo.list_indexer) # method to index session_players list for specific player and set name and gender attribs
             PlayerInfo.list_indexer = PlayerInfo.list_indexer + 1 # increases index value so looping will call next player in session_players list
             PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
@@ -301,7 +300,7 @@ class PlayerInfo(tk.Toplevel):
                 #~~~~~~~~~~~~~~~
 
                 engine.set_random_player() # gets a random player from the active player list, auto calls varbinging binding all variables.
-                app.update_atrib_frame() # updates all label variables from gameVar to MainLoop frame.
+                app.update_attrib_frame() # updates all label variables from gameVar to MainLoop frame.
                 app.update_message("show")
                 app.update_message("dev") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
@@ -436,15 +435,13 @@ class MainLoop(tk.Frame):
         app.update_message()  # clears all messages
         app.update_message("show") # updates main broadcast message
         # self.message2.destroy() # destroys message2 for the dev mode
-        app.update_atrib_frame() # updates the tk.vars in Main under the instance controller.
+        app.update_attrib_frame() # updates the tk.vars in Main under the instance controller.
         print(" Turn ended!\n", "."*10, "\n")
 
     def door(self):
         """Calls methods associated to kicking the door. End result is to move cards to the desired location ie on table
         ready for fight (and display) or in to the players handCommits a player to game action by disabling buttons. """
 
-        for player in library.GameObjects.session_players:
-            print(player)
         print("\nKicking door method")
         # Commits player to game loop
         self.message2.destroy()  # removes dev label
@@ -465,16 +462,18 @@ class MainLoop(tk.Frame):
             # broadcast new message
             if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # General card that is NOT a mon or a curse
                 library.GameObjects.message = f"Your card is: {door_card.get('name')}"
-            app.update_message("show") # update the broadcast message
+                app.update_message("show") # update the broadcast message
 
             # if monster set the following button configs.
             if door_card["type"] == "monster":
-                self.door_button.config(state="disabled") # kick door
+                self.door_button.config(state="disabled") # kick door NO MORE USE OF THE DOOR!
                 self.weapons_button.config(state="disabled") # weapons
                 self.armor_button.config(state="disabled") # armor
                 self.sell_button.config(state="disabled") # sell
                 self.fight_button.config(state="normal") # fight
                 self.run_away_button.config(state="normal") # run
+
+            # other cards fall of bottom for the door_attempts_remaining catch to be set.
 
 
                 # 2nd attempt circumstance
@@ -485,12 +484,12 @@ class MainLoop(tk.Frame):
             self.pic = Tools.viewer(0)  # gets card pic face down
             self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
             self.door_button.config(state="disabled") # disables door button
-            self.end_turn_button.config(state="normal") # enables fight
+            self.end_turn_button.config(state="normal")
             app.update_message("show")
 
         # final end of methods
 
-        library.CardDraw.door_attempts_remaining = 0  # set to false after first kick (always runs on this button)
+        library.CardDraw.door_attempts_remaining = 0  # set to false after first kick, only monster will deactivate the button
         Tools.fluid_player_info() # updates any changes cause by status effecting cards to the player............................right place?
         print("Door attempts:zero= last attempt:: ", library.CardDraw.door_attempts_remaining)
 
@@ -518,7 +517,7 @@ class MainLoop(tk.Frame):
             # grab first card
             self.selected_card = cards.in_play[0][0] # [fight selector], [monster selector/enhancer selector]. to be defined by monster selector tl
             print(self.selected_card, id(cards.in_play))
-        player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
+        # player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
 
         selfobj = app.frames[MainLoop] # what is this doing?
 
@@ -796,7 +795,7 @@ class Tools:
 
         engine.player_attrib_ipc_updater(library.GameObjects.active_player) # ensures all player info is up to
         # date and sent to gameVar
-        app.update_atrib_frame() # updates the GUI with the new player info
+        app.update_attrib_frame() # updates the GUI with the new player info
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
     @staticmethod

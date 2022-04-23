@@ -85,13 +85,13 @@ class Player(MonTools, T_tools):
     @classmethod
     def gender(cls):
         """Sets gender"""
-        x = library.PlayerAtribs.player_gender # grabs string stored in in game var
+        x = library.PlayerAttribs.player_gender # grabs string stored in in game var
         return x
 
     @classmethod
     def name(cls):
         """Sets name"""
-        x = library.PlayerAtribs.player_name
+        x = library.PlayerAttribs.player_name
         if x == "rory":  # ......................................................................... dev mode
             y = "The_Creator"
             return y
@@ -118,7 +118,7 @@ class Player(MonTools, T_tools):
             self.gender = "bob"
             self.bonus = 200
             self.wallet = 20000
-            library.PlayerAtribs.player_gender = self.gender
+            library.PlayerAttribs.player_gender = self.gender
             library.GameObjects.message2 = f"{self.name} is in play, A God among mortals!"
 
         #~~~~~~~~~~~~ info
@@ -234,13 +234,10 @@ class Player(MonTools, T_tools):
         """ link to card methods, args should be the card, kwards the different card meths and actions to take
         ie 'static':'on' """
         print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") #  args are the cards sent, info on meth used and status
-
-        for card in args: # takes in as many cards in args tuple. Also works if cards are wrapped in list
+        for card in args: # takes in as many cards in args tuple.
             for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
-                print(k, v)
-                # if k in card: # 1st arg of tuple. Looks for kward key in provided card. ie is there a static key in card? (kward key == card key)
-                print('card is', card)
-                print(f'confirmed match of {k}')
+                print(f'card is {card},\nSearching for a {k} method')
+                print(f'Confirmed match of: {k}, Switching status to: {v}')
                 method = card.get(k)
                 for action in method: # loops over the list value  in card provided by the key.
                     print(f"this card has {method} methods that will all be {v}")

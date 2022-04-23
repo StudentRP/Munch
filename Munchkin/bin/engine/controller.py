@@ -89,28 +89,28 @@ class PlayerSetUp:
 
     def player_attrib_ipc_updater(self, playerinst=library.GameObjects.active_player): # defaults to gamevar active_player player
         """Binds all player atribs to gameVar for current player activity. Can take param of a player or grab active_player."""
-        library.PlayerAtribs.player_name = playerinst.name.title()
-        library.PlayerAtribs.player_gender = playerinst.gender.title()
-        library.PlayerAtribs.player_level = playerinst.level
-        library.PlayerAtribs.player_bonus = playerinst.bonus
-        library.PlayerAtribs.player_wallet = playerinst.wallet
-        library.PlayerAtribs.player_race = playerinst.race.title()
-        library.PlayerAtribs.player_race2 = playerinst.race2.title()
-        library.PlayerAtribs.player_klass = playerinst.klass.title()
-        library.PlayerAtribs.player_klass2 = playerinst.klass2.title()
-        library.PlayerAtribs.player_sack = playerinst.sack
-        library.PlayerAtribs.player_l_hand = playerinst.update_bindings("L_hand")
-        library.PlayerAtribs.player_r_hand = playerinst.update_bindings("R_hand")
-        library.PlayerAtribs.player_two_hand = playerinst.update_bindings("two_hand")
-        library.PlayerAtribs.player_headgear = playerinst.update_bindings("headgear")
-        library.PlayerAtribs.player_armor = playerinst.update_bindings("armor")
-        library.PlayerAtribs.player_knees = playerinst.update_bindings("knees")
-        library.PlayerAtribs.player_footgear = playerinst.update_bindings("footgear")
-        library.PlayerAtribs.player_necklace = playerinst.update_bindings("necklace")
+        library.PlayerAttribs.player_name = playerinst.name.title()
+        library.PlayerAttribs.player_gender = playerinst.gender.title()
+        library.PlayerAttribs.player_level = playerinst.level
+        library.PlayerAttribs.player_bonus = playerinst.bonus
+        library.PlayerAttribs.player_wallet = playerinst.wallet
+        library.PlayerAttribs.player_race = playerinst.race.title()
+        library.PlayerAttribs.player_race2 = playerinst.race2.title()
+        library.PlayerAttribs.player_klass = playerinst.klass.title()
+        library.PlayerAttribs.player_klass2 = playerinst.klass2.title()
+        library.PlayerAttribs.player_sack = playerinst.sack
+        library.PlayerAttribs.player_l_hand = playerinst.update_bindings("L_hand")
+        library.PlayerAttribs.player_r_hand = playerinst.update_bindings("R_hand")
+        library.PlayerAttribs.player_two_hand = playerinst.update_bindings("two_hand")
+        library.PlayerAttribs.player_headgear = playerinst.update_bindings("headgear")
+        library.PlayerAttribs.player_armor = playerinst.update_bindings("armor")
+        library.PlayerAttribs.player_knees = playerinst.update_bindings("knees")
+        library.PlayerAttribs.player_footgear = playerinst.update_bindings("footgear")
+        library.PlayerAttribs.player_necklace = playerinst.update_bindings("necklace")
 
 # card handling class:
 
-    def deal_handler(self, option, deal_amount=0):
+    def deal_handler(self, option, deal_amount=1):
         """ Sends requests to the dealer based on the option parameter to define card type.
         Deal_amount defines how many of the cards are to be returned to a player.
         """
@@ -119,21 +119,21 @@ class PlayerSetUp:
 
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
             for player in library.GameObjects.session_players: # loops over each player in session_players
-                player.sack = cards.card_sop.deal_cards(option, cardnum=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
+                player.sack = cards.card_sop.deal_cards(option, deal_amount=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
 
         elif option == "door": # Standard gameplay loop on door kick
             print("In deal_handler, retrieving door card & determining fate of card")  # test location
-            door_card = cards.card_sop.deal_cards(option, cardnum=1) # fetches 1 door card,
+            door_card = cards.card_sop.deal_cards(option, deal_amount) # fetches 1 door card defined by the default,
             return door_card # for pic use only in gui
 
         elif option == "treasure": # Deal treasure, requires number for amount to deal.
             print("retrieving treasure card/s") # test location
-            add_treasure = cards.card_sop.deal_cards(option, cardnum=deal_amount) # cardnum is usually determined by the treasures a monster holds.
+            add_treasure = cards.card_sop.deal_cards(option, deal_amount=deal_amount) # cardnum is usually determined by the treasures a monster holds.
             playerinst.sack = playerinst.sack + add_treasure # DUMPS ALL IN THE ACTIVE_PLAYER.....TODO::Sort how treasure is handled when used as currency for another players help
 
         elif option == "resurrect":
             if library.Options.perm_death:
-                playerinst.sack = cards.card_sop.deal_cards("start", cardnum=library.Options.cards_dealt)
+                playerinst.sack = cards.card_sop.deal_cards("start", deal_amount=library.Options.cards_dealt)
             else:
                 print(f"Game over for {playerinst.name}, BUMMER!")
 
@@ -153,11 +153,7 @@ class PlayerSetUp:
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
                 cards.in_play[0].append(card) # places card on table in the lol for the first fight.
-
-                player.card_meths(card, static='on') # activates any static meths for the card TEST WITH 2 CARDS
-                # print(f'player in game:: {player.name}')
-                # print("This is the card in play;", cards.in_play, 'id', id(cards.in_play)) # TEST INFO
-
+                player.card_meths(card, static='on') # activates any static meths for the card. TESTED WITH 2 CARDS. OK!
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
@@ -175,7 +171,7 @@ class PlayerSetUp:
                     library.GameObjects.message = f"timed curse card not configured yet" # overrides top message
                     #TODO meth for timed
                     cards.burn_pile.append(card) # disposes of to burn pile
-                    print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}")
+                    print(f"card status is passive, should be added to burn pile!\nBurn pile {cards.burn_pile}"),
 
             else: # for all other cards that have no direct effect or influence.
                 print(f"Adding {card['name']}to sack.")
