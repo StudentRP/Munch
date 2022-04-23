@@ -503,7 +503,7 @@ class MainLoop(tk.Frame):
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
-
+#Todo next job sort this mess and add in monster selector TL
         """ selecting monster and fighting"""
         print("Fight button pressed") # TEST
         #fight select setup
