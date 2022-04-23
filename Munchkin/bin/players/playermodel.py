@@ -230,21 +230,49 @@ class Player(MonTools, T_tools):
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, *args, **kwargs):
+    def card_meths(self, *args, **kwargs): # takes single cards no list
         """ link to card methods, args should be the card, kwards the different card meths and actions to take
         ie 'static':'on' """
-        print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") # info on meth used and status
-        # single cards processing...just use another layer for processing more than one card
-        for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
-            # print(k, v)
-            if k in args[0]: # 1st arg of tuple. Looks for kward key in provided card. ie is there a static key in card? (kward key == card key)
+        print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") #  args are the cards sent, info on meth used and status
+
+        for card in args: # takes in as many cards in args tuple. Also works if cards are wrapped in list
+            for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
+                print(k, v)
+                # if k in card: # 1st arg of tuple. Looks for kward key in provided card. ie is there a static key in card? (kward key == card key)
+                print('card is', card)
                 print(f'confirmed match of {k}')
-                method = args[0].get(k) # gets method of the found key in card ie static : no_run........ THIS COULD VERY EASILY BE A LIST THAT CAN BE LOOPED OVER TO IMPLEMENT SEVERAL METHS
+                method = card.get(k)
                 for action in method: # loops over the list value  in card provided by the key.
                     print(f"this card has {method} methods that will all be {v}")
                     if action in MonTools.method_types: # checks to see if method (the value from above) is in dict
-                        method_call = MonTools.method_types.get(action)
-                        method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
+                            method_call = MonTools.method_types.get(action)
+                            method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
+
+
+    # def card_meths(self, *args, **kwargs): #card meth to take in all card formats whether as single card/series of cards or presented as a list of cards
+    #     """ link to card methods, args should be the card, kwards the different card meths and actions to take
+    #     ie 'static':'on' """
+    #     print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") #  args are the cards sent, info on meth used and status
+    #
+    #     for cardset in args: # takes in as many cards in args tuple. Also works if cards are wrapped in list
+    #         for card in cardset: # if args list of cards iterates over each card, IF single card iterates over the keys!
+    #             for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
+    #                 print(k, v)
+    #                 # if k in card: # 1st arg of tuple. Looks for kward key in provided card. ie is there a static key in card? (kward key == card key)
+    #                 print('card is', card)
+    #                 print(f'confirmed match of {k}')
+    #                 if isinstance(cardset, list):
+    #                     method = card.get(k) # gets method of the found key in card ie static : no_run........ THIS COULD VERY EASILY BE A LIST THAT CAN BE LOOPED OVER TO IMPLEMENT SEVERAL METHS
+    #                 else:
+    #                     method = cardset.get(k)
+    #
+    #                 for action in method: # loops over the list value  in card provided by the key.
+    #                     print(f"this card has {method} methods that will all be {v}")
+    #                     if action in MonTools.method_types: # checks to see if method (the value from above) is in dict
+    #                             method_call = MonTools.method_types.get(action)
+    #                             method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
+
+
 
 
 """

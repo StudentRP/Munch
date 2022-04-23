@@ -154,7 +154,7 @@ class PlayerSetUp:
                 library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
                 cards.in_play[0].append(card) # places card on table in the lol for the first fight.
 
-                player.card_meths(card, static='on') # activates any static meths for the card
+                player.card_meths(card, static='on') # activates any static meths for the card TEST WITH 2 CARDS
                 # print(f'player in game:: {player.name}')
                 # print("This is the card in play;", cards.in_play, 'id', id(cards.in_play)) # TEST INFO
 

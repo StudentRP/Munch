@@ -99,23 +99,30 @@
 # app.mainloop()
 
 def card_meth(*arg, **kwargs):
-    for a in arg:
-        if a == 'foo':
-            print(a)
-        else:
-            print('nope')
+    print(arg)
+    for cardset in arg:
+        print(cardset)
+        for card in cardset:
+            print(card)
+            if 'mon' in card:
+                print('monster found')
+            else:
+                print(card.get('enhancer', 'Not enhancer'))
 
 
-    if kwargs.get('foo'):
-        print('in dict')
+
+    # if kwargs.get('foo'):
+    #     print('in dict')
 # card_meth('foo', 'bar', foo='foobar')
 
 
 f = [ [{'mon': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}], [{'mon': ["b", 'bb', 'bbb']}] ]
+n = {'mon': ["a"]}, {'enhancer': ['enhancer found']}, {'mon': ["b"]}, {'weap': ["w"]}  # simulates 3 cards in list
+card_meth(n)
 
-print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
-print(f[0][0])
-print(len(f[0][0]))
-print(len(f))
-x=f
-print(id(f), id(x))
+# print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
+# print(f[0][0])
+# print(len(f[0][0]))
+# print(len(f))
+# x=f
+# print(id(f), id(x))

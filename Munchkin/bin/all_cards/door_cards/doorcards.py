@@ -15,7 +15,10 @@ class MonTools:
     def test_meth(self, *args):
         print('In test meth expecting level change to 500')
         if "on" in args:
+            print('lvl changed')
             self.level = 500
+        else:
+            self.level = -500
 
 
     def wandering_mon(self, *args, **kwargs):
@@ -245,14 +248,16 @@ class Moncurse(MonTools):
         """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
         print("CARD METHOD TEST")
         test_type = "static" # card key.  method, This ois to be passed before play when selecting a monster to action
+        # for card in cards
         if card.get(test_type, "Method not in card"): # checks to see if test_type in card.
-            value = card[test_type] # gets value stored at card key (test_type)
+            meth_list = card[test_type] # gets value stored at card key (test_type)
             print(value)
-            get_method = MonTools.method_types[value] # returns inactive method #looks up method with key assigning inactive value
-            get_method(self, action, value) # action 'on' or 'off', value level to add/ remove
+            for meth in meth_list:
+                get_method = MonTools.method_types[meth] # returns inactive method #looks up method with key assigning inactive value
+                get_method(self, action, value) # action 'on' or 'off', value level to add/ remove
 
     def __getattr__(self, attrib):
-        """simulates player attribs for the instance m1 when called by monster mehtods. Acts as attribute not found lookup."""
+        """simulates player attribs for the instance m1 when called by monster mehtods. Acts as attribute not found lookup for the string interpretation of the attrib."""
         if attrib == "level": # catches m1.level (FROM CARD METHS) setting to 4 mimicking a player with a level of 4.
             return 4 # provides m1 with player traits of level
         elif attrib == "gender":

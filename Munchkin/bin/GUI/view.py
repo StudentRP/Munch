@@ -215,15 +215,15 @@ class PlayerSelect(tk.Frame):
         label.pack(pady=10, padx=10)
         l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players) # num of players select
         l1.focus()
-        l1.set(1)
+        l1.set(1) # sets inittal value on spinbox to 1
         l1.pack()
         but1 = tk.Button(self, text="Confirm", command=self.playersetter)
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack(side="bottom")
 
     def playersetter(self):
-        """Binds values from spinbox to gui_var for later use and calls next stage. Calls player slice and meth to set
-        initial player cards. COULD USE A INSTANCE FACTORY TO BUILD PLAYERS"""
+        """Binds values from spinbox to gui_var for later use and calls next stage. Calls playermodel factory and meth to set
+        initial player cards."""
         library.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         library.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
 

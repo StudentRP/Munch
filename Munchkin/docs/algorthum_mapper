@@ -327,29 +327,26 @@ player can now either re-enter options of press start
 #######################################################################
 # Name/gender, random player to start and deal starting set of cards
 #######################################################################
-Details method for setting a players name/gender, dealling them a starter set of cards, setting random player to initally
-and binding that player to the active_player variable
+Details method for setting a players name/gender, dealing each player a starter set of cards, setting random player to
+start and binding that player to the active_player variable for a reference in the game scope for player attrib access.
 
-PlayerSelect(), class
+PlayerSelect(), class (views.py)
     creates spinbox with textvariable=self.Num_of_players bound to tk.IntVar()
     and Confirm Button that calls self.playersetter method
 
-    playersetter, method
+    playersetter(),  Button handler
         library.StartVariables.new_players = self.Num_of_players.get()
-            pulls the number of selected players from the spinbox and binds to library new_players
-            This is the number of players wanted in the current game.
+            pulls the number of selected players from the spinbox and binds within variable_library.py under StartVariables
+            new_players. This is the number of players wanted in the current game.
 
         library.StartVariables.player_rand = self.Num_of_players.get()
-            Binds player_rand to Num_of_players also.
+            Also uses the spinbox var for later indexing
 
         engine.active_player_creation(), method
             method is used to call Player.factory building player instances and placing them into a list of sesion_players.
             deal_handler() is then called which deals cards to each player in the game session.
 
-            num_of_players = library.StartVariables.new_players
-            actual players named session_players which is then stored in library.
-                This is used to slice available_players list into a list of
-                library.StartVariables.session_players = library.StartVariables.players_available[:num_of_players]
+
 
             deal_handler("start"), method
             Flexible method created to deal cards either at start, after death or specific cards (door/treasure).
@@ -638,8 +635,10 @@ most likely card associated methods that are called at start of play to enrich/e
 #######################################################################
 Door button triggers the advancement through the game by placing cards on the table. 3 types of card can be door cards.
 The three types include: monster, curse or other. In the case of a non-fighting card the player may have the option to
-loot the room (another kick of the door that send a card strait to the players hand) or look for trouble
-(fight a monster from their hand).
+loot the room (another kick of the door that send a card strait to the players hand, not shown on table) or look for trouble
+(fight a monster from their hand). On the first kick of the door and a monster or curse card is returned, static methods
+are activated (static = conditions determined from the card that must be in place before a fight ie cant outrun, or
+instant curse action)
 
 Curses come in 3 flavours, one_shot, time dependent (lasts certain amount of time usually a turn) and permanent until a
 condition is met. More on curses under curse section. Their action is strictly kicking (1st turn) a door and player
