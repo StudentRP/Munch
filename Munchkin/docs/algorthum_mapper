@@ -701,6 +701,7 @@ Door button > door method
     Tools.fluid_player_info()
            Updates any changes to the player made by the the door_card ready for the next scenario.
 
+Remember: After this method ends static card methods have been enabled, card is on the table or in hand, button sates have changed
 
 
 #######################################################################
@@ -717,6 +718,69 @@ with the run button discussed later.
 #######################################################################
 method looks up a players ability to run - as a bool 0 = false so no run and all other numbers = true.
 If true this number represents the roll required to escape
+
+
+#######################################################################
+# card activation
+#######################################################################
+Card activation is a massive part of the game so a dynamic system is required. cards are required to be activated when:
+# first put on table be it monster or curse
+# used in interferance, wondering monster, enhancer
+# when equipped as enhancer
+# results of win/looses in fights
+# change must be specific to a player
+
+Method must:
+    # take in any number of cards and methods and states
+    # activate card method
+    # change player state/ include remove items
+    # elicit change from and enchantment within a player
+    # in some cases return a cred for further processing
+
+Generic method calls:
+    # player.card_meths(card, static='on') 3 important parts: 1) player is the active player during the game
+        2) Card/s must be the first argument/s 3) keywords must be used to define a method and a state.
+
+Method:
+        card_meths(self, *args, **kwargs)
+            Loops over kwargs generating retrieving the keys and values (method : state).
+            The first arg should be the card in which u wish to activate with the method and state
+            Cards are packed in a tuple thus indexing is used to address the correct card.
+            Method should retrieve a list of methods as its value from the card and iterated over. This is so a card
+            can have more than one method associated to a key.
+            The method from the list is checked against the keys of method_types found in either the doorcards.py or
+            treasure.py scripts.
+            matches calls the first class object with params : method_call(self, state, args[1:])
+            This places the player in direct association to the methods associated to the cards and thus changing
+            player states. state will tell the method to switch on or off and args[1:] passes all but the first card to
+            the method if required. This is important for wondering monsters!
+
+Typical monster method:
+        def test_meth(self, *args):
+            print('In test meth expecting level change to 500')
+            if "on" in args:
+                print('lvl changed')
+                self.level = 500
+            else:
+                self.level = -500
+
+    # args in this cas uses args[0] as state control, all others will be cards.
+    # self.level gives direct access to the player state information.
+
+Notes: from within doorcards.py or treasure.py scripts cards can not be sent to the burn or put into play. Them must therefore
+    be return back to the caller in controller class for further processing. As a relic of the proces of iteration through the
+    listed_meths a none type can be returned. This is screened out by a return check. before returned cards are processed.
+    any object returned to the caller is in the form of a list object. The first arg of this is a string that is used to
+    determine the fate of the cards. This process is also used to deal with the initial fires card, args[0].
+
+Look_up kwargs calls:
+    static='on' # turns the static method on. 'off' will have the opposite effect..
+    method_bs='on' # Runs the bad stuff after a fight
+
+
+
+
+
 
 
 #######################################################################

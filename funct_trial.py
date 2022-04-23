@@ -109,16 +109,13 @@ def card_meth(*arg, **kwargs):
             else:
                 print(card.get('enhancer', 'Not enhancer'))
 
-
-
     # if kwargs.get('foo'):
     #     print('in dict')
 # card_meth('foo', 'bar', foo='foobar')
 
-
 f = [ [{'mon': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}], [{'mon': ["b", 'bb', 'bbb']}] ]
 n = {'mon': ["a"]}, {'enhancer': ['enhancer found']}, {'mon': ["b"]}, {'weap': ["w"]}  # simulates 3 cards in list
-card_meth(n)
+# card_meth(n)
 
 # print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
 # print(f[0][0])
@@ -126,3 +123,12 @@ card_meth(n)
 # print(len(f))
 # x=f
 # print(id(f), id(x))
+
+armor = {"headgear": "", "armor": "", "knees": "", "footgear": "", "necklace": "", "ring": {'fireband': ['hot!']}, "ring2": ""}
+
+print(armor)
+print(armor.get('ring'))
+a = armor.pop('ring')
+a = armor['ring'] = "" # need to be added back in as pop removes
+print(armor)
+print(a)

@@ -20,7 +20,8 @@ from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
 from Munchkin.bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
 import bin.GUI.variables_library as library
-from bin.all_cards.table import cards
+# from bin.all_cards.table import cards
+from bin.GUI.variables_library import cards # single location to same memory address
 from bin.all_cards.door_cards.doorcards import MonTools
 from bin.all_cards.treasure_cards.treasurecards import T_tools
 from itertools import cycle
@@ -57,7 +58,7 @@ class Player(MonTools, T_tools):
         self.big_unlock = False
         self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""} # values will be cards
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
-        self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
+        self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": {'testcard': 'armor'},
                       "necklace": "", "ring": "", "ring2": ""}
         self.sack = [] # 5 max, editable in options
         self.hireling = []
@@ -230,20 +231,30 @@ class Player(MonTools, T_tools):
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, *args, **kwargs): # takes single cards no list
-        """ link to card methods, args should be the card, kwards the different card meths and actions to take
+    def card_meths(self, *args, **kwargs): # expects (card/s) dict('static'='on')
+        """ link to card methods, args should be the card/s, kwards the different card meths and actions to take
         ie 'static':'on' """
-        print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") #  args are the cards sent, info on meth used and status
-        for card in args: # takes in as many cards in args tuple.
-            for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
-                print(f'card is {card},\nSearching for a {k} method')
-                print(f'Confirmed match of: {k}, Switching status to: {v}')
-                method = card.get(k)
-                for action in method: # loops over the list value  in card provided by the key.
-                    print(f"this card has {method} methods that will all be {v}")
-                    if action in MonTools.method_types: # checks to see if method (the value from above) is in dict
-                            method_call = MonTools.method_types.get(action)
-                            method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
+        print(f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}") # args are the cards sent, info on meth used and status
+        for method, state in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
+            print(f'Card is {args[0]["name"]}. Searching for a {method} method')
+            if args[0].get(method): # checks 1st card in args for the kward key method
+                for listed_meth in args[0].get(method): # loops over the list values. "static": ["no_outrun", 'test_meth']
+                    print(listed_meth) # leave in to make sure I made it a list!!! TEST
+                    if listed_meth in MonTools.method_types: # checks if method (the value from above) is in monster_types dict
+                        method_call = MonTools.method_types.get(listed_meth) # returns method associated to the value of monster_types
+                        dispose_card = method_call(self, state, args[1:]) # returns None, or [card_destination, card] method_call(self, on, all other cards in the tuple)
+
+                        if dispose_card: # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
+                            if dispose_card[0] == 'burn':
+                                cards.add_to_burn(dispose_card[1]) # recycles any card that has been removed from a player from a method
+                            elif dispose_card[0] == 'wondering':
+                                print(' are wee here?')
+                                cards.in_play.append(dispose_card[1]) # places new monster on table
+                                cards.add_to_burn(args[0]) # disposes of original card ie wandering monster card
+                            elif dispose_card[0] == 'enhancer':
+                                cards.add_to_burn(args[0])
+                                return dispose_card[1] # returns to caller for processing further, usually enhancer to monster will be added to specific fight
+
 
 
     # def card_meths(self, *args, **kwargs): #card meth to take in all card formats whether as single card/series of cards or presented as a list of cards
@@ -268,6 +279,7 @@ class Player(MonTools, T_tools):
     #                     if action in MonTools.method_types: # checks to see if method (the value from above) is in dict
     #                             method_call = MonTools.method_types.get(action)
     #                             method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
+
 
 
 

@@ -503,44 +503,54 @@ class MainLoop(tk.Frame):
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
+
         """ selecting monster and fighting"""
         print("Fight button pressed") # TEST
         #fight select setup
-        player_obj = library.GameObjects.active_player # for grabing card_meths
+        player_obj = library.GameObjects.active_player #
+        print(player_obj.armor)
+        card = cards.in_play[0][0] # specific call to the card
+        print(f"the monster is {card['name']}")
+        player_obj.card_meths(card, method_bs='on') #  can throw more cards in here from the library.card_transfer list
+        print(player_obj.armor)
+        print(f'burn cards: {len(cards.burn_pile)}')
 
-        if len(cards.in_play) > 1:
-            # run monster selection toplevel selector
-            print('more than one monster present!!!!!!!!!!!')
-            pass
 
-        else:
-            # grab first card
-            self.selected_card = cards.in_play[0][0] # [fight selector], [monster selector/enhancer selector]. to be defined by monster selector tl
-            print(self.selected_card, id(cards.in_play))
-        # player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
 
-        selfobj = app.frames[MainLoop] # what is this doing?
 
-        result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
-
-        app.update_message("show") # name and lvl of monster
-        if result == "win":
-            self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
-            print('remove off canvas?????? ')
-            # pass # remove single card off tablecards off table
-        elif result == "loose":
-            pass # clears table runs card method
-
-        self.fight_button.config(state="disabled")  # fight
-        self.run_away_button.config(state="disabled")  # run
-        self.door_button.config(state="disabled")  # kick door
-
-        # remove card form list and canvas ect
-        self.end_turn_button.config(state="normal") # end turn
-        self.weapons_button.config(state="normal")  # weapons
-        self.armor_button.config(state="normal")  # armor
-        print("End of Fight\n")
-        Tools.fluid_player_info()
+        # if len(cards.in_play) > 1:
+        #     # run monster selection toplevel selector
+        #     print('more than one monster present!!!!!!!!!!!')
+        #     pass
+        #
+        # else:
+        #     # grab first card
+        #     self.selected_card = cards.in_play[0][0] # [fight selector], [monster selector/enhancer selector]. to be defined by monster selector tl
+        #     print(self.selected_card, id(cards.in_play))
+        # # player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
+        #
+        # selfobj = app.frames[MainLoop] # what is this doing?
+        #
+        # result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
+        #
+        # app.update_message("show") # name and lvl of monster
+        # if result == "win":
+        #     self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
+        #     print('remove off canvas?????? ')
+        #     # pass # remove single card off tablecards off table
+        # elif result == "loose":
+        #     pass # clears table runs card method
+        #
+        # self.fight_button.config(state="disabled")  # fight
+        # self.run_away_button.config(state="disabled")  # run
+        # self.door_button.config(state="disabled")  # kick door
+        #
+        # # remove card form list and canvas ect
+        # self.end_turn_button.config(state="normal") # end turn
+        # self.weapons_button.config(state="normal")  # weapons
+        # self.armor_button.config(state="normal")  # armor
+        # print("End of Fight\n")
+        # Tools.fluid_player_info()
 
     def run(self):
         player = library.GameObjects.active_player

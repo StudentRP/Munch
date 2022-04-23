@@ -30,6 +30,7 @@ class GameObjects:
     check_but_boo = [] # populated with checkbutton return values from intVar() objects
     check_but_card_ids = [] # populated with card id's
     zipped_tup = [] # populated with bools of card ids & fetched checkbutton from (check_but_card_ids, check_but_boo)
+    card_transfer = [] # intermediate storage for cards from player selection to a method action ie monster for wandering monster
 
 
 class Fight_enhancers:
