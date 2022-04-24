@@ -546,11 +546,11 @@ class MainLoop(tk.Frame):
         # self.door_button.config(state="disabled")  # kick door
         #
         # # remove card form list and canvas ect
-        # self.end_turn_button.config(state="normal") # end turn
-        # self.weapons_button.config(state="normal")  # weapons
-        # self.armor_button.config(state="normal")  # armor
-        # print("End of Fight\n")
-        # Tools.fluid_player_info()
+        self.end_turn_button.config(state="normal") # end turn
+        self.weapons_button.config(state="normal")  # weapons
+        self.armor_button.config(state="normal")  # armor
+        print("End of Fight\n")
+        Tools.fluid_player_info()
 
     def run(self):
         player = library.GameObjects.active_player
@@ -814,8 +814,10 @@ class Tools:
         # path = "..\\imgs\\cards\\" # this path will not work on linux requires os module and resolve() method
         # img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") #dependent on windows os
         BASE_DIR = Path(__file__).resolve().parent.parent
-        img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(card_id)}.png')) # works regardless of os
-
+        try:
+            img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(card_id)}.png')) # works regardless of os
+        except FileNotFoundError:
+            img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(0)}.png'))
         return img
 
 

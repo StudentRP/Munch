@@ -159,6 +159,9 @@ class PlayerSetUp:
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"The room you have entered has a curse {card.get('name').title()}.\n Lets hope you have protection!"
                 print("In curse::", player.active_curses)
+
+                player.card_meths(card, method_bs='on') # turns on curse bs## TEST
+
                 # ~~~~~~~~~~~~~TODO  curse checker method required ie tin hat, ork ect
                 if card.get("duration") == "persistent": # for constant effect curse
                     player.card_meths(card, "method", "on") # switches card on.
@@ -250,10 +253,11 @@ class PlayerSetUp:
                     break
 
         if flag: # only if flag remains True, compliant to non restrictions.
+
             if card["category"] == "treasure":  # for all treasure cards the player uses that was from their hand
                 self.player_treasure_cards(card) # for the use of treasure cards
-            # elif card["category"] == "door":  # for all enhancers ect that the player has from their hand  DO DOOR CARDS REALLY COME DOWN THIS ROUTE! however thowables???
-            #     self.player_door_cards(card) # for the use of door cards
+            elif card["category"] == "door":  # for all enhancers ect that the player has from their hand  DO DOOR CARDS REALLY COME DOWN THIS ROUTE! however thowables???
+                self.player_door_cards(card) # for the use of door cards
 
     def player_treasure_cards(self, card):
         """method to sort the locations of treasure cards that the player has selected"""
@@ -269,8 +273,8 @@ class PlayerSetUp:
 
     def player_door_cards(self, card): #card meth#####################################################
         player = library.GameObjects.active_player
-        player.card_meths(card, "method", "on")  # link to player to card meths.
-        print(player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
+        player.card_meths(card, method="on")  # link to player to card meths.
+        print('unlocking:', player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
         # meths added at end_turn
 
     def scrub_lists(self):

@@ -62,7 +62,6 @@ class MonTools:
     def supermunch(self, *args, **kwargs):
         """player class_unlock bool option;  ln 227 player_door_cards engine! """
         print(f"In supermunchkin. action is {args}") # location tester
-
         if "on" in args:
             self.klass_unlock = True
             print("class unlocked!!!")
@@ -202,19 +201,19 @@ class Moncurse(MonTools):
     door_cards = [ ##### Remember all methods have to be in list format for value!!!
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
         {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method_bs': ["below_waist"], "static": ["no_outrun", 'test_meth']},
-        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': ["loose_level"]},
-        {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': ["loose_level"], "static":["shade"]},
-        {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up":1, 'lexical': ['+ 2 to halflings'], 'method': ["monkey_business"]},
-
-        # Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
-        {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method': ['loose_footgear']},
-        {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method': ['loose_armor']},
-        {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method': ['loose_level']},
-        {'id': 404, "category": "door", 'type': 'curse', 'duration': 'timed', 'name': 'sex change', 'method': ['sex_change']}, # has another timed condition
-        {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method': ['loose_headgear']},
-        # {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': ['loose_small_item']},
-        {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method': ['income_one_shot']},
-        # Monster Enhancers
+        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': ["loose_level"]},
+        # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': ["loose_level"], "static":["shade"]},
+        # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up": 1, 'lexical': ['+ 2 to halflings'], 'method': ["monkey_business"]},
+        #
+        # # Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
+        # {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method_bs': ['loose_footgear']},
+        # {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method_bs': ['loose_armor']},
+        # {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method_bs': ['loose_level']},
+        # {'id': 404, "category": "door", 'type': 'curse', 'duration': 'timed', 'name': 'sex change', 'method_bs': ['sex_change']}, # has another timed condition
+        # {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method_bs': ['loose_headgear']},
+        # # {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': ['loose_small_item']},
+        # {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method_bs': ['income_one_shot']},
+        # # Monster Enhancers
         # #
         # # card modifiers ## methods to add to list
         # {'id': 800, "category": "door", 'type': 'modifier', 'name': 'Intelligent +5 to monster', 'method': ['add_5'], 'win': 'extra_treasure'},
@@ -241,17 +240,17 @@ class Moncurse(MonTools):
         #  'method': ['subtract_5', 'not_compat_enraged', 'not_compat_friendly'], 'win': '1less_treasure'},
         #
         ## Joining cards
-        # {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        # {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        # {'id': 502, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        # {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        # {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        {'id': 502, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
 
-        # {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed]},
-        # {'id': 601, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed]},
-        # {'id': 602, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed]},
-        # {'id': 603, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed]},
-        # {'id': 604, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed]},
+        # {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},
+        # {'id': 601, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},
+        # {'id': 602, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},
+        # {'id': 603, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},
+        # {'id': 604, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},
 
         # {'id': 701, "category": "door", 'type': 'wondering monster', 'name': 'Wondering Monster', "method": ['wondering_mon']},
         # {'id': 702, "category": "door", 'type': 'wondering monster', 'name': 'Wondering Monster', "method": ['wondering_mon']},
