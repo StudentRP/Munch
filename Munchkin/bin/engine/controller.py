@@ -14,11 +14,10 @@ Contents functions:
 
 
 from Munchkin.bin.players.playermodel import Player
-from Munchkin.bin.all_cards.table import dice # , cards
+from Munchkin.bin.all_cards.table import dice
 from random import randint, choice
 import bin.GUI.variables_library as library
 from itertools import cycle
-
 from bin.GUI.variables_library import cards
 print('controller', id(library.cards))
 from time import sleep
@@ -221,27 +220,31 @@ class PlayerSetUp:
         player = library.GameObjects.active_player
 
         checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
-                  player.klass2: "klass_requirement", player.gender: "gender_requirement"} # card specific requirements to use
-        flag = 1 # True
+                  player.klass2: "klass_requirement",
+                  player.gender: "gender_requirement"}  # card specific requirements to use
+        flag = 1  # True
 
         for player_attribs, card_requirement in checks.items():
             # checks card restrict method lexical for non use cases. If found player cant use.
-            if card.get('restriction', False): # checks card to see if there is a key named 'restriction'. if not return False
+            if card.get('restriction',
+                        False):  # checks card to see if there is a key named 'restriction'. if not return False
                 print("Searching card restriction method")
-                if player_attribs in card.get('restriction'):  # checks all player attribs to see if in restricted treasure card list # Returns True if match
+                if player_attribs in card.get(
+                        'restriction'):  # checks all player attribs to see if in restricted treasure card list # Returns True if match
                     print('Restriction found')
                     if player.name == "The_Creator":  # dev mode
                         print(f"{player_attribs} - Restriction avoided: Dev path")
                         break
-                    else: # sets flag so card cant be used
+                    else:  # sets flag so card cant be used
                         print('Restricted, card cant be used.')
                         flag = 0
                         break
             # checks cards for player dependent attribs to use card
             if card.get(card_requirement):  # checks card to see if requirement present
-                if card.get(card_requirement) == player_attribs: # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
+                if card.get(
+                        card_requirement) == player_attribs:  # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
                     print(f"Main path for: {card_requirement}")
-                    continue # checks next requirement parameter for conformance
+                    continue  # checks next requirement parameter for conformance
                 elif player.name == "The_Creator":  # dev mode
                     print(f"{player_attribs} - Dev path")
                     continue
@@ -251,13 +254,13 @@ class PlayerSetUp:
                     # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
                     break
 
-        if flag: # only if flag remains True, compliant to non restrictions.
+        if flag:  # only if flag remains True, compliant to non restrictions.
 
             if card["category"] == "treasure":  # for all treasure cards the player uses that was from their hand
-                self.player_treasure_cards(card) # for the use of treasure cards
-            elif card["category"] == "door":  # for all enhancers ect that the player has from their hand  DO DOOR CARDS REALLY COME DOWN THIS ROUTE! however thowables???
-                self.player_door_cards(card) # for the use of door cards
-
+                self.player_treasure_cards(card)  # for the use of treasure cards
+            elif card[
+                "category"] == "door":  # for all enhancers ect that the player has from their hand  DO DOOR CARDS REALLY COME DOWN THIS ROUTE! however thowables???
+                self.player_door_cards(card)  # for the use of door cards
     def player_treasure_cards(self, card):
         """method to sort the locations of treasure cards that the player has selected"""
         player = library.GameObjects.active_player

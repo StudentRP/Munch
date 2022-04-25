@@ -8,14 +8,36 @@ from random import randint
 
 class T_tools:
     """ Specific methods for Treasure cards"""
-    def tasty_pie(self):
-        """method for tasty pie"""
-        if self.race == 'ork' or  self.race2 == 'ork':
-            '+2 as a bonus'
-            pass
-        elif self.race == 'halfling' or  self.race2 == 'halfling':
-            self.lvl += 1
 
+    def test_meth(self, *args):
+        print('In test T_tools meth expecting bonus change to 50')
+        if "on" in args:
+            print('Bonus changed')
+            self.bonus += 50
+        else:
+            self.bonus -= -50
+
+    def unknown(self, *args, **kwargs):
+        print(f"Problem found in  Treasure method {args}, {kwargs}")
+
+    def radioactive(self, *args):
+        if "on" in args:
+            print('using Radioactive meth')
+            self.bonus += 5
+            print(f"bonus changed to {self.bonus} increased by 5")
+        elif "off" in args:
+            print(self.bonus)
+            self.bonus -= 5
+            print(f"bonus changed to {self.bonus} decreased by 5")
+        else:
+            self.unknown("radioactive")
+
+
+
+    method_types = {
+        'radioactive': radioactive,
+
+                    }
 #####################################################################
 # MAIN TREASURE CLASS
 #####################################################################
@@ -41,13 +63,13 @@ class Treasure(T_tools):
     """
     treasure_cards = [
         # type disposable #no 2 add!! #key ideas effects=['fire',]
-        # {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, "bonus":5},
+        {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, "bonus":5, 'method': ['radioactive']},# need on off activation after play
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, "bonus": 5},
         # {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", "sell": 100, "bonus":3, "lexical": ["fire"]},
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Royal Oil", "sell": 100, "bonus": 3},
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, "bonus": 3, 'lexical': ['freeze']},
-        # {"id": 4, "category": "treasure", "type": "disposable", 'name': "Instant Wall", 'sell': 300, 'method': 'auto_escape'},
-        # {"id": 5, "category": "treasure", "type": "disposable", "name": "Flask Of Glue", "sell": 100, 'method': "re-roll_escape"},
+        # {"id": 4, "category": "treasure", "type": "disposable", 'name': "Instant Wall", 'sell': 300, 'method': ['auto_escape']},
+        # {"id": 5, "category": "treasure", "type": "disposable", "name": "Flask Of Glue", "sell": 100, 'method': ["re-roll_escape"]},
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
 
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus

@@ -36,6 +36,7 @@ class GameObjects:
 class Fight_enhancers:
     player_aid = 0
     monster_aid = 0
+    consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn
 
 
 class Options:

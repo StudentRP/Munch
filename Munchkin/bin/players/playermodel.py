@@ -20,7 +20,6 @@ from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 
 from Munchkin.bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
 import bin.GUI.variables_library as library
-# from bin.all_cards.table import cards
 from bin.GUI.variables_library import cards # single location to same memory address
 from bin.all_cards.door_cards.doorcards import MonTools
 from bin.all_cards.treasure_cards.treasurecards import T_tools
@@ -67,10 +66,10 @@ class Player(MonTools, T_tools):
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
-        self.enhancer_cards = []  # cards that elicit an effect ie supermunch/class card, ect. card lexical must be added to enhancer lexical
-        self.enhancers_lexical = set() # all positive effects strings for comparative evaluation. only added when card installed on player.
-        self.active_curses = []  # place to store all curse cards effecting player. card remove meth should reverse player change
-        self.negative_lexical = set() # all negative effects strings for comparative evaluation. only added when card installed on player.
+        self.enhancer_lexical = []  # used by card methods, provides +ve effects to player.
+        # self.enhancers_lexical = [] # all positive effects strings for comparative evaluation. only added when card installed on player.
+        # self.active_curses = []  # place to store all curse cards effecting player that are not one shot .....
+        self.negative_lexical = [] # all negative effects strings for comparative evaluation. only added when card installed/used on player.
         self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
         self.run_away = True # locks ability toi run or not dependent on some monsters
 
@@ -146,14 +145,15 @@ class Player(MonTools, T_tools):
                                       f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
         # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
-    def sum_of_bonuses(self): # pos multi usage and use as player item searcher. limited by equipped_items as caller ############
+    def sum_of_bonuses(
+            self):  # pos multi usage and use as player item searcher. limited by equipped_items as caller ############
         # TODO: DISSOLVE THIS METH ONTO THE CARD_METH FOR ACTIVATION WITH METHOD='ON'/'OFF') TO MAKE CHANGES TO PLAYER
         """ Adds up all bonuses and bind to player in weapons and armour"""
         tot_bonus = 0
-        locations = [self.weapons, self.armor] #locations to search
-        for obj in locations: # looks at each object in list
+        locations = [self.weapons, self.armor]  # locations to search
+        for obj in locations:  # looks at each object in list
             for sub_menu in obj:
-                if isinstance(obj[sub_menu], dict): #checks submenu for card attachment in the form of a dict
+                if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
                     # print(obj.get(sub_menu, "No sub menu").get("bonus", "No bonus found"))
                     tot_bonus += obj.get(sub_menu, "").get("bonus", "Problem getting bonus")
                     continue
@@ -161,26 +161,27 @@ class Player(MonTools, T_tools):
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
 
-    def equipped_items(self, action, my_cards=None, card_id=None): # in use by gui list_equipped meth
+    def equipped_items(self, action, my_cards=None, card_id=None):  # in use by gui list_equipped meth
         """Shows all items that have been equipped to the player. If remove, Sorts through equipped items,
         removing items that have been selected"""
         locations = [self.weapons, self.armor]  # locations to search
         for obj in locations:  # looks at each object in list. obj is the dict of all the poss locations as seen in player attrbs
             for sub_menu in obj:  # sub_menu is the keys which link to the card is placed in: armor = {}
                 if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
-                    card = obj.get(sub_menu) # x is the card object
+                    card = obj.get(sub_menu)  # x is the card object
                     if action == "list_equipped":
-                        library.GameObjects.selected_items.append(card) #adds cards to selected_items list in gameVar
+                        library.GameObjects.selected_items.append(card)  # adds cards to selected_items list in gameVar
                         continue
                     elif action == "removal":
                         if card["id"] == my_cards["id"]:
-                            self.sack.append(card) # adds card back to player inventory
+                            self.sack.append(card)  # adds card back to player inventory
                             # self.card_meths(card, method='off') ################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
-                            obj[sub_menu] = "" # resets player atrib location
-                            self.sum_of_bonuses() # recalculates bonuses
-                            self.weapon_count += card.get("hold_weight", 0) # adds the cards carry_weight for available hands, if available.
+                            obj[sub_menu] = ""  # resets player atrib location
+                            self.sum_of_bonuses()  # recalculates bonuses
+                            self.weapon_count += card.get("hold_weight",
+                                                          0)  # adds the cards carry_weight for available hands, if available.
                             continue
-                    elif action == "curse": # not tested
+                    elif action == "curse":  # not tested
                         print("In equipped items remove cursed item")
                         pass
 
@@ -236,33 +237,38 @@ class Player(MonTools, T_tools):
         print("capacity count", self.weapon_count)
         self.sum_of_bonuses()
 
-    def card_meths(self, *args, **kwargs): # expects (card/s) dict('static'='on')
+    def card_meths(self, *args, **kwargs):  # expects (card/s) dict('static'='on')
         """ link to card methods, args should be the card/s, kwards the different card meths and actions to take
         ie 'static':'on' """
-        print(f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}") # args are the cards sent, info on meth used and status
-        for method, state in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
+        print(
+            f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}")  # args are the cards sent, info on meth used and status
+        for method, state in kwargs.items():  # loops supplied kwards which contain card meth search and an action to take
             print(f'Card is {args[0]["name"]}. Searching for a {method} method')
-            if args[0].get(method, 'no meth found'): # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
-                for listed_meth in args[0].get(method): # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
-                    print(listed_meth) # leave in to make sure I made it a list!!! ******* TEST PRINT
-                    if listed_meth in MonTools.method_types: # checks if method (the value from above) is in monster_types dict     (we can pretty much garentee the meth will be in the list...)
-                        method_call = MonTools.method_types.get(listed_meth) # returns method associated to the value of monster_types WILL NEED ANOTHER CONDITIONAL DEPENDENT ON CARD TYPE
-                        dispose_card = method_call(self, state, args[1:]) # pushes any other cards to the fist cards methods.
+            if args[0].get(method,
+                           'no meth found'):  # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
+                for listed_meth in args[0].get(
+                        method):  # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
+                    print(listed_meth)  # leave in to make sure I made it a list!!! ******* TEST PRINT
+                    if listed_meth in MonTools.method_types:  # checks if method (the value from above) is in monster_types dict     (we can pretty much garentee the meth will be in the list...)
+                        method_call = MonTools.method_types.get(
+                            listed_meth)  # returns method associated to the value of monster_types WILL NEED ANOTHER CONDITIONAL DEPENDENT ON CARD TYPE
+                        dispose_card = method_call(self, state,
+                                                   args[1:])  # pushes any other cards to the fist cards methods.
                         # returns None, or [card_destination, card] method_call(self, on, all other cards in the tuple)
 
                         # handle returned objects
-                        if dispose_card: # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
+                        if dispose_card:  # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
                             if dispose_card[0] == 'burn':
-                                cards.add_to_burn(dispose_card[1]) # recycles any card that has been removed from a player from a method
+                                cards.add_to_burn(dispose_card[
+                                                      1])  # recycles any card that has been removed from a player from a method
                             elif dispose_card[0] == 'wondering':
                                 print(' are wee here?')
-                                cards.in_play.append(dispose_card[1]) # places new monster on table
-                                cards.add_to_burn(args[0]) # disposes of original card ie wandering monster card
+                                cards.in_play.append(dispose_card[1])  # places new monster on table
+                                cards.add_to_burn(args[0])  # disposes of original card ie wandering monster card
                             elif dispose_card[0] == 'enhancer':
                                 cards.add_to_burn(args[0])
-                                return dispose_card[1] # returns to caller for processing further, usually enhancer to monster will be added to specific fight
-
-
+                                return dispose_card[
+                                    1]  # returns to caller for processing further, usually enhancer to monster will be added to specific fight
 
     # def card_meths(self, *args, **kwargs): #card meth to take in all card formats whether as single card/series of cards or presented as a list of cards
     #     """ link to card methods, args should be the card, kwards the different card meths and actions to take

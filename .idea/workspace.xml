@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="card metho sorted, can add to accept more than one card arg">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="completed card_meths">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/variables_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/variables_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +202,7 @@
       <workItem from="1649938477233" duration="1987000" />
       <workItem from="1650490391088" duration="17364000" />
       <workItem from="1650789083067" duration="3385000" />
-      <workItem from="1650877919860" duration="3963000" />
+      <workItem from="1650877919860" duration="7696000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -266,7 +267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650823336289</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="completed card_meths">
+      <created>1650895325367</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1650895325367</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -292,7 +300,8 @@
     <MESSAGE value="renaming scripts" />
     <MESSAGE value="V4 starting for new player factory, fight mechanics, naming, dependencies ect" />
     <MESSAGE value="card metho sorted, can add to accept more than one card arg" />
-    <option name="LAST_COMMIT_MESSAGE" value="card metho sorted, can add to accept more than one card arg" />
+    <MESSAGE value="completed card_meths" />
+    <option name="LAST_COMMIT_MESSAGE" value="completed card_meths" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -309,12 +318,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>207</line>
+          <line>208</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>236</line>
+          <line>237</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
