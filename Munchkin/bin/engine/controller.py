@@ -226,11 +226,10 @@ class PlayerSetUp:
 
         for player_attribs, card_requirement in checks.items():
             # checks card restrict method lexical for non use cases. If found player cant use.
-            if card.get('restriction', False): # checks to see if there is a key named 'restriction' in card if not return False
+            if card.get('restriction', False): # checks card to see if there is a key named 'restriction'. if not return False
                 print("Searching card restriction method")
-                if player_attribs in card.get('restriction'):  # checks all player attribs to see if in restricted treasure card list #
-                    # THINK ABOUT CARDS YOU ARE APPLYING THEM TOO; TREASURE!
-                    print('Restriction found in card')
+                if player_attribs in card.get('restriction'):  # checks all player attribs to see if in restricted treasure card list # Returns True if match
+                    print('Restriction found')
                     if player.name == "The_Creator":  # dev mode
                         print(f"{player_attribs} - Restriction avoided: Dev path")
                         break
@@ -270,6 +269,7 @@ class PlayerSetUp:
             pass  # meth for selecting target and changing bonuses, # TODO
         else:
             pass # for all other cards ie steeds
+
 
     def player_door_cards(self, card): #card meth#####################################################
         player = library.GameObjects.active_player

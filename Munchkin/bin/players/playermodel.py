@@ -146,7 +146,8 @@ class Player(MonTools, T_tools):
                                       f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
         # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
-    def sum_of_bonuses(self): # pos multi usage and use as player item searcher. limited by equipped_items as caller
+    def sum_of_bonuses(self): # pos multi usage and use as player item searcher. limited by equipped_items as caller ############
+        # TODO: DISSOLVE THIS METH ONTO THE CARD_METH FOR ACTIVATION WITH METHOD='ON'/'OFF') TO MAKE CHANGES TO PLAYER
         """ Adds up all bonuses and bind to player in weapons and armour"""
         tot_bonus = 0
         locations = [self.weapons, self.armor] #locations to search
@@ -174,6 +175,7 @@ class Player(MonTools, T_tools):
                     elif action == "removal":
                         if card["id"] == my_cards["id"]:
                             self.sack.append(card) # adds card back to player inventory
+                            # self.card_meths(card, method='off') ################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
                             obj[sub_menu] = "" # resets player atrib location
                             self.sum_of_bonuses() # recalculates bonuses
                             self.weapon_count += card.get("hold_weight", 0) # adds the cards carry_weight for available hands, if available.
@@ -195,10 +197,13 @@ class Player(MonTools, T_tools):
                     break
                 elif occupied:
                     card_removed = self.armor.pop(sub_type)  # removing card from player's attrib
+                    # self.card_meths(card_removed, method='off') # switches off card meths ################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
                     self.sack.append(card_removed)
                     x = self.sack.pop(self.sack.index(card))  # removes cards from sack list
                     self.armor[sub_type] = x  # binds now card to player attribute
                     break
+
+        # self.card_meths(card, method='on') # switches card meths on################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
         library.GameObjects.message = f"Equipping {card['name']}"
         self.sum_of_bonuses()
 
@@ -237,13 +242,15 @@ class Player(MonTools, T_tools):
         print(f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}") # args are the cards sent, info on meth used and status
         for method, state in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
             print(f'Card is {args[0]["name"]}. Searching for a {method} method')
-            if args[0].get(method): # checks 1st card in args for the kward key method
-                for listed_meth in args[0].get(method): # loops over the list values. "static": ["no_outrun", 'test_meth']
-                    print(listed_meth) # leave in to make sure I made it a list!!! TEST
-                    if listed_meth in MonTools.method_types: # checks if method (the value from above) is in monster_types dict
-                        method_call = MonTools.method_types.get(listed_meth) # returns method associated to the value of monster_types
-                        dispose_card = method_call(self, state, args[1:]) # returns None, or [card_destination, card] method_call(self, on, all other cards in the tuple)
+            if args[0].get(method, 'no meth found'): # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
+                for listed_meth in args[0].get(method): # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
+                    print(listed_meth) # leave in to make sure I made it a list!!! ******* TEST PRINT
+                    if listed_meth in MonTools.method_types: # checks if method (the value from above) is in monster_types dict     (we can pretty much garentee the meth will be in the list...)
+                        method_call = MonTools.method_types.get(listed_meth) # returns method associated to the value of monster_types WILL NEED ANOTHER CONDITIONAL DEPENDENT ON CARD TYPE
+                        dispose_card = method_call(self, state, args[1:]) # pushes any other cards to the fist cards methods.
+                        # returns None, or [card_destination, card] method_call(self, on, all other cards in the tuple)
 
+                        # handle returned objects
                         if dispose_card: # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
                             if dispose_card[0] == 'burn':
                                 cards.add_to_burn(dispose_card[1]) # recycles any card that has been removed from a player from a method

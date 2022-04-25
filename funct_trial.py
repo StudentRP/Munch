@@ -132,3 +132,4 @@ a = armor.pop('ring')
 a = armor['ring'] = "" # need to be added back in as pop removes
 print(armor)
 print(a)
+x = A
