@@ -66,10 +66,9 @@ class Player(MonTools, T_tools):
         self.longevity = 0 # counts cycles alive, if 0 player misses go
         self.cheat = 0 # set to false
         self.cheat_card = 0 # card the player is cheating with
-        self.enhancer_lexical = []  # used by card methods, provides +ve effects to player.
-        # self.enhancers_lexical = [] # all positive effects strings for comparative evaluation. only added when card installed on player.
-        # self.active_curses = []  # place to store all curse cards effecting player that are not one shot .....
+        self.enhancer_lexical = []  # all positive effects strings for comparative evaluation. only added when card installed on player.
         self.negative_lexical = [] # all negative effects strings for comparative evaluation. only added when card installed/used on player.
+        # self.active_curses = []  # place to store all curse cards effecting player that are not one shot .....
         self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
         self.run_away = True # locks ability toi run or not dependent on some monsters
 
@@ -178,15 +177,14 @@ class Player(MonTools, T_tools):
                             # self.card_meths(card, method='off') ################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
                             obj[sub_menu] = ""  # resets player atrib location
                             self.sum_of_bonuses()  # recalculates bonuses
-                            self.weapon_count += card.get("hold_weight",
-                                                          0)  # adds the cards carry_weight for available hands, if available.
+                            self.weapon_count += card.get("hold_weight", 0)  # adds the cards carry_weight for available hands, if available.
                             continue
                     elif action == "curse":  # not tested
                         print("In equipped items remove cursed item")
                         pass
 
     def equip_armor(self, card):
-        """ Equips armor to the player"""
+        """ Equips armor to the player and calls card meths to activate"""
         location = self.armor
         print("in armor")
         for sub_type in location.keys():
@@ -203,9 +201,8 @@ class Player(MonTools, T_tools):
                     x = self.sack.pop(self.sack.index(card))  # removes cards from sack list
                     self.armor[sub_type] = x  # binds now card to player attribute
                     break
-
-        # self.card_meths(card, method='on') # switches card meths on################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
         library.GameObjects.message = f"Equipping {card['name']}"
+        # self.card_meths(card, method='on') # switches card meths on################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
         self.sum_of_bonuses()
 
     def equip_weapon(self, card):
@@ -235,6 +232,7 @@ class Player(MonTools, T_tools):
         else:
             library.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"
         print("capacity count", self.weapon_count)
+        # self.card_meths(card, method='on') # switches card meths on################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
         self.sum_of_bonuses()
 
     def card_meths(self, *args, **kwargs):  # expects (card/s) dict('static'='on')
@@ -259,16 +257,15 @@ class Player(MonTools, T_tools):
                         # handle returned objects
                         if dispose_card:  # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
                             if dispose_card[0] == 'burn':
-                                cards.add_to_burn(dispose_card[
-                                                      1])  # recycles any card that has been removed from a player from a method
+                                cards.add_to_burn(dispose_card[1])  # recycles any card that has been removed from a player from a method
                             elif dispose_card[0] == 'wondering':
                                 print(' are wee here?')
                                 cards.in_play.append(dispose_card[1])  # places new monster on table
                                 cards.add_to_burn(args[0])  # disposes of original card ie wandering monster card
                             elif dispose_card[0] == 'enhancer':
                                 cards.add_to_burn(args[0])
-                                return dispose_card[
-                                    1]  # returns to caller for processing further, usually enhancer to monster will be added to specific fight
+                                return dispose_card[1]  # returns to caller for processing further, usually enhancer to monster will be added to specific fight
+
 
     # def card_meths(self, *args, **kwargs): #card meth to take in all card formats whether as single card/series of cards or presented as a list of cards
     #     """ link to card methods, args should be the card, kwards the different card meths and actions to take

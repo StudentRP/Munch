@@ -20,7 +20,7 @@ class T_tools:
     def unknown(self, *args, **kwargs):
         print(f"Problem found in  Treasure method {args}, {kwargs}")
 
-    def radioactive(self, *args):
+    def bonus_five(self, *args):
         if "on" in args:
             print('using Radioactive meth')
             self.bonus += 5
@@ -30,12 +30,13 @@ class T_tools:
             self.bonus -= 5
             print(f"bonus changed to {self.bonus} decreased by 5")
         else:
-            self.unknown("radioactive")
+            self.unknown('bonus_five')
+
 
 
 
     method_types = {
-        'radioactive': radioactive,
+        'bonus_five': bonus_five,
 
                     }
 #####################################################################
@@ -63,8 +64,8 @@ class Treasure(T_tools):
     """
     treasure_cards = [
         # type disposable #no 2 add!! #key ideas effects=['fire',]
-        {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, "bonus":5, 'method': ['radioactive']},# need on off activation after play
-        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, "bonus": 5},
+        {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, "bonus":5, 'method': ['bonus_five']},# need on off activation after play
+        {"id": 0, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, "bonus": 5, 'method': ['bonus_five']},
         # {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", "sell": 100, "bonus":3, "lexical": ["fire"]},
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Royal Oil", "sell": 100, "bonus": 3},
         # {"id": 0, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, "bonus": 3, 'lexical': ['freeze']},

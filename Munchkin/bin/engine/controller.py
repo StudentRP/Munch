@@ -261,6 +261,7 @@ class PlayerSetUp:
             elif card[
                 "category"] == "door":  # for all enhancers ect that the player has from their hand  DO DOOR CARDS REALLY COME DOWN THIS ROUTE! however thowables???
                 self.player_door_cards(card)  # for the use of door cards
+
     def player_treasure_cards(self, card):
         """method to sort the locations of treasure cards that the player has selected"""
         player = library.GameObjects.active_player
@@ -269,7 +270,7 @@ class PlayerSetUp:
         elif card.get("type") == "weapon":
             player.equip_weapon(card)
         elif card.get("type") == "disposable":  # for disposable throwable only
-            pass  # meth for selecting target and changing bonuses, # TODO
+            player.card_meths(card, methood='on')
         else:
             pass # for all other cards ie steeds
 
@@ -291,6 +292,7 @@ class PlayerSetUp:
 ##################################################################
     def fight(self, helper=0, additional=0):# helper would be other player interactions. additional is anything else
         """for cards that are monsters and placed on the table"""
+
         print("In the fight!")
         card = cards.in_play.pop() # end of cards on table
         player = library.GameObjects.active_player

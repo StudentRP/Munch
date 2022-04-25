@@ -201,7 +201,7 @@ class Moncurse(MonTools):
     door_cards = [ ##### Remember all methods have to be in list format for value!!!
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
         {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method_bs': ["below_waist"], "static": ["no_outrun", 'test_meth']},
-        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': ["loose_level"]},
+        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': ["loose_level"]},
         # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': ["loose_level"], "static":["shade"]},
         # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up": 1, 'lexical': ['+ 2 to halflings'], 'method': ["monkey_business"]},
         #
@@ -240,11 +240,11 @@ class Moncurse(MonTools):
         #  'method': ['subtract_5', 'not_compat_enraged', 'not_compat_friendly'], 'win': '1less_treasure'},
         #
         ## Joining cards
-        {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        {'id': 502, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
-        {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        # {'id': 500, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        # {'id': 501, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        # {'id': 502, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        # {'id': 503, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
+        # {'id': 504, "category": "door", 'type': 'super munchkin', 'name': 'Super Munchkin', "method": ['supermunch']},
 
         # {'id': 600, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},
         # {'id': 601, "category": "door", 'type': 'half breed', 'name': 'Half Breed', "method": ['half_breed']},

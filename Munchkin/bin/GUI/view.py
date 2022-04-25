@@ -503,8 +503,12 @@ class MainLoop(tk.Frame):
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
-#Todo next job sort this mess and add in monster selector TL
+        #Todo next job sort this mess and add in monster selector TL
         """ selecting monster and fighting"""
+        # while cards.in_play >= 1:
+        #     # chooses monster to fight
+        #     #
+        #     # remove monster set
         print("Fight button pressed") # TEST
         #fight select setup
         player_obj = library.GameObjects.active_player #
