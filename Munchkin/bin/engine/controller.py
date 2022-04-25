@@ -146,7 +146,7 @@ class PlayerSetUp:
         """
         player = library.GameObjects.active_player
 
-        if door_attempts: #On first kick of the door. Decides what to do with the cards dependent on situation
+        if door_attempts: # On first kick of the door. Decides what to do with the cards dependent on situation
 
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
