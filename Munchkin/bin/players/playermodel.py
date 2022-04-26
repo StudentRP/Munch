@@ -233,7 +233,7 @@ class Player(MonTools, T_tools):
             library.GameObjects.message = "You are at max capacity. Remove some weapons to attach others!"
         print("capacity count", self.weapon_count)
         # self.card_meths(card, method='on') # switches card meths on################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
-        self.sum_of_bonuses()
+        self.sum_of_bonuses() # TODO sum of bonuses to be desolved
 
     def card_meths(self, *args, **kwargs):  # expects (card/s) dict('static'='on')
         """ link to card methods, args should be the card/s, kwards the different card meths and actions to take

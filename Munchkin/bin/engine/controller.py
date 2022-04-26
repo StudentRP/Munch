@@ -274,7 +274,6 @@ class PlayerSetUp:
         else:
             pass # for all other cards ie steeds
 
-
     def player_door_cards(self, card): #card meth#####################################################
         player = library.GameObjects.active_player
         player.card_meths(card, method="on")  # link to player to card meths.

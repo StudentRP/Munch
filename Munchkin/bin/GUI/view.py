@@ -655,7 +655,6 @@ class MainLoop(tk.Frame):
         # self.canvas.create_image(30, 30, image=self.img, anchor="nw")
 
 
-
 class OwnedItems(tk.Toplevel):
     """Generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made on those cards.
     Buttons will be dependent upon the type of cards selected prior."""
@@ -690,7 +689,7 @@ class OwnedItems(tk.Toplevel):
             # specific labels and tk variable
             set_row = 1 # row incrementor for loop
             for card in library.GameObjects.selected_items: # for each card in the selected items
-                status = tk.IntVar() # for keeping track of check buttons, 1 per loop ### TODO can i change to bool? will loose list then
+                status = tk.IntVar() # for keeping track of check buttons, 1 per loop ###
                 tk.Label(f, text=card['name']).grid(row=set_row, column=0, sticky="nw")
                 tk.Label(f, text=card['type']).grid(row=set_row, column=1, sticky="nw")
                 if self.set_but == "sell":
@@ -787,10 +786,10 @@ class MonsterSelector(tk.Toplevel): # In production
 
 
 class Table_Target_Selector(tk.Toplevel):
+    """class for interference selection"""
 
     # player = gameVar.GameObjects.active_player
     # all_players = gameVar.GameObjects.session_players
-
 
     def __init__(self):
         tk.Toplevel.__init__(self)

@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Games" />
       <excludeFolder url="file://$MODULE_DIR$/Munchkin/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (Munchin_venv)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
