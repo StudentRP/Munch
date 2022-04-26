@@ -412,7 +412,7 @@ class MainLoop(tk.Frame):
         self.canvas = tk.Canvas(self.tblframe, height=450) # canvas not dynamically expanding
         self.canvas.config(bg="black")
         self.canvas.pack(side="top", expand=True, fill="both") # without self should now be accessible for the class....
-        self.pic = ""
+        self.img = ""
 
     "Handlers"
     def end_turn(self):
@@ -456,8 +456,8 @@ class MainLoop(tk.Frame):
             print("VIEWING CARD")
 
             # display card
-            self.pic = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
-            self.canvas.create_image(10, 10, image=self.pic, anchor="nw")# view card on canvas. will need meth for this to add cards in linear fashion
+            self.img = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
+            self.canvas.create_image(10, 10, image=self.img, anchor="nw")# view card on canvas. will need meth for this to add cards in linear fashion
 
             # broadcast new message
             if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # General card that is NOT a mon or a curse
@@ -481,8 +481,8 @@ class MainLoop(tk.Frame):
             print("2nd kick activated")
             library.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
             app.update_message("show")  # update the broadcast message
-            self.pic = Tools.viewer(0)  # gets card pic face down
-            self.canvas.create_image(10, 10, image=self.pic, anchor="nw") # puts door card face down
+            self.img = Tools.viewer(0)  # gets card pic face down
+            self.canvas.create_image(10, 10, image=self.img, anchor="nw") # puts door card face down
             self.door_button.config(state="disabled") # disables door button
             self.end_turn_button.config(state="normal")
             app.update_message("show")
@@ -511,13 +511,16 @@ class MainLoop(tk.Frame):
         #     # remove monster set
         print("Fight button pressed") # TEST
         #fight select setup
-        player_obj = library.GameObjects.active_player #
-        print(player_obj.armor)
-        card = cards.in_play[0][0] # specific call to the card
-        print(f"the monster is {card['name']}")
-        player_obj.card_meths(card, method_bs='on') #  can throw more cards in here from the library.card_transfer list
-        print(player_obj.armor)
-        print(f'burn cards: {len(cards.burn_pile)}')
+        cards_set = cards.in_play[cards.fight_index][0] # grabs the card set for the fight
+        print('the monstrer u will be fighting is:')
+        print(cards_set) # WORKING , need to change card on table to match..
+        # player_obj = library.GameObjects.active_player #
+        # print(player_obj.armor)
+        # card = cards.in_play[0][0] # specific call to the card
+        # print(f"the monster is {card['name']}")
+        # player_obj.card_meths(card, method_bs='on') #  can throw more cards in here from the library.card_transfer list
+        # print(player_obj.armor)
+        # print(f'burn cards: {len(cards.burn_pile)}')
 
 
 
@@ -646,7 +649,11 @@ class MainLoop(tk.Frame):
 
     def status_effect(self):
         """method for showing what status effect are active on the current player"""
-        pass
+        MonsterSelector()
+
+        # self.img = Tools.viewer(cards.in_play[cards.fight_index][0]["id"])  # updates canvas?????? NOPE..
+        # self.canvas.create_image(30, 30, image=self.img, anchor="nw")
+
 
 
 class OwnedItems(tk.Toplevel):
@@ -740,6 +747,45 @@ class OwnedItems(tk.Toplevel):
         app.update_message("show")
 
 
+class MonsterSelector(tk.Toplevel): # In production
+    """ A toplevel window to select the monster a player wishis to fight in the event there is more than 1 on the table"""
+
+    def __init__(self):
+        tk.Toplevel.__init__(self)
+        print('in top lvl')
+        self.focus_set()  # focus on this window objects
+        self.grab_set()  # make modal
+        self.geometry('250x150+500+300')
+        self.title('Monster Selector')
+        self.var = tk.IntVar()
+
+        self.mainframe = tk.Frame(self)
+        self.mainframe.pack(side='top', fill='both', expand=True)
+        count = 1
+        for _monster in library.cards.in_play:
+            self.radio = tk.Radiobutton(self.mainframe,
+                                        text=f'{library.cards.in_play[count -1][0]["name"]}'
+                                        f' Level: {library.cards.in_play[count -1][0]["lvl"]}',
+                                        variable=self.var, value=count-1)
+            self.radio.grid(row=count, column=1)
+            tk.Button(self.mainframe, text="Info", command=lambda c=library.cards.in_play[count - 1][0]["id"]: self.showcard(c)).grid(row=count, column=2)
+            count += 1
+
+        self.buttonframe = tk.Frame(self)
+        self.buttonframe.pack()
+        tk.Button(self.buttonframe, text='Select', command=self.select).pack()
+
+    def select(self):
+        print('In handler ~Need to sort setting position for fight')
+        print(self.var.get())
+        engine.set_fight_index(self.var.get())
+        self.destroy()
+
+    def showcard(self, card_id):
+        """ Method for showing the card in a toplevel window"""
+        CardVeiw(card_id)
+
+
 class Table_Target_Selector(tk.Toplevel):
 
     # player = gameVar.GameObjects.active_player
@@ -763,14 +809,15 @@ class Table_Target_Selector(tk.Toplevel):
 
 
 class CardVeiw():
+    """Places image in a toplevel window in own canvas"""
     def __init__(self, card_id=None):
         # path = "..\\imgs\\cards\\"
-        PIC = os.path.abspath(r"..\imgs\cards")
-
+        # PIC = os.path.abspath(r"..\imgs\cards")
         win = tk.Toplevel()
         win.title("Card Info")
-        # img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") # does not require pil but in case change format
-        img = ImageTk.PhotoImage(file=PIC + f"\\{str(card_id)}.png")
+        img = Tools.viewer(card_id) # returns ImageTk.PhotoImage from file breadcrumb
+        # img = ImageTk.PhotoImage(file=PIC + f"\\{str(card_id)}.png")
+
         can = tk.Canvas(win)
         can.pack(fill=tk.BOTH)
         can.config(width=img.width(), height=img.height())
@@ -814,6 +861,7 @@ class Tools:
 
     @staticmethod
     def viewer(card_id=None):
+        """use PhotoImage to get the image from a path that can change dependent of os"""
 
         # path = "..\\imgs\\cards\\" # this path will not work on linux requires os module and resolve() method
         # img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") #dependent on windows os

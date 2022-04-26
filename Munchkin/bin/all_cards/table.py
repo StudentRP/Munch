@@ -79,7 +79,8 @@ class Table(Treasure, Moncurse): # inherits from
     def __init__(self):
         self.card_sop = Dealer() # has-a dealer
         self.burn_pile = []
-        self.in_play = [[]] # lol for first monster
+        self.in_play = [[], [{'id': 301, "category": "door", 'type': 'monster', 'name': 'Dinosaur', 'lvl': 2, "static": ["no_outrun", 'test_meth']}]] # lol for first monster TEST MONSTER TODO REMOVE TEST
+        self.fight_index = 0 # index of the monster to fight. 0 = standard first monster
         self.dice_sop = Dice()
 
     def add_to_burn(self, discard):

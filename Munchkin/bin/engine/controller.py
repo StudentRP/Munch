@@ -316,6 +316,12 @@ class PlayerSetUp:
             player.card_meths(card, 'static', 'off') # turns off static effect of card in play
             return "lose"
 
+    def set_fight_index(self, index):
+        cards.fight_index = index
+        print(f"card index has been set to {index}")
+
+
+
     def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
         """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
         switch on or off the condition"""

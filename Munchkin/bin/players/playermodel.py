@@ -242,16 +242,13 @@ class Player(MonTools, T_tools):
             f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}")  # args are the cards sent, info on meth used and status
         for method, state in kwargs.items():  # loops supplied kwards which contain card meth search and an action to take
             print(f'Card is {args[0]["name"]}. Searching for a {method} method')
-            if args[0].get(method,
-                           'no meth found'):  # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
-                for listed_meth in args[0].get(
-                        method):  # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
+            if args[0].get(method, 'no meth found'):  # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
+                for listed_meth in args[0].get(method):  # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
                     print(listed_meth)  # leave in to make sure I made it a list!!! ******* TEST PRINT
                     if listed_meth in MonTools.method_types:  # checks if method (the value from above) is in monster_types dict     (we can pretty much garentee the meth will be in the list...)
                         method_call = MonTools.method_types.get(
                             listed_meth)  # returns method associated to the value of monster_types WILL NEED ANOTHER CONDITIONAL DEPENDENT ON CARD TYPE
-                        dispose_card = method_call(self, state,
-                                                   args[1:])  # pushes any other cards to the fist cards methods.
+                        dispose_card = method_call(self, state, args[1:])  # pushes any other cards to the fist cards methods.
                         # returns None, or [card_destination, card] method_call(self, on, all other cards in the tuple)
 
                         # handle returned objects

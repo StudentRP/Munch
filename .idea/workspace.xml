@@ -4,10 +4,11 @@
     <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="rework of changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +40,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -204,7 +206,8 @@
       <workItem from="1649938477233" duration="1987000" />
       <workItem from="1650490391088" duration="17364000" />
       <workItem from="1650789083067" duration="3385000" />
-      <workItem from="1650877919860" duration="14625000" />
+      <workItem from="1650877919860" duration="15410000" />
+      <workItem from="1650963932645" duration="17601000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -283,7 +286,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650899019241</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="rework of changes">
+      <created>1650906060357</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1650906060357</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,7 +328,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>520</line>
+          <line>523</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -351,7 +361,7 @@
     <SUITE FILE_PATH="coverage/MyPackages$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1639811290752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
     <SUITE FILE_PATH="coverage/Munch$general_tests.coverage" NAME="general_tests Coverage Results" MODIFIED="1649253557839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests" />
     <SUITE FILE_PATH="coverage/Munch$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1650694902157" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
-    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1650905935811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1651006313865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/MyPackages$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1640266776710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MyPackages$controller.coverage" NAME="controller Coverage Results" MODIFIED="1640513926303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
   </component>
