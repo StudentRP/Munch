@@ -41,7 +41,6 @@ class Fight_enhancers:
     card_list_selection = [] # holds the list of cards/players associated to the radio selection process ready for index selection
 
 
-
 class Options:
     """variables associated to start options that may be manipulated changing win parameters ect"""
     win_lvl = 10 # sets the leve that triggers win

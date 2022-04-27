@@ -772,7 +772,6 @@ class RadioSelector(tk.Toplevel): # In production
 
         for all_obj in self.list_of_interest:
             self.radio = tk.Radiobutton(self.mainframe, variable=self.var, value=count-1)
-
             if isinstance(all_obj, dict): # monster cards are in dict form
                 self.radio.config(text=f'{all_obj["name"]}'f' Level: {all_obj["lvl"]}') # configs radio button specific to monsters.
                 tk.Button(self.mainframe, text="Info",

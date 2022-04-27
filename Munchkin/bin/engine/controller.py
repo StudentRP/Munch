@@ -315,6 +315,7 @@ class PlayerSetUp:
             player.card_meths(card, 'static', 'off') # turns off static effect of card in play
             return "lose"
 
+
     def radio_selector_handler(self, index, obj_list):
         """takes in index and a list of monster/mon/players where the index has relevance"""
         library.Fight_enhancers.card_selector_index = index # stores the index in the library
