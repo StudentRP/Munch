@@ -625,7 +625,8 @@ class MainLoop(tk.Frame):
     def interfere(self): #will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
         library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
-        RadioSelector('interfere')
+        RadioSelector('Player select') # select the player doing the action
+        # RadioSelector('interfere') # selects ,mon or player to select target or player
 
     def ask_for_help(self): #mot set
         library.GameObjects.message = "Toplevel window where another player can help... for a price.."
@@ -650,7 +651,7 @@ class MainLoop(tk.Frame):
 
     def status_effect(self):
         """method for showing what status effect are active on the current player"""
-        RadioSelector('monster_select')
+        RadioSelector('Monster select')
 
         # self.img = Tools.viewer(cards.in_play[cards.fight_index][0]["id"])  # updates canvas?????? NOPE..
         # self.canvas.create_image(30, 30, image=self.img, anchor="nw")
@@ -748,32 +749,38 @@ class OwnedItems(tk.Toplevel):
 
 
 class RadioSelector(tk.Toplevel): # In production
-    """ A toplevel window to select the monster a player wishis to fight in the event there is more than 1 on the table"""
+    """ A toplevel window to select the monster or another player to either change monster to fight
+    or to interfere with play respectively."""
+
     def __init__(self, action):
         tk.Toplevel.__init__(self)
         print('in top lvl')
         self.action = action # string input defining setup for objects
         self.focus_set()  # focus on this window objects
-        self.grab_set()  # make modal
+        # self.grab_set()  # make modal # cause card info conflict in win10
         self.geometry('250x150+500+300')
-        self.title('Monster Selector')
+        self.title(action)
         self.var = tk.IntVar()
         self.list_of_interest = []
 
         self.mainframe = tk.Frame(self)
         self.mainframe.pack(side='top', fill='both', expand=True)
         count = 1
-        monsters = [x[0] for x in library.cards.in_play]
+        print(library.cards.in_play)
         # get list of required iterable lists
-        if self.action == 'monster_select': # monsters only to choose from
+        if self.action == 'Monster select': # monsters only to choose from
+            monsters = [x[0] for x in library.cards.in_play]
             self.list_of_interest = monsters
-        elif self.action == 'interfere': # all monsters and players to choose from
+        elif self.action == 'Interfere': # all monsters and players to choose from
+            monsters = [x[0] for x in library.cards.in_play]
             self.list_of_interest = monsters + library.GameObjects.session_players
+        elif self.action == 'Player select': # for selecting the payer that will do an action to interfere
+            self.list_of_interest = library.GameObjects.session_players
 
         for all_obj in self.list_of_interest:
             self.radio = tk.Radiobutton(self.mainframe, variable=self.var, value=count-1)
             if isinstance(all_obj, dict): # monster cards are in dict form
-                self.radio.config(text=f'{all_obj["name"]}'f' Level: {all_obj["lvl"]}') # configs radio button specific to monsters.
+                self.radio.config(text=f'{all_obj["name"]}'f' Level: {all_obj.get("lvl")}') # configs radio button specific to monsters.
                 tk.Button(self.mainframe, text="Info",
                           command=lambda c=all_obj["id"]: self.showcard(c)).grid(row=count, column=2) # provides card view of monster
             else:#
