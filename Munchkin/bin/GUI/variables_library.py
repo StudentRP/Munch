@@ -37,6 +37,9 @@ class Fight_enhancers:
     player_aid = 0
     monster_aid = 0
     consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn
+    card_selector_index = 0 # complementary to card_list_selection
+    card_list_selection = [] # holds the list of cards/players associated to the radio selection process ready for index selection
+
 
 
 class Options:
