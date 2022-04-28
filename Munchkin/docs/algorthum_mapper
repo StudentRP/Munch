@@ -853,7 +853,7 @@ controller.py
 
 
 ########## NOTES FOR CHANGE ###
-change table system to display monsters as list of list with dicts eg:  [ [{monster card},{monster enhancers}],[{monster},{wandering monster] ]
+change table system to display monsters as list of list with dicts eg:  [ [{monster card},{monster enhancers}],[{monster},{wandering monster] ] DONE
 
 This gives each monster on the table the player has to fight a way to enhance, run monster specific methods and provide a way to run from specific monsters.
 Basically this provides and environment so that each monster can become independent.
@@ -864,7 +864,7 @@ The top level would require a tick box, to select monster/player to use a card a
 Weather zipper can be used for this is unknown...
 
 Top level would be used when: selecting a monster to fight, adding an item to the proceeding fight, (note when fight button pushed all interference ceases),
-seleting which one to run from, to use a crd against, and all things that require clarity in a target.
+seleting which one to run from, to use a crd against, and all things that require clarity in a target. Also used to selct player to interfere and where to use hteir item. MOST OF IT DONE
 
 Q:: how to run a monster conditions method (method that is ran when facing a specific monster on the table?
     * need auto method on single monster, check required in many cases.
@@ -872,6 +872,12 @@ Q:: how to run a monster conditions method (method that is ran when facing a spe
     * to switch off is another monster is added to the table. or to switch on when:
         * assured only one monster on the field of battle, or, suitable selection is made to define which monster is to be challenged.
     * switch on when another monster is chosen.
+
+
+ change bonus system to be on card methods which add or remove from player directly, loose calc method for it!.
+ Monsters run 3 methods types: static, method, method_bs. static can
+ search through player enhancers (placed on there by armour methods ect) to see if special event ie fire armour 2+
+ bonus.
 
 
 

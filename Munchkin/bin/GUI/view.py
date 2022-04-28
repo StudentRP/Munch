@@ -505,15 +505,60 @@ class MainLoop(tk.Frame):
     def fight(self):
         #Todo next job sort this mess and add in monster selector TL
         """ selecting monster and fighting"""
+        print("Fight button pressed")
+        if len(cards.in_play) > 1: # more than 1 monster on the table
+            card_set = cards.in_play[library.Fight_enhancers.card_selector_index] # gets index of card produced by radio selector
+        print('the card set u will be facing is:')
+        print(card_set) #will return the card set for all cards associated to this monster inc monster
         # while cards.in_play >= 1:
-        #     # chooses monster to fight
+        #     # chooses monster to
+
+        # player_obj = library.GameObjects.active_player #
+        # print(player_obj.armor)
+        # card = cards.in_play[0][0] # specific call to the card
+        # print(f"the monster is {card['name']}")
+        # player_obj.card_meths(card, method_bs='on') #  can throw more cards in here from the library.card_transfer list
+        # print(player_obj.armor)
+        # print(f'burn cards: {len(cards.burn_pile)}')
+
+
+
+
+        # if len(cards.in_play) > 1:
+        #     # run monster selection toplevel selector
+        #     print('more than one monster present!!!!!!!!!!!')
+        #     pass
+        #
+        # else:
+        #     # grab first card
+        #     self.selected_card = cards.in_play[0][0] # [fight selector], [monster selector/enhancer selector]. to be defined by monster selector tl
+        #     print(self.selected_card, id(cards.in_play))
+        # # player_obj.card_meths(self.selected_card, static='on') # turns on any card meths associated with monster DO NOT PUT STATIC METH HERE!
+        #
+        # selfobj = app.frames[MainLoop] # what is this doing?
+        #
+        # result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
+        #
+        # app.update_message("show") # name and lvl of monster
+        # if result == "win":
+        #     self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
+        #     print('remove off canvas?????? ')
+        #     # pass # remove single card off tablecards off table
+        # elif result == "loose":
+        #     pass # clears table runs card method
+        #
+        # self.fight_button.config(state="disabled")  # fight
+        # self.run_away_button.config(state="disabled")  # run
+        # self.door_button.config(state="disabled")  # kick door
+        #
+        # # remove card form list and canvas ect
+        self.end_turn_button.config(state="normal") # end turnfight
         #     #
         #     # remove monster set
-        print("Fight button pressed") # TEST
+        # TEST
         #fight select setup
-        cards_set = cards.in_play[cards.fight_index][0] # grabs the card set for the fight
-        print('the monstrer u will be fighting is:')
-        print(cards_set) # WORKING , need to change card on table to match..
+
+
         # player_obj = library.GameObjects.active_player #
         # print(player_obj.armor)
         # card = cards.in_play[0][0] # specific call to the card
@@ -631,7 +676,8 @@ class MainLoop(tk.Frame):
     def ask_for_help(self): #mot set
         library.GameObjects.message = "Toplevel window where another player can help... for a price.."
         app.update_message("show")
-        Table_Target_Selector()
+        # Table_Target_Selector() # depreciated for radioselector
+        RadioSelector('help')
 
     def list_sack(self):
         """shows all items in sack"""
@@ -651,7 +697,7 @@ class MainLoop(tk.Frame):
 
     def status_effect(self):
         """method for showing what status effect are active on the current player"""
-        RadioSelector('Monster select')
+        RadioSelector('monster_select')
 
         # self.img = Tools.viewer(cards.in_play[cards.fight_index][0]["id"])  # updates canvas?????? NOPE..
         # self.canvas.create_image(30, 30, image=self.img, anchor="nw")
@@ -749,9 +795,9 @@ class OwnedItems(tk.Toplevel):
 
 
 class RadioSelector(tk.Toplevel): # In production
-    """ A toplevel window to select the monster or another player to either change monster to fight
-    or to interfere with play respectively."""
-
+    """ A toplevel window presenting radio buttons for selection of monsters, players or both given a criteria.
+    End result is to generate a index and a list relative to the list created or a list in play.
+    """
     def __init__(self, action):
         tk.Toplevel.__init__(self)
         print('in top lvl')
@@ -776,9 +822,12 @@ class RadioSelector(tk.Toplevel): # In production
             self.list_of_interest = monsters + library.GameObjects.session_players
         elif self.action == 'Player select': # for selecting the payer that will do an action to interfere
             self.list_of_interest = library.GameObjects.session_players
+        elif self.action == 'help': # for helping fellow players
+            self.list_of_interest = library.GameObjects.session_players
 
         for all_obj in self.list_of_interest:
             self.radio = tk.Radiobutton(self.mainframe, variable=self.var, value=count-1)
+
             if isinstance(all_obj, dict): # monster cards are in dict form
                 self.radio.config(text=f'{all_obj["name"]}'f' Level: {all_obj.get("lvl")}') # configs radio button specific to monsters.
                 tk.Button(self.mainframe, text="Info",

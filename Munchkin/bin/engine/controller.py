@@ -293,36 +293,34 @@ class PlayerSetUp:
         """for cards that are monsters and placed on the table"""
 
         print("In the fight!")
-        card = cards.in_play.pop() # end of cards on table
-        player = library.GameObjects.active_player
-        player.card_meths(card, 'static', 'on') # turns on card static content for fight TODO change to something more relevant than "static"
-        if player.bonus + player.level + helper + library.Fight_enhancers.player_aid \
-                >= card["lvl"] + library.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
-            print("Player wins!")
-            reward = card['treasure']
-            self.deal_handler('treasure', deal_amount=reward) # fetches treasure for player
-            library.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
-            player.level += card["level_up"]
-            cards.burn_pile.append(card) # removes card
-            player.card_meths(card, 'static', 'off') # turns off static card content
-            print(f"cards in the burn pile: {len(cards.burn_pile)}")
-            return "win"
-        # need action to go up lvl note some cards do more than one level!
-        else:
-            library.GameObjects.message = "Fight lost"
-            print("Fight lost")
-            player.card_meths(card, 'method', 'on') # calls card bad stuff
-            player.card_meths(card, 'static', 'off') # turns off static effect of card in play
-            return "lose"
+        card_set = cards.in_play.pop(library.Fight_enhancers.card_selector_index) #
+        for card in card_set:
+            player = library.GameObjects.active_player
+            player.card_meths(card, 'static', 'on') # turns on card static content for fight TODO change to something more relevant than "static"
 
+            if player.bonus + player.level + helper + library.Fight_enhancers.player_aid \
+                    >= card["lvl"] + library.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
+                print("Player wins!")
+                reward = card['treasure']
+                self.deal_handler('treasure', deal_amount=reward) # fetches treasure for player
+                library.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
+                player.level += card["level_up"]
+                cards.burn_pile.append(card) # removes card
+                player.card_meths(card, 'static', 'off') # turns off static card content
+                print(f"cards in the burn pile: {len(cards.burn_pile)}")
+                return "win"
+            # need action to go up lvl note some cards do more than one level!
+            else:
+                library.GameObjects.message = "Fight lost"
+                print("Fight lost")
+                player.card_meths(card, 'method', 'on') # calls card bad stuff
+                player.card_meths(card, 'static', 'off') # turns off static effect of card in play
+                return "lose"
 
     def radio_selector_handler(self, index, obj_list):
         """takes in index and a list of monster/mon/players where the index has relevance"""
         library.Fight_enhancers.card_selector_index = index # stores the index in the library
         library.Fight_enhancers.card_list_selection = obj_list # list of all selected
-
-
-
 
     def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
         """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
