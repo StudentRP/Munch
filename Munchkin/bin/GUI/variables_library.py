@@ -33,9 +33,9 @@ class GameObjects:
     card_transfer = [] # intermediate storage for cards from player selection to a method action ie monster for wandering monster NOT USED YET!
 
 
-class Fight_enhancers:
-    player_aid = 0
-    monster_aid = 0
+class FightComponents:
+    player_aid = [] # list of int to be summed and added in the players favor
+    monster_aid = [] # list of ints to be summed and used against the player
     consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn
     card_selector_index = 0 # complementary to card_list_selection
     card_list_selection = [] # holds the list of cards/players associated to the radio selection process ready for index selection

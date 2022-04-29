@@ -99,31 +99,35 @@
 # app.mainloop()
 
 def card_meth(*arg, **kwargs):
-    print(arg)
+    # print(arg) tupled
     for cardset in arg:
-        print(cardset)
-        for card in cardset:
-            print(card)
-            if 'mon' in card:
-                print('monster found')
-            else:
-                print(card.get('enhancer', 'Not enhancer'))
+        print(cardset) #tuple stripped the list of the singe card reveling the list or the card dict.!!!
+        if isinstance(cardset, list): # list pathway contaning dicts
+            for card in cardset: # card_sets will reduce to single cards but, WILL call key on a single card
+                print(card)
+        #         if 'mon' in card:
+    #             print('monster found')
+    #         else:
+    #             print(card.get('enhancer', 'Not enhancer'))
 
     # if kwargs.get('foo'):
     #     print('in dict')
 # card_meth('foo', 'bar', foo='foobar')
 
-# f = [ [{'mon': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}], [{'mon': ["b", 'bb', 'bbb']}] ]
+
+l = [{'monL': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}] # card_set
 # n = {'mon': ["a"]}, {'enhancer': ['enhancer found']}, {'mon': ["b"]}, {'weap': ["w"]}  # simulates 3 cards in list
-# # card_meth(n)
-#
-# # print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
-# # print(f[0][0])
-# # print(len(f[0][0]))
-# # print(len(f))
-# # x=f
-# # print(id(f), id(x))
-#
+s= {'monS': ["a"]}   #single monster card
+card_meth(l)
+card_meth(s)
+
+# print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
+# print(f[0][0])
+# print(len(f[0][0]))
+# print(len(f))
+# x=f
+# print(id(f), id(x))
+
 # armor = {"headgear": "", "armor": "", "knees": "", "footgear": "", "necklace": "", "ring": {'fireband': ['hot!']}, "ring2": ""}
 #
 # print(armor)
@@ -134,8 +138,3 @@ def card_meth(*arg, **kwargs):
 # print(a)
 # x = A
 
-p= [['a'],['a']]
-
-while len(p) >= 1:
-    p.pop(-1)
-    print('monster present')

@@ -45,7 +45,7 @@ class MonTools:
                 removed_item = self.armor.pop(item) # removes both the key and the nested card
                 print(f'{item} removed')
                 self.armor[item] = '' # add the key back to dict ready to accept future card item
-                return ['burn', removed_item] # send card back to caller for placing on the burn pile
+                return ['in_play', removed_item] # send card back to caller for placing on the burn pile
 
     def level_up(self, *args, **kwargs):
         if "on" in args: # add level
@@ -114,9 +114,9 @@ class MonTools:
         import bin.GUI.variables_library as library
         if isinstance(self.klass, dict):
             if self.klass.get("name") == "thief":
-                library.Fight_enhancers.player_aid = 2
+                library.FightComponents.player_aid = 2
         else:
-            print(f"not thief no bonus {library.Fight_enhancers.player_aid}")
+            print(f"not thief no bonus {library.FightComponents.player_aid}")
 
     def sex_change(self, *args):
         print("curse change sex!")

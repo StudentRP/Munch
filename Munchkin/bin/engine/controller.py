@@ -151,7 +151,9 @@ class PlayerSetUp:
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
-                cards.in_play[0].append(card) # places card on table in the lol for the first fight.
+                # cards.in_play[0].append(card) # places card on table in the lol for the first fight.
+                cards.in_play.append([card]) # places the card into play. This wil be index [0]. This creates the lol
+                print(cards.in_play)
                 player.card_meths(card, static='on') # activates any static meths for the card. TESTED WITH 2 CARDS. OK!
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
@@ -290,16 +292,16 @@ class PlayerSetUp:
 
 ##################################################################
     def fight(self, helper=0, additional=0):# helper would be other player interactions. additional is anything else
-        """for cards that are monsters and placed on the table"""
-
+        """for cards that are monsters and placed on the table."""
+        # if can send card meths athe set for processing would solve lots of probs
         print("In the fight!")
-        card_set = cards.in_play.pop(library.Fight_enhancers.card_selector_index) #
+        card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # removed from in_play for work and disassembly
         for card in card_set:
             player = library.GameObjects.active_player
-            player.card_meths(card, 'static', 'on') # turns on card static content for fight TODO change to something more relevant than "static"
+            player.card_meths(card, static='on', method='on') # turns on card static content for fight
 
-            if player.bonus + player.level + helper + library.Fight_enhancers.player_aid \
-                    >= card["lvl"] + library.Fight_enhancers.monster_aid: # consideration required for player consumables and enhancers
+            if player.bonus + player.level + helper + sum(library.FightComponents.player_aid) \
+                    >= card["lvl"] + sum(library.FightComponents.monster_aid): # consideration required for player consumables and enhancers
                 print("Player wins!")
                 reward = card['treasure']
                 self.deal_handler('treasure', deal_amount=reward) # fetches treasure for player
@@ -319,16 +321,16 @@ class PlayerSetUp:
 
     def radio_selector_handler(self, index, obj_list):
         """takes in index and a list of monster/mon/players where the index has relevance"""
-        library.Fight_enhancers.card_selector_index = index # stores the index in the library
-        library.Fight_enhancers.card_list_selection = obj_list # list of all selected
+        library.FightComponents.card_selector_index = index # stores the index in the library
+        library.FightComponents.card_list_selection = obj_list # list of all selected
 
-    def card_method_activator(self, scenario, action, table_card_index): # will need to be a selector
-        """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
-        switch on or off the condition"""
-        card = cards.in_play[int(table_card_index)][0] # selects the monster in the fight on the table
-        player = library.GameObjects.active_player
-        if scenario == "persistent":
-            player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
+    # def card_method_activator(self, scenario, action, table_card_index): # deprecated method
+    #     """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
+    #     switch on or off the condition"""
+    #     card = cards.in_play[int(table_card_index)][0] # selects the monster in the fight on the table
+    #     player = library.GameObjects.active_player
+    #     if scenario == "persistent":
+    #         player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
 
     def run(self):
         roll = dice.dice_sop.roll()

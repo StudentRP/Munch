@@ -79,7 +79,8 @@ class Table(Treasure, Moncurse): # inherits from
     def __init__(self):
         self.card_sop = Dealer() # has-a dealer
         self.burn_pile = []
-        self.in_play = [[], [{'id': 301, "category": "door", 'type': 'monster', 'name': 'Dinosaur', 'lvl': 2, "static": ["no_outrun", 'test_meth']}]] # lol for first monster TEST MONSTER TODO REMOVE TEST
+        self.in_turn = [] # cards that influence all fights for the turn
+        self.in_play = [[{'id': 301, "category": "door", 'type': 'monster', 'name': 'Dinosaur', 'lvl': 2, "static": ["no_outrun", 'test_meth']}]] # TEST MONSTER TODO REMOVE TEST
         self.dice_sop = Dice()
 
     def add_to_burn(self, discard):

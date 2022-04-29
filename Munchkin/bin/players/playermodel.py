@@ -237,63 +237,37 @@ class Player(MonTools, T_tools):
 
     def card_meths(self, *args, **kwargs):  # expects (card/s) dict('static'='on')
         """ link to card methods, args should be the card/s, kwards the different card meths and actions to take
-        ie 'static':'on' """
-        print(
-            f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}")  # args are the cards sent, info on meth used and status
-        for method, state in kwargs.items():  # loops supplied kwards which contain card meth search and an action to take
-            print(f'Card is {args[0]["name"]}. Searching for a {method} method')
+        ie 'static':'on'. end result is to activate method on card and return to location card need to be."""
+
+        print(f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}")  # args are the cards sent, info on meth used and status
+        for method, state in kwargs.items():  # for each kwarg given do this loop
+            print(f'Card is {args[0]["name"]}. Searching for a {method} method') # all cards have a name
             if args[0].get(method, 'no meth found'):  # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
                 for listed_meth in args[0].get(method):  # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
                     print(listed_meth)  # leave in to make sure I made it a list!!! ******* TEST PRINT
                     if listed_meth in MonTools.method_types:  # checks if method (the value from above) is in monster_types dict     (we can pretty much garentee the meth will be in the list...)
-                        method_call = MonTools.method_types.get(
-                            listed_meth)  # returns method associated to the value of monster_types WILL NEED ANOTHER CONDITIONAL DEPENDENT ON CARD TYPE
-                        dispose_card = method_call(self, state, args[1:])  # pushes any other cards to the fist cards methods.
+                        method_call = MonTools.method_types.get(listed_meth)  # returns method associated to the value of monster_types WILL NEED ANOTHER CONDITIONAL DEPENDENT ON CARD TYPE
+                        outcome = method_call(self, state, args[1:])  # pushes any other cards to the first cards methods.
                         # returns None, or [card_destination, card] method_call(self, on, all other cards in the tuple)
 
-                        # handle returned objects
-                        if dispose_card:  # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
-                            if dispose_card[0] == 'burn':
-                                cards.add_to_burn(dispose_card[1])  # recycles any card that has been removed from a player from a method
-                            elif dispose_card[0] == 'wondering':
-                                print(' are wee here?')
-                                cards.in_play.append(dispose_card[1])  # places new monster on table
+                        # handle returned objects MOST SHOULD BE RETURNED TO SPECIFIC TABLE LISTS AFTER ACTIVATION
+                        if outcome:  # screens out non types. Received args back are in form of list when given. ['burn', removed_item]
+                            if outcome[0] == 'burn': # curses, non influencing cards that belong to the turn and fight
+                                cards.add_to_burn(outcome[1])  # recycles any card that has been removed from a player from a method
+                            elif outcome[0] == 'wondering': # special case
+                                print('Outcomes in card_meths with wondering m')
+                                cards.in_play.append([outcome[1]])  # adds new monster to the table starting a new card_set list
                                 cards.add_to_burn(args[0])  # disposes of original card ie wandering monster card
-                            elif dispose_card[0] == 'enhancer':
-                                cards.add_to_burn(args[0])
-                                return dispose_card[1]  # returns to caller for processing further, usually enhancer to monster will be added to specific fight
-
-
-    # def card_meths(self, *args, **kwargs): #card meth to take in all card formats whether as single card/series of cards or presented as a list of cards
-    #     """ link to card methods, args should be the card, kwards the different card meths and actions to take
-    #     ie 'static':'on' """
-    #     print(f"In player card_meth. Args: {args}, kwargs: {kwargs}") #  args are the cards sent, info on meth used and status
-    #
-    #     for cardset in args: # takes in as many cards in args tuple. Also works if cards are wrapped in list
-    #         for card in cardset: # if args list of cards iterates over each card, IF single card iterates over the keys!
-    #             for k, v in kwargs.items(): # loops supplied kwards which contain card meth search and an action to take
-    #                 print(k, v)
-    #                 # if k in card: # 1st arg of tuple. Looks for kward key in provided card. ie is there a static key in card? (kward key == card key)
-    #                 print('card is', card)
-    #                 print(f'confirmed match of {k}')
-    #                 if isinstance(cardset, list):
-    #                     method = card.get(k) # gets method of the found key in card ie static : no_run........ THIS COULD VERY EASILY BE A LIST THAT CAN BE LOOPED OVER TO IMPLEMENT SEVERAL METHS
-    #                 else:
-    #                     method = cardset.get(k)
-    #
-    #                 for action in method: # loops over the list value  in card provided by the key.
-    #                     print(f"this card has {method} methods that will all be {v}")
-    #                     if action in MonTools.method_types: # checks to see if method (the value from above) is in dict
-    #                             method_call = MonTools.method_types.get(action)
-    #                             method_call(self, k, v) # self=player, static, on .. need to think. do i need the k? am i only supplying the values: on, off, ect
-
+                            elif outcome[0] == 'in_play': # monsters
+                                cards.in_play[library.FightComponents.card_selector_index].append(args[0]) # adds the original card back to the in_play card_set for later use (turn off)
+                            elif outcome[0] == 'in_turn': # cards that influence the turn
+                                cards.in_turn[library.FightComponents.card_selector_index].append(args[0]) # adds the card to the in_turn list for later use
 
 
 
 
 """
-card meth to handle curse, monsters ect. must handle both a static action and methods associated to add and remove.
-calls required from; player select card, door kick for static ie no run, and loose scenario  
+card meths need to handle  
 
 
 """
