@@ -674,10 +674,12 @@ class MainLoop(tk.Frame):
         library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
         RadioSelector('Player Select') # select the player doing the action
-        print('TEST')
-        print(library.FightComponents.card_list_selection, library.FightComponents.card_selector_index) # TODO:LOADS BEFORE SELECTION!!! MOVE
-        player = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # gets the selected player
-        self.hand(other=player) # looks into new player hand for item to use
+        # problem. list is collected before finalisaing the Radio selector window
+        app.wait_window(RadioSelector)
+        player = library.GameObjects.substituted_player # gets the selected player WILL GET EMPTY LIST AS BUILD B4 RADIO SELECTION
+        print(' the selected player is:')
+        print(player)
+        # self.hand(other=player) # looks into new player hand for item to use
         # RadioSelector('interfere') # selects ,mon or player to select target or player
 
     def ask_for_help(self): #mot set
@@ -850,11 +852,12 @@ class RadioSelector(tk.Toplevel): # In production
 
         self.buttonframe = tk.Frame(self)
         self.buttonframe.pack()
-        tk.Button(self.buttonframe, text='Select', command=self.select).pack()
+        tk.Button(self.buttonframe, text='Select', command=lambda action=action: self.select(action)).pack()
 
-    def select(self):
+    def select(self, action):
         print('In handler ~Need to sort setting position for fight')
-        engine.radio_selector_handler(self.var.get(), self.list_of_interest) # send index and the list where the index has relevance
+        library.GameObjects.substituted_player = None # resets a player of interste
+        engine.radio_selector_handler(self.var.get(), self.list_of_interest, action) # send index and the list where the index has relevance
         # print('Item of interest is:', self.list_of_interest[self.var.get()])
         self.destroy()
 

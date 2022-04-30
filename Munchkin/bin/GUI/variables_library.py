@@ -24,6 +24,7 @@ class GameObjects:
 
     session_players = []  # (list) generated list slice from players_available CHANGED IN TEST FROM NONE!!!!
     active_player = None # current game player
+    substituted_player = None # player that can interfere or help
     all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
     check_but_intvar_gen = [] # populated with callable objects from checkbutton

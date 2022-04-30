@@ -324,10 +324,17 @@ class PlayerSetUp:
                 player.card_meths(card, 'static', 'off') # turns off static effect of card in play
                 return "lose"
 
-    def radio_selector_handler(self, index, obj_list):
+    def radio_selector_handler(self, index, obj_list, action):
         """takes in index and a list of monster/mon/players where the index has relevance"""
         library.FightComponents.card_selector_index = index # stores the index in the library
         library.FightComponents.card_list_selection = obj_list # list of all selected
+        print('index id:', id(library.FightComponents.card_selector_index))
+        print('list id', id(library.FightComponents.card_list_selection))
+
+        if action == 'Player Select':
+            library.GameObjects.substituted_player = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index]
+
+
 
     # def card_method_activator(self, scenario, action, table_card_index): # deprecated method
     #     """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
