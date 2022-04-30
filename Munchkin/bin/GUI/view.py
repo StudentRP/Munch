@@ -659,11 +659,14 @@ class MainLoop(tk.Frame):
         # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
-    def hand(self):
+    def hand(self, other=None):
         library.GameObjects.message = "Hidden items selected"
         app.update_message("show")
         engine.scrub_lists()
-        player = library.GameObjects.active_player
+        if other:
+            player = other # for calling another instance into play (interfere)
+        else:
+            player = library.GameObjects.active_player
         player.inventory("category", "door")
         OwnedItems("Hidden Items", "hidden")
 
@@ -671,6 +674,10 @@ class MainLoop(tk.Frame):
         library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
         RadioSelector('Player Select') # select the player doing the action
+        print('TEST')
+        print(library.FightComponents.card_list_selection, library.FightComponents.card_selector_index) # TODO:LOADS BEFORE SELECTION!!! MOVE
+        player = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # gets the selected player
+        self.hand(other=player) # looks into new player hand for item to use
         # RadioSelector('interfere') # selects ,mon or player to select target or player
 
     def ask_for_help(self): #mot set
@@ -782,10 +789,15 @@ class OwnedItems(tk.Toplevel):
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
-        Tools.common_set("disposable") #
-        Tools.fluid_player_info() # adds or removes player class2/race2 option
-        OwnedItems.destroy(self)
-        app.update_message("show")
+        if self == library.GameObjects.active_player:
+            Tools.common_set("disposable") #
+            Tools.fluid_player_info() # adds or removes player class2/race2 option
+            OwnedItems.destroy(self)
+            app.update_message("show")
+        else:
+            RadioSelector('Player Select')
+            player = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # gets the targeted player
+            Tools.common_set("disposable", player)
 
     def remove(self):
         Tools.common_set("remove")

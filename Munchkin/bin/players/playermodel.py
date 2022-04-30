@@ -127,7 +127,7 @@ class Player(MonTools, T_tools):
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player sack cards that have a specific key and specific value.
         (ie sub_type == armour). returns all sub_types with the val of armor"""
-        library.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
+        library.GameObjects.selected_ite,ms = [obj for obj in self.sack if obj[key] == cardtype]
 
     def item_by_key(self, key):# generalised meth for key search
         """Returns list of cards form player sack list that contain the key x. (ie "sell").

@@ -80,6 +80,7 @@ class Table(Treasure, Moncurse): # inherits from
         self.card_sop = Dealer() # has-a dealer
         self.burn_pile = []
         self.in_turn = [] # cards that influence all fights for the turn
+        # self.in_play = [] # main area for monster cards. lol created when adding more monsters.This makes card_sets where the mon is at index[0]
         self.in_play = [[{'id': 301, "category": "door", 'type': 'monster', 'name': 'Dinosaur', 'lvl': 2, "static": ["no_outrun", 'test_meth']}]] # TEST MONSTER TODO REMOVE TEST
         self.dice_sop = Dice()
 
