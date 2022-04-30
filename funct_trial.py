@@ -138,3 +138,9 @@ card_meth(s)
 # print(a)
 # x = A
 
+cs = None
+
+for card in [1], [2]:
+    cs
+print(cs)
+

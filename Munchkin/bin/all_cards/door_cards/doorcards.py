@@ -19,8 +19,9 @@ class MonTools:
 
     # first arg always received will be the state all others are cards
     # cards thus far can only send bback list with destination string and a card to be processed either removed or
-    # added to fight in the form of new monster enhancers will come this way too.
+    # added to fight in the form of new monster enhancers will come this way too
 
+########################### TEST AND CATCH #############################
     def test_meth(self, *args):
         print('In test meth expecting level change to 500')
         if "on" in args:
@@ -32,20 +33,7 @@ class MonTools:
     def unknown(self, *args, **kwargs):
         print(f"Problem found in  monster method {args}, {kwargs}")
 
-    def wondering_mon(self, *args):
-        """needs to take in a card and build a list with monster in it and put in Table.in_play lol"""
-        print('in wandering_mon')
-        return ['wondering', [args[1]]] # arg[0] = state
-
-    def below_waist(self, *args): # working
-        print("In loose items below waist")
-        player_items = ["knees", "footgear"]
-        for item in player_items:
-            if isinstance(self.armor[item], dict):
-                removed_item = self.armor.pop(item) # removes both the key and the nested card
-                print(f'{item} removed')
-                self.armor[item] = '' # add the key back to dict ready to accept future card item
-                return ['in_play', removed_item] # send card back to caller for placing on the burn pile
+########################### GENERIC #############################
 
     def level_up(self, *args, **kwargs):
         if "on" in args: # add level
@@ -58,6 +46,33 @@ class MonTools:
             print(f"level changed to {self.level} decreased by {args[1]}")
         else:
             self.unknown("level up")
+
+    def no_run(self, *args): # args sent include : ('static', 'on') # working
+        print("monster method prevents run")
+        if "on" in args:
+            self.run_away = False
+            print("run disabled")
+        else:
+            self.run_away = True
+            print("run enabled")
+
+
+
+    def loose_level(self, *args):
+        print(f"Your level is {self.level}")
+        if self.level > 1:
+            self.level -= 1
+            print(f"Level removed. You are now {self.level}")
+        else:
+            print("level not touched, not high enough")
+
+
+########################### SPECIAL #############################
+
+    def wondering_mon(self, *args):
+        """needs to take in a card and build a list with monster in it and put in Table.in_play lol"""
+        print('in wandering_mon')
+        return ['wondering', [args[1]]] # arg[0] = state
 
     def supermunch(self, *args, **kwargs):
         """player class_unlock bool option;  ln 227 player_door_cards engine! """
@@ -100,23 +115,18 @@ class MonTools:
         if self.race.get("name") == "thief":
             pass
 
-    def no_run(self, *args): # args sent include : ('static', 'on') # working
-        print("monster method prevents run")
-        if "on" in args:
-            self.run_away = False
-            print("run disabled")
-        else:
-            self.run_away = True
-            print("run enabled")
+########################### CURSES #############################
 
-    def shade(self, *args):
-        """Not used """
-        import bin.GUI.variables_library as library
-        if isinstance(self.klass, dict):
-            if self.klass.get("name") == "thief":
-                library.FightComponents.player_aid = 2
+    def loose_armor(self, *args):
+        print("in loose_armor")
+        item = "armor"
+        if isinstance(self.armor[item], dict):
+            print(f"Removing {self.name}'s armor")
+            removed_item = self.armor.pop(item)  # removes both the key and the nested card
+            self.armor[item] = ''  # add the key back to dict ready to accept future card item
+            return ['burn', removed_item]  # send card back to caller for placing on the burn pile
         else:
-            print(f"not thief no bonus {library.FightComponents.player_aid}")
+            print("No item to be removed by curse")
 
     def sex_change(self, *args):
         print("curse change sex!")
@@ -130,26 +140,6 @@ class MonTools:
 
         print(f"Your sex is now: {self.gender}")
 
-    def loose_level(self, *args):
-        print(f"Your level is {self.level}")
-        if self.level > 1:
-            self.level -= 1
-            print(f"Level removed. You are now {self.level}")
-        else:
-            print("level not touched, not high enough")
-
-    def loose_armor(self, *args):
-        print("in loose_armor")
-        item = "armor"
-        if isinstance(self.armor[item], dict):
-            print(f"Removing {self.name}'s armor")
-            removed_item = self.armor.pop(item)  # removes both the key and the nested card
-            self.armor[item] = ''  # add the key back to dict ready to accept future card item
-            return ['burn', removed_item]  # send card back to caller for placing on the burn pile
-        else:
-            print("No item to be removed by curse")
-
-    # not sure is i can use state to change the type of object to be removed to remove code redundancy
     def loose_footgear(self, *args):
         print("In loose_footgear")
         item = "footgear"
@@ -172,6 +162,28 @@ class MonTools:
         else:
             print("No item to be removed by curse")
 
+########################### MONSTERS #############################
+
+    def below_waist(self, *args): # working
+        print("In loose items below waist")
+        player_items = ["knees", "footgear"]
+        for item in player_items:
+            if isinstance(self.armor[item], dict):
+                removed_item = self.armor.pop(item) # removes both the key and the nested card
+                print(f'{item} removed')
+                self.armor[item] = '' # add the key back to dict ready to accept future card item
+                return ['in_play', removed_item] # send card back to caller for placing on the burn pile
+
+    def shade(self, *args):
+        """Not used """
+        import bin.GUI.variables_library as library
+        for klasses in self.klass, self.klass2:
+            if isinstance(klasses, dict):
+                if klasses.get("name") == "thief":
+                    library.FightComponents.player_aid = 2
+            else:
+                print(f"not thief no bonus {library.FightComponents.player_aid}")
+
     def monkey_business(self, *args):
         """looses_level, loose_small_item"""
         print(f"player level is : {self.level}")
@@ -180,6 +192,9 @@ class MonTools:
         print(f"player level after is : {self.level}")
 
 
+
+########################### METHODS TO CALL #############################
+
     method_types = {
         'test_meth': test_meth, 'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
         "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
@@ -187,7 +202,7 @@ class MonTools:
         'wondering_mon': wondering_mon
                     }
 
-#may need to lambda these to pass args
+
 #####################################################################
 # MAIN MONCURS CLASS LISTING DOOR CARDS
 #####################################################################
@@ -200,8 +215,8 @@ class Moncurse(MonTools):
 
     door_cards = [ ##### Remember all methods have to be in list format for value!!!
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
-        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['Cant_outrun'], 'method_bs': ["below_waist"], "static": ["no_outrun", 'test_meth']},
-        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_to_fire', 'lvl_up1'], 'method': ["loose_level"]},
+        {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['no_outrun'], 'method_bs': ["below_waist"], "static": ["no_outrun", 'test_meth']},
+        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_fire', 'lvl_up1'], 'method': ["loose_level"]},
         # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': ["loose_level"], "static":["shade"]},
         # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up": 1, 'lexical': ['+ 2 to halflings'], 'method': ["monkey_business"]},
         #

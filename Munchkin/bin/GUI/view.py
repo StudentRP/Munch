@@ -671,21 +671,28 @@ class MainLoop(tk.Frame):
         OwnedItems("Hidden Items", "hidden")
 
     def interfere(self): #will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
+        """Allows a person to interfere with play of another turn"""
         library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
         app.update_message("show")
-        RadioSelector('Player Select') # select the player doing the action
-        # problem. list is collected before finalisaing the Radio selector window
-        app.wait_window(RadioSelector)
-        player = library.GameObjects.substituted_player # gets the selected player WILL GET EMPTY LIST AS BUILD B4 RADIO SELECTION
-        print(' the selected player is:')
-        print(player)
-        # self.hand(other=player) # looks into new player hand for item to use
-        # RadioSelector('interfere') # selects ,mon or player to select target or player
+        app.wait_window(RadioSelector('Player Select')) # waits for the toplvl window to be destroyed before continuing (no lists created otherwise)
+        antagonist = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # player who is doing the interfering
+        print(f'The selected player is:{antagonist.name}')
+
+        engine.scrub_lists() # ensures all lists are empty
+        antagonist.inventory("type", "disposable") # creates a list of the players inventory
+        app.wait_window(OwnedItems("One shot items", "consume"))# runs the tl window for the antagonist select cards to use and adds to library
+
+        # TODO need meth so player can select the cards...
+
+        app.wait_window(RadioSelector('Interfere')) # generates list of potential targets mons + players
+        target = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index]
+        print(antagonist.name, target.name) # both are retained
+        print('cards selected: ', library.Interfering.card_storage, library.Interfering.card_storage2)
+        engine.interfere(antagonist, target)
 
     def ask_for_help(self): #mot set
         library.GameObjects.message = "Toplevel window where another player can help... for a price.."
         app.update_message("show")
-        # Table_Target_Selector() # depreciated for radioselector
         RadioSelector('Help')
 
     def list_sack(self):
@@ -773,7 +780,7 @@ class OwnedItems(tk.Toplevel):
 
     def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
-        CardVeiw(card_id)
+        CardView(card_id)
 
     def sell(self):
         """triggers sell event when pushed"""
@@ -791,15 +798,14 @@ class OwnedItems(tk.Toplevel):
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
-        if self == library.GameObjects.active_player:
-            Tools.common_set("disposable") #
+        if self == library.GameObjects.active_player: # for interfere screening
+            Tools.common_set("disposable")
             Tools.fluid_player_info() # adds or removes player class2/race2 option
             OwnedItems.destroy(self)
             app.update_message("show")
         else:
-            RadioSelector('Player Select')
-            player = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # gets the targeted player
-            Tools.common_set("disposable", player)
+            Tools.common_set("disposable")
+            OwnedItems.destroy(self)
 
     def remove(self):
         Tools.common_set("remove")
@@ -814,7 +820,7 @@ class RadioSelector(tk.Toplevel): # In production
     """
     def __init__(self, action):
         tk.Toplevel.__init__(self)
-        print('in top lvl')
+        print('In RadioSelector')
         self.action = action # string input defining setup for objects
         self.focus_set()  # focus on this window objects
         # self.grab_set()  # make modal # cause card info conflict in win10
@@ -852,43 +858,19 @@ class RadioSelector(tk.Toplevel): # In production
 
         self.buttonframe = tk.Frame(self)
         self.buttonframe.pack()
-        tk.Button(self.buttonframe, text='Select', command=lambda action=action: self.select(action)).pack()
+        tk.Button(self.buttonframe, text='Select', command=self.select).pack()
 
-    def select(self, action):
-        print('In handler ~Need to sort setting position for fight')
-        library.GameObjects.substituted_player = None # resets a player of interste
-        engine.radio_selector_handler(self.var.get(), self.list_of_interest, action) # send index and the list where the index has relevance
+    def select(self):
+        engine.radio_selector_handler(self.var.get(), self.list_of_interest) # send index and the list where the index has relevance
         # print('Item of interest is:', self.list_of_interest[self.var.get()])
         self.destroy()
 
     def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
-        CardVeiw(card_id)
+        CardView(card_id)
 
 
-class Table_Target_Selector(tk.Toplevel):
-    """class for interference selection"""
-
-    # player = gameVar.GameObjects.active_player
-    # all_players = gameVar.GameObjects.session_players
-
-    def __init__(self):
-        tk.Toplevel.__init__(self)
-        self.title('Target Selector')
-        self.frame = tk.Frame()
-
-        self.player = library.GameObjects.active_player
-        self.all_players = library.GameObjects.session_players
-
-        self.frame.pack(fill='both', expand=True)
-        # print(self.all_players)
-        print("cards in play:", cards.in_play)
-
-        # for object in Table_Target_Selector.all_players + table.cards.in_play:
-        #     print(object)
-
-
-class CardVeiw():
+class CardView:
     """Places image in a toplevel window in own canvas"""
     def __init__(self, card_id=None):
         # path = "..\\imgs\\cards\\"

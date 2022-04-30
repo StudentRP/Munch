@@ -127,7 +127,7 @@ class Player(MonTools, T_tools):
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player sack cards that have a specific key and specific value.
         (ie sub_type == armour). returns all sub_types with the val of armor"""
-        library.GameObjects.selected_ite,ms = [obj for obj in self.sack if obj[key] == cardtype]
+        library.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
 
     def item_by_key(self, key):# generalised meth for key search
         """Returns list of cards form player sack list that contain the key x. (ie "sell").
@@ -241,7 +241,7 @@ class Player(MonTools, T_tools):
 
         print(f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}")  # args are the cards sent, info on meth used and status
         for method, state in kwargs.items():  # for each kwarg given do this loop
-            print(f'Card is {args[0]["name"]}. Searching for a {method} method') # all cards have a name
+            print(f'Card is {args[0].get("name", "NOT FOUND")}. Searching for a {method} method') # all cards have a name
             if args[0].get(method, 'no meth found'):  # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
                 for listed_meth in args[0].get(method):  # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
                     print(listed_meth)  # leave in to make sure I made it a list!!! ******* TEST PRINT

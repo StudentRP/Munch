@@ -190,7 +190,7 @@ class PlayerSetUp:
             library.GameObjects.message = "2nd kck, Adding card to sack"  # 2nd kick
             player.sack.append(card)  # adds to player sack
 
-    def zipper(self, action, player=None): # player for interfere
+    def zipper(self, action): # passes action on to next meth
         """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
         action is conduit for card_matcher"""
         library.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
@@ -199,9 +199,9 @@ class PlayerSetUp:
             x, y = library.GameObjects.check_but_card_ids, library.GameObjects.check_but_boo
             library.GameObjects.zipped_tup = list(zip(x, y)) # result [(card_id,  bool), (card_id, bool)]
         # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
-        self.card_matcher(action, player)
+        self.card_matcher(action)
 
-    def card_matcher(self, action, player=None):
+    def card_matcher(self, action):
         """compares tuple to selected_items searching for matching card ids and only passes on cards that contain
         a tuple with the boolean true. Action determines the whats happening to the cards next. """
         for card in library.GameObjects.selected_items: # for every card in selected_items
@@ -210,54 +210,58 @@ class PlayerSetUp:
                     if action == "sell":
                         library.GameObjects.active_player.sell_item(card)
                     elif action in "equip, disposable ,use": # equip/disposable will be treasures
-                        self.tri_qualifier(card, player) #
+                        self.tri_qualifier(card)
                     elif action == "remove":
                         player = library.GameObjects.active_player
                         player.equipped_items("removal", card)
+                    elif action == 'interfere': # test needed
+                        if not library.Interfering.card_storage:
+                            library.Interfering.card_storage = card
+                        else:
+                            library.Interfering.card_storage2 = card
 
-    def tri_qualifier(self, card, player=None):
+
+    def tri_qualifier(self, card, player_obj=None):
         """ Checks player attribs against an item card before it can be used by the player. Split into 2 parts:
         1st: checks card for a specific restriction that would count against a player due to a specific attrib, ie if u are human u cant use this card.
         2nd part: """
-        if player: # meth for interfere
-            flag = 1
-        else:
-            player = library.GameObjects.active_player
 
-            checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
-                      player.klass2: "klass_requirement",
-                      player.gender: "gender_requirement"}  # card specific requirements to use
-            flag = 1  # True
+        player = library.GameObjects.active_player
 
-            for player_attribs, card_requirement in checks.items():
-                # checks card restrict method lexical for non use cases. If found player cant use.
-                if card.get('restriction',
-                            False):  # checks card to see if there is a key named 'restriction'. if not return False
-                    print("Searching card restriction method")
-                    if player_attribs in card.get(
-                            'restriction'):  # checks all player attribs to see if in restricted treasure card list # Returns True if match
-                        print('Restriction found')
-                        if player.name == "The_Creator":  # dev mode
-                            print(f"{player_attribs} - Restriction avoided: Dev path")
-                            break
-                        else:  # sets flag so card cant be used
-                            print('Restricted, card cant be used.')
-                            flag = 0
-                            break
-                # checks cards for player dependent attribs to use card
-                if card.get(card_requirement):  # checks card to see if requirement present
-                    if card.get(
-                            card_requirement) == player_attribs:  # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
-                        print(f"Main path for: {card_requirement}")
-                        continue  # checks next requirement parameter for conformance
-                    elif player.name == "The_Creator":  # dev mode
-                        print(f"{player_attribs} - Dev path")
-                        continue
-                    else:
-                        library.GameObjects.message = f"You cant use this card, {card_requirement}"
-                        flag = 0
-                        # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
+        checks = {player.race: "race_requirement", player.race2: "race_requirement", player.klass: "klass_requirement",
+                  player.klass2: "klass_requirement",
+                  player.gender: "gender_requirement"}  # card specific requirements to use
+        flag = 1  # True
+
+        for player_attribs, card_requirement in checks.items():
+            # checks card restrict method lexical for non use cases. If found player cant use.
+            if card.get('restriction',
+                        False):  # checks card to see if there is a key named 'restriction'. if not return False
+                print("Searching card restriction method")
+                if player_attribs in card.get(
+                        'restriction'):  # checks all player attribs to see if in restricted treasure card list # Returns True if match
+                    print('Restriction found')
+                    if player.name == "The_Creator":  # dev mode
+                        print(f"{player_attribs} - Restriction avoided: Dev path")
                         break
+                    else:  # sets flag so card cant be used
+                        print('Restricted, card cant be used.')
+                        flag = 0
+                        break
+            # checks cards for player dependent attribs to use card
+            if card.get(card_requirement):  # checks card to see if requirement present
+                if card.get(
+                        card_requirement) == player_attribs:  # if race_requirement = 'human' == player.race = 'human' change flag and break out of loop
+                    print(f"Main path for: {card_requirement}")
+                    continue  # checks next requirement parameter for conformance
+                elif player.name == "The_Creator":  # dev mode
+                    print(f"{player_attribs} - Dev path")
+                    continue
+                else:
+                    library.GameObjects.message = f"You cant use this card, {card_requirement}"
+                    flag = 0
+                    # gameVar.StartVariables.message = f"{card.get('name')} can not be quipped: {val}." # not working
+                    break
 
         if flag:  # only if flag remains True, compliant to non restrictions.
 
@@ -278,11 +282,9 @@ class PlayerSetUp:
         else:
             pass # for all other cards ie steeds
 
-    def player_door_cards(self, card, player_obj=None): #card meth#####################################################
-        if player_obj:  # meth for interfere
-            player = player_obj
-        else:
-            player = library.GameObjects.active_player
+    def player_door_cards(self, card): #card meth #####################################################
+
+        player = library.GameObjects.active_player
         player.card_meths(card, method="on")  # link to player to card meths.
         print('unlocking:', player.klass_unlock, player.race_unlock)  # only shows at end of turn due to meth restriction in class,
         # meths added at end_turn
@@ -324,17 +326,11 @@ class PlayerSetUp:
                 player.card_meths(card, 'static', 'off') # turns off static effect of card in play
                 return "lose"
 
-    def radio_selector_handler(self, index, obj_list, action):
+    def radio_selector_handler(self, index, obj_list):
         """takes in index and a list of monster/mon/players where the index has relevance"""
+        print('RadioSelector list and index are now bound')
         library.FightComponents.card_selector_index = index # stores the index in the library
         library.FightComponents.card_list_selection = obj_list # list of all selected
-        print('index id:', id(library.FightComponents.card_selector_index))
-        print('list id', id(library.FightComponents.card_list_selection))
-
-        if action == 'Player Select':
-            library.GameObjects.substituted_player = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index]
-
-
 
     # def card_method_activator(self, scenario, action, table_card_index): # deprecated method
     #     """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
@@ -343,6 +339,20 @@ class PlayerSetUp:
     #     player = library.GameObjects.active_player
     #     if scenario == "persistent":
     #         player.card_meths(card, 'static', action)  ######## will cause probs with monster individuality ######################
+    def interfere(self, player, target): # TODO finalise
+        """ working progress"""
+        card1 = library.Interfering.card_storage
+        card2 = library.Interfering.card_storage2
+        if isinstance(target, dict): # for targeting a monster
+            if card1['type'] == 'wondering monster': # may need more conditions dependent on the cards that require more than 1 card
+                target.card_meths(card1, card2, method='on') # wandering + monster
+            elif card1['type'] == 'modifier':
+                pass # needs to be added to the card_set but which one....
+
+        else: # target is player
+            # target.card_meths(card1, method='on') ## not quite right need meth to consider items given,
+            if card1['type'] == 'curse': # most use case..
+                target.card_meths(card1, method='on') # card does check on player
 
     def run(self):
         roll = dice.dice_sop.roll()

@@ -808,7 +808,7 @@ consider curses that have effect and those that dont.
 door_card_designator(self, card, call=1): look under curses to add meth
 
 WHERE I AM NOW...
-meth needed to determine if player susceptible to curse. IDEA= all cards that promote and effect can have key word/s that are added to player lexacl or dict with meths.
+meth needed to determine if player susceptible to curse. IDEA= all cards that promote and effect can have key word/s that are added to player lexical or dict with meths.
 cures would check against this list for resistant method
 ie: lexical would be filled with class bonus words and other bonuses like tinhat. These would be looked up by curse and if non compatible would reject cures.
 
@@ -827,13 +827,24 @@ enchantment to stay on lost weapons!
 #######################################################################
 # interfere method
 #######################################################################
+Method requiring an antagonist (first selection), a target and an action for the card.
 
+This method is triggered when the interfere button is pressed. The method, linked to the main play window, when
+clicked calls the app.wait_window(RadioSelector('Player Select')). This is an important step as calling the window directly
+will allow the main window to remain in operation and index a list that is not assigned (not good!). Once the player is
+selected and the list are build a self.destroy() on the toplevel window RadioSelector allows the main window to proceed.
+
+Now that an antagonist can be identified we need to look through the cards that are relevant. Once a card is chosen another
+wait_window must be used to identify the target. This list contains both monsters and all players. Having selected a target
+the card must be either placed iun the relevant card_set on the table or actioned against the person (curses, ect)
+
+library.Interfere.card_storage is used to stor any cards in from the antagonist ready for card_meths
 
 
 #######################################################################
 # help
 #######################################################################
-
+Now uses the RadioSelector to help a player. NOT SET UP
 
 
 #######################################################################

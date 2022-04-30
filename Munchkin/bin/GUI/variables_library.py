@@ -37,9 +37,14 @@ class GameObjects:
 class FightComponents:
     player_aid = [] # list of int to be summed and added in the players favor
     monster_aid = [] # list of ints to be summed and used against the player
-    consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn
+    # consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn # NOT USED
     card_selector_index = 0 # complementary to card_list_selection
     card_list_selection = [] # holds the list of cards/players associated to the radio selection process ready for index selection
+
+
+class Interfering:
+    card_storage = '' # for a card to be held temporarily
+    card_storage2 = ''
 
 
 class Options:
