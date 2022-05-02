@@ -32,11 +32,44 @@ class T_tools:
         else:
             self.unknown('bonus_five')
 
+    def bonus_three(self, *args):
+        if "on" in args:
+            print('using Radioactive meth')
+            self.bonus += 3
+            print(f"bonus changed to {self.bonus} increased by 5")
+        elif "off" in args:
+            print(self.bonus)
+            self.bonus -= 3
+            print(f"bonus changed to {self.bonus} decreased by 5")
+        else:
+            self.unknown('bonus_five')
+
+    def auto_escape(self):
+        print('in auto escape')
+        # up to 2 ppl escape
+        pass
+
+    def reroll_escape(self):
+        print('in reroll_escape escape')
+        # force re role of dice to escape
+        pass
+
+    def tasty_pie(self):
+        print('in tasty pie')
+        # +2  or if: thrown by ork+4, halfling can eat and gain lvl.
+        pass
+
+    def mean_medicine(self):
+        print('in mean_medicine')
+        # hit
+        pass
 
 
 
     method_types = {
-        'bonus_five': bonus_five,
+        'bonus_five': bonus_five, 'bonus_three': bonus_three, 'auto_escape': auto_escape, "reroll_escape": reroll_escape,
+        'tasty_pie': tasty_pie, 'mean_medicine': mean_medicine,
+
 
                     }
 #####################################################################
@@ -47,31 +80,24 @@ class T_tools:
 class Treasure(T_tools):
     """Base class for treasure, required to hold all Treasure cards and return card/attribute objects to children"""
 
-    burn_card = [] # The use-only-once pile that can not be reused
-
-    stack = [] # Re-usable cards
-
-    """ special methods associated to cards"""
-    # special_list = {'once': T_tools.restriction, 'deflect': T_tools.deflect,
-    #                 'immune': T_tools.immune}
-
 
     """General order: id, type, name, description, bonus, sell, special/restriction/, Dict to loop
     use only once, armour, weapons, 
     MAY NEED SOME FORM OF CATEGORY KEY FOR THE SORTER FUNCT REQUIRED WHEN DECIDING WHERE OR WHAT THE CARDS BELONG TOO.
      
-    ALL items require bonus status
+    bonus to be removed from cards and placed on methods. 
     """
     treasure_cards = [
         # # type disposable #no 2 add!! #key ideas effects=['fire',]
-        # {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, "bonus":5, 'method': ['bonus_five']},# need on off activation after play
-        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, "bonus": 5, 'method': ['bonus_five']},
-        # {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", "sell": 100, "bonus":3, "lexical": ["fire"]},
-        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Royal Oil", "sell": 100, "bonus": 3},
-        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, "bonus": 3, 'lexical': ['freeze']},
-        # {"id": 4, "category": "treasure", "type": "disposable", 'name': "Instant Wall", 'sell': 300, 'method': ['auto_escape']},
-        # {"id": 5, "category": "treasure", "type": "disposable", "name": "Flask Of Glue", "sell": 100, 'method': ["re-roll_escape"]},
-        # {"id": 0, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
+        {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, 'method': ['bonus_five']},# need on off activation after play
+        {"id": 2, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, 'method': ['bonus_five']},
+        {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", "sell": 100, "lexical": ["fire_damage"], 'method': ['bonus_three']},
+        {"id": 4, "category": "treasure", "type": "disposable", "name": "Royal Oil", "sell": 100, 'method': ['bonus_three']},
+        {"id": 5, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, 'lexical': ['cold_damage'], 'method': ['bonus_three']},
+        {"id": 6, "category": "treasure", "type": "disposable", 'name': "Instant Wall", 'sell': 300, 'method': ['auto_escape']},
+        {"id": 7, "category": "treasure", "type": "disposable", "name": "Flask Of Glue", "sell": 100, 'method': ["reroll_escape"]},
+        {"id": 8, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
+        # {"id": 9, "category": "treasure", "type": "disposable", "name": "Mean Medicine", "sell": 100, "method": 'mean_medicine', "target_requirement": "hireling"},
 
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
         # {"id": 6, "category": "treasure", "name": "The Occasionally Reliable Amulet", "type": "armor", "sub_type": "necklace",

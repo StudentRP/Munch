@@ -925,14 +925,20 @@ class Tools:
     def viewer(card_id=None):
         """use PhotoImage to get the image from a path that can change dependent of os"""
 
-        # path = "..\\imgs\\cards\\" # this path will not work on linux requires os module and resolve() method
-        # img = ImageTk.PhotoImage(file=f"{path}{str(card_id)}.png") #dependent on windows os
-        BASE_DIR = Path(__file__).resolve().parent.parent
+        base_dir = Path(__file__).resolve().parent.parent # path works regardless of os
+
         try:
-            img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(card_id)}.png')) # works regardless of os
+            img = Image.open(os.path.join(base_dir, 'imgs', 'cards', f'{str(card_id)}.png'))
+            # img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(card_id)}.png'))
+
         except FileNotFoundError:
-            img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(0)}.png'))
-        return img
+            img = Image.open(os.path.join(base_dir, 'imgs', 'cards', f'{str(0)}.png')) # loads default
+            # img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(0)}.png'))
+        # return img
+
+        new_image = img.resize((200, 310), Image.ANTIALIAS) # ANTIALIAS removes the structural Padding from the Image around it.
+        sized_img = ImageTk.PhotoImage(new_image)  # works regardless of os
+        return sized_img
 
 
 if __name__ == "__main__":
