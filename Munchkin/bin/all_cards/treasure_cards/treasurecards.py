@@ -99,6 +99,7 @@ class Treasure(T_tools):
         {"id": 8, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
         # {"id": 9, "category": "treasure", "type": "disposable", "name": "Mean Medicine", "sell": 100, "method": 'mean_medicine', "target_requirement": "hireling"},
 
+
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
         # {"id": 6, "category": "treasure", "name": "The Occasionally Reliable Amulet", "type": "armor", "sub_type": "necklace",
         #  'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect", "bonus": 0},

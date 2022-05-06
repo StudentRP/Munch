@@ -503,15 +503,22 @@ class MainLoop(tk.Frame):
     #         self.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
     def fight(self):
-        #Todo next job sort this mess and add in monster selector TL
-        """ selecting monster and fighting"""
+        #Todo next job sort this mess out
+        """ fight is called when all actions and options are exhausted. Fights main purpose is to compare lists and
+         determine outcome of the fight then trigger appropriate actions."""
         print("Fight button pressed")
-        if len(cards.in_play) > 1: # more than 1 monster on the table
-            card_set = cards.in_play[library.FightComponents.card_selector_index] # gets index of card produced by radio selector
-        print('the card set u will be facing is:')
+        if len(cards.in_play) > 1: # checks how many monster set are on the table
+            card_set = cards.in_play[library.FightComponents.card_selector_index] # gets the cards set selected by the player
+            # static/method methods to activate??
+        else:
+            card_set = cards.in_play[0] # will always grab the first set
+        print('The card set u will be facing is:')
         print(card_set) #will return the card set for all cards associated to this monster inc monster
-        # while cards.in_play >= 1:
-        #     # chooses monster to
+        engine.fight(library.FightComponents.assists)# calls the fight method passing in any helpers in list format
+
+        #after fight player can select another monster
+        # fight is when all oter options have been exhausted!
+        # this should only pass to a function that calculates the outcome
 
         # player_obj = library.GameObjects.active_player #
         # print(player_obj.armor)
@@ -520,9 +527,6 @@ class MainLoop(tk.Frame):
         # player_obj.card_meths(card, method_bs='on') #  can throw more cards in here from the library.card_transfer list
         # print(player_obj.armor)
         # print(f'burn cards: {len(cards.burn_pile)}')
-
-
-
 
         # if len(cards.in_play) > 1:
         #     # run monster selection toplevel selector
@@ -678,7 +682,7 @@ class MainLoop(tk.Frame):
         antagonist = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # player who is doing the interfering
         print(f'The selected player is:{antagonist.name}')
 
-        engine.scrub_lists() # ensures all lists are empty
+        engine.scrub_lists() # ensures item lists is empty
         antagonist.inventory("type", "disposable") # creates a list of the players inventory
         app.wait_window(OwnedItems("One shot items", "consume"))# runs the tl window for the antagonist select cards to use and adds to library
 
@@ -923,18 +927,15 @@ class Tools:
 
     @staticmethod
     def viewer(card_id=None):
-        """use PhotoImage to get the image from a path that can change dependent of os"""
+        """Resizes and processes image ready for canvas in main. Path corrects the route to the images is not dependent on os"""
 
         base_dir = Path(__file__).resolve().parent.parent # path works regardless of os
 
         try:
             img = Image.open(os.path.join(base_dir, 'imgs', 'cards', f'{str(card_id)}.png'))
-            # img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(card_id)}.png'))
 
         except FileNotFoundError:
             img = Image.open(os.path.join(base_dir, 'imgs', 'cards', f'{str(0)}.png')) # loads default
-            # img = ImageTk.PhotoImage(file=os.path.join(BASE_DIR, 'imgs', 'cards', f'{str(0)}.png'))
-        # return img
 
         new_image = img.resize((200, 310), Image.ANTIALIAS) # ANTIALIAS removes the structural Padding from the Image around it.
         sized_img = ImageTk.PhotoImage(new_image)  # works regardless of os

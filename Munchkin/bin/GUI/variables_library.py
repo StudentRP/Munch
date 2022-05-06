@@ -35,6 +35,7 @@ class GameObjects:
 
 
 class FightComponents:
+    assists = [] # players that are helping in the fight
     player_aid = [] # list of int to be summed and added in the players favor
     monster_aid = [] # list of ints to be summed and used against the player
     # consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn # NOT USED

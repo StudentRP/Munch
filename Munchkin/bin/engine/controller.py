@@ -298,10 +298,15 @@ class PlayerSetUp:
         library.GameObjects.zipped_tup.clear()  # clears tup list
 
 ##################################################################
-    def fight(self, helper=0, additional=0):# helper would be other player interactions. additional is anything else
+    def fight(self, helper=None, additional=0):# helper would be other player interactions. additional is anything else
         """for cards that are monsters and placed on the table."""
         # if can send card meths athe set for processing would solve lots of probs
         print("In the fight!")
+        if helper: # adds ints of player stats to player_aid ready for final sum
+            for assists in helper:
+                library.FightComponents.player_aid.append(assists.level)
+                library.FightComponents.player_aid.append(assists.bonus)
+
         card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # removed from in_play for work and disassembly
         for card in card_set:
             player = library.GameObjects.active_player
