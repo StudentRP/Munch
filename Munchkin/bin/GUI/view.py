@@ -514,7 +514,7 @@ class MainLoop(tk.Frame):
             card_set = cards.in_play[0] # will always grab the first set
         print('The card set u will be facing is:')
         print(card_set) #will return the card set for all cards associated to this monster inc monster
-        engine.fight(library.FightComponents.assists)# calls the fight method passing in any helpers in list format
+        engine.fight(library.FightComponents.assists)# calls the fight method passing in list of player instance deemed as helpers
 
         #after fight player can select another monster
         # fight is when all oter options have been exhausted!
@@ -807,7 +807,7 @@ class OwnedItems(tk.Toplevel):
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
-        if library.GameObjects.substituted_player != library.GameObjects.active_player: # for interfere screening. wont work! use substituted_player in library
+        if library.GameObjects.interfering_player != library.GameObjects.active_player: # for interfere screening. wont work! use interfering_player in library
             Tools.common_set("disposable")
             Tools.fluid_player_info() # adds or removes player class2/race2 option
             OwnedItems.destroy(self)

@@ -24,7 +24,7 @@ class GameObjects:
 
     session_players = []  # (list) generated list slice from players_available CHANGED IN TEST FROM NONE!!!!
     active_player = None # current game player
-    substituted_player = None # player that can interfere or help
+    interfering_player = None # player instance that is interfere
     all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
     check_but_intvar_gen = [] # populated with callable objects from checkbutton
@@ -35,7 +35,7 @@ class GameObjects:
 
 
 class FightComponents:
-    assists = [] # players that are helping in the fight
+    assists = [] # list of player instances that are helping in the fight.
     player_aid = [] # list of int to be summed and added in the players favor
     monster_aid = [] # list of ints to be summed and used against the player
     # consumables = [] # for all objects that are thrown #loop over to run card_meth(method='off') ad add to burn # NOT USED
