@@ -734,12 +734,14 @@ class OwnedItems(tk.Toplevel):
         # print(f"Top level self: {self}")
 
         if not library.GameObjects.selected_items: # if nothing in list display a label message
+            self.geometry('300x200')
             fm = tk.Frame(self)
             fm.pack(side="top", expand=True)
             tk.Label(fm, text="No cards to show").pack(side='top')
 
         # main toplevel window for displaying items and button choices dependent on the set_but string
         else:
+            # custom column titles
             f = tk.Frame(self)
             f.pack(side="top", expand=True)
             tk.Label(f, text="Name").grid(row=0, column=0, sticky="nw")# column titles
@@ -754,25 +756,27 @@ class OwnedItems(tk.Toplevel):
             #     tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
             tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw") # title column for check boxes
 
-            # specific labels and tk variable
+            # Standard card details & custom requirements dependent on request
             set_row = 1 # row incrementor for loop
             for card in library.GameObjects.selected_items: # for each card in the selected items
                 status = tk.IntVar() # for keeping track of check buttons, 1 per loop ###
                 tk.Label(f, text=card['name']).grid(row=set_row, column=0, sticky="nw")
                 tk.Label(f, text=card['type']).grid(row=set_row, column=1, sticky="nw")
+
                 if self.set_but == "sell":
                     tk.Label(f, text=card['sell']).grid(row=set_row, column=2, sticky="nw")
                 elif self.set_but in " weap, armor, consume, equip, remove":
                     tk.Label(f, text=card['bonus']).grid(row=set_row, column=2, sticky="nw")
                 if set_but != "No Buttons":
                     tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
-                tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c)).grid(row=set_row, column=4)
+
+                tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c)).grid(row=set_row, column=4) # for viewing card
 
                 library.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 library.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
                 set_row += 1
 
-        # specific buttons
+        # custom action buttons to handle cards selected
         if self.set_but in "weap, armor, sell":
             tk.Button(self, text="Sell", command=self.sell).pack(side="left")
         if self.set_but in "consume, hidden":
@@ -786,6 +790,7 @@ class OwnedItems(tk.Toplevel):
         """ Method for showing the card in a toplevel window"""
         CardView(card_id)
 
+    # could be 1 handler with set_but param ie Tools.common_set(set_but)
     def sell(self):
         """triggers sell event when pushed"""
         Tools.common_set("sell")# calls zipper with param
@@ -802,7 +807,7 @@ class OwnedItems(tk.Toplevel):
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
-        if self == library.GameObjects.active_player: # for interfere screening
+        if library.GameObjects.substituted_player != library.GameObjects.active_player: # for interfere screening. wont work! use substituted_player in library
             Tools.common_set("disposable")
             Tools.fluid_player_info() # adds or removes player class2/race2 option
             OwnedItems.destroy(self)

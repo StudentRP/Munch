@@ -98,28 +98,28 @@
 #     print("nope")
 # app.mainloop()
 
-def card_meth(*arg, **kwargs):
-    # print(arg) tupled
-    for cardset in arg:
-        print(cardset) #tuple stripped the list of the singe card reveling the list or the card dict.!!!
-        if isinstance(cardset, list): # list pathway contaning dicts
-            for card in cardset: # card_sets will reduce to single cards but, WILL call key on a single card
-                print(card)
-        #         if 'mon' in card:
-    #             print('monster found')
-    #         else:
-    #             print(card.get('enhancer', 'Not enhancer'))
-
-    # if kwargs.get('foo'):
-    #     print('in dict')
-# card_meth('foo', 'bar', foo='foobar')
-
-
-l = [{'monL': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}] # card_set
-# n = {'mon': ["a"]}, {'enhancer': ['enhancer found']}, {'mon': ["b"]}, {'weap': ["w"]}  # simulates 3 cards in list
-s= {'monS': ["a"]}   #single monster card
-card_meth(l)
-card_meth(s)
+# def card_meth(*arg, **kwargs):
+#     # print(arg) tupled
+#     for cardset in arg:
+#         print(cardset) #tuple stripped the list of the singe card reveling the list or the card dict.!!!
+#         if isinstance(cardset, list): # list pathway contaning dicts
+#             for card in cardset: # card_sets will reduce to single cards but, WILL call key on a single card
+#                 print(card)
+#         #         if 'mon' in card:
+#     #             print('monster found')
+#     #         else:
+#     #             print(card.get('enhancer', 'Not enhancer'))
+#
+#     # if kwargs.get('foo'):
+#     #     print('in dict')
+# # card_meth('foo', 'bar', foo='foobar')
+#
+#
+# l = [{'monL': ["a", 'aa', 'aaa']}, {'enhancer': ["x", 'xx', 'xxx']}] # card_set
+# # n = {'mon': ["a"]}, {'enhancer': ['enhancer found']}, {'mon': ["b"]}, {'weap': ["w"]}  # simulates 3 cards in list
+# s= {'monS': ["a"]}   #single monster card
+# card_meth(l)
+# card_meth(s)
 
 # print(f[0][0].get('mon')) # [fight selector], [monster selector].dict atrib fetcher
 # print(f[0][0])
@@ -138,9 +138,11 @@ card_meth(s)
 # print(a)
 # x = A
 
-cs = None
+# cs = None
+#
+# for card in [1], [2]:
+#     cs
+# print(cs)
 
-for card in [1], [2]:
-    cs
-print(cs)
+
 

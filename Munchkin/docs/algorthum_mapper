@@ -490,13 +490,12 @@ The end goal is to remove items from the player adding them to the burn pile and
         Player has method called item_by_key. This takes 1 argument 'sell' defined as key on other end
         (but could be anything specific from a game card)
         item_by_key(self, key) generates a list from all cards in player.unsorted (a list of cards delt to the player during
-        controller.PlayerSelect.playersetter during player slice) that are specific in the fact they have in card dictionary
+        controller.PlayerSelect.playersetter during player creation) that are specific in the fact they have in card dictionary
         a key called 'sell'. Under list comprehension this generates a list of only sellable objects in the player deck.
-        this list is binded to library.GameObjects.selected items.
+        this list is then assigned to library.GameObjects.selected items.
 
-        Returning to controller, OwnedItems(window_title) Toplevel is now called with the arg "Sellable Items".
+        Returning to controller, OwnedItems(window_title, action) Toplevel is now called with the args "Sellable Items", 'sell'.
         OwnedItems loops over objects in selected_items creating a list format each with a name,type,value and a checkbox.
-        ** consider adding info buttion that either raise the pic of the card or text description.
         library.GameObjects.check_but_intvar_gen.append(status) is also build per item and bound to checkbutton changing
         independently with checkbutton activity.
         The id of each card is appended to a new list in library.GameObjects.check_but_card_ids.

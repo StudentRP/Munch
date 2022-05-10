@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from main pc: test of interfere mechanism">
+    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: working on interference and fight">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2022,_09_51_[Changes]/shelved.patch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/MyPackages.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MyPackages.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_04_22_20_39__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_04_22_20_39__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_31_12_21_20_33__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_31_12_21_20_33__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_04_22_19_30__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_04_22_19_30__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_04_22_10_25_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_04_22_10_25__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_04_2022__09_25__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_04_2022__09_25__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_04_2022__22_03__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_04_2022__22_03__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_30_04_2022,_07_24_[Changes]/shelved.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/variables_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/variables_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
@@ -190,11 +181,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.view" />
-      <item itemvalue="Python.game_loop_v3" />
       <item itemvalue="Python.controller" />
-      <item itemvalue="Python.funct_trial" />
       <item itemvalue="Python.doorcards" />
+      <item itemvalue="Python.funct_trial" />
+      <item itemvalue="Python.game_loop_v3" />
+      <item itemvalue="Python.view" />
     </list>
     <recent_temporary>
       <list>
@@ -229,8 +220,8 @@
       <workItem from="1650963932645" duration="17601000" />
       <workItem from="1651088381872" duration="15000" />
       <workItem from="1651251813699" duration="3880000" />
-      <workItem from="1651299116790" duration="376000" />
-      <workItem from="1651342617767" duration="15559000" />
+      <workItem from="1651828134806" duration="2628000" />
+      <workItem from="1651908807897" duration="5822000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -316,12 +307,12 @@
       <option name="project" value="LOCAL" />
       <updated>1651084244094</updated>
     </task>
-    <task id="LOCAL-00013" summary="from main pc: test of interfere mechanism">
-      <created>1651299443555</created>
+    <task id="LOCAL-00013" summary="from laptop: working on interference and fight">
+      <created>1651869712994</created>
       <option name="number" value="00013" />
       <option name="presentableId" value="LOCAL-00013" />
       <option name="project" value="LOCAL" />
-      <updated>1651299443555</updated>
+      <updated>1651869712994</updated>
     </task>
     <option name="localTasksCounter" value="14" />
     <servers />
@@ -339,6 +330,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -351,15 +343,15 @@
     <MESSAGE value="completed card_meths" />
     <MESSAGE value="rework of changes" />
     <MESSAGE value="from main pc: addition of Player select in RadioSelector" />
-    <MESSAGE value="from main pc: test of interfere mechanism" />
-    <option name="LAST_COMMIT_MESSAGE" value="from main pc: test of interfere mechanism" />
+    <MESSAGE value="from laptop: working on interference and fight" />
+    <option name="LAST_COMMIT_MESSAGE" value="from laptop: working on interference and fight" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>568</line>
+          <line>570</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -383,54 +375,69 @@
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
+          <line>667</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/engine/controller.py</url>
-          <line>341</line>
-          <option name="timeStamp" value="39" />
+          <line>221</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Munchkin/bin/engine/controller.py</url>
+          <line>266</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Munchkin/bin/engine/controller.py</url>
+          <line>281</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>800</line>
-          <option name="timeStamp" value="40" />
+          <line>680</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Munchkin/bin/engine/controller.py</url>
-          <line>216</line>
-          <option name="timeStamp" value="41" />
+          <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
+          <line>809</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/gui_v3_py$controller.coverage" NAME="controller Coverage Results" MODIFIED="1616616433552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$server.coverage" NAME="server Coverage Results" MODIFIED="1607734550477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1617305583240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
-    <SUITE FILE_PATH="coverage/MyPackages$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1640967852670" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$cascading_frames.coverage" NAME="cascading_frames Coverage Results" MODIFIED="1606569227994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/methods" />
-    <SUITE FILE_PATH="coverage/MyPackages$controller.coverage" NAME="controller Coverage Results" MODIFIED="1640976909484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$test_engine.coverage" NAME="test_engine Coverage Results" MODIFIED="1614457569538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests/testengine" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1615720610908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1649621688034" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$components.coverage" NAME="components Coverage Results" MODIFIED="1606571460461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/methods" />
-    <SUITE FILE_PATH="coverage/Munch$general_tests.coverage" NAME="general_tests Coverage Results" MODIFIED="1649253557839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests" />
-    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1650458453729" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v2.coverage" NAME="game_loop_v2 Coverage Results" MODIFIED="1614508656597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$general_tests.coverage" NAME="general_tests Coverage Results" MODIFIED="1649624272820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$controller.coverage" NAME="controller Coverage Results" MODIFIED="1649971184886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$view.coverage" NAME="view Coverage Results" MODIFIED="1651255526307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/gui_v3_py$run.coverage" NAME="run Coverage Results" MODIFIED="1617043566223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$gui_v3.coverage" NAME="gui_v3 Coverage Results" MODIFIED="1606573299996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/Munch$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1650457265508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$gui_variables.coverage" NAME="gui_variables Coverage Results" MODIFIED="1616964872872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$gui_v3.coverage" NAME="gui_v3 Coverage Results" MODIFIED="1612123491582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$view.coverage" NAME="view Coverage Results" MODIFIED="1651353821057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1650734777954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$client.coverage" NAME="client Coverage Results" MODIFIED="1607734581411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$controler.coverage" NAME="controler Coverage Results" MODIFIED="1614511168277" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/gui_v3_py$pic_test.coverage" NAME="pic_test Coverage Results" MODIFIED="1616512660881" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/Tool_box" />
     <SUITE FILE_PATH="coverage/gui_v3_py$controller__1_.coverage" NAME="controller (1) Coverage Results" MODIFIED="1639218287704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Munch$general_tests.coverage" NAME="general_tests Coverage Results" MODIFIED="1649253557839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests" />
+    <SUITE FILE_PATH="coverage/Munch$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1650694902157" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$gui_variables.coverage" NAME="gui_variables Coverage Results" MODIFIED="1616964872872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$controler.coverage" NAME="controler Coverage Results" MODIFIED="1614511168277" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1649621688034" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
+    <SUITE FILE_PATH="coverage/Munch$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1652088318382" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MyPackages$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1639811290752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$client.coverage" NAME="client Coverage Results" MODIFIED="1607734581411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$controller.coverage" NAME="controller Coverage Results" MODIFIED="1649971184886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1650733411256" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1652087784808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$test_engine.coverage" NAME="test_engine Coverage Results" MODIFIED="1614457569538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests/testengine" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v2.coverage" NAME="game_loop_v2 Coverage Results" MODIFIED="1614508656597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$server.coverage" NAME="server Coverage Results" MODIFIED="1607734550477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$cascading_frames.coverage" NAME="cascading_frames Coverage Results" MODIFIED="1606569227994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/methods" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$general_tests.coverage" NAME="general_tests Coverage Results" MODIFIED="1649624272820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1617305583240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$components.coverage" NAME="components Coverage Results" MODIFIED="1606571460461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/methods" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$pic_test.coverage" NAME="pic_test Coverage Results" MODIFIED="1616512660881" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/TK_GUI/Tool_box" />
     <SUITE FILE_PATH="coverage/Munch$controller.coverage" NAME="controller Coverage Results" MODIFIED="1649254694799" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
-    <SUITE FILE_PATH="coverage/Munch$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1649279228321" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
-    <SUITE FILE_PATH="coverage/Working_git_projects$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1651354292617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Munch$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1649605889035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1615720610908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$controller.coverage" NAME="controller Coverage Results" MODIFIED="1616616433552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/MyPackages$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1640266776710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MyPackages$controller.coverage" NAME="controller Coverage Results" MODIFIED="1640513926303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/gui_v3_py$gui_v3.coverage" NAME="gui_v3 Coverage Results" MODIFIED="1612123491582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Munch$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1650360495937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$gui_v3.coverage" NAME="gui_v3 Coverage Results" MODIFIED="1606573299996" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Working_git_projects$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1650734777954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
   </component>
 </project>
