@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: working on interference and fight">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2022,_09_51_[Changes]/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MyPackages.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MyPackages.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_30_04_2022,_07_24_[Changes]/shelved.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/docs/algorthum_mapper" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,7 +214,7 @@
       <workItem from="1651088381872" duration="15000" />
       <workItem from="1651251813699" duration="3880000" />
       <workItem from="1651828134806" duration="2628000" />
-      <workItem from="1651908807897" duration="5822000" />
+      <workItem from="1651908807897" duration="6763000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -314,11 +307,29 @@
       <option name="project" value="LOCAL" />
       <updated>1651869712994</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="from laptop: working on interference and fight">
+      <created>1652186042305</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1652186042305</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
