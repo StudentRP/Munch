@@ -144,5 +144,10 @@
 #     cs
 # print(cs)
 
+def fight_lvl(x):
+    print(f'lvl is {x}')
 
+method_types = { 'fight_lvl': lambda x: fight_lvl(x)}
 
+m = method_types['fight_lvl']
+m(20)

@@ -85,15 +85,15 @@ class Treasure(T_tools):
     use only once, armour, weapons, 
     MAY NEED SOME FORM OF CATEGORY KEY FOR THE SORTER FUNCT REQUIRED WHEN DECIDING WHERE OR WHAT THE CARDS BELONG TOO.
      
-    bonus to be removed from cards and placed on methods. 
+    bonus to be removed from cards and placed on methods.NO NEEDED FOR THE GUI COMPONENT 
     """
     treasure_cards = [
         # # type disposable #no 2 add!! #key ideas effects=['fire',]
-        {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", "sell": 200, 'method': ['bonus_five']},# need on off activation after play
-        {"id": 2, "category": "treasure", "type": "disposable", "name": "Magic Missile", "sell": 300, 'method': ['bonus_five']},
-        {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", "sell": 100, "lexical": ["fire_damage"], 'method': ['bonus_three']},
-        {"id": 4, "category": "treasure", "type": "disposable", "name": "Royal Oil", "sell": 100, 'method': ['bonus_three']},
-        {"id": 5, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", "sell": 100, 'lexical': ['cold_damage'], 'method': ['bonus_three']},
+        {"id": 1, "category": "treasure", "type": "disposable", "name": "Electric Radioactive Acid Potion", 'bonus': 5, "sell": 200, 'method': ['bonus_five']},# need on off activation after play
+        {"id": 2, "category": "treasure", "type": "disposable", "name": "Magic Missile", 'bonus': 5, "sell": 300, 'method': ['bonus_five']},
+        {"id": 3, "category": "treasure", "type": "disposable", "name": "Flaming Poison Potion", 'bonus': 3, "sell": 100, "lexical": ["fire_damage"], 'method': ['bonus_three']},
+        {"id": 4, "category": "treasure", "type": "disposable", "name": "Royal Oil", 'bonus': 3, "sell": 100, 'method': ['bonus_three']},
+        {"id": 5, "category": "treasure", "type": "disposable", "name": "Freezing Explosive Potion", 'bonus': 3, "sell": 100, 'lexical': ['cold_damage'], 'method': ['bonus_three']},
         {"id": 6, "category": "treasure", "type": "disposable", 'name': "Instant Wall", 'sell': 300, 'method': ['auto_escape']},
         {"id": 7, "category": "treasure", "type": "disposable", "name": "Flask Of Glue", "sell": 100, 'method': ["reroll_escape"]},
         {"id": 8, "category": "treasure", "type": "disposable", "name": "Tasty Pie", "sell": 100, 'bonus': 2, "method": 'tasty_pie'},
@@ -119,7 +119,7 @@ class Treasure(T_tools):
         # {"id": 12, "category": "treasure", "name": "Raincoat", "type": "armor", "sub_type": "armor", "sell": 100, "special": "over armor",
         #  "restrictions": "loose with armour", "bonus": 0},
         # {"id": 13, "category": "treasure", "name": "Slimy Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 200},
-        {"id": 14, "category": "treasure", "name": "Mithril Armor", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 600, "restriction": ['big', 'wizard', 'human']},####not wizards
+        {"id": 14, "category": "treasure", "name": "Mithril Armor", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 600, "restriction": ['big', 'wizard']},
         # {"id": 15, "category": "treasure", "name": "Budget Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 100},
         # {"id": 16, "category": "treasure", "name": "Flaming Armour", "type": "armor", "sub_type": "armor", "bonus": 2, "sell": 400},
         # {"id": 17, "category": "treasure", "name": "Spudded Leather Armor", "type": "armor", "sub_type": "armor", "bonus": 2, "sell": 400},

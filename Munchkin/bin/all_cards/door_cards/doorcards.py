@@ -9,6 +9,8 @@ Will need a processing level
  object None can not be unpacked into more than 1 return receiver.
  """
 
+
+
 class MonTools:
     """methods for all cards associated to Door cards, self should be the player
     *items/ will have add abd remove meth
@@ -25,7 +27,7 @@ class MonTools:
     def test_meth(self, *args):
         print('In test meth expecting level change to 500')
         if "on" in args:
-            print('lvl changed')
+            print('lvl changed\n')
             self.level = 500
         else:
             self.level = -500
@@ -48,14 +50,13 @@ class MonTools:
             self.unknown("level up")
 
     def no_run(self, *args): # args sent include : ('static', 'on') # working
-        print("monster method prevents run")
+        print("\nmonster method prevents run")
         if "on" in args:
             self.run_away = False
             print("run disabled")
         else:
             self.run_away = True
             print("run enabled")
-
 
 
     def loose_level(self, *args):
@@ -199,7 +200,7 @@ class MonTools:
         'test_meth': test_meth, 'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
         "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
         "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus,
-        'wondering_mon': wondering_mon
+        'wondering_mon': wondering_mon,
                     }
 
 
@@ -216,7 +217,7 @@ class Moncurse(MonTools):
     door_cards = [ ##### Remember all methods have to be in list format for value!!!
         ## monster cards:id, category,  type, name, lexical, level, treasure, level_up method = bs, static = conditions at start of fight ie cant run.
         {'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['no_outrun'], 'method_bs': ["below_waist"], "static": ["no_outrun", 'test_meth']},
-        # {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_fire', 'lvl_up1'], 'method': ["loose_level"]},
+        {'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2, 'treasure': 1, "level_up": 1, 'lexical': ['sensitive_fire', 'lvl_up1'], 'method': ["loose_level"]},
         # {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': ["loose_level"], "static":["shade"]},
         # {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up": 1, 'lexical': ['+ 2 to halflings'], 'method': ["monkey_business"]},
         #

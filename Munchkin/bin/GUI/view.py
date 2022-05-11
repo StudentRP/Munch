@@ -508,13 +508,12 @@ class MainLoop(tk.Frame):
          determine outcome of the fight then trigger appropriate actions."""
         print("Fight button pressed")
         if len(cards.in_play) > 1: # checks how many monster set are on the table
-            card_set = cards.in_play[library.FightComponents.card_selector_index] # gets the cards set selected by the player
-            # static/method methods to activate??
+            card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # selects a monster based on potential player selection
         else:
-            card_set = cards.in_play[0] # will always grab the first set
+            card_set = cards.in_play.pop(0) # will always grab the first set and remove it
         print('The card set u will be facing is:')
         print(card_set) # will return the card set for all cards associated to this monster inc monster
-        engine.fight(library.FightComponents.assists)# calls the fight method passing in list of player instance deemed as helpers
+        engine.fight(card_set, library.FightComponents.assists)# calls the fight method passing in list of player instance deemed as helpers
 
         #after fight player can select another monster
         # fight is when all oter options have been exhausted!
@@ -627,6 +626,34 @@ class MainLoop(tk.Frame):
             app.update_message("show")
             self.run_away_button.config(state="disabled")  # run
 
+    def interfere(self):  # will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
+        """Allows a person to interfere with play of another turn"""
+        library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
+        app.update_message("show")
+        app.wait_window(RadioSelector(
+            'Player Select'))  # waits for the toplvl window to be destroyed before continuing (no lists created otherwise)
+        antagonist = library.FightComponents.card_list_selection[
+            library.FightComponents.card_selector_index]  # player who is doing the interfering
+        print(f'The selected player is:{antagonist.name}')
+
+        engine.scrub_lists()  # ensures item lists is empty
+        antagonist.inventory("type", "disposable")  # creates a list of the players inventory
+        app.wait_window(OwnedItems("One shot items",
+                                   "consume"))  # runs the tl window for the antagonist select cards to use and adds to library
+
+        # TODO need meth so player can select the cards...
+
+        app.wait_window(RadioSelector('Interfere'))  # generates list of potential targets mons + players
+        target = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index]
+        print(antagonist.name, target.name)  # both are retained
+        print('cards selected: ', library.Interfering.card_storage, library.Interfering.card_storage2)
+        engine.interfere(antagonist, target)
+
+    def ask_for_help(self):  # mot set
+        library.GameObjects.message = "Toplevel window where another player can help... for a price.."
+        app.update_message("show")
+        RadioSelector('Help')
+
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
         library.GameObjects.message = "Weapons list"
@@ -645,11 +672,14 @@ class MainLoop(tk.Frame):
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
         OwnedItems("Armor Owned", "armor")
 
-    def consumables(self):
+    def consumables(self, other=False):
         library.GameObjects.message = "Consumable items"
         app.update_message("show")
         engine.scrub_lists()
-        player = library.GameObjects.active_player
+        if other:
+            player = other # for calling another instance into play (interfere) to view their cards
+        else:
+            player = library.GameObjects.active_player
         player.inventory("type", "disposable")
         OwnedItems("One shot items", "consume")
 
@@ -663,41 +693,16 @@ class MainLoop(tk.Frame):
         # print(gameVar.StartVariables.selected_items) # call method that in gamefile that creates zip
         OwnedItems("Sellable Items", "sell") # calls toplevel with window title
 
-    def hand(self, other=None):
+    def hand(self, other=False):
         library.GameObjects.message = "Hidden items selected"
         app.update_message("show")
         engine.scrub_lists()
         if other:
-            player = other # for calling another instance into play (interfere)
+            player = other # for calling another instance into play (aid) to view their cards
         else:
             player = library.GameObjects.active_player
         player.inventory("category", "door")
         OwnedItems("Hidden Items", "hidden")
-
-    def interfere(self): #will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
-        """Allows a person to interfere with play of another turn"""
-        library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
-        app.update_message("show")
-        app.wait_window(RadioSelector('Player Select')) # waits for the toplvl window to be destroyed before continuing (no lists created otherwise)
-        antagonist = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index] # player who is doing the interfering
-        print(f'The selected player is:{antagonist.name}')
-
-        engine.scrub_lists() # ensures item lists is empty
-        antagonist.inventory("type", "disposable") # creates a list of the players inventory
-        app.wait_window(OwnedItems("One shot items", "consume"))# runs the tl window for the antagonist select cards to use and adds to library
-
-        # TODO need meth so player can select the cards...
-
-        app.wait_window(RadioSelector('Interfere')) # generates list of potential targets mons + players
-        target = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index]
-        print(antagonist.name, target.name) # both are retained
-        print('cards selected: ', library.Interfering.card_storage, library.Interfering.card_storage2)
-        engine.interfere(antagonist, target)
-
-    def ask_for_help(self): #mot set
-        library.GameObjects.message = "Toplevel window where another player can help... for a price.."
-        app.update_message("show")
-        RadioSelector('Help')
 
     def list_sack(self):
         """shows all items in sack"""
@@ -733,6 +738,7 @@ class OwnedItems(tk.Toplevel):
         self.set_but = set_but
         # print(f"Top level self: {self}")
 
+        # default no card view
         if not library.GameObjects.selected_items: # if nothing in list display a label message
             self.geometry('300x200')
             fm = tk.Frame(self)
@@ -786,6 +792,20 @@ class OwnedItems(tk.Toplevel):
         if self.set_but == "remove":
             tk.Button(self, text="Remove", command=self.remove).pack(side="left")
 
+    ##########################
+    # TODO potential for the replacement of branch above and some for the handler methods like sell equip ect
+
+    #     if self.set_but:
+    #         tk.Button(self, text=self.set_but.title(), command=lambda action: self.handler(self.set_but)).pack(side="left")
+    #          # require small change to the incoming set_but names to full names rather than 'weap' ect
+    # def handler(self, action):
+    #     """test of generic meth to incorporate all handlers below into 1 handler"""
+    #     Tools.common_set(action) # takes all params of set_but that is used to when calling common_set
+    #     Tools.fluid_player_info() # calls an update method for gui to show all player changes, also cleans lists from zipper
+    #     OwnedItems.destroy(self) # destroys toplevel window
+    #     app.update_message("show") # updates the messaging system
+    ###########################
+
     def showcard(self, card_id):
         """ Method for showing the card in a toplevel window"""
         CardView(card_id)
@@ -802,7 +822,6 @@ class OwnedItems(tk.Toplevel):
         Tools.common_set("equip")
         Tools.fluid_player_info()
         OwnedItems.destroy(self)
-
         app.update_message("show")
 
     def use_item(self): #hidden items path hand and consume lead here

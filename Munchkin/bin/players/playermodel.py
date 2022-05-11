@@ -126,7 +126,8 @@ class Player(MonTools, T_tools):
 
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player sack cards that have a specific key and specific value.
-        (ie sub_type == armour). returns all sub_types with the val of armor"""
+        (ie sub_type == armour). returns a copy of all sub_types with the val of armor."""
+        # could replace clear_list method by rebind list to an empty list here.
         library.GameObjects.selected_items = [obj for obj in self.sack if obj[key] == cardtype]
 
     def item_by_key(self, key):# generalised meth for key search
@@ -144,8 +145,7 @@ class Player(MonTools, T_tools):
                                       f"\nCard added to burn pile. Depth: {len(cards.burn_pile)}"
         # print("tup list: ", gameVar.GameObjects.zipped_tup)
 
-    def sum_of_bonuses(
-            self):  # pos multi usage and use as player item searcher. limited by equipped_items as caller ############
+    def sum_of_bonuses(self):  # pos multi usage and use as player item searcher. limited by equipped_items as caller ############
         # TODO: DISSOLVE THIS METH ONTO THE CARD_METH FOR ACTIVATION WITH METHOD='ON'/'OFF') TO MAKE CHANGES TO PLAYER
         """ Adds up all bonuses and bind to player in weapons and armour"""
         tot_bonus = 0
@@ -242,7 +242,8 @@ class Player(MonTools, T_tools):
         print(f"In player card_meth. Num of cards: {len(args)}, kwargs: {kwargs}")  # args are the cards sent, info on meth used and status
         for method, state in kwargs.items():  # for each kwarg given do this loop
             print(f'Card is {args[0].get("name", "NOT FOUND")}. Searching for a {method} method') # all cards have a name
-            if args[0].get(method, 'no meth found'):  # checks 1st card in args for the kward key method ( 1st card is the 1 to action, any others are for work later on).
+            # checker = args[0].get(method, False)# returns false if not present
+            if args[0].get(method, False):  # checks 1st card in tuple for the kwrd key method ( 1st card is the 1 to action, any others are for work later on).
                 for listed_meth in args[0].get(method):  # loops over the list the key returns. ie: "static": ["no_outrun", 'test_meth']
                     print(listed_meth)  # leave in to make sure I made it a list!!! ******* TEST PRINT
                     if listed_meth in MonTools.method_types:  # checks if method (the value from above) is in monster_types dict     (we can pretty much garentee the meth will be in the list...)
@@ -264,6 +265,8 @@ class Player(MonTools, T_tools):
                                 cards.in_turn[library.FightComponents.card_selector_index].append(args[0]) # adds the card to the in_turn list for later use
 
 
+            else:
+                print(f'CARD METHOD {method} NOT AVAILABLE WITH {args[0]["name"]} CARD')
 
 
 """
