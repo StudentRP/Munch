@@ -301,38 +301,63 @@ class PlayerSetUp:
     def fight(self, helpers=False, additional=0):# helper would be other player interactions. additional is anything else
         """for cards that are monsters and placed on the table."""
         # if can send card meths athe set for processing would solve lots of probs
-        player = library.GameObjects.active_player
+        # notes; card meths will be switched on in interfere and kick door, no meths to activate here other than loose
+
         print("In the fight!")
+        flag = None # fight outcome
+        player = library.GameObjects.active_player
+
         if helpers: # adds ints of player stats to player_aid ready for final sum !!!!!!! WIPE LIST AT THE END
             for assist in helpers:
                 '''adds all players bonuses/ lvls to to the player_aid list'''
                 library.FightComponents.player_aid.append(assist.level)
                 library.FightComponents.player_aid.append(assist.bonus)
 
-        card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # removed from in_play for work and disassembly
-        for card in card_set:
-            '''turns all cards methods'''
-            player.card_meths(card, method='on') # turns on card methods on
+        card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # card_set removed from in_play to action events. !!! TODO send sets to burn pile
+        if len(card_set) >= 2: # more than just the monster card
+            for card in card_set:
+                if card['type'] == 'monster':
+                    library.FightComponents.monster_aid.append(card['lvl']) # adds monster level to monster_aid list
+                else:
+                    '''turns all cards methods'''
+                    player.card_meths(card, method='on') # turns on card methods on, adds to lexical if needed, adds monster bonus ect
 
-        sum_of_all_positives = player.bonus + player.level + sum(library.FightComponents.player_aid)
-        sum_of_all_negatives = sum(library.FightComponents.monster_aid)
-        if aid >= card["lvl"]: # consideration required for player consumables and enhancers
+
+        sum_of_all_positives = player.bonus + player.level + sum(library.FightComponents.player_aid) # All +ves added by player/s
+        sum_of_all_negatives = sum(library.FightComponents.monster_aid) # All -ves added by cards through interfere
+
+        card = card_set[0] # monster card
+        print('card 0 is::::::::')
+        print(card)
+
+        if sum_of_all_positives >= sum_of_all_negatives: # consideration required for player consumables and enhancers
             print("Player wins!")
             reward = card['treasure']
             self.deal_handler('treasure', deal_amount=reward) # fetches treasure for player
             library.GameObjects.message = f"You win! You have found {reward} treasures for your trouble."
             player.level += card["level_up"]
-            cards.burn_pile.append(card) # removes card
-            player.card_meths(card, 'static', 'off') # turns off static card content
+            # cards.burn_pile.append(card) # removes card
+            # player.card_meths(card, 'static', 'off') # turns off static card content
             print(f"cards in the burn pile: {len(cards.burn_pile)}")
-            return "win"
+            flag = "win"
         # need action to go up lvl note some cards do more than one level!
         else:
             library.GameObjects.message = "Fight lost"
             print("Fight lost")
-            player.card_meths(card, 'method', 'on') # calls card bad stuff
+            player.card_meths(card, 'method_bs', 'on') # calls card bad stuff
             player.card_meths(card, 'static', 'off') # turns off static effect of card in play
-            return "lose"
+            flag = "lose"
+
+        # for cards in card_set:
+        #     player.card_meths(cards, 'static', 'off')
+
+        # if card set in position 0 activate all static meths
+        if library.cards.in_play: # if cards still in play
+            library.FightComponents.card_selector_index = 0 # index reset to 0 for next card_set unless another monster is selected
+            for card in cards.in_play(library.FightComponents.card_selector_index):
+                player.card_meths(card, 'static') # turns on all static meths for the next fight
+
+        return flag
 
     def radio_selector_handler(self, index, obj_list):
         """takes in index and a list of monster/mon/players where the index has relevance"""

@@ -513,7 +513,7 @@ class MainLoop(tk.Frame):
         else:
             card_set = cards.in_play[0] # will always grab the first set
         print('The card set u will be facing is:')
-        print(card_set) #will return the card set for all cards associated to this monster inc monster
+        print(card_set) # will return the card set for all cards associated to this monster inc monster
         engine.fight(library.FightComponents.assists)# calls the fight method passing in list of player instance deemed as helpers
 
         #after fight player can select another monster
