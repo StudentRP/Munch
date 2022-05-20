@@ -371,10 +371,11 @@ class PlayerSetUp:
         library.FightComponents.card_list_selection = obj_list # list of all selected
 
         player = library.GameObjects.active_player
+        print(f'index:', index)
         if index == 0: # turn off door activated meths and any interfering card meths in that set
             for card in library.cards.in_play[0]:
-                player(card, static='off')
-        else:
+                player.card_meths(card, static='off')
+        else: # turns on new set
             for card in library.cards.in_play[index]:
                 player.card_meths(card, static='on')
 

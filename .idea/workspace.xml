@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: working on interference and fight">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_04_22_20_39__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_06_04_22_20_39__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_31_12_21_20_33__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_31_12_21_20_33__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_04_22_19_30__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_20_04_22_19_30__Changes_.xml" afterDir="false" />
+    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2022,_09_51_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +220,10 @@
       <workItem from="1651088381872" duration="15000" />
       <workItem from="1651251813699" duration="3880000" />
       <workItem from="1651828134806" duration="2628000" />
-      <workItem from="1651908807897" duration="7132000" />
+      <workItem from="1651908807897" duration="19564000" />
+      <workItem from="1652370999481" duration="16000" />
+      <workItem from="1652374183248" duration="1206000" />
+      <workItem from="1652458641115" duration="3042000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -323,7 +330,28 @@
       <option name="project" value="LOCAL" />
       <updated>1652187453780</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="from laptop: working on interference and fight">
+      <created>1652187650277</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1652187650277</updated>
+    </task>
+    <task id="LOCAL-00017" summary="from laptop: building on fight mechanism">
+      <created>1652204166970</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1652204166970</updated>
+    </task>
+    <task id="LOCAL-00018" summary="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere">
+      <created>1652289686537</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1652289686537</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -364,14 +392,16 @@
     <MESSAGE value="rework of changes" />
     <MESSAGE value="from main pc: addition of Player select in RadioSelector" />
     <MESSAGE value="from laptop: working on interference and fight" />
-    <option name="LAST_COMMIT_MESSAGE" value="from laptop: working on interference and fight" />
+    <MESSAGE value="from laptop: building on fight mechanism" />
+    <MESSAGE value="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere" />
+    <option name="LAST_COMMIT_MESSAGE" value="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>570</line>
+          <line>569</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -391,12 +421,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>146</line>
+          <line>147</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>667</line>
+          <line>697</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -416,12 +446,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>680</line>
+          <line>706</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>809</line>
+          <line>828</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
@@ -436,12 +466,12 @@
     <SUITE FILE_PATH="coverage/gui_v3_py$gui_variables.coverage" NAME="gui_variables Coverage Results" MODIFIED="1616964872872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/gui_v3_py$controler.coverage" NAME="controler Coverage Results" MODIFIED="1614511168277" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/Working_git_projects$game_loop_v3.coverage" NAME="game_loop_v3 Coverage Results" MODIFIED="1649621688034" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
-    <SUITE FILE_PATH="coverage/Munch$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1652088318382" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Munch$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1652978733526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MyPackages$doorcards.coverage" NAME="doorcards Coverage Results" MODIFIED="1639811290752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards" />
     <SUITE FILE_PATH="coverage/Working_git_projects$client.coverage" NAME="client Coverage Results" MODIFIED="1607734581411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
     <SUITE FILE_PATH="coverage/Working_git_projects$controller.coverage" NAME="controller Coverage Results" MODIFIED="1649971184886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/Working_git_projects$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1650733411256" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1652087784808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1652303013875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/gui_v3_py$test_engine.coverage" NAME="test_engine Coverage Results" MODIFIED="1614457569538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests/testengine" />
     <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v2.coverage" NAME="game_loop_v2 Coverage Results" MODIFIED="1614508656597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
     <SUITE FILE_PATH="coverage/Working_git_projects$server.coverage" NAME="server Coverage Results" MODIFIED="1607734550477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />

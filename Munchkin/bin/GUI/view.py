@@ -846,6 +846,7 @@ class RadioSelector(tk.Toplevel): # In production
     """ A toplevel window presenting radio buttons for selection of monsters, players or both dependant upon action parameter.
     End result is to generate a index and a list relative to the list created or a list in play.
     """
+
     def __init__(self, action):
         tk.Toplevel.__init__(self)
         print('In RadioSelector')

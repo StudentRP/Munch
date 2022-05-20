@@ -10,7 +10,6 @@ Will need a processing level
  """
 
 
-
 class MonTools:
     """methods for all cards associated to Door cards, self should be the player
     *items/ will have add abd remove meth
@@ -30,6 +29,7 @@ class MonTools:
             print('lvl changed\n')
             self.level = 500
         else:
+            print('lvl returned')
             self.level = -500
 
     def unknown(self, *args, **kwargs):

@@ -81,8 +81,7 @@ class Table(Treasure, Moncurse): # inherits from
         self.burn_pile = []
         self.in_turn = [] # cards that influence all fights for the turn
         # self.in_play = [] # main area for monster cards. lol created when adding more monsters.This makes card_sets where the mon is at index[0]
-        self.in_play = [[{'id': 301, "category": "door", 'type': 'monster', 'name': 'Large Angry Chicken', 'lvl': 2,
-                          'treasure': 1, "level_up": 1, 'lexical': ['sensitive_fire', 'lvl_up1'], 'method': ["loose_level"]}]] # TEST MONSTER TODO REMOVE TEST
+        self.in_play = [[{'id': 300, "category": "door", 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, "level_up": 1, 'lexical': ['no_outrun'], 'method_bs': ["below_waist"], "static": ["no_outrun", 'test_meth']}]] # TEST MONSTER TODO REMOVE TEST
         self.dice_sop = Dice()
 
     def add_to_burn(self, discard):
