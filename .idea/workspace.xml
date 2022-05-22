@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_01_05_2022,_09_51_[Changes]/shelved.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/door_cards/doorcards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/engine/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/funct_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/funct_trial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,6 +218,8 @@
       <workItem from="1652370999481" duration="16000" />
       <workItem from="1652374183248" duration="1206000" />
       <workItem from="1652458641115" duration="3042000" />
+      <workItem from="1653086162249" duration="74000" />
+      <workItem from="1653118047145" duration="1205000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -351,7 +347,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652289686537</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere">
+      <created>1653086199374</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1653086199374</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
