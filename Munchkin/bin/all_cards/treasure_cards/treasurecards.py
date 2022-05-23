@@ -101,10 +101,10 @@ class Treasure(T_tools):
 
 
         #type armor/head, all should have: id, type, subtype, name, des, sell, bonus
-        # {"id": 6, "category": "treasure", "name": "The Occasionally Reliable Amulet", "type": "armor", "sub_type": "necklace",
-        #  'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect", "bonus": 0},
-        # {"id": 7, "category": "treasure", "name": "Tinfoil Hat", "type": "armor", "sub_type": "headgear",
-        #  "des": "Immune to curses when  curses by kicking down doors still effect", "bonus": 0, "sell": 800, "special": "cast immune"},
+        {"id": 6, "category": "treasure", "name": "The Occasionally Reliable Amulet", "type": "armor", "sub_type": "necklace",
+         'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect", "bonus": 0},
+        {"id": 7, "category": "treasure", "name": "Tinfoil Hat", "type": "armor", "sub_type": "headgear",
+         "des": "Immune to curses when  curses by kicking down doors still effect", "bonus": 0, "sell": 800, "special": "cast immune"},
         # {"id": 8, "category": "treasure", "name": "Pointy Hat Of Power", "type": "armor", "sub_type": "headgear", "des": "Usable by wizards only",
         #  "bonus": 3, "sell": 400, "klass_requirement": "wizard"},
         # {"id": 9, "category": "treasure", "name": "Helm Of Peripheral Vision", "type": "armor", "sub_type": "headgear",

@@ -456,7 +456,7 @@ class MainLoop(tk.Frame):
             print("VIEWING CARD")
 
             # display card
-            self.img = Tools.viewer(door_card["id"]) # gets card id. needs self or garbage collected!
+            self.img = Tools.viewer(door_card["id"], 'door_cards') # gets card id. needs self or garbage collected!, 2nd arg for retrieval through card filing
             self.canvas.create_image(10, 10, image=self.img, anchor="nw")# view card on canvas. will need meth for this to add cards in linear fashion
 
             # broadcast new message
@@ -776,7 +776,7 @@ class OwnedItems(tk.Toplevel):
                 if set_but != "No Buttons":
                     tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
 
-                tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c)).grid(row=set_row, column=4) # for viewing card
+                tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c, card_type='treasure_cards')).grid(row=set_row, column=4) # for viewing card
 
                 library.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
                 library.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
@@ -806,9 +806,9 @@ class OwnedItems(tk.Toplevel):
     #     app.update_message("show") # updates the messaging system
     ###########################
 
-    def showcard(self, card_id):
+    def showcard(self, card_id, card_type=None):
         """ Method for showing the card in a toplevel window"""
-        CardView(card_id)
+        CardView(card_id, card_type)
 
     # could be 1 handler with set_but param ie Tools.common_set(set_but)
     def sell(self):
@@ -879,7 +879,7 @@ class RadioSelector(tk.Toplevel): # In production
             if isinstance(all_obj, dict): # monster cards are in dict form
                 self.radio.config(text=f'{all_obj["name"]}'f' Level: {all_obj.get("lvl")}') # configs radio button specific to monsters.
                 tk.Button(self.mainframe, text="Info",
-                          command=lambda c=all_obj["id"]: self.showcard(c)).grid(row=count, column=2) # provides card view of monster
+                          command=lambda c=all_obj["id"], d=all_obj["category"]: self.showcard(c, d).grid(row=count, column=2))  # provides card view of monster
             else:#
                 self.radio.config(text=f'{all_obj.name}'f' Level: {all_obj.level}') # configs radio specific to players
             self.radio.grid(row=count, column=1)
@@ -894,19 +894,19 @@ class RadioSelector(tk.Toplevel): # In production
         # print('Item of interest is:', self.list_of_interest[self.var.get()])
         self.destroy()
 
-    def showcard(self, card_id):
+    def showcard(self, card_id, card_type):
         """ Method for showing the card in a toplevel window"""
-        CardView(card_id)
+        CardView(card_id, card_type)
 
 
 class CardView:
     """Places image in a toplevel window in own canvas"""
-    def __init__(self, card_id=None):
+    def __init__(self, card_id=None, card_type=None):
         # path = "..\\imgs\\cards\\"
         # PIC = os.path.abspath(r"..\imgs\cards")
         win = tk.Toplevel()
         win.title("Card Info")
-        img = Tools.viewer(card_id) # returns ImageTk.PhotoImage from file breadcrumb
+        img = Tools.viewer(card_id, card_type) # returns ImageTk.PhotoImage from file breadcrumb
         # img = ImageTk.PhotoImage(file=PIC + f"\\{str(card_id)}.png")
 
         can = tk.Canvas(win)
@@ -951,16 +951,17 @@ class Tools:
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
     @staticmethod
-    def viewer(card_id=None):
+    def viewer(card_id=0, card_type=None):
         """Resizes and processes image ready for canvas in main. Path corrects the route to the images is not dependent on os"""
 
         base_dir = Path(__file__).resolve().parent.parent # path works regardless of os
+        card_type = str(card_type) # for processing treasure or door card
 
         try:
-            img = Image.open(os.path.join(base_dir, 'imgs', 'cards', f'{str(card_id)}.png'))
+            img = Image.open(os.path.join(base_dir, 'imgs', 'cards', card_type, f'{str(card_id)}.png'))
 
         except FileNotFoundError:
-            img = Image.open(os.path.join(base_dir, 'imgs', 'cards', f'{str(0)}.png')) # loads default
+            img = Image.open(os.path.join(base_dir, 'imgs', 'cards', card_type, f'{str(0)}.png')) # loads default
 
         new_image = img.resize((200, 310), Image.ANTIALIAS) # ANTIALIAS removes the structural Padding from the Image around it.
         sized_img = ImageTk.PhotoImage(new_image)  # works regardless of os
