@@ -160,24 +160,24 @@ class Player(MonTools, T_tools):
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
 
-    def equipped_items(self, action, my_cards=None, card_id=None):  # in use by gui list_equipped meth
+    def equipped_items(self, action, selected_card=None, card_id=None):  # in use by gui list_equipped meth
         """Shows all items that have been equipped to the player. If remove, Sorts through equipped items,
         removing items that have been selected"""
-        locations = [self.weapons, self.armor]  # locations to search
-        for obj in locations:  # looks at each object in list. obj is the dict of all the poss locations as seen in player attrbs
-            for sub_menu in obj:  # sub_menu is the keys which link to the card is placed in: armor = {}
-                if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
-                    card = obj.get(sub_menu)  # x is the card object
+        atrib_locations = [self.weapons, self.armor]  # locations to search
+        for dict_obj in atrib_locations:  # looks at each object in list. dict_obj is the player dict of locations a card can be placed
+            for location_key in dict_obj:  # location_key is the keys which link to the card is placed in: armor = {}
+                if isinstance(dict_obj[location_key], dict):  # checks dict_obj for card occupancy
+                    equipped_card = dict_obj.get(location_key) # card stored at dict location
                     if action == "list_equipped":
-                        library.GameObjects.selected_items.append(card)  # adds cards to selected_items list in gameVar
+                        library.GameObjects.selected_items.append(equipped_card)  # adds cards to selected_items list in gameVar
                         continue
                     elif action == "removal":
-                        if card["id"] == my_cards["id"]:
-                            self.sack.append(card)  # adds card back to player inventory
-                            # self.card_meths(card, method='off') ################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED
-                            obj[sub_menu] = ""  # resets player atrib location
+                        if equipped_card["id"] == selected_card["id"]: # compares equipped card id to selected card id
+                            self.sack.append(equipped_card)  # puts card back in player inventory
+                            # self.card_meths(card, method='off') ################################### NEED SWITCHING ON WHEN ARMOUR METHS HAVE BEEN SORTED <<<<<<<<<<<<<<<
+                            dict_obj[location_key] = ""  # resets player atrib location (re-assigning key required as removal destroys it)
                             self.sum_of_bonuses()  # recalculates bonuses
-                            self.weapon_count += card.get("hold_weight", 0)  # adds the cards carry_weight for available hands, if available.
+                            self.weapon_count += equipped_card.get("hold_weight", 0)  # adds the cards carry_weight for available hands, if available.
                             continue
                     elif action == "curse":  # not tested
                         print("In equipped items remove cursed item")

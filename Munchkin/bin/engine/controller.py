@@ -191,13 +191,13 @@ class PlayerSetUp:
             player.sack.append(card)  # adds to player sack
 
     def zipper(self, action): # passes action on to next meth
-        """zips card id's to checkbox bools from selected_list. Used for all card sorting regardless of card type.
+        """zips card id's to checkbox ints from check_but_obj. Used for all card sorting regardless of card type.
         action is conduit for card_matcher"""
-        library.GameObjects.zipped_tup.clear()  # clears tup list ready for new entry. not working...................
-        for status in library.GameObjects.check_but_intvar_gen: # gets attribute from object then from the attribute which is an object gets the value stored (list>intvar>get()>1 or 0)
-            library.GameObjects.check_but_boo.append(status.get()) # creates a list of 1s & 0s from check buttons status
+        library.GameObjects.zipped_tup.clear()  # clears tup list ready for new card_id/ checkbut value pair.
+        for status in library.GameObjects.checkbut_intvar_obj: # loops all tk intVar objects stored in checkbut_intvar_obj list
+            library.GameObjects.check_but_boo.append(status.get()) # creates a list of 1s & 0s from check buttons status (True|False)
             x, y = library.GameObjects.check_but_card_ids, library.GameObjects.check_but_boo
-            library.GameObjects.zipped_tup = list(zip(x, y)) # result [(card_id,  bool), (card_id, bool)]
+            library.GameObjects.zipped_tup = list(zip(x, y)) # >>>>> binds card id to the checkbuttion result forming: [(card_id,  bool), (card_id, bool), ect] <<<<<<
         # print("moving to player script", gameVar.GameObjects.zipped_tup) # checker shows all cleared lists
         self.card_matcher(action)
 
@@ -206,7 +206,7 @@ class PlayerSetUp:
         a tuple with the boolean true. Action determines the whats happening to the cards next. """
         for card in library.GameObjects.selected_items: # for every card in selected_items
             for tup in library.GameObjects.zipped_tup: # go over every tuple in  zipped_tup. (card_id, bool tuples).
-                if tup[0] == card["id"] and tup[1]: # if tup id matches card fid from selected items and bool is True from the checkbox
+                if tup[0] == card["id"] and tup[1]: # if tup[0] (card_id) matches card id in selected_items and bool is True (1) from the checkbox
                     if action == "sell":
                         library.GameObjects.active_player.sell_item(card)
                     elif action in "equip, disposable ,use": # equip/disposable will be treasures
@@ -292,7 +292,7 @@ class PlayerSetUp:
     def scrub_lists(self):
         """Clears all appended list that are not capable of clearing."""
         library.GameObjects.selected_items.clear()  # clears the card objects list
-        library.GameObjects.check_but_intvar_gen.clear()  # clears list of intVar objects from check buttons
+        library.GameObjects.checkbut_intvar_obj.clear()  # clears list of intVar objects from check buttons
         library.GameObjects.check_but_boo.clear()  # clears boolean list
         library.GameObjects.check_but_card_ids.clear()  # clears card id list
         library.GameObjects.zipped_tup.clear()  # clears tup list

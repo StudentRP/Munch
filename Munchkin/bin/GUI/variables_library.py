@@ -27,7 +27,7 @@ class GameObjects:
     interfering_player = None # player instance that is interfere
     all_cards = [] # simple list of all cards #  for listing whole inventory ???
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
-    check_but_intvar_gen = [] # populated with callable objects from checkbutton
+    checkbut_intvar_obj = [] # populated with callable objects from checkbutton
     check_but_boo = [] # populated with checkbutton return values from intVar() objects
     check_but_card_ids = [] # populated with card id's
     zipped_tup = [] # populated with bools of card ids & fetched checkbutton from (check_but_card_ids, check_but_boo)

@@ -496,7 +496,7 @@ The end goal is to remove items from the player adding them to the burn pile and
 
         Returning to controller, OwnedItems(window_title, action) Toplevel is now called with the args "Sellable Items", 'sell'.
         OwnedItems loops over objects in selected_items creating a list format each with a name,type,value and a checkbox.
-        library.GameObjects.check_but_intvar_gen.append(status) is also build per item and bound to checkbutton changing
+        library.GameObjects.checkbut_intvar_obj.append(status) is also build per item and bound to checkbutton changing
         independently with checkbutton activity.
         The id of each card is appended to a new list in library.GameObjects.check_but_card_ids.
         This order is the same order as Checkbutton object in the other list.
@@ -507,7 +507,7 @@ The end goal is to remove items from the player adding them to the burn pile and
         Calls engine.zipper method (generic method for zipping 2 list together into a tuple)
         library.GameObjects.zipped_tup.clear() is called to ensure list is clear.
         First step required is the conversion of the Checkbutton objects to the boolean value (0 or 1) from
-        library.GameObjects.check_but_intvar_gen, a list of all tk Vars, associated to the check button, requiring .get method.
+        library.GameObjects.checkbut_intvar_obj, a list of all tk Vars, associated to the check button, requiring .get method.
         This creates new list of booleans called library.GameObjects.check_but_boo consisting of the boolean values.
         x, y = library.GameObjects.check_but_card_ids, library.GameObjects.check_but_boo
         library.GameObjects.zipped_tup = list(zip(x, y)) function is to zip cards independent ids to their bool.
@@ -537,7 +537,7 @@ The end goal is to remove items from the player adding them to the burn pile and
 
     engine.scrub_lists()
         Critical for appended lists.
-        calls scrub_list from engine resetting all appendable lists: selected_items, check_but_intvar_gen, check_but_boo,
+        calls scrub_list from engine resetting all appendable lists: selected_items, checkbut_intvar_obj, check_but_boo,
         check_but_card_ids and zipped_tup. This reset allows new creation when recalled or new player.
 
     rebinding variables

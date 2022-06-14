@@ -660,8 +660,8 @@ class MainLoop(tk.Frame):
         app.update_message("show")
         engine.scrub_lists()
         player = library.GameObjects.active_player
-        player.inventory("type", "weapon") # key= 'type', value = 'weapon'
-        # print(gameVar.GameObjects.selected_items)  list all items placed in list that meet the criteria above.
+        player.inventory("type", "weapon") # key= 'type', value = 'weapon' # (generates a list of items with criteria type: weapons from the player sack)
+        # print(gameVar.GameObjects.selected_items)  # new list all items placed in list that meet the criteria above.
         OwnedItems("Weapons owned", "weap")
 
     def list_armor(self):
@@ -762,10 +762,10 @@ class OwnedItems(tk.Toplevel):
             #     tk.Label(f, text="Bonus").grid(row=0, column=2, sticky="nw")
             tk.Label(f, text="Select").grid(row=0, column=3, sticky="nw") # title column for check boxes
 
-            # Standard card details & custom requirements dependent on request
+            # Standard card details & custom requirements dependent on request. individual card per row
             set_row = 1 # row incrementor for loop
-            for card in library.GameObjects.selected_items: # for each card in the selected items
-                status = tk.IntVar() # for keeping track of check buttons, 1 per loop ###
+            for card in library.GameObjects.selected_items: # for each card in the selected items generated
+                status = tk.IntVar() # for keeping track of check buttons, 1 per loop ### assigning a var to each item (could use boolVar() but mechanism same as 0|1)
                 tk.Label(f, text=card['name']).grid(row=set_row, column=0, sticky="nw")
                 tk.Label(f, text=card['type']).grid(row=set_row, column=1, sticky="nw")
 
@@ -774,13 +774,14 @@ class OwnedItems(tk.Toplevel):
                 elif self.set_but in " weap, armor, consume, equip, remove":
                     tk.Label(f, text=card['bonus']).grid(row=set_row, column=2, sticky="nw")
                 if set_but != "No Buttons":
-                    tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw")
+                    tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw") # adds a checkbut for each card (not linked to card)
 
                 tk.Button(f, text="Info", command=lambda c=card["id"]: self.showcard(c, card_type='treasure_cards')).grid(row=set_row, column=4) # for viewing card
 
-                library.GameObjects.check_but_intvar_gen.append(status) # creates list of IntVars for each item in list
-                library.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list
-                set_row += 1
+                # creates list for later use in coupling checkbuts with card ids for card selection process to do work with card/s selected.
+                library.GameObjects.checkbut_intvar_obj.append(status) # >>>>>> appends checkbut var to list in order cards were displayed.
+                library.GameObjects.check_but_card_ids.append(card["id"]) # sends card ids int to list  >>>>>> WITH ABOVE, USED FOR CARD/CHECKBUTTON ASSOCIATION
+                set_row += 1 # increments to change row for next card
 
         # custom action buttons to handle cards selected
         if self.set_but in "weap, armor, sell":
