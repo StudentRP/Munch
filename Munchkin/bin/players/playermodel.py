@@ -147,18 +147,21 @@ class Player(MonTools, T_tools):
 
     def sum_of_bonuses(self):  # pos multi usage and use as player item searcher. limited by equipped_items as caller ############
         # TODO: DISSOLVE THIS METH ONTO THE CARD_METH FOR ACTIVATION WITH METHOD='ON'/'OFF') TO MAKE CHANGES TO PLAYER
-        """ Adds up all bonuses and bind to player in weapons and armour"""
+        """ Adds up all bonuses and bind to player.bonus. searches weapons and armor"""
         tot_bonus = 0
         locations = [self.weapons, self.armor]  # locations to search
-        for obj in locations:  # looks at each object in list
+        for obj in locations:  # looks at each dict object in list
+            print(obj.keys())
             for sub_menu in obj:
                 if isinstance(obj[sub_menu], dict):  # checks submenu for card attachment in the form of a dict
                     # print(obj.get(sub_menu, "No sub menu").get("bonus", "No bonus found"))
-                    tot_bonus += obj.get(sub_menu, "").get("bonus", "Problem getting bonus")
+                    # print(f"bonus::: {obj.get(sub_menu).get('bonus', 0)} at location: {obj}, in submenu; {sub_menu}\n")
+                    tot_bonus += obj.get(sub_menu).get("bonus", 0)
                     continue
         if self.name == "The_Creator":
             tot_bonus = 200 + tot_bonus
         self.bonus = tot_bonus
+        print(f"sum of bonus: {self.bonus}")
 
     def equipped_items(self, action, selected_card=None, card_id=None):  # in use by gui list_equipped meth
         """Shows all items that have been equipped to the player. If remove, Sorts through equipped items,

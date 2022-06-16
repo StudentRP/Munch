@@ -105,17 +105,16 @@ class Treasure(T_tools):
          'des': 'chance to deflect curse', 'sell': 600, 'special': "deflect", "bonus": 0},
         {"id": 7, "category": "treasure", "name": "Tinfoil Hat", "type": "armor", "sub_type": "headgear",
          "des": "Immune to curses when  curses by kicking down doors still effect", "bonus": 0, "sell": 800, "special": "cast immune"},
-        # {"id": 8, "category": "treasure", "name": "Pointy Hat Of Power", "type": "armor", "sub_type": "headgear", "des": "Usable by wizards only",
-        #  "bonus": 3, "sell": 400, "klass_requirement": "wizard"},
-        # {"id": 9, "category": "treasure", "name": "Helm Of Peripheral Vision", "type": "armor", "sub_type": "headgear",
-        #  "des": "can not be back stabbed or stolen from by thief", "bonus": 2, "sell": 600, "special": "headgear",
-        #  "restriction": "no backstab, no steal"},
+        {"id": 8, "category": "treasure", "name": "Pointy Hat Of Power", "type": "armor", "sub_type": "headgear", "des": "Usable by wizards only",
+         "bonus": 3, "sell": 400, "klass_requirement": "wizard"},
+        {"id": 9, "category": "treasure", "name": "Helm Of Peripheral Vision", "type": "armor", "sub_type": "headgear",
+         "des": "can not be back stabbed or stolen from by thief", "bonus": 2, "sell": 600, "special": "headgear", "restriction": "no backstab, no steal"},
         # {"id": 10, "category": "treasure", "name": "Badass Bandanna", "type": "armor", "sub_type": "headgear",
         #  "des": "Usable by humans only", "bonus": 3, "sell": 400, "race_requirement": "human"}, #humans only can use
 
         # armor/armor (complete set)
         #race_requirements= needs to be this, restriction = cant be this, or have this
-        # {"id": 11, "category": "treasure", "name": "Short Wide Armour", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 400, "race_requirement": "dwarfs"},
+        {"id": 11, "category": "treasure", "name": "Short Wide Armour", "type": "armor", "sub_type": "armor", "bonus": 3, "sell": 400, "race_requirement": "dwarfs"},
         # {"id": 12, "category": "treasure", "name": "Raincoat", "type": "armor", "sub_type": "armor", "sell": 100, "special": "over armor",
         #  "restrictions": "loose with armour", "bonus": 0},
         # {"id": 13, "category": "treasure", "name": "Slimy Armour", "type": "armor", "sub_type": "armor", "bonus": 1, "sell": 200},

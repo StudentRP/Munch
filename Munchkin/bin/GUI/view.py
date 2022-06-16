@@ -665,10 +665,13 @@ class MainLoop(tk.Frame):
         OwnedItems("Weapons owned", "weap")
 
     def list_armor(self):
+        print("in armour handler")
         library.GameObjects.message = "Armour list"
         app.update_message("show")
         engine.scrub_lists()
         player = library.GameObjects.active_player
+        # print(f"player is : {player.name}")
+        # print("player inventory: ", player.sack)
         player.inventory("type", "armor") # load all weapons items into gamevar.selected_items
         OwnedItems("Armor Owned", "armor")
 
