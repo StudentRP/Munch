@@ -1,238 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere">
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/10.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/100.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/101.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/102.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/103.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/104.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/105.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/106.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/107.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/108.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/109.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/11.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/110.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/111.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/112.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/113.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/114.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/115.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/116.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/117.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/118.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/119.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/12.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/120.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/121.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/123.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/124.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/125.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/126.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/127.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/128.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/129.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/13.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/130.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/131.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/132.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/133.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/134.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/135.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/136.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/137.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/138.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/139.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/14.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/140.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/141.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/142.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/143.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/144.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/145.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/146.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/147.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/148.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/149.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/15.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/150.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/151.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/152.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/153.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/154.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/155.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/156.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/157.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/158.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/159.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/16.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/160.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/161.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/162.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/163.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/164.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/165.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/166.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/167.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/168.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/169.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/17.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/170.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/171.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/172.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/173.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/174.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/175.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/179.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/18.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/180.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/181.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/182.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/183.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/184.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/185.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/186.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/187.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/188.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/189.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/19.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/190.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/191.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/20.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/21.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/22.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/23.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/24.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/25.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/26.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/27.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/28.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/29.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/30.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/31.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/32.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/33.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/34.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/35.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/36.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/37.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/38.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/39.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/40.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/41.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/42.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/43.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/44.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/46.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/47.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/48.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/49.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/50.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/51.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/52.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/53.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/54.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/55.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/56.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/57.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/58.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/60.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/61.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/62.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/63.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/64.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/65.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/66.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/67.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/68.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/69.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/70.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/71.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/72.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/73.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/74.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/75.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/76.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/77.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/78.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/79.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/80.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/81.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/82.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/83.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/84.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/85.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/86.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/87.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/88.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/89.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/9.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/90.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/91.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/92.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/93.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/94.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/95.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/96.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/97.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/98.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/treasure_cards/99.png" afterDir="false" />
+    <list default="true" id="e89d33e8-f65b-4c0f-9d3f-1de9856c0ba0" name="Changes" comment="from laptop: error with equip and sum_of_bonuses">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/GUI/view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/all_cards/treasure_cards/treasurecards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/engine/doc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/0.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/0.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/15.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/17.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/18.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/19.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/20.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/21.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/22.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/23.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/24.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/25.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/26.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/27.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/28.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/300.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/300.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/301.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/301.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/302.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/302.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/303.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/303.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/401.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/401.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/402.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/402.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/403.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/403.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/404.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/404.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/405.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/405.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/406.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/406.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/407.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/407.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/500.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/500.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/600.png" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/door_cards/600.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Munchkin/bin/imgs/cards/9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Munchkin/bin/players/playermodel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -457,7 +229,9 @@
       <workItem from="1652374183248" duration="1206000" />
       <workItem from="1652458641115" duration="3042000" />
       <workItem from="1653086162249" duration="74000" />
-      <workItem from="1653118047145" duration="4245000" />
+      <workItem from="1653118047145" duration="4910000" />
+      <workItem from="1653423756183" duration="1203000" />
+      <workItem from="1655153099524" duration="22055000" />
     </task>
     <task id="LOCAL-00001" summary="update to card date structure">
       <created>1639844962852</created>
@@ -592,7 +366,28 @@
       <option name="project" value="LOCAL" />
       <updated>1653086199374</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere&#10;&#10;change to folder structure for card images and calls">
+      <created>1653330612086</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1653330612086</updated>
+    </task>
+    <task id="LOCAL-00021" summary="from laptop: owned items flow&#10; var name cleanup">
+      <created>1655240420281</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1655240420281</updated>
+    </task>
+    <task id="LOCAL-00022" summary="from laptop: error with equip and sum_of_bonuses">
+      <created>1655403369913</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1655403369914</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -635,7 +430,10 @@
     <MESSAGE value="from laptop: working on interference and fight" />
     <MESSAGE value="from laptop: building on fight mechanism" />
     <MESSAGE value="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere" />
-    <option name="LAST_COMMIT_MESSAGE" value="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere" />
+    <MESSAGE value="from laptop: building fight&#10;Requires: meth to set next card_set to index 0 and activate that set. WHY card_sets are activated 1) on door card press 2) when a player selects a monster to fight. &#10;&#10;check needed for active set when adding cards through interfere&#10;&#10;change to folder structure for card images and calls" />
+    <MESSAGE value="from laptop: owned items flow&#10; var name cleanup" />
+    <MESSAGE value="from laptop: error with equip and sum_of_bonuses" />
+    <option name="LAST_COMMIT_MESSAGE" value="from laptop: error with equip and sum_of_bonuses" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -647,27 +445,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>178</line>
+          <line>185</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>205</line>
+          <line>212</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>240</line>
+          <line>247</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
-          <line>147</line>
+          <line>149</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>697</line>
+          <line>700</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -687,18 +485,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>706</line>
+          <line>709</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>828</line>
+          <line>832</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Munchkin/bin/GUI/view.py</url>
-          <line>778</line>
+          <line>781</line>
           <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Munchkin/bin/players/playermodel.py</url>
+          <line>155</line>
+          <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -717,7 +520,7 @@
     <SUITE FILE_PATH="coverage/Working_git_projects$client.coverage" NAME="client Coverage Results" MODIFIED="1607734581411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />
     <SUITE FILE_PATH="coverage/Working_git_projects$controller.coverage" NAME="controller Coverage Results" MODIFIED="1649971184886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/Working_git_projects$funct_trial.coverage" NAME="funct_trial Coverage Results" MODIFIED="1650733411256" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1653309026011" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
+    <SUITE FILE_PATH="coverage/Munch$view.coverage" NAME="view Coverage Results" MODIFIED="1655539935509" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/GUI" />
     <SUITE FILE_PATH="coverage/gui_v3_py$test_engine.coverage" NAME="test_engine Coverage Results" MODIFIED="1614457569538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/Tests/testengine" />
     <SUITE FILE_PATH="coverage/gui_v3_py$game_loop_v2.coverage" NAME="game_loop_v2 Coverage Results" MODIFIED="1614508656597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Munchkin/bin/engine" />
     <SUITE FILE_PATH="coverage/Working_git_projects$server.coverage" NAME="server Coverage Results" MODIFIED="1607734550477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../PycharmProjects/2-Modules/Networking/basics" />

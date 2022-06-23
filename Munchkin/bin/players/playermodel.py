@@ -57,8 +57,10 @@ class Player(MonTools, T_tools):
         self.big_unlock = False
         self.weapons = {"L_hand": "", "R_hand": "", "two_hand": ""} # values will be cards
         self.weapon_count = 2  # 1 per hand, can add to with cheat. adding +=, removal -=.
-        self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": {'testcard': 'armor'},
+        self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": "",
                       "necklace": "", "ring": "", "ring2": ""}
+        # self.armor = {"headgear": "", "armor": "", "knees": "", "footgear": {'testcard': 'armor'},
+        #               "necklace": "", "ring": "", "ring2": ""} test set
         self.sack = [] # 5 max, editable in options
         self.hireling = []
         # self.unsorted = [] # Old! list of all cards that are used to by sorting
@@ -166,11 +168,13 @@ class Player(MonTools, T_tools):
     def equipped_items(self, action, selected_card=None, card_id=None):  # in use by gui list_equipped meth
         """Shows all items that have been equipped to the player. If remove, Sorts through equipped items,
         removing items that have been selected"""
+        print(f"in equipped_items\n")
         atrib_locations = [self.weapons, self.armor]  # locations to search
         for dict_obj in atrib_locations:  # looks at each object in list. dict_obj is the player dict of locations a card can be placed
             for location_key in dict_obj:  # location_key is the keys which link to the card is placed in: armor = {}
                 if isinstance(dict_obj[location_key], dict):  # checks dict_obj for card occupancy
                     equipped_card = dict_obj.get(location_key) # card stored at dict location
+
                     if action == "list_equipped":
                         library.GameObjects.selected_items.append(equipped_card)  # adds cards to selected_items list in gameVar
                         continue

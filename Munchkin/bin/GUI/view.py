@@ -775,7 +775,7 @@ class OwnedItems(tk.Toplevel):
                 if self.set_but == "sell":
                     tk.Label(f, text=card['sell']).grid(row=set_row, column=2, sticky="nw")
                 elif self.set_but in " weap, armor, consume, equip, remove":
-                    tk.Label(f, text=card['bonus']).grid(row=set_row, column=2, sticky="nw")
+                    tk.Label(f, text=card.get('bonus', 'None')).grid(row=set_row, column=2, sticky="nw")
                 if set_but != "No Buttons":
                     tk.Checkbutton(f, text=" ", variable=status).grid(row=set_row, column=3, sticky="nw") # adds a checkbut for each card (not linked to card)
 
