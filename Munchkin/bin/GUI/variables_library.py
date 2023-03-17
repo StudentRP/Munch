@@ -8,6 +8,7 @@ This script is updated by gui_v3 with game-loop_v2 requesting data for the logic
 from bin.all_cards.table import cards
 
 
+
 class StartVariables:
 
     # Start game variables

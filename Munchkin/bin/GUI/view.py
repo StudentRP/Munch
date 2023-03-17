@@ -13,10 +13,14 @@ from tkinter import messagebox
 from PIL import ImageTk, Image
 import os
 from pathlib import Path
+import Tests.process_logger as logger
 
 from bin.GUI.variables_library import cards
 # import bin.GUI.gui_tools as tools
-print('view', id(library.cards))
+
+logger.log_creator("Initialising log")
+logger.log_note(f"'view', {id(library.cards)}")
+print('logged')
 
 
 gamefont = ('castellar', 12, 'bold')
@@ -38,7 +42,7 @@ class Main(tk.Tk):
         self.title("Munchkin")
         # main container for the different frames to be placed in
         container = tk.Frame(self)
-        container.pack(side=tk.TOP, fill='both', expand=True) # creates frame that spans all of the main tk window
+        container.pack(side=tk.TOP, fill='both', expand=True) # creates frame that spans the main tk window
         container.grid_rowconfigure(0, weight=1) # params = row 0 expand(1, 0 for not expand)
         container.grid_columnconfigure(0, weight=1)
         # holds all the prebuilt frames for the container to look up
@@ -47,7 +51,7 @@ class Main(tk.Tk):
         #### all Game notifications ####
         self.message = tk.StringVar()
         self.message2 = tk.StringVar()
-        #### all player atribs to bind ####
+        #### all player attribs to bind ####
         self.name = tk.StringVar()
         self.gender = tk.StringVar()
         self.race = tk.StringVar()
@@ -131,7 +135,7 @@ class StartPg(tk.Frame):
         label.config(font=gamefont, bg=window_color, fg=text_color)
         label.pack(pady=10, padx=10)
 
-        #button to change frame seen in container
+        # button to change frame seen in container
         but1 = tk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect))
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack()
@@ -155,7 +159,7 @@ class GameOptions(tk.Toplevel):
         self.permadeath = tk.BooleanVar()
         self.carry_weight = tk.IntVar()
 
-        #styling
+        # styling
         lf = tk.LabelFrame(self, text="Game Options")
         lf.config(font=gamefont)
         lf.pack(fill='both', expand=True)
@@ -180,7 +184,7 @@ class GameOptions(tk.Toplevel):
         self.carry_weight.set(10) # change when cards are categorised, should be 6
         e2.grid(column=1, row=2)
 
-        l3 = tk.Label(lf,text="Perm-a-death")
+        l3 = tk.Label(lf, text="Perm-a-death")
         l3.grid(column=0, row=3)
         cbut = tk.Checkbutton(lf, variable=self.permadeath)
         cbut.grid(column=1, row=3, sticky="w")
@@ -293,10 +297,9 @@ class PlayerInfo(tk.Toplevel):
                 "once all player attribs have been set"
                 PlayerInfo.destroy(self) # final destruction of top window
                 #~~~~~~~~ debug loop
-                print("\nPlayers in game:", end=" ")
+                logger.log_note("\nPlayers in game:")
                 for players in library.GameObjects.session_players: # loop to see all player names
-                    print(players.name.title(), end=", ") # checks all players names assigned in session_players
-                print("\n...............")
+                    logger.log_note(players.name.title()) # checks all players names assigned in session_players
                 #~~~~~~~~~~~~~~~
 
                 engine.set_random_player() # gets a random player from the active player list, auto calls varbinging binding all variables.
@@ -437,12 +440,13 @@ class MainLoop(tk.Frame):
         # self.message2.destroy() # destroys message2 for the dev mode
         app.update_attrib_frame() # updates the tk.vars in Main under the instance controller.
         print(" Turn ended!\n", "."*10, "\n")
+        logger.log_note('End turn')
 
     def door(self):
         """Calls methods associated to kicking the door. End result is to move cards to the desired location ie on table
         ready for fight (and display) or in to the players handCommits a player to game action by disabling buttons. """
 
-        print("\nKicking door method")
+        logger.log_note("\nKicking door method")
         # Commits player to game loop
         self.message2.destroy()  # removes dev label
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
@@ -478,7 +482,7 @@ class MainLoop(tk.Frame):
 
                 # 2nd attempt circumstance
         elif library.CardDraw.door_attempts_remaining == 0:
-            print("2nd kick activated")
+            logger.log_note("2nd kick activated")
             library.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
             app.update_message("show")  # update the broadcast message
             self.img = Tools.viewer(0)  # gets card pic face down
@@ -491,7 +495,7 @@ class MainLoop(tk.Frame):
 
         library.CardDraw.door_attempts_remaining = 0  # set to false after first kick, only monster will deactivate the button
         Tools.fluid_player_info() # updates any changes cause by status effecting cards to the player............................right place?
-        print("Door attempts:zero= last attempt:: ", library.CardDraw.door_attempts_remaining)
+        logger.log_note(f"Door attempts:zero= last attempt::{library.CardDraw.door_attempts_remaining}")
 
     # def update_info(self): # may be redundant for TOOLS fluid_player_info just button link left
     #     """method to update a player info window with any changes ie halfbreed ect"""
@@ -506,17 +510,17 @@ class MainLoop(tk.Frame):
         #Todo next job sort this mess out
         """ fight is called when all actions and options are exhausted. Fights main purpose is to compare lists and
          determine outcome of the fight then trigger appropriate actions."""
-        print("Fight button pressed")
+        logger.log_note("Fight button pressed")
         if len(cards.in_play) > 1: # checks how many monster set are on the table
             card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # selects a monster based on potential player selection
         else:
             card_set = cards.in_play.pop(0) # will always grab the first set and remove it
-        print('The card set u will be facing is:')
-        print(card_set) # will return the card set for all cards associated to this monster inc monster
+        logger.log_note('The card set u will be facing is:')
+        logger.log_note(f"card_set") # will return the card set for all cards associated to this monster inc monster
         engine.fight(card_set, library.FightComponents.assists)# calls the fight method passing in list of player instance deemed as helpers
 
         #after fight player can select another monster
-        # fight is when all oter options have been exhausted!
+        # fight is when all other options have been exhausted!
         # this should only pass to a function that calculates the outcome
 
         # player_obj = library.GameObjects.active_player #
@@ -604,7 +608,7 @@ class MainLoop(tk.Frame):
         self.end_turn_button.config(state="normal") # end turn
         self.weapons_button.config(state="normal")  # weapons
         self.armor_button.config(state="normal")  # armor
-        print("End of Fight\n")
+        logger.log_note("End of Fight\n")
         Tools.fluid_player_info()
 
     def run(self):
@@ -634,7 +638,7 @@ class MainLoop(tk.Frame):
             'Player Select'))  # waits for the toplvl window to be destroyed before continuing (no lists created otherwise)
         antagonist = library.FightComponents.card_list_selection[
             library.FightComponents.card_selector_index]  # player who is doing the interfering
-        print(f'The selected player is:{antagonist.name}')
+        logger.log_note(f'The selected player is:{antagonist.name}')
 
         engine.scrub_lists()  # ensures item lists is empty
         antagonist.inventory("type", "disposable")  # creates a list of the players inventory
@@ -645,8 +649,8 @@ class MainLoop(tk.Frame):
 
         app.wait_window(RadioSelector('Interfere'))  # generates list of potential targets mons + players
         target = library.FightComponents.card_list_selection[library.FightComponents.card_selector_index]
-        print(antagonist.name, target.name)  # both are retained
-        print('cards selected: ', library.Interfering.card_storage, library.Interfering.card_storage2)
+        logger.log_note(f"{antagonist.name}, {target.name}")  # both are retained
+        logger.log_note(f'cards selected: , {library.Interfering.card_storage}, {library.Interfering.card_storage2}')
         engine.interfere(antagonist, target)
 
     def ask_for_help(self):  # mot set
@@ -665,7 +669,7 @@ class MainLoop(tk.Frame):
         OwnedItems("Weapons owned", "weap")
 
     def list_armor(self):
-        print("in armour handler")
+        logger.log_note("in armour handler")
         library.GameObjects.message = "Armour list"
         app.update_message("show")
         engine.scrub_lists()
@@ -734,7 +738,7 @@ class MainLoop(tk.Frame):
 class OwnedItems(tk.Toplevel):
     """Generates toplevel from cards place in gameVar.GameObjects.selected_items where selections can be made on those cards.
     Buttons will be dependent upon the type of cards selected prior."""
-    def __init__(self, wind_title="Template", set_but="No Buttons"): #title and buttons to be used for items
+    def __init__(self, wind_title="Template", set_but="No Buttons"): # title and buttons to be used for items
         tk.Toplevel.__init__(self)
         self.title(wind_title)
         # self.geometry("350x250+200+200")

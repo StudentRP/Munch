@@ -11,6 +11,7 @@ from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
 from Munchkin.bin.all_cards.door_cards.doorcards import Moncurse
 # import Munchkin.bin.GUI.gui_variables as gameVar# creates circle import
 from random import randint
+import Tests.process_logger as logger # std output
 
 
 class Dice:

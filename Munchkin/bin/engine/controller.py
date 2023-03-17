@@ -19,6 +19,7 @@ from random import randint, choice
 import bin.GUI.variables_library as library
 from itertools import cycle
 from bin.GUI.variables_library import cards
+import Tests.process_logger as logger # std output
 print('controller', id(library.cards))
 from time import sleep
 
@@ -70,18 +71,18 @@ class PlayerSetUp:
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
         while play:
             if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
-                print(f"Current player {current_player.name} turn ended\n")
+                logger.log_note(f"Current player {current_player.name} turn ended")
                 library.GameObjects.active_player = next(player_gen) # binds next player to rand_player, (changes x)
                 self.player_attrib_ipc_updater(library.GameObjects.active_player) #  binds new player
-                print(f"{library.GameObjects.active_player.name} has been binded")
+                logger.log_note(f"{library.GameObjects.active_player.name} has been binded")
                 break
             elif current_player == y and not current_player.alive and not library.Options.perm_death:
-                print(f"print player {current_player} is dead") # move in to conditional for perm-a-death
+                logger.log_note(f"print player {current_player} is dead") # move in to conditional for perm-a-death
                 current_player.alive = True # resets player status ##########need per-a-death bit here
                 library.GameObjects.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
             else:
-                print(f"{y.name.title()} did not match. Searching for player in list")
+                logger.log_note(f"{y.name.title()} did not match. Searching for player in list")
                 y = next(player_gen) # changes y to find commonality to x
 
         library.GameObjects.message = f"{library.GameObjects.active_player.name.title()}'s turn..."
@@ -220,7 +221,6 @@ class PlayerSetUp:
                         else:
                             library.Interfering.card_storage2 = card
 
-
     def tri_qualifier(self, card, player_obj=None):
         """ Checks player attribs against an item card before it can be used by the player. Split into 2 parts:
         1st: checks card for a specific restriction that would count against a player due to a specific attrib, ie if u are human u cant use this card.
@@ -298,7 +298,7 @@ class PlayerSetUp:
         library.GameObjects.zipped_tup.clear()  # clears tup list
 
 ##################################################################
-    def fight(self, card_set, helpers=False, ):
+    def fight(self, card_set, helpers=False):
         """for cards that are monsters and placed on the table."""
         # if can send card meths athe set for processing would solve lots of probs
         # notes; card meths will be switched on in interfere and kick door, no meths to activate here other than loose
@@ -379,7 +379,6 @@ class PlayerSetUp:
             for card in library.cards.in_play[index]:
                 player.card_meths(card, static='on')
 
-
     # def card_method_activator(self, scenario, action, table_card_index): # deprecated method
     #     """method to activate a card dependent upon the scenario of having a specific monster/ curse/ item in play and action to
     #     switch on or off the condition"""
@@ -425,11 +424,6 @@ if __name__ == "__main__":
     # NumberOfPlayers().select_players() # starts game by activating NOP building the objects, and activating select_players
     # running wach line.
     engine.player_name_gender()
-
-
-
-
-
 
 # old
 # def door_card_designator(self, card, door_attempts=1):  # for all door cards that are drawn from the pack

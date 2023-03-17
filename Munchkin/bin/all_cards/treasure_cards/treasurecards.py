@@ -1,6 +1,7 @@
 """ Class to define all treasure cards"""
 
 from random import randint
+import Tests.process_logger as logger # std output
 
 
 #x = randint(0, 6)

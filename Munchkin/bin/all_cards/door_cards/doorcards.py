@@ -3,6 +3,7 @@ Contains all door cards.
 Will need a processing level
 """
 # from random import choice as rand_choice
+import Tests.process_logger as logger # std output
 
 """ problem on returns weandering monster returns list card to be placed on table while below_waist returns to be burned.
  * solution pass a 1st arg that is string for destination and the card in a list. require list format as other returned 
