@@ -41,10 +41,10 @@ class PlayerSetUp:
 # meths associated to play setup
 
     def active_player_creation(self):
-        """ calls Player.factory creating player instances"""
+        """ Calls Player factory creating player instances"""
         logger.log_note('In active_player_creation. x2 >>')
         for person in range(library.StartVariables.new_players):
-            player = Player.factory() # << Returned
+            player = Player.factory() # << Player instance Returned
             library.GameObjects.session_players.append(player) # players added to session players
         self.deal_handler("start") # >> GO TO
 
@@ -115,7 +115,7 @@ class PlayerSetUp:
         """ Sends requests to the dealer based on the option parameter to define card type.
         Deal_amount defines how many of the cards are to be returned to a player.
         """
-        logger.log_note(f"In Deal_handler(), Option: {option}")
+        logger.log_note(f"In Deal_handler(), Option: {option} >>")
 
         playerinst = library.GameObjects.active_player # gets current player. Not set at start default=None.
 

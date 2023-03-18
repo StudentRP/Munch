@@ -292,18 +292,22 @@ controller.py:
 #######################################################################
 # Game start and options methods
 #######################################################################
-Detailed method for start page and game options
+Initial start up protocol
 
 controller.StartPg, class
-    Presents two options start or options
-    - start button will call controller.show_frame(PlayerSelect) so that number of players can be selected from the spinbox
-    - options button will call toplevel GameOptions class
+    Presents two Buttons: Start or Options
+    - Start button will rase PlayerSelect frame. Number of players may then be selected. GO TO >> PlayerSelect class >>
+    - Options button will call Toplevel event GameOptions class. GO TO >> GameOptions class
 
-start button
+Start button
     controller.show_frame(PlayerSelect)
         See player rotation method detailed in independent section bellow
 
-GameOptions, toplevel
+#######################################################################
+# GAME OPTIONS class
+#######################################################################
+
+GameOptions, toplevel event
     presents options that change library.Options that act as flags for specific in game methods
     Defaults are set in library. Options for are:
         library.Options.cards_delt = self.inital_deal.get()     # number of each type of card to deal on start
@@ -325,34 +329,50 @@ controller.StartPg
 player can now either re-enter options of press start
 
 #######################################################################
-# Name/gender, random player to start and deal starting set of cards
+# Name/gender, Random player start and Deal starting set of cards
 #######################################################################
 Details method for setting a players name/gender, dealing each player a starter set of cards, setting random player to
 start and binding that player to the active_player variable for a reference in the game scope for player attrib access.
 
+Variables used in variables_library.py library class:
+ - library.StartVariables.new_players # num of people in play
+ - library.StartVariables.player_rand
+ - library.GameObjects.session_players # holds all player instances
+
+Other variables used:
+ - self.Num_of_players = tk.IntVar() # store spinbox number of players.
+ - playerinst = library.GameObjects.active_player # not used during start (default=None)
+
 PlayerSelect(), class (views.py)
-    creates spinbox with textvariable=self.Num_of_players bound to tk.IntVar()
-    and Confirm Button that calls self.player_set_up() method
+    spinbox field num of players
+    Confirm button GO TO >> player_set_up() >>
 
     player_set_up(),  Button handler
-        library.StartVariables.new_players = self.Num_of_players.get()
-            pulls the number of selected players from the spinbox and binds within variable_library.py under StartVariables
-            new_players. This is the number of players wanted in the current game.
+        BINDS:
+        library.StartVariables.new_players = self.Num_of_players.get(). spinbox val used
+        library.StartVariables.player_rand = self.Num_of_players.get(). spinbox val used
 
-        library.StartVariables.player_rand = self.Num_of_players.get()
-            Also uses the spinbox var for later indexing
-
+        CAllS:
         engine.active_player_creation(), method
-            Calls Player.factory() for each player in range(library.StartVariables.new_players).
-            Each player is then added to the session_players list within the variables_library script.
-            method ends with a call to deal_handler(option='start') which deals cards to each player in the session_players list.
-            The amount assigned is dependent on the option provided before game start.
+            Iterates range(library.StartVariables.new_players) calling: player = Player.factory() GO TO >>
 
-            deal_handler(self, option, deal_amount=0), method
-            Flexible method created to deal cards either at start, after death or specific cards (door/treasure).
-            player.unsorted = cards.card_sop.deal_cards("start", library.Options.cards_dealt)
-                Used to issue cards to all players. "start" parameter is used to define the the type of deal wanted.
-                This then loops over the players in session_players calling cards.card_sop.deal_cards() table.py
+                Player.factory() class method: playermodel.py
+                        returns Player() to caller creating caller instance of Player
+
+                Iteration adds each player instance to session_players list within the variables_library script.
+                (NOTE generic player at this point)
+
+            deal_handler(option='start') >> GO TO >> controller.py PlayerSetUp >> deal_handler()
+               # Flexible method: options = start, door, treasure, resurrect scenarios and deal amount int.
+
+                deal_handler(self, option, deal_amount=0), method
+                    Branch == start
+                        Iteration library.GameObjects.session_players
+
+
+                player.unsorted = cards.card_sop.deal_cards("start", library.Options.cards_dealt)
+                    Used to issue cards to all players. "start" parameter is used to define the the type of deal wanted.
+                    This then loops over the players in session_players calling cards.card_sop.deal_cards() table.py
 
                 cards.card_sop.deal_cards("start", library.Options.cards_dealt)
                     Calls Table class and the card method card_sop for the Dealer class (a table has-a Dealer) with the

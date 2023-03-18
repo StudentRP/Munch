@@ -53,7 +53,7 @@ class Options:
     """variables associated to start options that may be manipulated changing win parameters ect"""
     win_lvl = 10 # sets the leve that triggers win
     carry_weight = 6 # number of cards allowed in player sack. #6 std
-    cards_dealt = 4 # >>>>>>>>>>>>> number of each card type delt at start or on resurrection. #4 std
+    cards_dealt = 2 # >>>>>>>>>>>>> number of each card type delt at start or on resurrection. #4 std
     perm_death = False # dead players do not come back
 
 

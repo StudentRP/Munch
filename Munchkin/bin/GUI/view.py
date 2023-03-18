@@ -142,7 +142,7 @@ class StartPg(tk.Frame):
         label.pack(pady=10, padx=10)
 
         # button to change frame seen in container
-        but1 = tk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect)) # GO TO >>>>
+        but1 = tk.Button(self, text='START', command=lambda: controller.show_frame(PlayerSelect)) # GO TO >>>>
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack()
         but1.focus_set()
