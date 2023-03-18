@@ -390,6 +390,7 @@ PlayerSelect(), class (views.py)
         PlayerInfo(),
             Complex script to create a arbitrary name tag with incrementation number, set the name and gender of
             the player, generate a random player to start and structure a game loop that loops over session_players.
+            GUI binds names to library and player class atakes those names and binds tp a player instance.
             Components: instname entry, instgender selector, Confirm button > initial_set handler.
 
                 class had 2 class variables:

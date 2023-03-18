@@ -65,8 +65,8 @@ class CardDraw:
 class PlayerAttribs:
     """Must mirror what's in controller.PlayerSetUp.verbinding and call to bind here!"""
     player_ref = 0
-    player_name = 'BOB' # current session player name
-    player_gender = 'Male'  # current session player gender
+    player_name = 'BOB' # default
+    player_gender = 'Male'  # default
     player_level = 1
     player_bonus = 0
     player_wallet = 0

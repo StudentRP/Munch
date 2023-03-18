@@ -86,16 +86,16 @@ class Player(MonTools, T_tools):
         logger.log_note("In Player.factory << END")
         return Player()
 
-    @classmethod
-    def gender(cls):
-        """Sets gender"""
-        x = library.PlayerAttribs.player_gender # grabs string stored in in game var
-        return x
+    # @classmethod # redundant
+    # def gender(cls):
+    #     """Sets gender"""
+    #     x = library.PlayerAttribs.player_gender # grabs string stored in library
+    #     return x
 
     @classmethod
     def name(cls):
         """Sets name"""
-        x = library.PlayerAttribs.player_name
+        x = library.PlayerAttribs.player_name # gets entered name that was stored in library
         if x == "rory":  # ......................................................................... dev mode
             y = "The_Creator"
             return y
@@ -113,21 +113,20 @@ class Player(MonTools, T_tools):
     def char_setup(self):
         # complete, prints to be removed
         """sets up name and gender in gameVar and player instance when called"""
-        na = Player.name() # method to set name
+        na = Player.name() # method check name
         self.name = na  # makes change to player
-        xy = Player.gender()
-        self.gender = xy
+        # xy = Player.gender() # redundant
+        # self.gender = xy # redundant
+        self.gender = library.PlayerAttribs.player_gender
 
         if self.name == "The_Creator": # ................................................................... dev mode
             self.gender = "bob"
             self.bonus = 200
-            self.wallet = 20000
+            self.wallet = 10000
             library.PlayerAttribs.player_gender = self.gender
             library.GameObjects.message2 = f"{self.name} is in play, A God among mortals!"
 
-        #~~~~~~~~~~~~ info
-        print(f"The player {self.name.title()} with the gender {self.gender.title()} has been created.")
-        # ~~~~~~~~~~~~
+        logger.log_note(f"The player {self.name.title()} with the gender {self.gender.title()} has been created.")
 
     def inventory(self, key, cardtype): # called from GUI on button press
         """Returns list of dict from player sack cards that have a specific key and specific value.

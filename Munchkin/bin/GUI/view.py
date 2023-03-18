@@ -264,7 +264,7 @@ class PlayerInfo(tk.Toplevel):
         self.mainframe.focus_set()  # focus on this window objects
         self.mainframe.grab_set()  # make modal
 
-        self.arbitrary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.label_counter}") # unique title
+        self.arbitrary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.label_counter}") # unique title 'Player 1'
         self.arbitrary.config(font=('castellar', 15, 'bold'), fg='blue')
         self.arbitrary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
 
@@ -285,7 +285,6 @@ class PlayerInfo(tk.Toplevel):
         self.save_button.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
         self.bind('<Return>', self.initial_set)  # alternative to button press
 
-
     def initial_set(self, event=None):
         """Primary function: call method == session_players[list_indexer] for player instance setting name and gender,
         & set a random player binding to active_player.
@@ -293,15 +292,15 @@ class PlayerInfo(tk.Toplevel):
         ensuring all get attribute assignment. """
         logger.log_note(f'Player {self.instname.get()},Gender: {self.instgender.get()} initialised')
         players_assign = library.StartVariables.new_players # players_assign  = total players_assign of players in play ie 4.
-        if players_assign >= 1: # loop won't work as branch needs to be restarted per player
-            players_assign -= 1 # decreases the num of new pLayer integer to count down players_assign of players left to assign
-            PlayerInfo.label_counter += 1 # increase player counter for arbitrary label in class scope
-            library.PlayerAttribs.player_name = self.instname.get() # binds name in library.
-            library.PlayerAttribs.player_gender = self.instgender.get() # binds gender in library
+        if players_assign >= 1: # checks number of players left to modify.
+            players_assign -= 1 # decreases the num of new pLayers left to modify
+            PlayerInfo.label_counter += 1 # Increase player counter for arbitrary label numerically showing player to be modified
+            library.PlayerAttribs.player_name = self.instname.get() # binds entered name in library.
+            library.PlayerAttribs.player_gender = self.instgender.get() # binds selected gender in library
             engine.player_name_gender(PlayerInfo.list_indexer) # actives meth for transferring player data to player instance
-            PlayerInfo.list_indexer += 1 # increases index value so looping will call next player in session_players list
+            PlayerInfo.list_indexer += 1 # increases index for session_players
             PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
-            library.StartVariables.new_players = players_assign # gamevar is bound to the new value for players_assign
+            library.StartVariables.new_players = players_assign # library is bound to the new value for players_assign
 
             if players_assign != 0: # loop for next player
                 PlayerInfo() # rebuilds toplevel anew for next player
