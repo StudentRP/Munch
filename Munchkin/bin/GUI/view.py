@@ -19,8 +19,11 @@ from bin.GUI.variables_library import cards
 # import bin.GUI.gui_tools as tools
 
 logger.log_creator("Initialising log")
+logger.log_note("###################\n"
+                "# Info: >> method active path, << returned Path "
+                "\n###################")
 logger.log_note(f"'view', {id(library.cards)}")
-print('logged')
+print('Log initialised')
 
 
 gamefont = ('castellar', 12, 'bold')
@@ -29,7 +32,7 @@ text_color = "#7A0600"
 but_color = "#3EB0A1"
 
 ##########################################################################
-# Main controller
+# Main View Top level events
 ##########################################################################
 
 
@@ -40,14 +43,8 @@ class Main(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
         self.geometry('500x200') # adding +x+y to the end provide window location, maybe create option slider in menu
         self.title("Munchkin")
-        # main container for the different frames to be placed in
-        container = tk.Frame(self)
-        container.pack(side=tk.TOP, fill='both', expand=True) # creates frame that spans the main tk window
-        container.grid_rowconfigure(0, weight=1) # params = row 0 expand(1, 0 for not expand)
-        container.grid_columnconfigure(0, weight=1)
         # holds all the prebuilt frames for the container to look up
         self.frames = {} # app.frames
-
         #### all Game notifications ####
         self.message = tk.StringVar()
         self.message2 = tk.StringVar()
@@ -70,6 +67,12 @@ class Main(tk.Tk):
         self.footgear = tk.StringVar()
         self.necklace = tk.StringVar()
 
+        # main container for the different frames to be placed in
+        container = tk.Frame(self)
+        container.pack(side=tk.TOP, fill='both', expand=True)  # creates frame that spans the main tk window
+        container.grid_rowconfigure(0, weight=1)  # params = row 0 expand(1, 0 for not expand)
+        container.grid_columnconfigure(0, weight=1)
+
         "Creates 3 frames all with the same parent and fills the dictionary with snapshots of built instances"
         for frm in StartPg, PlayerSelect, MainLoop: # snapshot of the frames (classes) put into the dict
             frame = frm(container, self) # Instance creation. Passes container as the parent frame & self as controller (app)
@@ -78,7 +81,7 @@ class Main(tk.Tk):
         self.show_frame(StartPg) # calling correct pg to top of the frame, last one stacked will show otherwise
 
     def show_frame(self, content):
-        """ Brings the frame to the fore front within the pre packed parent frame. Content being name of frame class
+        """ Brings the frame to the forefront within the pre packed parent frame. Content being name of frame class
         packed into the container """
         frame = self.frames[content] # looks up the frame in the dict
         frame.tkraise() # brings the child frame to the forefront to be seen within the main container frame
@@ -106,7 +109,9 @@ class Main(tk.Tk):
         self.footgear.set(library.PlayerAttribs.player_footgear)
         self.necklace.set(library.PlayerAttribs.player_necklace)
 
-    def update_message(self, action=None):
+
+    def broadcast_message(self, action=None):
+        """ Message broadcast """
         if action == "show":
             self.message.set(library.GameObjects.message) # grabs message stored in gamevar messages
         elif action == "dev":
@@ -126,7 +131,8 @@ class StartPg(tk.Frame):
     # text_color ="#7A0600"
     # but_color = "#3EB0A1" # moved to top of script
 
-    def __init__(self, parent, controller): # parent = container in Main class, controller = app object.
+    def __init__(self, parent, controller): # parent = container in Main class, controller = frame object.
+        # print(f' the controller is {type(controller)}: parent: {type(parent)}')
         tk.Frame.__init__(self, parent)
         self.config(bg=window_color)
 
@@ -136,15 +142,16 @@ class StartPg(tk.Frame):
         label.pack(pady=10, padx=10)
 
         # button to change frame seen in container
-        but1 = tk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect))
+        but1 = tk.Button(self, text='Continue', command=lambda: controller.show_frame(PlayerSelect)) # GO TO >>>>
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack()
         but1.focus_set()
 
         # game options
-        but2 = tk.Button(self, text="Options", command=GameOptions)
+        but2 = tk.Button(self, text="Options", command=GameOptions) # GO TO >>>>
         but2.config(bg=but_color, fg=text_color, padx=40, activebackground='yellow', relief="raised")
         but2.pack(side="bottom")
+
 
 
 class GameOptions(tk.Toplevel):
@@ -192,9 +199,11 @@ class GameOptions(tk.Toplevel):
         b1 = tk.Button(lf, text="OK", command=self.setopts)
         b1.config(padx=20)
         b1.grid(column=0, row=4, columnspan=2)
+        logger.log_note('Game options toplevel initiated')
 
     def setopts(self):
-        """Sets gamevar options to the new values provided with the get() method used for tkvars. """
+        """Sets library options to the new values provided with the get() method used for tkvars. """
+        logger.log_note('Game options triggered')
         library.Options.cards_dealt = self.initial_deal.get() # gets value stored in the bound tkvar associated to initial_deal
         library.Options.win_lvl = self.maxlvl.get()
         library.Options.perm_death = self.permadeath.get()
@@ -216,22 +225,25 @@ class PlayerSelect(tk.Frame):
         label = tk.Label(self, text="Select number of players")
         label.config(font=gamefont, bg=window_color, fg=text_color)
         label.pack(pady=10, padx=10)
-        l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players) # num of players select
+        l1 = ttk.Spinbox(self, from_=1, to=10, increment=1, textvariable=self.Num_of_players) # Select num of players
         l1.focus()
-        l1.set(1) # sets inittal value on spinbox to 1
+        l1.set(1) # sets initial value on spinbox to 1
         l1.pack()
-        but1 = tk.Button(self, text="Confirm", command=self.playersetter)
+        but1 = tk.Button(self, text="Confirm", command=self.player_set_up) # GO TO >>>>
         but1.config(bg=but_color, fg=text_color, padx=40, activebackground='red', relief="raised")
         but1.pack(side="bottom")
 
-    def playersetter(self):
+
+    def player_set_up(self):
         """Binds values from spinbox to gui_var for later use and calls next stage. Calls playermodel factory and meth to set
         initial player cards."""
         library.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         library.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
+        logger.log_note(f'Player_set_up activated. Setting: new_players & player_rand:{self.Num_of_players.get()}. >> ') #
 
-        engine.active_player_creation() # creates list of session players for the game
+        engine.active_player_creation() # creates list of session players for the game ## GO TO >>>
         PlayerInfo() # each player in session_players sets their name and gender in a toplevel window.
+
 
 
 class PlayerInfo(tk.Toplevel):
@@ -253,9 +265,9 @@ class PlayerInfo(tk.Toplevel):
         self.mainframe.focus_set()  # focus on this window objects
         self.mainframe.grab_set()  # make modal
 
-        self.arbitary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.label_counter}") # unique title
-        self.arbitary.config(font=('castellar', 15, 'bold'), fg='blue')
-        self.arbitary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
+        self.arbitrary = tk.Label(self.mainframe, text=f"Player {PlayerInfo.label_counter}") # unique title
+        self.arbitrary.config(font=('castellar', 15, 'bold'), fg='blue')
+        self.arbitrary.grid(column=0, row=0, columnspan=2, sticky='n,e,s,w')
 
         self.namelab = tk.Label(self.mainframe, text='Name: ')
         self.namelab.grid(column=1, row=1, sticky='w')
@@ -266,28 +278,29 @@ class PlayerInfo(tk.Toplevel):
         self.genderlab = tk.Label(self.mainframe, text='Gender: ')
         self.genderlab.grid(column=1, row=2, sticky='w')
         self.instgender.set("male") # creates default
-        self.nameent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
-        self.nameent.grid(column=2, row=2, sticky='w')
+        self.genderent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
+        self.genderent.grid(column=2, row=2, sticky='w')
 
-        self.but2 = tk.Button(self.mainframe, text='Confirm', command=self.initial_set)
-        self.but2.config(bd=10, activebackground='green')
-        self.but2.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
+        self.save_button = tk.Button(self.mainframe, text='Confirm', command=self.initial_set) # launches toplevel
+        self.save_button.config(bd=10, activebackground='green')
+        self.save_button.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
         self.bind('<Return>', self.initial_set)  # alternative to button press
+
 
     def initial_set(self, event=None):
         """Primary function: call method == session_players[list_indexer] for player instance setting name and gender,
         & set a random player binding to active_player.
         Secondary requirements: Increments arbitrary label_counter & counts down from the number of players in-game
         ensuring all get attribute assignment. """
-
+        logger.log_note(f'Player {self.instname.get()},Gender: {self.instgender.get()} initialised')
         players_assign = library.StartVariables.new_players # players_assign  = total players_assign of players in play ie 4.
-        if players_assign >= 1: # loop wont work as branch needs to be restarted per player
+        if players_assign >= 1: # loop won't work as branch needs to be restarted per player
             players_assign -= 1 # decreases the num of new pLayer integer to count down players_assign of players left to assign
             PlayerInfo.label_counter += 1 # increase player counter for arbitrary label in class scope
             library.PlayerAttribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
             library.PlayerAttribs.player_gender = self.instgender.get() # entered gender binds to gameVar
             engine.player_name_gender(PlayerInfo.list_indexer) # method to index session_players list for specific player and set name and gender attribs
-            PlayerInfo.list_indexer = PlayerInfo.list_indexer + 1 # increases index value so looping will call next player in session_players list
+            PlayerInfo.list_indexer += 1 # increases index value so looping will call next player in session_players list
             PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
             library.StartVariables.new_players = players_assign # gamevar is bound to the new value for players_assign
 
@@ -297,15 +310,15 @@ class PlayerInfo(tk.Toplevel):
                 "once all player attribs have been set"
                 PlayerInfo.destroy(self) # final destruction of top window
                 #~~~~~~~~ debug loop
-                logger.log_note("\nPlayers in game:")
-                for players in library.GameObjects.session_players: # loop to see all player names
-                    logger.log_note(players.name.title()) # checks all players names assigned in session_players
+                logger.log_note(f"Player creation ended.\n\nPlayers in game:"
+                                f"{[p for p in library.GameObjects.session_players]}")
+                # checks all players names assigned in session_players
                 #~~~~~~~~~~~~~~~
 
                 engine.set_random_player() # gets a random player from the active player list, auto calls varbinging binding all variables.
                 app.update_attrib_frame() # updates all label variables from gameVar to MainLoop frame.
-                app.update_message("show")
-                app.update_message("dev") # dev addition message from the creator
+                app.broadcast_message("show")
+                app.broadcast_message("dev") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
                 ########## deal cards to all players required
 
@@ -417,6 +430,7 @@ class MainLoop(tk.Frame):
         self.canvas.pack(side="top", expand=True, fill="both") # without self should now be accessible for the class....
         self.img = ""
 
+
     "Handlers"
     def end_turn(self):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
@@ -431,12 +445,12 @@ class MainLoop(tk.Frame):
         self.sell_button.config(state="normal")  # sell
         self.fight_button.config(state="disabled")  # fight
         self.run_away_button.config(state="disabled")  # run
-        # app.update_message() #clears all messages
+        # app.broadcast_message() #clears all messages
 
         engine.player_order(library.GameObjects.active_player) # sends active player rebind new player in game_loop
         Tools.fluid_player_info() # adds or removes player class2/race2 option
-        app.update_message()  # clears all messages
-        app.update_message("show") # updates main broadcast message
+        app.broadcast_message()  # clears all messages
+        app.broadcast_message("show") # updates main broadcast message
         # self.message2.destroy() # destroys message2 for the dev mode
         app.update_attrib_frame() # updates the tk.vars in Main under the instance controller.
         print(" Turn ended!\n", "."*10, "\n")
@@ -466,7 +480,7 @@ class MainLoop(tk.Frame):
             # broadcast new message
             if door_card.get('type') != 'monster' and door_card.get('type') != 'curse': # General card that is NOT a mon or a curse
                 library.GameObjects.message = f"Your card is: {door_card.get('name')}"
-                app.update_message("show") # update the broadcast message
+                app.broadcast_message("show") # update the broadcast message
 
             # if monster set the following button configs.
             if door_card["type"] == "monster":
@@ -484,12 +498,12 @@ class MainLoop(tk.Frame):
         elif library.CardDraw.door_attempts_remaining == 0:
             logger.log_note("2nd kick activated")
             library.GameObjects.message = f"You have drawn a face down card that is placed in your hand"
-            app.update_message("show")  # update the broadcast message
+            app.broadcast_message("show")  # update the broadcast message
             self.img = Tools.viewer(0)  # gets card pic face down
             self.canvas.create_image(10, 10, image=self.img, anchor="nw") # puts door card face down
             self.door_button.config(state="disabled") # disables door button
             self.end_turn_button.config(state="normal")
-            app.update_message("show")
+            app.broadcast_message("show")
 
         # final end of methods
 
@@ -546,7 +560,7 @@ class MainLoop(tk.Frame):
         #
         # result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
         #
-        # app.update_message("show") # name and lvl of monster
+        # app.broadcast_message("show") # name and lvl of monster
         # if result == "win":
         #     self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
         #     print('remove off canvas?????? ')
@@ -592,7 +606,7 @@ class MainLoop(tk.Frame):
         #
         # result = engine.fight() # helper may be added when sorting it <----------- HERE to add to for selection
         #
-        # app.update_message("show") # name and lvl of monster
+        # app.broadcast_message("show") # name and lvl of monster
         # if result == "win":
         #     self.canvas.delete("all") # clears the canvas, not quite right as will remove all cards
         #     print('remove off canvas?????? ')
@@ -622,18 +636,18 @@ class MainLoop(tk.Frame):
                 self.canvas.delete("all")  # clears the canvas, not quite right as will remove all cards TAG maybe?
             else:
                 library.GameObjects.message = "You are trapped! All that is left is to fight!"
-                app.update_message("show")
+                app.broadcast_message("show")
                 self.run_away_button.config(state="disabled")  # run
 
         else:
             library.GameObjects.message = "This is not a fight you can run from!"
-            app.update_message("show")
+            app.broadcast_message("show")
             self.run_away_button.config(state="disabled")  # run
 
     def interfere(self):  # will link to player select toplvl window that then add an action . may need to look at card_matcher to be more flexible
         """Allows a person to interfere with play of another turn"""
         library.GameObjects.message = "Toplevel window where another player can interfere with play\n NOT SET UP"
-        app.update_message("show")
+        app.broadcast_message("show")
         app.wait_window(RadioSelector(
             'Player Select'))  # waits for the toplvl window to be destroyed before continuing (no lists created otherwise)
         antagonist = library.FightComponents.card_list_selection[
@@ -655,13 +669,13 @@ class MainLoop(tk.Frame):
 
     def ask_for_help(self):  # mot set
         library.GameObjects.message = "Toplevel window where another player can help... for a price.."
-        app.update_message("show")
+        app.broadcast_message("show")
         RadioSelector('Help')
 
     def list_weapons(self):
         """ builds a list of cards that meet the the weapons criterion. List is bound to gameVar..selected_items """
         library.GameObjects.message = "Weapons list"
-        app.update_message("show")
+        app.broadcast_message("show")
         engine.scrub_lists()
         player = library.GameObjects.active_player
         player.inventory("type", "weapon") # key= 'type', value = 'weapon' # (generates a list of items with criteria type: weapons from the player sack)
@@ -671,7 +685,7 @@ class MainLoop(tk.Frame):
     def list_armor(self):
         logger.log_note("in armour handler")
         library.GameObjects.message = "Armour list"
-        app.update_message("show")
+        app.broadcast_message("show")
         engine.scrub_lists()
         player = library.GameObjects.active_player
         # print(f"player is : {player.name}")
@@ -681,7 +695,7 @@ class MainLoop(tk.Frame):
 
     def consumables(self, other=False):
         library.GameObjects.message = "Consumable items"
-        app.update_message("show")
+        app.broadcast_message("show")
         engine.scrub_lists()
         if other:
             player = other # for calling another instance into play (interfere) to view their cards
@@ -693,7 +707,7 @@ class MainLoop(tk.Frame):
     def list_sell(self):
         """builds toplevel with sellable items"""
         library.GameObjects.message = "Sell selected"
-        app.update_message("show")
+        app.broadcast_message("show")
         engine.scrub_lists() # resets all lists for next action
         player = library.GameObjects.active_player # gets current player
         player.item_by_key("sell") # generates list of sellable cards passed on to gameVar.selected_items
@@ -702,7 +716,7 @@ class MainLoop(tk.Frame):
 
     def hand(self, other=False):
         library.GameObjects.message = "Hidden items selected"
-        app.update_message("show")
+        app.broadcast_message("show")
         engine.scrub_lists()
         if other:
             player = other # for calling another instance into play (aid) to view their cards
@@ -714,7 +728,7 @@ class MainLoop(tk.Frame):
     def list_sack(self):
         """shows all items in sack"""
         library.GameObjects.message = "The contents of sack:"
-        app.update_message("show")
+        app.broadcast_message("show")
         engine.scrub_lists()
         player = library.GameObjects.active_player
         player.inventory("category", "treasure")
@@ -811,7 +825,7 @@ class OwnedItems(tk.Toplevel):
     #     Tools.common_set(action) # takes all params of set_but that is used to when calling common_set
     #     Tools.fluid_player_info() # calls an update method for gui to show all player changes, also cleans lists from zipper
     #     OwnedItems.destroy(self) # destroys toplevel window
-    #     app.update_message("show") # updates the messaging system
+    #     app.broadcast_message("show") # updates the messaging system
     ###########################
 
     def showcard(self, card_id, card_type=None):
@@ -824,13 +838,13 @@ class OwnedItems(tk.Toplevel):
         Tools.common_set("sell")# calls zipper with param
         Tools.fluid_player_info() # calls an update method for gui to show all player changes, also cleans lists from zipper
         OwnedItems.destroy(self) # destroys toplevel window
-        app.update_message("show")
+        app.broadcast_message("show")
 
     def equip(self):
         Tools.common_set("equip")
         Tools.fluid_player_info()
         OwnedItems.destroy(self)
-        app.update_message("show")
+        app.broadcast_message("show")
 
     def use_item(self): #hidden items path hand and consume lead here
         """for consumables and hidden objects"""
@@ -838,7 +852,7 @@ class OwnedItems(tk.Toplevel):
             Tools.common_set("disposable")
             Tools.fluid_player_info() # adds or removes player class2/race2 option
             OwnedItems.destroy(self)
-            app.update_message("show")
+            app.broadcast_message("show")
         else:
             Tools.common_set("disposable")
             OwnedItems.destroy(self)
@@ -847,7 +861,7 @@ class OwnedItems(tk.Toplevel):
         Tools.common_set("remove")
         Tools.fluid_player_info()
         OwnedItems.destroy(self)
-        app.update_message("show")
+        app.broadcast_message("show")
 
 
 class RadioSelector(tk.Toplevel): # In production

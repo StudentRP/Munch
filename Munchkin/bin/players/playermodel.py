@@ -14,15 +14,17 @@ Considerations:
 """
 
 
-from Munchkin.bin.all_cards.table import Table # most likely not used here (pos for cross talk bypassing circular
+from bin.all_cards.table import Table # most likely not used here (pos for cross talk bypassing circular
 # import but may require for adding to player inventory and stats (note same card in engine will return here)
-from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
+from bin.all_cards.treasure_cards.treasurecards import Treasure
 
-from Munchkin.bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
+from bin.players.playersetup import P_tools # OF LITTLE USE. Methods name/gender moved to this script.
 import bin.GUI.variables_library as library
 from bin.GUI.variables_library import cards # single location to same memory address
 from bin.all_cards.door_cards.doorcards import MonTools
 from bin.all_cards.treasure_cards.treasurecards import T_tools
+import Tests.process_logger as logger
+
 from itertools import cycle
 
 """This is the player class. It will have all setting to configure players and modify attributes that are set to that
@@ -70,17 +72,19 @@ class Player(MonTools, T_tools):
         self.cheat_card = 0 # card the player is cheating with
         self.enhancer_lexical = []  # all positive effects strings for comparative evaluation. only added when card installed on player.
         self.negative_lexical = [] # all negative effects strings for comparative evaluation. only added when card installed/used on player.
-        # self.active_curses = []  # place to store all curse cards effecting player that are not one shot .....
+        self.active_curses = []  # place to store all curse cards effecting player that are not one shot .....
         self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
         self.run_away = True # locks ability toi run or not dependent on some monsters
 
+
     def __repr__(self):
         """developer aid"""
-        return f"\nPLAYER Ref:{self.ref}\nName:{self.name}\nGender:{self.gender}\nLevel:{self.level}" \
-               f"\nBonus:{self.bonus}\nSack:{self.wallet}\n"
+        return f"\nPLAYER: Name:{self.name}, Gender:{self.gender.title()}:Level:{self.level}, Bonus:{self.bonus}," \
+               f"Sack:{self.wallet}\n"
 
     @classmethod
     def factory(cls):
+        logger.log_note("In Player.factory << END")
         return Player()
 
     @classmethod

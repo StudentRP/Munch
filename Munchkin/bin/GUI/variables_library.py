@@ -13,7 +13,7 @@ class StartVariables:
 
     # Start game variables
     new_players = 1 # (int) number associated to total players in current game
-    player_rand = 1  # number for random player generator for PlayerSelect.playersetter
+    player_rand = 1  # number for random player generator for PlayerSelect.player_set_up
     selected_items = [] # list of playing cards ready to be looped over. ie all weapons from player items
     cards = cards
 
@@ -63,10 +63,10 @@ class CardDraw:
 
 
 class PlayerAttribs:
-    """Must mirror whats in controller.PlayerSetUp.verbinding and call to bind here!"""
+    """Must mirror what's in controller.PlayerSetUp.verbinding and call to bind here!"""
     player_ref = 0
     player_name = 'BOB' # current session player name
-    player_gender = 'male'  # current session player gender
+    player_gender = 'Male'  # current session player gender
     player_level = 1
     player_bonus = 0
     player_wallet = 0

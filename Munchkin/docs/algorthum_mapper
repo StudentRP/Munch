@@ -226,8 +226,8 @@ Pages:
 
     player select-
         spin box with player select. textvariable = num_of_players
-        button leads to player details playersetter method
-        playersetter-
+        button leads to player details player_set_up method
+        player_set_up-
             num_of_players = IntVar() binds to 2 variables in library -
                 1) library.StartVariables.new_players that manipulates label in Toplevel
                 2) library.StartVariables.player_rand that drives the index for the instances in the list during selection
@@ -332,9 +332,9 @@ start and binding that player to the active_player variable for a reference in t
 
 PlayerSelect(), class (views.py)
     creates spinbox with textvariable=self.Num_of_players bound to tk.IntVar()
-    and Confirm Button that calls self.playersetter() method
+    and Confirm Button that calls self.player_set_up() method
 
-    playersetter(),  Button handler
+    player_set_up(),  Button handler
         library.StartVariables.new_players = self.Num_of_players.get()
             pulls the number of selected players from the spinbox and binds within variable_library.py under StartVariables
             new_players. This is the number of players wanted in the current game.
@@ -370,7 +370,7 @@ PlayerSelect(), class (views.py)
                     counter = 1  #  player identity title number for arbitrary label
                     indexing = 0 # index to access correct player instance in session_players list and ensures
                     details are bound to the correct player instance.
-                    note a 3rd is used but located in library (new_players) set by the playersetter method above.
+                    note a 3rd is used but located in library (new_players) set by the player_set_up method above.
 
                 Players enter their details and press "confirm" button that triggers initial_set (return button does
                 same thing).
@@ -490,7 +490,7 @@ The end goal is to remove items from the player adding them to the burn pile and
         Player has method called item_by_key. This takes 1 argument 'sell' defined as key on other end
         (but could be anything specific from a game card)
         item_by_key(self, key) generates a list from all cards in player.unsorted (a list of cards delt to the player during
-        controller.PlayerSelect.playersetter during player creation) that are specific in the fact they have in card dictionary
+        controller.PlayerSelect.player_set_up during player creation) that are specific in the fact they have in card dictionary
         a key called 'sell'. Under list comprehension this generates a list of only sellable objects in the player deck.
         this list is then assigned to library.GameObjects.selected items.
 
@@ -555,7 +555,7 @@ MainLoop, class
     Armor, Main screen button - calls list_armor method
 
     list_armor, method:
-        library.GameObjects.message & app.update_message("show") - Call simple message to the main window
+        library.GameObjects.message & app.broadcast_message("show") - Call simple message to the main window
 
         engine.scrub_lists() - clears all lists ready for new item stack in the toplevel window.
 

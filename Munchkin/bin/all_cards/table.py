@@ -7,8 +7,8 @@ Burn pile, object o get cards
 
 """
 
-from Munchkin.bin.all_cards.treasure_cards.treasurecards import Treasure
-from Munchkin.bin.all_cards.door_cards.doorcards import Moncurse
+from bin.all_cards.treasure_cards.treasurecards import Treasure
+from bin.all_cards.door_cards.doorcards import Moncurse
 # import Munchkin.bin.GUI.gui_variables as gameVar# creates circle import
 from random import randint
 import Tests.process_logger as logger # std output
@@ -28,22 +28,24 @@ class Dealer:
         dealing specific cards. deal_amount specific to the start/resurrect determines the amount of cards to of each type
         to deal players. REQUIRES ALL PARAMS TO BE PASSED BY CALLER."""
 
-        print(f"In deal cards. Num of cards in: \nDoor stack: {len(Moncurse.door_cards)}\nTreasure stack: {len(Treasure.treasure_cards)}\n"
-              f"Burn pile: {len(cards.burn_pile)}\nIn-play stack: {len(cards.in_play)}\n") # dev print
+        logger.log_note(f"In Deal_cards(), Checking cards: Door stack: {len(Moncurse.door_cards)}: "
+                        f"Treasure stack:{len(Treasure.treasure_cards)}: Burn pile: {len(cards.burn_pile)}:"
+                        f"In-play stack:{len(cards.in_play)}")
 
         # Checks # CHANGE TO A FIRST IN FIRST OUT ALGORITHM FOR THE BURN CARDS SO ONLY GETTING WHAT IS NEEDED
         if deal_amount > len(Moncurse.door_cards):
-            print(f"Not enough Door cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]}")
             cards.restock()
-            print(f"cards left in burn pile after restock {cards.burn_pile}") # test for change
+            logger.log_note(f"Not enough Door cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]},"
+                            f"cards left in burn pile after restock:{cards.burn_pile}")
         if deal_amount > len(Treasure.treasure_cards):
-            print(f"Not enough Treasure cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]}")
             cards.restock()
+            logger.log_note(f"Not enough Treasure cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]},"
+                            f"cards left in burn pile after restock:{cards.burn_pile}")
 
         # Main actions
         try:
             if option == "start":
-                """called at start to deal specific number of cards to pass to player"""
+                """Called at start to deal specific number of cards to pass to player"""
                 starter_set = []
                 for i in range(deal_amount): # takes attrib of number of loops for card dealing (set by gameVar.Options)
                     dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
@@ -87,6 +89,7 @@ class Table(Treasure, Moncurse): # inherits from
 
     def add_to_burn(self, discard):
         """adding to burn pile"""
+        print(f"Adding {discard['name']} to Burn Pile")
         self.burn_pile.append(discard)
 
     def remove_from_burn(self, pull_request):

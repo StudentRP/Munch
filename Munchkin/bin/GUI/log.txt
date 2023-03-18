@@ -1,8 +1,28 @@
 Initialising log
-'view', 140620191414496
+'view', 1400723454944
+Start page created
+Player select frame created
+Main loop frame created
+Player info toplevel created
+Player select accessed. Players in game: 2
+Player dftd,Gender: male initialised
+Player info toplevel created
+Player gggg,Gender: Female initialised
+Player creation ended.
 
-Players in game:
-
-The_Creator
-Ho;Lly
-Ethan
+Players in game:[
+PLAYER Ref:1
+Name:dftd
+Gender:male
+Level:1
+Bonus:0
+Sack:0
+, 
+PLAYER Ref:2
+Name:gggg
+Gender:Female
+Level:1
+Bonus:0
+Sack:0
+]
+Setting Random player to start: dftd

@@ -13,17 +13,18 @@ import Tests.process_logger as logger # std output
 
 class MonTools:
     """methods for all cards associated to Door cards, self should be the player
-    *items/ will have add abd remove meth
-    * monsters have "conditions" ie -2 for theifs ect and "badstuff" ie event of loosing fight,  params
+    *items/ will have add and remove meth
+    * monsters have "conditions" ie -2 for thieves ect and "badstuff" ie event of loosing fight,  params
     so far: 'add' = to add item from pack, 'remove' = bs outcome or curse
 
     """
 
-    # first arg always received will be the state all others are cards
+    # first arg always received will be the state all others are cards.
     # cards thus far can only send bback list with destination string and a card to be processed either removed or
     # added to fight in the form of new monster enhancers will come this way too
 
 ########################### TEST AND CATCH #############################
+
     def test_meth(self, *args):
         print('In test meth expecting level change to 500')
         if "on" in args:

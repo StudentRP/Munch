@@ -1,5 +1,5 @@
 """
-Controller provudes backend logic to the view script and makes changes to variable library
+Controller provides backend logic to the view script and makes changes to variable library
 Initiates player personalisation and runs game cycle for each player fetching cards and initiation
 each scene of play
 
@@ -12,16 +12,15 @@ Contents functions:
 
 """
 
-
-from Munchkin.bin.players.playermodel import Player
-from Munchkin.bin.all_cards.table import dice
-from random import randint, choice
+from bin.players.playermodel import Player
+from bin.all_cards.table import dice
+from random import choice
 import bin.GUI.variables_library as library
 from itertools import cycle
 from bin.GUI.variables_library import cards
 import Tests.process_logger as logger # std output
 print('controller', id(library.cards))
-from time import sleep
+
 
 
 
@@ -43,13 +42,15 @@ class PlayerSetUp:
 
     def active_player_creation(self):
         """ calls Player.factory creating player instances"""
+        logger.log_note('In active_player_creation. x2 >>')
         for person in range(library.StartVariables.new_players):
-            player = Player.factory()
-            library.GameObjects.session_players.append(player)
-        self.deal_handler("start")
+            player = Player.factory() # << Returned
+            library.GameObjects.session_players.append(player) # players added to session players
+        self.deal_handler("start") # >> GO TO
 
     def player_name_gender(self, playerindex): # gui attrib, passes session_players index identifying specific instance
         """Gets player with list index and Sets name and gender to that player instance."""
+        logger.log_note('In player_name_gender')
         player = library.GameObjects.session_players[playerindex] #references a player objects from session_players
         player.char_setup() # call to set name and gender of player instance.
 
@@ -59,8 +60,8 @@ class PlayerSetUp:
         player = choice(library.GameObjects.session_players) # selects random player from list of players
         library.GameObjects.active_player = player # assigns the selected player to active player in gamevar for gui to see
         library.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
-        self.player_attrib_ipc_updater(player) # arg not needed. Calls method to set all attribs in in gamevar of player
-
+        self.player_attrib_ipc_updater(player) # arg not needed. Calls method to set all attribs in gamevar of player
+        logger.log_note(f"Setting Random player to start: {player.name}")
 # class Game_Play:
 
     def player_order(self, current_player): # called with gameVar rand_index
@@ -88,7 +89,7 @@ class PlayerSetUp:
         library.GameObjects.message = f"{library.GameObjects.active_player.name.title()}'s turn..."
 
     def player_attrib_ipc_updater(self, playerinst=library.GameObjects.active_player): # defaults to gamevar active_player player
-        """Binds all player atribs to gameVar for current player activity. Can take param of a player or grab active_player."""
+        """Binds all player attribs to gameVar for current player activity. Can take param of a player or grab active_player."""
         library.PlayerAttribs.player_name = playerinst.name.title()
         library.PlayerAttribs.player_gender = playerinst.gender.title()
         library.PlayerAttribs.player_level = playerinst.level
@@ -114,12 +115,13 @@ class PlayerSetUp:
         """ Sends requests to the dealer based on the option parameter to define card type.
         Deal_amount defines how many of the cards are to be returned to a player.
         """
+        logger.log_note(f"In Deal_handler(), Option: {option}")
 
         playerinst = library.GameObjects.active_player # gets current player. Not set at start default=None.
 
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
             for player in library.GameObjects.session_players: # loops over each player in session_players
-                player.sack = cards.card_sop.deal_cards(option, deal_amount=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal)
+                player.sack = cards.card_sop.deal_cards(option, deal_amount=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal) >> GO TO
 
         elif option == "door": # Standard gameplay loop on door kick
             print("In deal_handler, retrieving door card & determining fate of card")  # test location
