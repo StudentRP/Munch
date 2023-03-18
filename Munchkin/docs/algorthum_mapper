@@ -342,6 +342,9 @@ Variables used in variables_library.py library class:
 Other variables used:
  - self.Num_of_players = tk.IntVar() # store spinbox number of players.
  - playerinst = library.GameObjects.active_player # not used during start (default=None)
+ - starter_set # list of cards provided to a player
+ - instname # holds a player name temporarily
+ - instgender # holds a player gender temporarily
 
 PlayerSelect(), class (views.py)
     spinbox field num of players
@@ -366,25 +369,28 @@ PlayerSelect(), class (views.py)
                # Flexible method: options = start, door, treasure, resurrect scenarios and deal amount int.
 
                 deal_handler(self, option, deal_amount=0), method
-                    Branch == start
+                    Branch == option=start
                         Iteration library.GameObjects.session_players
+                        player.sack = cards.card_sop.deal_cards(option, deal_amount=library.Options.cards_dealt) >> GO TO >> deal_cards
 
-
-                player.unsorted = cards.card_sop.deal_cards("start", library.Options.cards_dealt)
-                    Used to issue cards to all players. "start" parameter is used to define the the type of deal wanted.
-                    This then loops over the players in session_players calling cards.card_sop.deal_cards() table.py
-
-                cards.card_sop.deal_cards("start", library.Options.cards_dealt)
+                 cards.card_sop.deal_cards(option, library.Options.cards_dealt), option=start
+                    Persestant method checks card availability
                     Calls Table class and the card method card_sop for the Dealer class (a table has-a Dealer) with the
-                    method deal_cards. The arguments "start" and ameVar.Options.cards_dealt specify the mode of deal
-                    through the branch and the number of each card to deal laid out by the game options respectively.
-                    Card selection fo each type is randomised through the use of Random module.
-                    Cards are stored in the variable starter_set and returned to caller and bound to player.unsorted.
-                    This is a list of cards that associates to the individual player
+                    method deal_cards. The arguments "start" and library.Options.cards_dealt specify a branch and the
+                    number of each card to deal set within by game options.
+                    A starter_set list is compiled from random cards from both monster and treasure. and returned to player.sack
+                    player.sack = << RETURN starter_set << END
+                    Each player instance now has a sack of cards containing both monster and treasure type cards to the
+                    amount defined within game options.
 
-        PlayerInfo(), toplevel
+            SUMMARY: Player instances added to session_players and cards added to player.sack. integer created for new_players & player_rand.
+
+        PlayerInfo() class Toplevel called in view >> GO TO >>
+
+        PlayerInfo(),
             Complex script to create a arbitrary name tag with incrementation number, set the name and gender of
             the player, generate a random player to start and structure a game loop that loops over session_players.
+            Components: instname entry, instgender selector, Confirm button > initial_set handler.
 
                 class had 2 class variables:
                     counter = 1  #  player identity title number for arbitrary label

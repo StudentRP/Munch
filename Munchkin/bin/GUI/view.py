@@ -153,7 +153,6 @@ class StartPg(tk.Frame):
         but2.pack(side="bottom")
 
 
-
 class GameOptions(tk.Toplevel):
     """Toplevel window for setting in game options at start""" # WORKS need others added and style tidying
     def __init__(self):
@@ -271,17 +270,17 @@ class PlayerInfo(tk.Toplevel):
 
         self.namelab = tk.Label(self.mainframe, text='Name: ')
         self.namelab.grid(column=1, row=1, sticky='w')
-        self.nameent = tk.Entry(self.mainframe, textvariable=self.instname)
+        self.nameent = tk.Entry(self.mainframe, textvariable=self.instname) # player name entry
         self.nameent.grid(column=2, row=1, sticky='w,e')
         self.nameent.focus_set()
 
         self.genderlab = tk.Label(self.mainframe, text='Gender: ')
         self.genderlab.grid(column=1, row=2, sticky='w')
         self.instgender.set("male") # creates default
-        self.genderent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"])
+        self.genderent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"]) # player gender select
         self.genderent.grid(column=2, row=2, sticky='w')
 
-        self.save_button = tk.Button(self.mainframe, text='Confirm', command=self.initial_set) # launches toplevel
+        self.save_button = tk.Button(self.mainframe, text='Confirm', command=self.initial_set) #
         self.save_button.config(bd=10, activebackground='green')
         self.save_button.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
         self.bind('<Return>', self.initial_set)  # alternative to button press
@@ -297,9 +296,9 @@ class PlayerInfo(tk.Toplevel):
         if players_assign >= 1: # loop won't work as branch needs to be restarted per player
             players_assign -= 1 # decreases the num of new pLayer integer to count down players_assign of players left to assign
             PlayerInfo.label_counter += 1 # increase player counter for arbitrary label in class scope
-            library.PlayerAttribs.player_name = self.instname.get() # gameVar atrib is used to store the entered player name.
-            library.PlayerAttribs.player_gender = self.instgender.get() # entered gender binds to gameVar
-            engine.player_name_gender(PlayerInfo.list_indexer) # method to index session_players list for specific player and set name and gender attribs
+            library.PlayerAttribs.player_name = self.instname.get() # binds name in library.
+            library.PlayerAttribs.player_gender = self.instgender.get() # binds gender in library
+            engine.player_name_gender(PlayerInfo.list_indexer) # actives meth for transferring player data to player instance
             PlayerInfo.list_indexer += 1 # increases index value so looping will call next player in session_players list
             PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
             library.StartVariables.new_players = players_assign # gamevar is bound to the new value for players_assign

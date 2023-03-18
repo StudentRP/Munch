@@ -76,7 +76,6 @@ class Player(MonTools, T_tools):
         self.run = 4 # ability to run, manipulable. note elf must change this. !!! use as bool and escape value!
         self.run_away = True # locks ability toi run or not dependent on some monsters
 
-
     def __repr__(self):
         """developer aid"""
         return f"\nPLAYER: Name:{self.name}, Gender:{self.gender.title()}:Level:{self.level}, Bonus:{self.bonus}," \
