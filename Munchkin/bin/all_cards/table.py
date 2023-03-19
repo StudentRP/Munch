@@ -27,25 +27,25 @@ class Dealer:
         """Method for dealing cards to players at start or during play. params: option selects the type/situation of
         dealing specific cards. deal_amount specific to the start/resurrect determines the amount of cards to of each type
         to deal players. REQUIRES ALL PARAMS TO BE PASSED BY CALLER."""
-
-        logger.log_note(f"In Deal_cards(), Checking cards: Door stack: {len(Moncurse.door_cards)}: "
-                        f"Treasure stack:{len(Treasure.treasure_cards)}: Burn pile: {len(cards.burn_pile)}:"
-                        f"In-play stack:{len(cards.in_play)}")
+        logger.log_note(" deal_cards << END")
+        logger.log_note(f"\n NOTE: Door stack:{len(Moncurse.door_cards)},"
+                        f"Treasure stack:{len(Treasure.treasure_cards)},"
+                        f"Burn pile:{len(cards.burn_pile)},"
+                        f"In-play stack:{len(cards.in_play)} # TEST MONSTER IN PLACE!!\n")
 
         # Checks # CHANGE TO A FIRST IN FIRST OUT ALGORITHM FOR THE BURN CARDS SO ONLY GETTING WHAT IS NEEDED
         if deal_amount > len(Moncurse.door_cards):
             cards.restock()
-            logger.log_note(f"Not enough Door cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]},"
-                            f"cards left in burn pile after restock:{cards.burn_pile}")
+            logger.log_note(f"\nNot enough Door cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]},"
+                            f"cards left in burn pile after restock:{cards.burn_pile}\n")
         if deal_amount > len(Treasure.treasure_cards):
             cards.restock()
-            logger.log_note(f"Not enough Treasure cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]},"
-                            f"cards left in burn pile after restock:{cards.burn_pile}")
-
+            logger.log_note(f"\nNot enough Treasure cards\nRESTOCKING WITH {[x['name'] for x in cards.burn_pile]},"
+                            f"cards left in burn pile after restock:{cards.burn_pile}\n")
         # Main actions
         try:
             if option == "start":
-                """Called at start to deal specific number of cards to pass to player"""
+                """Creates a starter set of cards that is to be returned to the player"""
                 starter_set = []
                 for i in range(deal_amount): # takes attrib of number of loops for card dealing (set by gameVar.Options)
                     dobj = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1)) # randon monster card
@@ -57,9 +57,9 @@ class Dealer:
 
             elif option == "door":
                 """Deal Door cards""" # will need condition for kicking door (placed on table) 2nd draw (player hand)
-                print('Dealing from Door pile:')
+                logger.log_note('Dealing from Door pile:')
                 card = Moncurse.door_cards.pop(randint(0, len(Moncurse.door_cards) - 1))
-                print(f"Your card is: {card['name']}\nCards left in Door deck: {len(Moncurse.door_cards)}\n")
+                logger.log_note(f"Return card is: {card['name']}\nCards left in Door deck: {len(Moncurse.door_cards)}\n")
                 return card
 
             elif option == "treasure":

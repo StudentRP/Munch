@@ -3,6 +3,7 @@ MUNCHKIN
 contents:
     GAME GENERAL
         SCRIP DEPENDENCIES
+        IMPORTS
     PLAY CYCLE
         START
         GAME LOOP
@@ -13,7 +14,7 @@ contents:
 
 ****************************************************************************************************
 **************************************** GAME GENERAL ************************************
-****************************************************************************************************,
+****************************************************************************************************
 
 
 ######################################################
@@ -24,11 +25,11 @@ view.py: provides front end logic and building blocks for GUI
 
 variables_library.py (referred to as library): acts as a IPC script that view.py can interact with and controller.py
 can change without creating conflicting imports and convoluted return statements.
-This create a clear uncomplicated area that values may be seen, like game options, or stored without obfuscation.
+This creates a clear area that variables may be seen, like game options, and stored without obfuscation.
 
-controller.py (referred to as engine): location of all the backend logic that called from the GUI, generic card methods
+controller.py (referred to as engine): location of all the backend logic thats called from the GUI, generic card methods
 for sorting, player rotation, control of play and anything else that sits on top of the basic script logic.
-This script imports table.py giving access to both doorcards.py & treasurercards.py and playermodel.py.
+This script imports playermoodel.py and variables_library.py
 
 table.py: is modeled on a playing table and contains classes that relate to a dealer, dice and table. dealer will fetch
 cards from both doorcards.py & treasurercards.py returning the card back to the caller (usually engine).
@@ -45,6 +46,9 @@ treasurecards.py: contains all cards for the treasure deck. This is a list of ne
 information relevent to any of the cards in question. treasurecards.py inherits from T_tools that contains a dictioanry of all
 methods associated to a card as a value to the called key received from a card in or used during play.
 
+######################################################
+# IMPORTS
+######################################################
 
 
 **********************************************************************************************
@@ -329,7 +333,7 @@ controller.StartPg
 player can now either re-enter options of press start
 
 #######################################################################
-# Name/gender, Random player start and Deal starting set of cards
+# Name/gender, Random player start and Deal starting set of cards, OK!
 #######################################################################
 Details method for setting a players name/gender, dealing each player a starter set of cards, setting random player to
 start and binding that player to the active_player variable for a reference in the game scope for player attrib access.
@@ -338,6 +342,8 @@ Variables used in variables_library.py library class:
  - library.StartVariables.new_players # num of people in play
  - library.StartVariables.player_rand
  - library.GameObjects.session_players # holds all player instances
+ - library.GameObjects.active_player # player instance who's turn it is
+
 
 Other variables used:
  - self.Num_of_players = tk.IntVar() # store spinbox number of players.
@@ -345,6 +351,10 @@ Other variables used:
  - starter_set # list of cards provided to a player
  - instname # holds a player name temporarily
  - instgender # holds a player gender temporarily
+ - list_indexer # temp used for session_player index
+ - label_counter # toplevel title window counter
+ - players_assign # decrement counter
+ - player_attrib_ipc_updater # variables associated to active_player
 
 PlayerSelect(), class (views.py)
     spinbox field num of players
@@ -388,120 +398,336 @@ PlayerSelect(), class (views.py)
         PlayerInfo() class Toplevel called in view >> GO TO >>
 
         PlayerInfo(),
-            Section function is to bind names and genders to the instances within season_players,
-            Complex script to create a arbitrary name tag with incrementation number, set the name and gender of
-            the player, generate a random player to start and structure a game loop that loops over session_players.
-            GUI binds names to library and player class atakes those names and binds tp a player instance.
+            Section creates arbitrary title name tag with incrementation per person (Player 1) Where the player can set
+            name/gender to be bound to that player instance. Section writes to libray as an intermediary where
+            Generates a random player to start and structure a game loop that loops over session_players (player instances).
+            GUI binds names to library in short lived variable and player class and takes name/gender and binds to a player instance.
             Components: instname entry, instgender selector, Confirm button > initial_set handler.
 
-                class had 2 class variables:
-                    counter = 1  #  player identity title number for arbitrary label
-                    indexing = 0 # index to access correct player instance in session_players list and ensures
-                    details are bound to the correct player instance.
-                    note a 3rd is used but located in library (new_players) set by the player_set_up method above.
+                class has 2 class variables:
+                    label_counter = 1  #  player identity title number for arbitrary label
+                    list_indexer = 0 # index used to access player instance in session_players
 
-                Players enter their details and press "confirm" button that triggers initial_set (return button does
-                same thing).
-
-                    number = library.StartVariables.new_players
+                method variable:
+                    players_assign = library.StartVariables.new_players. Controls branch and player info.
 
                 initial_set, method
-                    Branch is created for checking the number of players in library.StartVariables.new_players assigned
-                    to the variable name = number. Each time this method is called it reduces number by 1 ensuring that
-                    the final entry is the last to redraw the toplevel window. (number -= 1)
-
-                    PlayerInfo.counter += 1 is used to increase the number for the arbitrary player label
+                    Branch checks the number of players in library.StartVariables.new_players. Each time this method is
+                    called it reduces number by 1 so each player can enter name, gender details.
+                    Players are identified in title by incrementation of label_counter that referees to players as a number.
 
                     library.PlayerAtribs.player_name = self.instname.get()
                     library.PlayerAtribs.player_gender = self.instgender.get()
-                    Both bind the player attribs provided to the player name in library
+                        Both bind the player attribs provided to the player name in library
                     engine.player_name_gender(PlayerInfo.indexing) is then called
 
-                    engine.player_name_gender(PlayerInfo.indexing), engine class method
-                        player = library.StartVariables.session_players[playerindex]
-                            class indexing variable is used to pass to player_name_gender method to access the correct
-                            player in session_players.
-                            player is now a specific player instance
+                        engine.player_name_gender(PlayerInfo.indexing), engine class method
+                            player = library.StartVariables.session_players[playerindex]
+                            player is now a specific player instance that may be used
+                            player.char_setup() method is called to set and binds attribs to above player instance
 
-                        player.char_setup() method is called to set and bind attrribs to players
+                            player.char_setup(self), method
+                                Assigns name and gender to a player instance
+                                Player.name() fetches from library and checks condition of name for a condition returning name
+                                gender assigned directly from library, no check required.
 
-                        player.char_setup(), method
-                            calls P_tools.name() and xy = P_tools.name()
-                            return value of each is set as a player attribute
-                            if the return val is == to the dev mode other attribs will be attributed to the player
+                        PlayerInfo.list_indexing is increased to access next player instance in session_players
+                        library.StartVariables.new_players = players_assign updates the external variable for next player
+                        PlayerInfo.destroy(self) is called to destroy the toplevel window
 
-                            P_tools.name()
-                                x = library.PlayerAtribs.player_name
-                                returns name stored in library with title method
-                                or dev mode name if criteria met
+                        Inner branch conditions:
+                            players_assign != 0 triggers toplevel to rebuild with updated title from counter_label and
+                            wiped fields.
 
-                            P_tools.name()
-                            x = library.PlayerAtribs.player_gender
-                            return x.title()
+                            else block executed when players_assign == 0.
+                            setting random player to start
 
-                    PlayerInfo.indexing = PlayerInfo.indexing + 1 is increased for the next player when passed back into
-                    engine.player_name_gender(self, playerindex)    NOTE: index == playerindex as it becomes method argument
-                    PlayerInfo.destroy(self) is called to destroy the toplevel window
-                    library.StartVariables.new_players = number changes the number new_players in library to the new
-                    decreased number.
+                            engine.set_random_player(), method
+                                Selects a player from the session_players to go first.
+                                Binds player instance to library.GameObjects.active_player making this the active player that goes first.
+                                Creates index for session players so payers can be accessed from anywhere, Session_index .
+                                player_attrib_ipc_updater(player) updates library attribs with player info.  >> GO TO >>
 
-                        Inner loop triggered if number not equal to 0 triggering toplevel to rebuild with the new
-                        arbitrary counter label increasing.
+                                player_attrib_ipc_updater(player) method
+                                    Binds all player attributes to library.PlayerAtribs. Note this method can take in any
+                                    player instance and bind to library.PlayerAtribs.
 
-                        When the condition runs that the number is == 0, the integer in new_players list has reached
-                        zero. This will destroy the toplevel PlayerInfo permanently and trigger the next sequence of
-                        events.
+                            app.update_attrib_frame() method, Main class
+                                Calls Main class instance (app) to set library.PlayerAtribs to the Main class instance TK variables
+                                # Communication link:  player_attrib_ipc_updater >> library << app.update_attrib_frame
+                            app.show_frame(MainLoop), method
+                                Raises MainLoop to the forefront
 
-                        engine.set_random_player(), method
-                            method for selecting a player from the session_players to go first with the use of the
-                            random module - player = choice(library.StartVariables.session_players).
-                            This method then calls player_attrib_ipc_updater(player), a method specifically for binding the player
-                            attributes to library.
-                            Importantly library active_player is named: library.StartVariables.active_player = player
-                            used later in turn based assignment
 
-                            player_attrib_ipc_updater(player) method
-                                Binds all player attributes to library.PlayerAtribs. Note this method can take in any
-                                player instance and bind to library.PlayerAtribs.
+SUMMARY:    Session_players list built with all player instances,
+            All names and genders added to individual player instance,
+            Player selected to go first and bound to active_player,
+            Session_index updated,
+            Attributes updated to active_player on main play window.
 
-                        app.update_attrib_frame(), method
-                            part of view.py class Main method that acts as the controller. Sets all tk.Vars with
-                            library.PlayerAttribs. Act like a refresh for new bindings from player_attrib_ipc_updater that impacts upon
-                            MainLoop frame that calls controller.attrib. method also changes size of the Main window
-                            ready for gameplay.
-
-                        app.show_frame(MainLoop), method
-                            Raises MainLoop to the forefront
 
 #######################################################################
-# player rotation method, (initial start and game progression)
+# Game cycle, (initial start and game progression) OK!
 #######################################################################
+    Players must be rotated in order from the randomly selected player. During play some buttons must be deactivated/activated
+    which must be reset at the beginning of a new players turn.
+    In previous section player_attrib_ipc_updater(player) updates the library and update_atrib_frame() fetches a new active_player
+    data. This data is detailed in the player info frame to the left on the game screen and must be updated in an event or
+    for a new player turn.
 
-Setting player rotation method and binding attributes. In previous section player_attrib_ipc_updater(player) and update_atrib_frame()
-set the player info to the random selected player. This is detailed in the player info to the left on the game screen and
-goes first in the game. End turn button should trigger events that lead to the next player and the update of the
-player info window.
 
     end_turn, button method
     On button press player turn ends and another players turn begins.
-        engine.player_order(library.StartVariables.active_player) active_player bound in set_random_player method above becomes
-        current_player. while play is true (to be set as conditional for library.Options.win_lvl) creates loop for
-        players in game. With the use of itertools cycle is used to iterate over the session_players
-        player_gen = cycle(library.StartVariables.session_players). next is called to yield next player and loop back
-        to the beginning of the list.
+        engine.player_order(library.StartVariables.active_player) active_player bound in set_random_player method above is
+        current_player.
+        While play is true (set as conditional for library.Options.win_lvl AND final page to be added to Main class)###########################TODO
+        creates loop for players in game. With the use of itertools, cycle is used to create and object that can be cycled.
+        player_gen = cycle(library.StartVariables.session_players). y calls next on cycle object returning instance from
+        session_players.
 
-        within the while loop there is a branch. current_player is compared to next(player_gen) that is called y.
-        If the conditional in not met  current_player == y next is called again until current_player is found == y.
-        When this happens there are 2 outcomes either the player is alive or the player is dead.
+        Loop: This is used to match y with current_player,aka active_player. with additional conditions considered for latter use.
+        Player_order branching checks conditions within loop where else block changes y to next instance in the generator
+        until a match is found.
+        A player that meets the conditional but is dead will be resurrected on next go dependent upon perm_a_death within the game options.
 
-        In the event of alive library.active_player is updated to next(player_gen) thus next in line to play. player_attrib_ipc_updater
-        is called with the new player argument library.active_player. The loop is then broken preventing endless recursion.
+        when initial condition is met, current_player ==y and alive, library.active_player is updated to next(player_gen)
+        thus next in line to play. Loop is broken returning back to end_turn
 
-        Death and its conditionals will be addressed later.
+        library.GameObjects.session_index is updated in line with library.GameObjects.session_players providing current
+        info at start of player turn. Later use.
 
-        app.update_attrib_frame(), method
-        method again updates the player info to the left of the screen
+        Tools.fluid_player_info() updates gui to active player info calling both player_attrib_ipc_updater(library.GameObjects.active_player)
+        and app.update_attrib_frame() NOTE the former will always use a player instance to update the GUI view while the latter
+        just calls a method to update the info window by fetching from library. fluid_tools also check for race2/klass2 and
+        importantly calls scrub_lists() which are used with player items ready for the new player
 
+SUMMARY:    A turn is ended and another player assigned to active_player,
+            Session_index updated,
+            GUI player values are updated,
+            Temporary item lists scrubbed.
+
+#######################################################################
+# door
+#######################################################################
+    Door button triggers the advancement through the game by placing cards on the table and activating any static methods
+    which may influence play. 3 types of door cards available: monster, curse or other.
+    In the case of a non-fighting card the player may have the option to loot the room (another kick of the door that
+    send a card strait to the players hand, not shown on table) or look for trouble (fight a monster from their hand).
+
+    On the first kick of the door, a monster and curse card can trigger a static method which can have instant or lasting effects.
+    Curses will ahve instant action and be removed from play once actioned.
+    Monsters must be placed into the table in_play list. This has the format of a nested list per monster group and each
+    group of monsters can have further card dictionaries in the nested list which change that monster.
+    eg: in_play= [
+                    [{monster1}, {enhancer}],
+                    [{monster2}, {enhancer}]
+                ]
+    Enhancers that effect monsters can be used in the interfere section.
+    When 1 or more monster is present the active_player can fight a monster, run from or use items (hand > use) section
+
+
+
+Hitting the door button initiates a cascade of events that leads to:
+    - certain buttons being disabled
+    - static methods of cards activated
+    - card being delt to the table
+    - card being displayed
+    - broadcast system update
+
+
+Door button > door method
+     self.end_turn_button.config(state="disabled"), disables end_turn to prevent incorrect usage.
+
+     door_card = engine.deal_handler("door", deal_amount=default)
+        Is one of the main method and excepts a return object. The card returned is dependent on the string parameter used.
+        In this case the parameter 'door' is used to retrieve a door card. This is the value to the key 'category' within the card's dict.
+        door_attempts as a parameter exerts control over where the card ends up and in the current class defines how the
+        card is viewed. The returned card is used for the picture on canvas and trigger the card method.
+
+        deal_handler(self, option, deal_amount=1):
+            # option = 'start', 'door', 'treasure', 'resurrect'
+            # deal_amount = default=1, set for treasure cards to deal back to player/s
+               This method is used to define what call is made to the dealer by the option parameter.
+               a 'door' param, now re-defined as option controls the type of card to get from the deck. As a default deal_amount will always be 1
+               returning only 1 door card from the dealer.
+
+                door_card = cards.card_sop.deal_cards(option, deal_amount) #  REQUIRES ALL PARAMS TO BE PASSED BY CALLER
+                    Runs the Table class that has-a dealer() method that returns a door cards. Note, dealer will check the pack first
+                    and if insufficient cards are present it will empty and sort the burn_pile to refresh the card decks. !MAY BE CHANGE TO A FIRST IN FIRST OUT ALGORITHM!
+                    A card is returned to the caller back to door_card variable.
+
+     engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining)
+        # door_card is the returned card above
+        # door_attempts determines how many times the door has been kicked  and the gui changes to be made.
+            Method first checks door_attempts as this will define where the card is placed. Consider a monster, 1st
+            kick would be placed on table while 2nd would be placed in hand.
+            Branch statements there after defines the fate of the card dependent upon the card type ('door', 'curse', other).
+            else block catches the cards that do not fall into the monster/curse scenarios placing in the player sack.
+            The final else block relates to the outer branch for door_attempts providing a generic catch that places
+            a card in the player hand. ##################################################### (TO BE UPDATED WITH A LOOT_ROOM OR LOOK FOR TROUBLE METHODS).
+            HANDS BACK TO GUI COMPONENT
+
+     Branch: library.CardDraw.door_attempts_remaining FIRST KICK
+        Processes the card to display it on the canvas.
+        Conditional check for mon/curs to update broadcast
+        If monster a cascade of events relating to button states will ensue main one being the deactivation of the door preventing
+        further use on the current players turn.
+
+     Branch: library.CardDraw.door_attempts_remaining == 0:
+        Will never be reached if kick button deactivated. Only works if first kick was NOT a monster.
+        Cascade events to not show the card on canvas and disable door for further use and enable end_turn state change.
+
+    library.CardDraw.door_attempts_remaining = 0
+        Always run but does not make difference when first kick is monster.
+        Importance is in the card that is not the monster allowing second kick to proceed.
+
+    Tools.fluid_player_info()
+           Updates any changes to the player made by the the door_card ready for the next scenario.
+
+Remember: After this method ends static card methods have been enabled, card is on the table or in hand, button sates have changed
+
+
+#######################################################################
+# fight
+#######################################################################
+fight button becomes available when a monster is on the table within the in_play list. Any additions to this list will
+force the player to battle monsters in a last in last out order until no monsters are left. This order is also apparent
+with the run button discussed later.
+
+
+
+#######################################################################
+# run
+#######################################################################
+method looks up a players ability to run - as a bool 0 = false so no run and all other numbers = true.
+If true this number represents the roll required to escape
+
+
+#######################################################################
+# card activation
+#######################################################################
+Card activation is a massive part of the game so a dynamic system is required. cards are required to be activated when:
+# first put on table be it monster or curse
+# used in interferance, wondering monster, enhancer
+# when equipped as enhancer
+# results of win/looses in fights
+# change must be specific to a player
+
+Method must:
+    # take in any number of cards and methods and states
+    # activate card method
+    # change player state/ include remove items
+    # elicit change from and enchantment within a player
+    # in some cases return a cred for further processing
+
+Generic method calls:
+    # player.card_meths(card, static='on') 3 important parts: 1) player is the active player during the game
+        2) Card/s must be the first argument/s 3) keywords must be used to define a method and a state.
+
+Method:
+        card_meths(self, *args, **kwargs)
+            Loops over kwargs generating retrieving the keys and values (method : state).
+            The first arg should be the card in which u wish to activate with the method and state
+            Cards are packed in a tuple thus indexing is used to address the correct card.
+            Method should retrieve a list of methods as its value from the card and iterated over. This is so a card
+            can have more than one method associated to a key.
+            The method from the list is checked against the keys of method_types found in either the doorcards.py or
+            treasure.py scripts.
+            matches calls the first class object with params : method_call(self, state, args[1:])
+            This places the player in direct association to the methods associated to the cards and thus changing
+            player states. state will tell the method to switch on or off and args[1:] passes all but the first card to
+            the method if required. This is important for wondering monsters!
+
+Typical monster method:
+        def test_meth(self, *args):
+            print('In test meth expecting level change to 500')
+            if "on" in args:
+                print('lvl changed')
+                self.level = 500
+            else:
+                self.level = -500
+
+    # args in this cas uses args[0] as state control, all others will be cards.
+    # self.level gives direct access to the player state information.
+
+Notes: from within doorcards.py or treasure.py scripts cards can not be sent to the burn or put into play. Them must therefore
+    be return back to the caller in controller class for further processing. As a relic of the proces of iteration through the
+    listed_meths a none type can be returned. This is screened out by a return check. before returned cards are processed.
+    any object returned to the caller is in the form of a list object. The first arg of this is a string that is used to
+    determine the fate of the cards. This process is also used to deal with the initial fires card, args[0].
+
+Look_up kwargs calls:
+    static='on' # turns the static method on. 'off' will have the opposite effect..
+    method_bs='on' # Runs the bad stuff after a fight
+
+#######################################################################
+# curses
+#######################################################################
+Curses come in 3 flavours, one_shot, time dependent (lasts certain amount of time usually a turn) and permanent until a
+    condition is met. More on curses under curse section. In this section we are only interested in their action when kicking
+    (1st turn) a door and how this effects the player.
+
+Consider that there are 3 kind of curses, 1 that effects the player in a single instance like a one_shot. Theses cards
+would have an effect and an action instantly, ie loose head_gear. Cards of this type would be returned to burn_pile after
+action complete or not.
+
+The second type is the continued effect. Theses cards will effect a player attribute until removed ie -1 to run away.
+When called the method is triggered (if valid for the player) and its effect implemented. Removal of the cures must trigger
+the curse card's remove method to ensure attributes are returned to normal. Theses cards will be stored under
+player.active_curses and NOT returned back to burn pile until a condition to do so is met. This ensures a record of the curse
+is kept and access to the removal method is possible.
+
+The 3rd type would be a single turn activity that last a single cycle of play.
+
+Cruse cards can be iterated over to find the one the player wants to remove when in the active_cures list of a player.
+
+consider curses that have effect and those that dont.
+    dont > back to burn pile
+    do > determine location of activity ( armor, weapon?) needs link to card that is effected (id) and storage
+    somewhere in player model. card active in correct situation then deactivation meth required
+
+door_card_designator(self, card, call=1): look under curses to add meth
+
+WHERE I AM NOW...
+meth needed to determine if player susceptible to curse. IDEA= all cards that promote and effect can have key word/s that are added to player lexical or dict with meths.
+cures would check against this list for resistant method
+ie: lexical would be filled with class bonus words and other bonuses like tinhat. These would be looked up by curse and if non compatible would reject cures.
+
+
+#######################################################################
+# enhancers method
+#######################################################################
+enchantment to stay on lost weapons!
+
+# may be not a requirement. method can be run by card when used to attach to item and run a remove meth when chosen
+(ie with on or off param for adding/removing)
+
+
+#######################################################################
+# interfere method
+#######################################################################
+Method requiring an antagonist (first selection), a target and an action for the card.
+
+This method is triggered when the interfere button is pressed. The method, linked to the main play window, when
+clicked calls the app.wait_window(RadioSelector('Player Select')). This is an important step as calling the window directly
+will allow the main window to remain in operation and index a list that is not assigned (not good!). Once the player is
+selected and the list are build a self.destroy() on the toplevel window RadioSelector allows the main window to proceed.
+
+Now that an antagonist can be identified we need to look through the cards that are relevant. Once a card is chosen another
+wait_window must be used to identify the target. This list contains both monsters and all players. Having selected a target
+the card must be either placed iun the relevant card_set on the table or actioned against the person (curses, ect)
+
+library.Interfere.card_storage is used to stor any cards in from the antagonist ready for card_meths
+
+
+##########################################################################
+# Use from Hand method
+##########################################################################
+
+#######################################################################
+# help
+#######################################################################
+Now uses the RadioSelector to help a player. NOT SET UP
 
 #######################################################################
 # sell method
@@ -655,225 +881,6 @@ not done
 most likely card associated methods that are called at start of play to enrich/encumber player
 
 
-
-#######################################################################
-# door
-#######################################################################
-Door button triggers the advancement through the game by placing cards on the table and actioning any static methods is may
-have to influence play. 3 types of card can be door cards.
-The three types include: monster, curse or other. In the case of a non-fighting card the player may have the option to
-loot the room (another kick of the door that send a card strait to the players hand, not shown on table) or look for trouble
-(fight a monster from their hand).
-
-On the first kick of the door, and a monster or curse card is returned, a static method is ran on the card to implement
-any effects it may have on the player ready for the fight.
-Curses come in 3 flavours, one_shot, time dependent (lasts certain amount of time usually a turn) and permanent until a
-condition is met. More on curses under curse section. In this section we are only interested in their action when kicking
-(1st turn) a door and how this effects the player.
-
-Hitting the door button initiates a cascade of events that leads to:
-    - certain buttons being disabled
-    - static methods of cards activated
-    - card being delt to the table
-    - card being displayed
-    - broadcast system update
-
-
-Door button > door method
-     self.end_turn_button.config(state="disabled"), disables end_turn to prevent incorrect usage.
-
-     door_card = engine.deal_handler("door", deal_amount=default)
-        Is one of the main method and excepts a return object. The card returned is dependent on the string parameter used.
-        In this case the parameter 'door' is used to retrieve a door card. This is the value to the key 'category' within the card's dict.
-        door_attempts as a parameter exerts control over where the card ends up and in the current class defines how the
-        card is viewed. The returned card is used for the picture on canvas and trigger the card method.
-
-        deal_handler(self, option, deal_amount=1):
-            # option = 'start', 'door', 'treasure', 'resurrect'
-            # deal_amount = default=1, set for treasure cards to deal back to player/s
-               This method is used to define what call is made to the dealer by the option parameter.
-               a 'door' param, now re-defined as option controls the type of card to get from the deck. As a default deal_amount will always be 1
-               returning only 1 door card from the dealer.
-
-                door_card = cards.card_sop.deal_cards(option, deal_amount) #  REQUIRES ALL PARAMS TO BE PASSED BY CALLER
-                    Runs the Table class that has-a dealer() method that returns a door cards. Note, dealer will check the pack first
-                    and if insufficient cards are present it will empty and sort the burn_pile to refresh the card decks. !MAY BE CHANGE TO A FIRST IN FIRST OUT ALGORITHM!
-                    A card is returned to the caller back to door_card variable.
-
-     engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining)
-        # door_card is the returned card above
-        # door_attempts determines how many times the door has been kicked  and the gui changes to be made.
-            Method first checks door_attempts as this will define where the card is placed. Consider a monster, 1st
-            kick would be placed on table while 2nd would be placed in hand.
-            Branch statements there after defines the fate of the card dependent upon the card type ('door', 'curse', other).
-            else block catches the cards that do not fall into the monster/curse scenarios placing in the player sack.
-            The final else block relates to the outer branch for door_attempts providing a generic catch that places
-            a card in the player hand. ##################################################### (TO BE UPDATED WITH A LOOT_ROOM OR LOOK FOR TROUBLE METHODS).
-            HANDS BACK TO GUI COMPONENT
-
-     Branch: library.CardDraw.door_attempts_remaining FIRST KICK
-        Processes the card to display it on the canvas.
-        Conditional check for mon/curs to update broadcast
-        If monster a cascade of events relating to button states will ensue main one being the deactivation of the door preventing
-        further use on the current players turn.
-
-     Branch: library.CardDraw.door_attempts_remaining == 0:
-        Will never be reached if kick button deactivated. Only works if first kick was NOT a monster.
-        Cascade events to not show the card on canvas and disable door for further use and enable end_turn state change.
-
-    library.CardDraw.door_attempts_remaining = 0
-        Always run but does not make difference when first kick is monster.
-        Importance is in the card that is not the monster allowing second kick to proceed.
-
-    Tools.fluid_player_info()
-           Updates any changes to the player made by the the door_card ready for the next scenario.
-
-Remember: After this method ends static card methods have been enabled, card is on the table or in hand, button sates have changed
-
-
-#######################################################################
-# fight
-#######################################################################
-fight button becomes available when a monster is on the table within the in_play list. any additions to this list will
-force the player to battle monsters in a first in last out order until no monsters are left. This order is also apparent
-with the run button discussed later.
-
-
-
-#######################################################################
-# run
-#######################################################################
-method looks up a players ability to run - as a bool 0 = false so no run and all other numbers = true.
-If true this number represents the roll required to escape
-
-
-#######################################################################
-# card activation
-#######################################################################
-Card activation is a massive part of the game so a dynamic system is required. cards are required to be activated when:
-# first put on table be it monster or curse
-# used in interferance, wondering monster, enhancer
-# when equipped as enhancer
-# results of win/looses in fights
-# change must be specific to a player
-
-Method must:
-    # take in any number of cards and methods and states
-    # activate card method
-    # change player state/ include remove items
-    # elicit change from and enchantment within a player
-    # in some cases return a cred for further processing
-
-Generic method calls:
-    # player.card_meths(card, static='on') 3 important parts: 1) player is the active player during the game
-        2) Card/s must be the first argument/s 3) keywords must be used to define a method and a state.
-
-Method:
-        card_meths(self, *args, **kwargs)
-            Loops over kwargs generating retrieving the keys and values (method : state).
-            The first arg should be the card in which u wish to activate with the method and state
-            Cards are packed in a tuple thus indexing is used to address the correct card.
-            Method should retrieve a list of methods as its value from the card and iterated over. This is so a card
-            can have more than one method associated to a key.
-            The method from the list is checked against the keys of method_types found in either the doorcards.py or
-            treasure.py scripts.
-            matches calls the first class object with params : method_call(self, state, args[1:])
-            This places the player in direct association to the methods associated to the cards and thus changing
-            player states. state will tell the method to switch on or off and args[1:] passes all but the first card to
-            the method if required. This is important for wondering monsters!
-
-Typical monster method:
-        def test_meth(self, *args):
-            print('In test meth expecting level change to 500')
-            if "on" in args:
-                print('lvl changed')
-                self.level = 500
-            else:
-                self.level = -500
-
-    # args in this cas uses args[0] as state control, all others will be cards.
-    # self.level gives direct access to the player state information.
-
-Notes: from within doorcards.py or treasure.py scripts cards can not be sent to the burn or put into play. Them must therefore
-    be return back to the caller in controller class for further processing. As a relic of the proces of iteration through the
-    listed_meths a none type can be returned. This is screened out by a return check. before returned cards are processed.
-    any object returned to the caller is in the form of a list object. The first arg of this is a string that is used to
-    determine the fate of the cards. This process is also used to deal with the initial fires card, args[0].
-
-Look_up kwargs calls:
-    static='on' # turns the static method on. 'off' will have the opposite effect..
-    method_bs='on' # Runs the bad stuff after a fight
-
-
-
-
-
-
-
-#######################################################################
-# curses
-#######################################################################
-Consider that there are 3 kind of curses, 1 that effects the player in a single instance like a one_shot. Theses cards
-would have an effect and an action instantly, ie loose head_gear. Cards of this type would be returned to burn_pile after
-action complete or not.
-
-The second type is the continued effect. Theses cards will effect a player attribute until removed ie -1 to run away.
-When called the method is triggered (if valid for the player) and its effect implemented. Removal of the cures must trigger
-the curse card's remove method to ensure attributes are returned to normal. Theses cards will be stored under
-player.active_curses and NOT returned back to burn pile until a condition to do so is met. This ensures a record of the curse
-is kept and access to the removal method is possible.
-
-The 3rd type would be a single turn activity that last a single cycle of play.
-
-Cruse cards can be iterated over to find the one the player wants to remove when in the active_cures list of a player.
-
-consider curses that have effect and those that dont.
-    dont > back to burn pile
-    do > determine location of activity ( armor, weapon?) needs link to card that is effected (id) and storage
-    somewhere in player model. card active in correct situation then deactivation meth required
-
-door_card_designator(self, card, call=1): look under curses to add meth
-
-WHERE I AM NOW...
-meth needed to determine if player susceptible to curse. IDEA= all cards that promote and effect can have key word/s that are added to player lexical or dict with meths.
-cures would check against this list for resistant method
-ie: lexical would be filled with class bonus words and other bonuses like tinhat. These would be looked up by curse and if non compatible would reject cures.
-
-
-#######################################################################
-# enhancers method
-#######################################################################
-enchantment to stay on lost weapons!
-
-# may be not a requirement. method can be run by card when used to attach to item and run a remove meth when chosen
-(ie with on or off param for adding/removing)
-
-
-
-
-#######################################################################
-# interfere method
-#######################################################################
-Method requiring an antagonist (first selection), a target and an action for the card.
-
-This method is triggered when the interfere button is pressed. The method, linked to the main play window, when
-clicked calls the app.wait_window(RadioSelector('Player Select')). This is an important step as calling the window directly
-will allow the main window to remain in operation and index a list that is not assigned (not good!). Once the player is
-selected and the list are build a self.destroy() on the toplevel window RadioSelector allows the main window to proceed.
-
-Now that an antagonist can be identified we need to look through the cards that are relevant. Once a card is chosen another
-wait_window must be used to identify the target. This list contains both monsters and all players. Having selected a target
-the card must be either placed iun the relevant card_set on the table or actioned against the person (curses, ect)
-
-library.Interfere.card_storage is used to stor any cards in from the antagonist ready for card_meths
-
-
-#######################################################################
-# help
-#######################################################################
-Now uses the RadioSelector to help a player. NOT SET UP
-
-
 #######################################################################
 # pay to go up level
 #######################################################################
@@ -891,7 +898,7 @@ controller.py
 
 
 ########## NOTES FOR CHANGE ###
-change table system to display monsters as list of list with dicts eg:  [ [{monster card},{monster enhancers}],[{monster},{wandering monster] ] DONE
+change table system to display monsters as list of list with card dicts eg:  [ [{monster card},{enhancer card}],[{monster card},{wandering monster}] ] DONE
 
 This gives each monster on the table the player has to fight a way to enhance, run monster specific methods and provide a way to run from specific monsters.
 Basically this provides and environment so that each monster can become independent.

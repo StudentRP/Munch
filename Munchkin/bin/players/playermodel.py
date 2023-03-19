@@ -78,12 +78,12 @@ class Player(MonTools, T_tools):
 
     def __repr__(self):
         """developer aid"""
-        return f"\nPLAYER: Name:{self.name}, Gender:{self.gender.title()}:Level:{self.level}, Bonus:{self.bonus}," \
+        return f"\nPLAYER: Name:{self.name}, Gender:{self.gender.title()}:Level:{self.level}, Bonus:{self.bonus}, " \
                f"Sack:{self.wallet}\n"
 
     @classmethod
     def factory(cls):
-        logger.log_note("In Player.factory << END")
+        logger.log_note("\t>In Player.factory << END\n")
         return Player()
 
     # @classmethod # redundant

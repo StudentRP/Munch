@@ -23,17 +23,17 @@ class GameObjects:
     message = ""
     message2 = ""
 
-    session_players = []  # (list) generated list slice from players_available CHANGED IN TEST FROM NONE!!!!
-    active_player = None # current game player
-    interfering_player = None # player instance that is interfere
-    all_cards = [] # simple list of all cards #  for listing whole inventory ???
+    session_players = []  # holds player instances
+    active_player = None # points to current player instance
+    interfering_player = [] # player instances that are interefearing with play.
+    all_cards = [] # simple list of all cards #  for listing whole inventory
     selected_items = []  # list of playing cards of particular type . ie all weapons from player.unsorted
     checkbut_intvar_obj = [] # populated with callable objects from checkbutton
     check_but_boo = [] # populated with checkbutton return values from intVar() objects
     check_but_card_ids = [] # populated with card id's
     zipped_tup = [] # populated with bools of card ids & fetched checkbutton from (check_but_card_ids, check_but_boo)
     card_transfer = [] # intermediate storage for cards from player selection to a method action ie monster for wandering monster NOT USED YET!
-
+    session_index = None # during gameplay used to index session_players
 
 class FightComponents:
     assists = [] # list of player instances that are helping in the fight.

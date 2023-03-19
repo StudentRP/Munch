@@ -17,13 +17,11 @@ import Tests.process_logger as logger
 
 from bin.GUI.variables_library import cards
 # import bin.GUI.gui_tools as tools
-
-logger.log_creator("Initialising log")
+logger.log_creator("Initialising log\n")
 logger.log_note("###################\n"
                 "# Info: >> method active path, << returned Path "
-                "\n###################")
-logger.log_note(f"'view', {id(library.cards)}")
-print('Log initialised')
+                "\n###################\n")
+logger.log_note(f"Table instance: {id(library.cards)}\n")
 
 
 gamefont = ('castellar', 12, 'bold')
@@ -68,7 +66,7 @@ class Main(tk.Tk):
         self.necklace = tk.StringVar()
 
         # main container for the different frames to be placed in
-        container = tk.Frame(self)
+        container = tk.Frame(self) # parent frame
         container.pack(side=tk.TOP, fill='both', expand=True)  # creates frame that spans the main tk window
         container.grid_rowconfigure(0, weight=1)  # params = row 0 expand(1, 0 for not expand)
         container.grid_columnconfigure(0, weight=1)
@@ -76,7 +74,7 @@ class Main(tk.Tk):
         "Creates 3 frames all with the same parent and fills the dictionary with snapshots of built instances"
         for frm in StartPg, PlayerSelect, MainLoop: # snapshot of the frames (classes) put into the dict
             frame = frm(container, self) # Instance creation. Passes container as the parent frame & self as controller (app)
-            self.frames[frm] = frame  # adding to dict
+            self.frames[frm] = frame  # adding entry to dict
             frame.grid(row=0, column=0, sticky='nsew')
         self.show_frame(StartPg) # calling correct pg to top of the frame, last one stacked will show otherwise
 
@@ -108,6 +106,7 @@ class Main(tk.Tk):
         self.knees.set(library.PlayerAttribs.player_knees)
         self.footgear.set(library.PlayerAttribs.player_footgear)
         self.necklace.set(library.PlayerAttribs.player_necklace)
+        logger.log_note("update_attrib_frame\n")
 
 
     def broadcast_message(self, action=None):
@@ -202,7 +201,7 @@ class GameOptions(tk.Toplevel):
 
     def setopts(self):
         """Sets library options to the new values provided with the get() method used for tkvars. """
-        logger.log_note('Game options triggered')
+        logger.log_note('Game options triggered\n')
         library.Options.cards_dealt = self.initial_deal.get() # gets value stored in the bound tkvar associated to initial_deal
         library.Options.win_lvl = self.maxlvl.get()
         library.Options.perm_death = self.permadeath.get()
@@ -238,7 +237,7 @@ class PlayerSelect(tk.Frame):
         initial player cards."""
         library.StartVariables.new_players = self.Num_of_players.get() # int for Playerinfo toplevel window generation per player
         library.StartVariables.player_rand = self.Num_of_players.get() # binds in 2nd location for later used in indexing
-        logger.log_note(f'Player_set_up activated. Setting: new_players & player_rand:{self.Num_of_players.get()}. >> ') #
+        logger.log_note(f'Player_set_up activated. >> ') #
 
         engine.active_player_creation() # creates list of session players for the game ## GO TO >>>
         PlayerInfo() # each player in session_players sets their name and gender in a toplevel window.
@@ -276,11 +275,11 @@ class PlayerInfo(tk.Toplevel):
 
         self.genderlab = tk.Label(self.mainframe, text='Gender: ')
         self.genderlab.grid(column=1, row=2, sticky='w')
-        self.instgender.set("male") # creates default
+        self.instgender.set("Male") # creates default
         self.genderent = ttk.Combobox(self.mainframe, textvariable=self.instgender, values=["Male", "Female"]) # player gender select
         self.genderent.grid(column=2, row=2, sticky='w')
 
-        self.save_button = tk.Button(self.mainframe, text='Confirm', command=self.initial_set) #
+        self.save_button = tk.Button(self.mainframe, text='Confirm', command=self.initial_set) # handler
         self.save_button.config(bd=10, activebackground='green')
         self.save_button.grid(column=2, row=4, columnspan=2, sticky='n,e,s,w')
         self.bind('<Return>', self.initial_set)  # alternative to button press
@@ -290,7 +289,7 @@ class PlayerInfo(tk.Toplevel):
         & set a random player binding to active_player.
         Secondary requirements: Increments arbitrary label_counter & counts down from the number of players in-game
         ensuring all get attribute assignment. """
-        logger.log_note(f'Player {self.instname.get()},Gender: {self.instgender.get()} initialised')
+        logger.log_note(f'Player {self.instname.get()},Gender: {self.instgender.get()} initialised\n')
         players_assign = library.StartVariables.new_players # players_assign  = total players_assign of players in play ie 4.
         if players_assign >= 1: # checks number of players left to modify.
             players_assign -= 1 # decreases the num of new pLayers left to modify
@@ -299,25 +298,22 @@ class PlayerInfo(tk.Toplevel):
             library.PlayerAttribs.player_gender = self.instgender.get() # binds selected gender in library
             engine.player_name_gender(PlayerInfo.list_indexer) # actives meth for transferring player data to player instance
             PlayerInfo.list_indexer += 1 # increases index for session_players
-            PlayerInfo.destroy(self) # destroys toplevel window wiping all entered info for next player to enter
             library.StartVariables.new_players = players_assign # library is bound to the new value for players_assign
+            PlayerInfo.destroy(self)  # destroys toplevel window wiping all entered info for next player to enter
 
-            if players_assign != 0: # loop for next player
-                PlayerInfo() # rebuilds toplevel anew for next player
+            if players_assign != 0: # checks condition for more players
+                PlayerInfo() # rebuilds toplevel for next player
+
             else:
-                "once all player attribs have been set"
-                PlayerInfo.destroy(self) # final destruction of top window
-                #~~~~~~~~ debug loop
-                logger.log_note(f"Player creation ended.\n\nPlayers in game:"
-                                f"{[p for p in library.GameObjects.session_players]}")
-                # checks all players names assigned in session_players
-                #~~~~~~~~~~~~~~~
-
-                engine.set_random_player() # gets a random player from the active player list, auto calls varbinging binding all variables.
+                "No players left ot assign"
+                engine.set_random_player() # selects random player from session_players binding to active player
                 app.update_attrib_frame() # updates all label variables from gameVar to MainLoop frame.
                 app.broadcast_message("show")
                 app.broadcast_message("dev") # dev addition message from the creator
                 app.show_frame(MainLoop) # calls next frame to raise by controller
+
+                logger.log_note(f"Player creation ended. Session players:"
+                                f"{[p for p in library.GameObjects.session_players]}\n")
                 ########## deal cards to all players required
 
 
@@ -434,7 +430,7 @@ class MainLoop(tk.Frame):
         """require method to be called from gameloop to rebase all variables in guivar. this should update the var in Mainloop
         with app.update_frame() method call"""
         # meth for checking sack size of player
-        library.CardDraw.door_attempts_remaining = 1 # resets door kicks for next player.. Should change to false
+        library.CardDraw.door_attempts_remaining = 1 # resets door kicks for next player. Should change to false
         self.canvas.delete("all")  # clears the canvas(table) for new player
         # Methods that need to be applied to a player for next turn.
         self.door_button.config(state="normal") # enables kick door button
@@ -445,12 +441,12 @@ class MainLoop(tk.Frame):
         self.run_away_button.config(state="disabled")  # run
         # app.broadcast_message() #clears all messages
 
-        engine.player_order(library.GameObjects.active_player) # sends active player rebind new player in game_loop
-        Tools.fluid_player_info() # adds or removes player class2/race2 option
+        engine.player_order(library.GameObjects.active_player) # sends active player rebind new active_player in game_loop
+        library.GameObjects.session_index = library.GameObjects.session_players.index(library.GameObjects.active_player)
+        Tools.fluid_player_info() # updates library, GUI, and checks for new label conditions race2/klass2
         app.broadcast_message()  # clears all messages
         app.broadcast_message("show") # updates main broadcast message
         # self.message2.destroy() # destroys message2 for the dev mode
-        app.update_attrib_frame() # updates the tk.vars in Main under the instance controller.
         print(" Turn ended!\n", "."*10, "\n")
         logger.log_note('End turn')
 
@@ -522,8 +518,9 @@ class MainLoop(tk.Frame):
         #Todo next job sort this mess out
         """ fight is called when all actions and options are exhausted. Fights main purpose is to compare lists and
          determine outcome of the fight then trigger appropriate actions."""
-        logger.log_note("Fight button pressed")
-        if len(cards.in_play) > 1: # checks how many monster set are on the table
+        logger.log_note("Fight button pressed\n")
+        logger.log_note(f"In_play {len(cards.in_play)}:\n{cards.in_play}")
+        if len(cards.in_play) > 1: # checks how many monster sets are on the table
             card_set = cards.in_play.pop(library.FightComponents.card_selector_index) # selects a monster based on potential player selection
         else:
             card_set = cards.in_play.pop(0) # will always grab the first set and remove it
@@ -965,9 +962,8 @@ class Tools:
             selfid.klass2_option.grid(row=9, column=1, sticky='nsew')
             selfid.klass2_optionb.grid(row=9, column=2, sticky='nsew')
 
-        engine.player_attrib_ipc_updater(library.GameObjects.active_player) # ensures all player info is up to
-        # date and sent to gameVar
-        app.update_attrib_frame() # updates the GUI with the new player info
+        engine.player_attrib_ipc_updater(library.GameObjects.active_player) # updates player info in library
+        app.update_attrib_frame() # updates the GUI with the player info
         engine.scrub_lists() # clears all the lists for zipper ect for fresh search
 
     @staticmethod
@@ -982,8 +978,8 @@ class Tools:
 
         except FileNotFoundError:
             img = Image.open(os.path.join(base_dir, 'imgs', 'cards', card_type, f'{str(0)}.png')) # loads default
-
-        new_image = img.resize((200, 310), Image.ANTIALIAS) # ANTIALIAS removes the structural Padding from the Image around it.
+        # new_image = img.resize((200, 310), Image.ANTIALIAS) # old depreciation warning
+        new_image = img.resize((200, 310), resample=Image.Resampling.LANCZOS) # LANCZOS removes the structural Padding from img
         sized_img = ImageTk.PhotoImage(new_image)  # works regardless of os
         return sized_img
 

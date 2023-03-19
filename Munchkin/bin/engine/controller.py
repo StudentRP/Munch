@@ -21,10 +21,6 @@ from bin.GUI.variables_library import cards
 import Tests.process_logger as logger # std output
 print('controller', id(library.cards))
 
-
-
-
-
 ##################################################################
 # main loop
 ##################################################################
@@ -42,72 +38,75 @@ class PlayerSetUp:
 
     def active_player_creation(self):
         """ Calls Player factory creating player instances"""
-        logger.log_note('In active_player_creation. x2 >>')
+        logger.log_note('active_player_creation. x2 >>\n')
         for person in range(library.StartVariables.new_players):
             player = Player.factory() # << Player instance Returned
             library.GameObjects.session_players.append(player) # players added to session players
         self.deal_handler("start") # >> GO TO
 
-    def player_name_gender(self, playerindex): # gui attrib, passes session_players index identifying specific instance
+    def player_name_gender(self, playerindex): # expects index for session_players
         """Gets player with list index and Sets name and gender to that player instance."""
-        logger.log_note('In player_name_gender')
         player = library.GameObjects.session_players[playerindex] #references a player objects from session_players
         player.char_setup() # call to set name and gender of player instance.
+        logger.log_note(f'Player_name_gender creation complete.')
 
     def set_random_player(self):
         """Selects random player to start from session_players list. Binds player as active_player and calls
         method to load all attributes of the player (player_attrib_ipc_updater(). parameter is optional but explicit)"""
         player = choice(library.GameObjects.session_players) # selects random player from list of players
-        library.GameObjects.active_player = player # assigns the selected player to active player in gamevar for gui to see
+        library.GameObjects.active_player = player # assigns the selected player to active player in library for gui to see
+        library.GameObjects.session_index = library.GameObjects.session_players.index(library.GameObjects.active_player) #sets index
+        self.player_attrib_ipc_updater(player)  # arg not needed. Calls method to set all attribs in library of player
         library.GameObjects.message = f"The dice has been rolled. Random player selected is {player.name.title()}"
-        self.player_attrib_ipc_updater(player) # arg not needed. Calls method to set all attribs in gamevar of player
-        logger.log_note(f"Setting Random player to start: {player.name}")
+        logger.log_note(f"Setting Random player to start:{player.name}\n")
 # class Game_Play:
 
-    def player_order(self, current_player): # called with gameVar rand_index
+    def player_order(self, current_player): # called with library rand_index
         """Triggered at end of turn. Note 1st player was random and assigned to active_player after player creation.
         Current_player = active player"""
-        play = True # win condition need method that will check all players
-        player_gen = cycle(library.GameObjects.session_players) # generator function that cycles a list indefinitely
+        play = True # win condition need method that will check all players #TODO create new end pg with winner on it
+        player_gen = cycle(library.GameObjects.session_players) # address for generator function object
         y = next(player_gen) # yields players from the list, at start this would be first item = p1.
         while play:
-            if current_player == y and current_player.alive: # conditions to see if x==y (x= player, y=list item)
-                logger.log_note(f"Current player {current_player.name} turn ended")
+            if current_player == y and current_player.alive: # if current player == next(player_gen)
+                logger.log_note(f"\nPlayer {library.GameObjects.active_player.name} turn ended\n")
                 library.GameObjects.active_player = next(player_gen) # binds next player to rand_player, (changes x)
-                self.player_attrib_ipc_updater(library.GameObjects.active_player) #  binds new player
-                logger.log_note(f"{library.GameObjects.active_player.name} has been binded")
+                logger.log_note(f"New player:{library.GameObjects.active_player.name} bound\n")
                 break
             elif current_player == y and not current_player.alive and not library.Options.perm_death:
-                logger.log_note(f"print player {current_player} is dead") # move in to conditional for perm-a-death
-                current_player.alive = True # resets player status ##########need per-a-death bit here
+                logger.log_note(f"Player {current_player.name} is dead. Spawned next round.\n") # move in to conditional for perm-a-death
+                current_player.alive = True # resets player status
                 library.GameObjects.active_player = next(player_gen) # changes x without binding and moves to next player
                 continue
             else:
-                logger.log_note(f"{y.name.title()} did not match. Searching for player in list")
+                logger.log_note(f"{y.name.title()} did not match. Searching for player in list\n")
                 y = next(player_gen) # changes y to find commonality to x
 
         library.GameObjects.message = f"{library.GameObjects.active_player.name.title()}'s turn..."
 
-    def player_attrib_ipc_updater(self, playerinst=library.GameObjects.active_player): # defaults to gamevar active_player player
-        """Binds all player attribs to gameVar for current player activity. Can take param of a player or grab active_player."""
-        library.PlayerAttribs.player_name = playerinst.name.title()
-        library.PlayerAttribs.player_gender = playerinst.gender.title()
-        library.PlayerAttribs.player_level = playerinst.level
-        library.PlayerAttribs.player_bonus = playerinst.bonus
-        library.PlayerAttribs.player_wallet = playerinst.wallet
-        library.PlayerAttribs.player_race = playerinst.race.title()
-        library.PlayerAttribs.player_race2 = playerinst.race2.title()
-        library.PlayerAttribs.player_klass = playerinst.klass.title()
-        library.PlayerAttribs.player_klass2 = playerinst.klass2.title()
-        library.PlayerAttribs.player_sack = playerinst.sack
-        library.PlayerAttribs.player_l_hand = playerinst.update_bindings("L_hand")
-        library.PlayerAttribs.player_r_hand = playerinst.update_bindings("R_hand")
-        library.PlayerAttribs.player_two_hand = playerinst.update_bindings("two_hand")
-        library.PlayerAttribs.player_headgear = playerinst.update_bindings("headgear")
-        library.PlayerAttribs.player_armor = playerinst.update_bindings("armor")
-        library.PlayerAttribs.player_knees = playerinst.update_bindings("knees")
-        library.PlayerAttribs.player_footgear = playerinst.update_bindings("footgear")
-        library.PlayerAttribs.player_necklace = playerinst.update_bindings("necklace")
+    def player_attrib_ipc_updater(self, player_instant):
+        """Binds all player attribs to library for current player activity. Can take param of a player or grab active_player.
+            player_attrib_ipc_updater >> library << app.update_attrib_frame.
+        """
+
+        library.PlayerAttribs.player_name = player_instant.name.title()
+        library.PlayerAttribs.player_gender = player_instant.gender.title()
+        library.PlayerAttribs.player_level = player_instant.level
+        library.PlayerAttribs.player_bonus = player_instant.bonus
+        library.PlayerAttribs.player_wallet = player_instant.wallet
+        library.PlayerAttribs.player_race = player_instant.race.title()
+        library.PlayerAttribs.player_race2 = player_instant.race2.title()
+        library.PlayerAttribs.player_klass = player_instant.klass.title()
+        library.PlayerAttribs.player_klass2 = player_instant.klass2.title()
+        library.PlayerAttribs.player_sack = player_instant.sack
+        library.PlayerAttribs.player_l_hand = player_instant.update_bindings("L_hand")
+        library.PlayerAttribs.player_r_hand = player_instant.update_bindings("R_hand")
+        library.PlayerAttribs.player_two_hand = player_instant.update_bindings("two_hand")
+        library.PlayerAttribs.player_headgear = player_instant.update_bindings("headgear")
+        library.PlayerAttribs.player_armor = player_instant.update_bindings("armor")
+        library.PlayerAttribs.player_knees = player_instant.update_bindings("knees")
+        library.PlayerAttribs.player_footgear = player_instant.update_bindings("footgear")
+        library.PlayerAttribs.player_necklace = player_instant.update_bindings("necklace")
 
 # card handling class:
 
@@ -115,20 +114,21 @@ class PlayerSetUp:
         """ Sends requests to the dealer based on the option parameter to define card type.
         Deal_amount defines how many of the cards are to be returned to a player.
         """
-        logger.log_note(f"In Deal_handler(), Option: {option} >>")
+        logger.log_note(f"\t> Deal_handler({option}) >>")
 
         playerinst = library.GameObjects.active_player # gets current player. Not set at start default=None.
 
         if option == "start": # initial play selector to deal cards to each player. NO GOOD FOR RESURRECT OPTION as deals to all players
             for player in library.GameObjects.session_players: # loops over each player in session_players
                 player.sack = cards.card_sop.deal_cards(option, deal_amount=library.Options.cards_dealt) # deals cards with params "start" & num of cards to deal) >> GO TO
+            logger.log_note(f"Cards added to player sack. END\n")
 
         elif option == "door": # Standard gameplay loop on door kick
             print("In deal_handler, retrieving door card & determining fate of card")  # test location
             door_card = cards.card_sop.deal_cards(option, deal_amount) # fetches 1 door card defined by the default,
             return door_card # for pic use only in gui
 
-        elif option == "treasure": # Deal treasure, requires number for amount to deal.
+        elif option == "treasure": # Deal treasure, requires number for amount to deal dependent on win.
             print("retrieving treasure card/s") # test location
             add_treasure = cards.card_sop.deal_cards(option, deal_amount=deal_amount) # cardnum is usually determined by the treasures a monster holds.
             playerinst.sack = playerinst.sack + add_treasure # DUMPS ALL IN THE ACTIVE_PLAYER.....TODO::Sort how treasure is handled when used as currency for another players help
@@ -155,14 +155,14 @@ class PlayerSetUp:
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
                 # cards.in_play[0].append(card) # places card on table in the lol for the first fight.
-                cards.in_play.append([card]) # places the card into play. This wil be indexed [0]. This creates the lol
-                print(cards.in_play)
+                cards.in_play.append([card]) # places the card into play creating lol structure
+                logger.log_note(f"Cards in play{cards.in_play}\n")
                 player.card_meths(card, static='on') # activates any static meths for the card. TESTED WITH 2 CARDS. OK!
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"The room you have entered has a curse {card.get('name').title()}.\n Lets hope you have protection!"
-                print("In curse::", player.active_curses)
+                logger.log_note(f"In curse:: {player.active_curses}")
 
                 player.card_meths(card, method='on') # turns on curse method on ## TEST
 

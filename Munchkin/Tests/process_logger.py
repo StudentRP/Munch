@@ -14,11 +14,24 @@ def log_creator(msg):
 
 
 def log_note(msg):
-    print('writing')
     with open(log, "a+") as f: # position at the end
-        f.write(msg + '\n')
+        f.write(msg)
         f.close()
 #
 # log_creator('hello')
 # log_note("this is a test")
 # log_note("second test")
+
+
+# def f(*args):
+#   print(args)  #tuple
+#     for x in args:
+#       print(x) #lol
+#         for y in x:
+#             print(y) # specific
+#
+# l= [[1],[2]]
+# f(l)
+
+
+

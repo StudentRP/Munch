@@ -1,42 +1,26 @@
 Initialising log
+
 ###################
 # Info: >> method active path, << returned Path 
 ###################
-'view', 140204140658848
-Player_set_up activated. Setting: new_players & player_rand:2. >> 
-In active_player_creation. x2 >>
-In Player.factory << END
-In Player.factory << END
-In Deal_handler(), Option: start >>
-In Deal_cards(), Checking cards: Door stack: 6: Treasure stack:14: Burn pile: 0:In-play stack:1
-In Deal_cards(), Checking cards: Door stack: 4: Treasure stack:12: Burn pile: 0:In-play stack:1
-Player rory,Gender: male initialised
-In player_name_gender
-Player holly,Gender: Female initialised
-In player_name_gender
-Player creation ended.
-
-Players in game:[
-PLAYER: Name:The_Creator, Gender:Bob:Level:1, Bonus:200,Sack:20000
-, 
-PLAYER: Name:holly, Gender:Female:Level:1, Bonus:0,Sack:0
+Table instance: 2441180134608
+Player_set_up activated. >> active_player_creation. x2 >>
+	>In Player.factory << END
+	> Deal_handler(start) >> deal_cards << END
+ NOTE: Door stack:6,Treasure stack:14,Burn pile:0,In-play stack:1 # TEST MONSTER IN PLACE!!
+Cards added to player sack. END
+Player dfdf,Gender: Male initialised
+The player Dfdf with the gender Male has been created.Player_name_gender creation complete.Setting Random player to start:dfdf
+update_attrib_frame
+Player creation ended. Session players:[
+PLAYER: Name:dfdf, Gender:Male:Level:1, Bonus:0, Sack:0
 ]
-Setting Random player to start: holly
-The_Creator did not match. Searching for player in list
-Current player holly turn ended
-The_Creator has been binded
-End turn
-Current player The_Creator turn ended
-holly has been binded
-End turn
-The_Creator did not match. Searching for player in list
-Current player holly turn ended
-The_Creator has been binded
-End turn
-Current player The_Creator turn ended
-holly has been binded
-End turn
-The_Creator did not match. Searching for player in list
-Current player holly turn ended
-The_Creator has been binded
-End turn
+
+Kicking door method	> Deal_handler(door) >> deal_cards << END
+ NOTE: Door stack:4,Treasure stack:12,Burn pile:0,In-play stack:1 # TEST MONSTER IN PLACE!!
+update_attrib_frame
+Door attempts:zero= last attempt::0Fight button pressedIn_play 2:
+[[{'id': 300, 'category': 'door', 'type': 'monster', 'name': 'Crabs', 'lvl': 1, 'treasure': 1, 'level_up': 1, 'lexical': ['no_outrun'], 'method_bs': ['below_waist'], 'static': ['no_outrun', 'test_meth']}], [{'id': 303, 'category': 'door', 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, 'level_up': 1, 'lexical': ['+ 2 to halflings'], 'method': ['monkey_business']}]]The card set u will be facing is:card_set	> Deal_handler(treasure) >> deal_cards << END
+ NOTE: Door stack:3,Treasure stack:12,Burn pile:0,In-play stack:1 # TEST MONSTER IN PLACE!!
+End of Fight
+update_attrib_frame
