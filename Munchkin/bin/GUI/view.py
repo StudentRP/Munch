@@ -460,7 +460,7 @@ class MainLoop(tk.Frame):
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
 
         # main actions, get card, define where it belongs activate static meths
-        door_card = engine.deal_handler("door") # fetch a door card
+        door_card = engine.deal_handler("door") # fetch and returns door card
         engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining) # Assigns card to destination. switches on static meths of curses and monsters
 
         # 1st attempt, gui setup

@@ -148,7 +148,6 @@ class PlayerSetUp:
         times the door button is clicked. Also update the message dependent on action
         """
         player = library.GameObjects.active_player
-
         if door_attempts: # On first kick of the door. Decides what to do with the cards dependent on situation
 
             # if monster, put on table ready to fight

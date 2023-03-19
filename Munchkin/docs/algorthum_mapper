@@ -526,11 +526,10 @@ SUMMARY:    A turn is ended and another player assigned to active_player,
     When 1 or more monster is present the active_player can fight a monster, run from or use items (hand > use) section
 
 
-
 Hitting the door button initiates a cascade of events that leads to:
     - certain buttons being disabled
     - static methods of cards activated
-    - card being delt to the table
+    - card being delt to the table capsuled in a list
     - card being displayed
     - broadcast system update
 

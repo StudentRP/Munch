@@ -296,16 +296,20 @@ class Moncurse(MonTools):
         """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
         print("CARD METHOD TEST")
         # print(args[0], kwargs)
-        for k, v in kwargs.items():
-            # print(k,v)
-            if args[0].get(k): # checks to see if test_type in card.
+        # for card in args: loop used for interfere where more than one card could be sent.
+        for k, v in kwargs.items(): #static=on
+            print(k,v)
+            # print(args) # card in tuple
+            if args[0].get(k): # index tuple and search for static method.
                 meth_list = args[0][k] # gets value stored at card key (test_type)
-                for meth in meth_list:
+                for meth in meth_list: # meth 'shade', meth_list ['shade']
+                    print(meth, meth_list)
                     get_method = MonTools.method_types[meth] # returns inactive method #looks up method with key assigning inactive value
                     return get_method(self, k, v) # action 'on' or 'off', value level to add/ remove
 
     def __getattr__(self, attrib):
-        """simulates player attribs for the instance m1 when called by monster mehtods. Acts as attribute not found lookup for the string interpretation of the attrib."""
+        """simulates player attribs for the instance m1 when called by monster mehtods. Acts as attribute not found
+        lookup for the string interpretation of the attrib."""
         if attrib == "level": # catches m1.level (FROM CARD METHS) setting to 4 mimicking a player with a level of 4.
             return 4 # provides m1 with player traits of level
         elif attrib == "gender":
@@ -318,7 +322,7 @@ m1 = Moncurse()
 if __name__ == "__main__":
     print(m1)
     # print(Moncurse)
-    card = m1.door_cards[0] # draws specific card
+    card = m1.door_cards[2] # draws specific card
     # print(card) # show card
     m1.card_meth(card, static="on") # for methods that require action to turn off or on.
     m1.card_meth(card, static="off")
