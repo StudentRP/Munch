@@ -144,19 +144,19 @@ class PlayerSetUp:
 
     def door_card_designator(self, card, door_attempts=1): # for all door cards that are drawn from the pack or placed by another player.
         """Takes in door card and door_attempts as params to decide card fate.
-        Cards have different fates dependent upon the type of card it is ie: monster, curse, other and the number of
+        Cards have different fates dependent upon the type of card it is ie: monster, curse, other, and the number of
         times the door button is clicked. Also update the message dependent on action
         """
         player = library.GameObjects.active_player
         if door_attempts: # On first kick of the door. Decides what to do with the cards dependent on situation
-
             # if monster, put on table ready to fight
             if card.get("type") == "monster": # if the cards a monster #1st/2nd kicks covered
                 library.GameObjects.message = f"{card.get('name')} placed on table, Level {card.get('lvl')}" # updates broadcast message
                 # cards.in_play[0].append(card) # places card on table in the lol for the first fight.
                 cards.in_play.append([card]) # places the card into play creating lol structure
-                logger.log_note(f"Cards in play{cards.in_play}\n")
-                player.card_meths(card, static='on') # activates any static meths for the card. TESTED WITH 2 CARDS. OK!
+                logger.log_note(f">In door_card_designator >> Go TO ")
+                # player.card_meths(card, static='on') # activates any static meths for the card. #OLD
+                player.card_processer(card, static='on') ## new. accepts card_sets (lod) or single card
 
             # WORK REQUIRED!!     if curse, activate effects. need check to see if conditions in place to stop cursing ie ork/ wishing ring.
             elif card.get("type") == "curse": # if the cards a monster #1st/2nd kicks covered

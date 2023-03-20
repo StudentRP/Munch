@@ -55,7 +55,7 @@ class MonTools:
         print("\nmonster method prevents run")
         if "on" in args:
             self.run_away = False
-            print("run disabled")
+            print("run disabled") #change to return to disable button
         else:
             self.run_away = True
             print("run enabled")
@@ -68,6 +68,10 @@ class MonTools:
             print(f"Level removed. You are now {self.level}")
         else:
             print("level not touched, not high enough")
+
+    def spent(self, *args):
+        """card disposal for one shot items"""
+        pass
 
 
 ########################### SPECIAL #############################
@@ -202,7 +206,7 @@ class MonTools:
         'test_meth': test_meth, 'level_up': level_up, 'supermunch': supermunch, 'half_breed': half_breed, "below_waist": below_waist,
         "loose_level": loose_level, "monkey_business": monkey_business, "no_outrun": no_run, "sex_change": sex_change,
         "loose-armor": loose_armor, 'loose_headgear': loose_headgear, 'loose_footgear': loose_footgear, "shade": klass_bonus,
-        'wondering_mon': wondering_mon,
+        'wondering_mon': wondering_mon, 'spent':spent
                     }
 
 
@@ -223,13 +227,14 @@ class Moncurse(MonTools):
         {'id': 302, "category": "door", 'type': 'monster', 'name': 'Shade', 'lvl': 3, 'treasure': 1, "level_up":1, 'lexical': ['undead', '-2 against_thieves'], 'method': ["loose_level"], "static":["shade"]},
         {'id': 303, "category": "door", 'type': 'monster', 'name': 'Barrel Of Monkeys', 'lvl': 6, 'treasure': 2, "level_up": 1, 'lexical': ['+ 2 to halflings'], 'method': ["monkey_business"]},
         #
-        # #Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player) # may need to add timed for card that last a certain amoun of time...
-        {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method_bs': ['loose_footgear']},
-        {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method_bs': ['loose_armor']},
-        # {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method_bs': ['loose_level']},
+        # #Curse cards: id, category, type, status, name, method, (status = active or passive for const effect that need to be added to player)
+        # may need to add timed for card that last a certain amoun of time.
+        # {'id': 401, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose footgear', 'method_bs': ['loose_footgear', 'spent']},
+        # {'id': 402, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose armor!', 'method_bs': ['loose_armor', 'spent']},
+        # {'id': 403, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose level', 'method_bs': ['loose_level', 'spent']},
         # {'id': 404, "category": "door", 'type': 'curse', 'duration': 'timed', 'name': 'sex change', 'method_bs': ['sex_change']}, # has another timed condition
-        # {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method_bs': ['loose_headgear']},
-        # # {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': ['loose_small_item']},
+        # {'id': 405, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose headgear', 'method_bs': ['loose_headgear', 'spent']},
+        # # {'id': 406, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'Loose 1 small item', 'method': ['loose_small_item', 'spent']},
         # {'id': 407, "category": "door", 'type': 'curse', 'duration': 'one_shot', 'name': 'income tax', 'method_bs': ['income_one_shot']},
         #
         # # Monster Enhancers
@@ -292,20 +297,49 @@ class Moncurse(MonTools):
         """Card test request check"""
         return cls.door_cards[0]["name"] # list index, dict name cls=
 
-    def card_meth(self, *args, **kwargs):
-        """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
-        print("CARD METHOD TEST")
-        # print(args[0], kwargs)
-        # for card in args: loop used for interfere where more than one card could be sent.
-        for k, v in kwargs.items(): #static=on
-            print(k,v)
-            # print(args) # card in tuple
-            if args[0].get(k): # index tuple and search for static method.
-                meth_list = args[0][k] # gets value stored at card key (test_type)
-                for meth in meth_list: # meth 'shade', meth_list ['shade']
-                    print(meth, meth_list)
-                    get_method = MonTools.method_types[meth] # returns inactive method #looks up method with key assigning inactive value
-                    return get_method(self, k, v) # action 'on' or 'off', value level to add/ remove
+    # def card_meth(self, *args, **kwargs): # output: (card), static:on
+    #     """Test of cards with key values that associated to methods within method_types list located within MonTools class"""
+    #     print("CARD METHOD TEST")
+    #     # print(args[0], kwargs)
+    #     # for card in args: loop used for interfere where more than one card could be sent.
+    #     for key, action in kwargs.items():
+    #         print(key, action) #static, on
+    #         # print(args) # card in tuple
+    #         if args[0].get(key): # index tuple and search for static method.
+    #             meth_list = args[0][key] # gets value stored at card key (test_type)
+    #             for meth in meth_list: # meth 'shade', meth_list ['shade']
+    #                 print(f"meth{meth}, meth_list{meth_list}")
+    #                 get_method = MonTools.method_types[meth] # returns inactive method #looks up method with key assigning inactive value
+    #                 return get_method(self, key, action) # action 'on' or 'off', value level to add/ remove
+
+    def _card_processer(self, *args, **kwargs): #produces card tuple, a key in a dict and action to take
+        """test meth that will except card_sets and multi kwags as key lookups and actions within card meths"""
+
+        for card_sets in args:
+            if not isinstance(card_sets, dict): #checks for single card dict or a card_set is a list of dicts
+                for card in card_sets: # for each card in the card_set
+                    for key, action in kwargs.items(): # loops all kwags for each card.
+                        if card.get(key, False):
+                            print(card.get(key))
+                            for meth in card[key]:
+                                print(meth)
+                                activation = MonTools.method_types[meth] #gets method object from MonTools
+                                activation(self, action)
+                        else:
+                            print(f'key not in card {key}')
+
+            else:
+                for card in args:
+                    for key, action in kwargs.items():
+                        if card.get(key, False):
+                            print(card.get(key))
+                            for meth in card[key]:
+                                print(meth)
+                                activation = MonTools.method_types[meth] #gets method object
+                                activation(self, action)
+
+        # if returns:
+
 
     def __getattr__(self, attrib):
         """simulates player attribs for the instance m1 when called by monster mehtods. Acts as attribute not found
@@ -316,14 +350,23 @@ class Moncurse(MonTools):
             return "male" # change according to requirement
         elif attrib == "klass" or attrib == "klass2":
             return {"name": "elf"} # mock class card dict, Change elements according to the required class
+        elif attrib == 'run_away':
+            return True
 
 
 m1 = Moncurse()
 if __name__ == "__main__":
-    print(m1)
+    # print('Card Name', m1) # repr return
     # print(Moncurse)
-    card = m1.door_cards[2] # draws specific card
+    card1 = m1.door_cards[0]
+    # m1._card_processer(card1, static="on") # works for 1 card
+    card2 = m1.door_cards[1]
+    card3 = m1.door_cards[2]
+    card_set = [card1, card2, card3] # [{},{},{}]
+    m1._card_processer(card_set, static="on", method='on')
+
+
     # print(card) # show card
-    m1.card_meth(card, static="on") # for methods that require action to turn off or on.
-    m1.card_meth(card, static="off")
+    # m1.card_meth(card, static="on") # for methods that require action to turn off or on.
+    # m1.card_meth(card, static="off")
     # print(dir(m1)) #shows all methods and inherited meths

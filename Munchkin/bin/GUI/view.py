@@ -454,19 +454,18 @@ class MainLoop(tk.Frame):
         """Calls methods associated to kicking the door. End result is to move cards to the desired location ie on table
         ready for fight (and display) or in to the players handCommits a player to game action by disabling buttons. """
 
-        logger.log_note("\nKicking door method")
+        logger.log_note("\nGUI Door method>>Go To")
         # Commits player to game loop
         self.message2.destroy()  # removes dev label
         self.end_turn_button.config(state="disabled") # disables end turn button, enabled at end of fight
-
         # main actions, get card, define where it belongs activate static meths
         door_card = engine.deal_handler("door") # fetch and returns door card
-        engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining) # Assigns card to destination. switches on static meths of curses and monsters
+        engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining) # determines card destination.
+        # switches on static meths of curses and monsters
 
         # 1st attempt, gui setup
         if library.CardDraw.door_attempts_remaining: # first kick of door (always get this at start of turn!) == 1(True)
             print("VIEWING CARD")
-
             # display card
             self.img = Tools.viewer(door_card["id"], 'door_cards') # gets card id. needs self or garbage collected!, 2nd arg for retrieval through card filing
             self.canvas.create_image(10, 10, image=self.img, anchor="nw")# view card on canvas. will need meth for this to add cards in linear fashion
@@ -483,9 +482,9 @@ class MainLoop(tk.Frame):
                 self.armor_button.config(state="disabled") # armor
                 self.sell_button.config(state="disabled") # sell
                 self.fight_button.config(state="normal") # fight
-                self.run_away_button.config(state="normal") # run
+                self.run_away_button.config(state="normal") #run
 
-            # other cards fall of bottom for the door_attempts_remaining catch to be set.
+                    # other cards fall of bottom for the door_attempts_remaining catch to be set.
 
 
                 # 2nd attempt circumstance
@@ -978,8 +977,8 @@ class Tools:
 
         except FileNotFoundError:
             img = Image.open(os.path.join(base_dir, 'imgs', 'cards', card_type, f'{str(0)}.png')) # loads default
-        # new_image = img.resize((200, 310), Image.ANTIALIAS) # old depreciation warning
-        new_image = img.resize((200, 310), resample=Image.Resampling.LANCZOS) # LANCZOS removes the structural Padding from img
+        new_image = img.resize((200, 310), Image.ANTIALIAS) # old depreciation warning
+        # new_image = img.resize((200, 310), resample=Image.Resampling.LANCZOS) # LANCZOS removes the structural Padding from img
         sized_img = ImageTk.PhotoImage(new_image)  # works regardless of os
         return sized_img
 

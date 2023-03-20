@@ -393,7 +393,9 @@ PlayerSelect(), class (views.py)
                     Each player instance now has a sack of cards containing both monster and treasure type cards to the
                     amount defined within game options.
 
-            SUMMARY: Player instances added to session_players and cards added to player.sack. integer created for new_players & player_rand.
+SUMMARY:    Player instances added to session_players,
+            cards added to player.sack,
+            Integer created for new_players & player_rand.
 
         PlayerInfo() class Toplevel called in view >> GO TO >>
 
@@ -527,21 +529,19 @@ SUMMARY:    A turn is ended and another player assigned to active_player,
 
 
 Hitting the door button initiates a cascade of events that leads to:
-    - certain buttons being disabled
-    - static methods of cards activated
-    - card being delt to the table capsuled in a list
-    - card being displayed
+    - certain buttons being disabled :weapons, door, armour
+    - static methods of cards activated; methods that can change play.
+    - card being delt to the table capsuled in a list: ready for interfering or additional monsters
+    - card displayed
     - broadcast system update
 
 
 Door button > door method
      self.end_turn_button.config(state="disabled"), disables end_turn to prevent incorrect usage.
 
-     door_card = engine.deal_handler("door", deal_amount=default)
-        Is one of the main method and excepts a return object. The card returned is dependent on the string parameter used.
-        In this case the parameter 'door' is used to retrieve a door card. This is the value to the key 'category' within the card's dict.
-        door_attempts as a parameter exerts control over where the card ends up and in the current class defines how the
-        card is viewed. The returned card is used for the picture on canvas and trigger the card method.
+     door_card = engine.deal_handler("door")
+        Called previously with 'start' parameter for starter_set. In this case the parameter 'door' is used to retrieve a door card.
+        The card is returned to the GUI view to be later processed.
 
         deal_handler(self, option, deal_amount=1):
             # option = 'start', 'door', 'treasure', 'resurrect'
@@ -553,7 +553,7 @@ Door button > door method
                 door_card = cards.card_sop.deal_cards(option, deal_amount) #  REQUIRES ALL PARAMS TO BE PASSED BY CALLER
                     Runs the Table class that has-a dealer() method that returns a door cards. Note, dealer will check the pack first
                     and if insufficient cards are present it will empty and sort the burn_pile to refresh the card decks. !MAY BE CHANGE TO A FIRST IN FIRST OUT ALGORITHM!
-                    A card is returned to the caller back to door_card variable.
+                    A card is returned to the caller back to door_card variable within the GUI view.py for toplevel processing.
 
      engine.door_card_designator(door_card, door_attempts=library.CardDraw.door_attempts_remaining)
         # door_card is the returned card above

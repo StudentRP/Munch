@@ -273,9 +273,35 @@ class Player(MonTools, T_tools):
                             elif outcome[0] == 'in_turn': # cards that influence the turn
                                 cards.in_turn[library.FightComponents.card_selector_index].append(args[0]) # adds the card to the in_turn list for later use
 
-
             else:
                 print(f'CARD METHOD {method} NOT AVAILABLE WITH {args[0]["name"]} CARD')
+
+    def card_processer(self, *args, **kwargs): #produces card tuple, a key in a dict and action to take
+        """test meth that will except card_sets and multi kwags as key lookups and actions within card meths"""
+
+        for card_sets in args:
+            if not isinstance(card_sets, dict): #checks for single card dict or a card_set is a list of dicts
+                for card in card_sets: # for each card in the card_set
+                    for key, action in kwargs.items(): # loops all kwags for each card.
+                        if card.get(key, False):
+                            print(card.get(key))
+                            for meth in card[key]:
+                                print(meth)
+                                activation = MonTools.method_types[meth] #gets method object from MonTools
+                                activation(self, action)
+                        else:
+                            print(f'key not in card {key}')
+
+            else:
+                for card in args:
+                    for key, action in kwargs.items():
+                        if card.get(key, False):
+                            print(card.get(key))
+                            for meth in card[key]:
+                                print(meth)
+                                activation = MonTools.method_types[meth] #gets method object
+                                activation(self, action)
+
 
 
 """
